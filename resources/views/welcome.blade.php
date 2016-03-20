@@ -40,7 +40,7 @@
             <div class="content">
                 <div class="title">Proyecto Dashboard</div>
                 <div class="title">NosVenden</div>
-                <div class="title">Prueba Slack</div>
+                <div class="title">Prueba Slack & CodeShip</div>
             </div>
         </div>
     </body>

@@ -39,6 +39,7 @@
         <div class="container">
             <div class="content">
                 <div class="title">Proyecto Dashboard</div>
+                <div class="title">NosVenden</div>
             </div>
         </div>
     </body>

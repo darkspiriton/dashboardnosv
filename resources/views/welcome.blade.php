@@ -40,6 +40,7 @@
             <div class="content">
                 <div class="title">Proyecto Dashboard</div>
                 <div class="title">NosVenden</div>
+                <div class="title">Vagrant Online</div>
             </div>
         </div>
     </body>

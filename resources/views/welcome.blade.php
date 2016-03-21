@@ -41,6 +41,7 @@
                 <div class="title">Proyecto Dashboard</div>
                 <div class="title">NosVenden</div>
                 <div class="title">Prueba Slack & CodeShip Now</div>
+                <div class="title">CodeShip Now 2</div>
             </div>
         </div>
     </body>

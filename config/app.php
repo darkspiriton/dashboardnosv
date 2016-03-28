@@ -156,6 +156,8 @@ return [
         Dashboard\Providers\EventServiceProvider::class,
         Dashboard\Providers\RouteServiceProvider::class,
 
+        /* Personal provider */
+        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
     ],
 
     /*

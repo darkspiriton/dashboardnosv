@@ -8,3 +8,4 @@ VagrantFile
 homestead
 /scripts
 /.vagrant
+/.idea

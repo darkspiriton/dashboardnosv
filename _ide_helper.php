@@ -1108,7 +1108,7 @@ namespace {
          */
         public static function handle($input, $output = null){
             //Method inherited from \Illuminate\Foundation\Console\Kernel            
-            return \App\Console\Kernel::handle($input, $output);
+            return \Dashboard\Console\Kernel::handle($input, $output);
         }
         
         /**
@@ -1121,7 +1121,7 @@ namespace {
          */
         public static function terminate($input, $status){
             //Method inherited from \Illuminate\Foundation\Console\Kernel            
-            \App\Console\Kernel::terminate($input, $status);
+            \Dashboard\Console\Kernel::terminate($input, $status);
         }
         
         /**
@@ -1134,7 +1134,7 @@ namespace {
          */
         public static function call($command, $parameters = array()){
             //Method inherited from \Illuminate\Foundation\Console\Kernel            
-            return \App\Console\Kernel::call($command, $parameters);
+            return \Dashboard\Console\Kernel::call($command, $parameters);
         }
         
         /**
@@ -1147,7 +1147,7 @@ namespace {
          */
         public static function queue($command, $parameters = array()){
             //Method inherited from \Illuminate\Foundation\Console\Kernel            
-            \App\Console\Kernel::queue($command, $parameters);
+            \Dashboard\Console\Kernel::queue($command, $parameters);
         }
         
         /**
@@ -1158,7 +1158,7 @@ namespace {
          */
         public static function all(){
             //Method inherited from \Illuminate\Foundation\Console\Kernel            
-            return \App\Console\Kernel::all();
+            return \Dashboard\Console\Kernel::all();
         }
         
         /**
@@ -1169,7 +1169,7 @@ namespace {
          */
         public static function output(){
             //Method inherited from \Illuminate\Foundation\Console\Kernel            
-            return \App\Console\Kernel::output();
+            return \Dashboard\Console\Kernel::output();
         }
         
         /**
@@ -1180,7 +1180,7 @@ namespace {
          */
         public static function bootstrap(){
             //Method inherited from \Illuminate\Foundation\Console\Kernel            
-            \App\Console\Kernel::bootstrap();
+            \Dashboard\Console\Kernel::bootstrap();
         }
         
     }
@@ -1327,7 +1327,7 @@ namespace {
         /**
          * Get the currently authenticated user.
          *
-         * @return \App\User|null 
+         * @return \Dashboard\User|null 
          * @static 
          */
         public static function user(){
@@ -1431,7 +1431,7 @@ namespace {
          *
          * @param mixed $id
          * @param bool $remember
-         * @return \App\User 
+         * @return \Dashboard\User 
          * @static 
          */
         public static function loginUsingId($id, $remember = false){
@@ -1536,7 +1536,7 @@ namespace {
         /**
          * Return the currently cached user.
          *
-         * @return \App\User|null 
+         * @return \Dashboard\User|null 
          * @static 
          */
         public static function getUser(){
@@ -1578,7 +1578,7 @@ namespace {
         /**
          * Get the last user we attempted to authenticate.
          *
-         * @return \App\User 
+         * @return \Dashboard\User 
          * @static 
          */
         public static function getLastAttempted(){

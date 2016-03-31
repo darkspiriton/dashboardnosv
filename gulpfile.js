@@ -13,9 +13,10 @@ require('laravel-elixir-stylus');
  */
 
 elixir(function(mix) {
-    mix.stylus('app.styl');
+    mix.stylus('styles.styl' , 'public/css/styles.min.css');
+    mix.stylus('toastr.styl' , 'public/css/toastr.min.css');
 });
 
 elixir(function(mix) {
-    mix.version("css/app.css");
+    //mix.version("css/styles.css");
 });

@@ -1,9 +1,10 @@
 angular.module('loginApp', ['ngResource', 'ngMessages', 'ngAnimate', 'toastr', 'ui.router', 'satellizer'])
-    .config(function($stateProvider, $urlRouterProvider, $authProvider) {
+    .config(function($location, $stateProvider, $urlRouterProvider, $authProvider) {
+        var url = $location.protocol() + $location.host() + '/';
         $stateProvider
             .state('homeLogin', {
                 url: '/login',
-                templateUrl: 'partials/login.html',
+                templateUrl: url+'app/partials/login.html',
                 controller: 'LoginCtrl',
                 //resolve: {
                 //    skipIfLoggedIn: skipIfLoggedIn

@@ -12,7 +12,8 @@
 */
 
 Route::get('/', function () {
-    return File::get(public_path('\index.html'));
+    return view('index');
+    //return File::get(public_path().'/.index.html');
 });
 
 
@@ -27,8 +28,8 @@ Route::get('/', function () {
 |
 */
 
-Route::post('auth/login' , 'auth\AuthTokenController@login');
-Route::post('auth/signup' , 'auth\AuthTokenController@signup');
+Route::post('auth/login' , 'Auth\AuthTokenController@login');
+Route::post('auth/signup' , 'Auth\AuthTokenController@signup');
 
 Route::get('/test', function(){
     dd(Config::get('app.jwt_token'));

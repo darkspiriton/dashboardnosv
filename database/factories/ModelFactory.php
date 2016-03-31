@@ -11,7 +11,9 @@
 |
 */
 
-$factory->define(Dashboard\User::class, function (Faker\Generator $faker) {
+use Faker\Generator;
+
+$factory->define(Dashboard\User::class, function (Generator $faker) {
     return [
         'name' => $faker->name,
         'email' => $faker->safeEmail,

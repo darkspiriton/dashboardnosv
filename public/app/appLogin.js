@@ -5,15 +5,13 @@ angular.module('loginApp', ['ngResource', 'ngMessages', 'ngAnimate', 'toastr', '
                 url: '/login',
                 templateUrl: 'app/partials/login.html',
                 controller: 'LoginCtrl',
-                resolve: {
-                    skipIfLoggedIn: skipIfLoggedIn
-                }
+                //resolve: {
+                //    skipIfLoggedIn: skipIfLoggedIn
+                //}
             });
 
         $urlRouterProvider.otherwise('/login');
 
-        $authProvider.loginUrl = "http://dashboard.app:8000/auth/login";
-        $authProvider.signupUrl = "http://dashboard.app:8000/auth/signup";
         $authProvider.tokenName = "token";
         $authProvider.tokenPrefix = "DB_NV";
 

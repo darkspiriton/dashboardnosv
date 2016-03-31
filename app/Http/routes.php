@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return File::get(public_path('\index.html'));
 });
 
 /*
@@ -26,12 +26,8 @@ Route::get('/', function () {
 |
 */
 
-Route::group(['middleware' => ['web']], function () {
-    //
-});
+Route::post('auth/login' , 'auth\AuthTokenController@login');
 
-Route::group(['middleware' => 'web'], function () {
-    Route::auth();
-
-    Route::get('/home', 'HomeController@index');
+Route::get('/test', function(){
+    dd(Config::get('app.jwt_token'));
 });

@@ -1,5 +1,5 @@
 angular.module('loginApp', ['ngResource', 'ngMessages', 'ngAnimate', 'toastr', 'ui.router', 'satellizer'])
-    .config(function($location, $stateProvider, $urlRouterProvider, $authProvider) {
+    .config(function($locationProvider, $stateProvider, $urlRouterProvider, $authProvider) {
         var url = $location.protocol() + $location.host() + '/';
         $stateProvider
             .state('homeLogin', {

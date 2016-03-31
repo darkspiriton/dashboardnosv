@@ -13,7 +13,7 @@
 
 Route::get('/', function () {
     return view('index');
-//    return File::get(public_path().'/.index.html');
+    //return File::get(public_path().'/.index.html');
 });
 
 /*

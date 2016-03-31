@@ -1,6 +1,6 @@
 angular.module('loginApp', ['ngResource', 'ngMessages', 'ngAnimate', 'toastr', 'ui.router', 'satellizer'])
     .config(function($stateProvider, $urlRouterProvider, $authProvider) {
-        var url = 'http://luisdev.me/';
+
         $stateProvider
             .state('homeLogin', {
                 url: '/login',

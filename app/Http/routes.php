@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return redirect('index.html');
+    return View::make('index');
 });
 
 /*

@@ -50,4 +50,28 @@ class AuthTokenController extends Controller
             return response()->json(['message' => 'Wrong email and/or password'], 401);
         }
     }
+
+    /**
+     * Create Email and Password Account.
+     */
+    public function signup(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:6'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['message' => $validator->messages()], 400);
+        }
+
+        $user = new User;
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->password = bcrypt($request->input('password'));
+        $user->save();
+
+        return response()->json(['token' => $this->createToken($user)]);
+    }
 }

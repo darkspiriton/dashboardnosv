@@ -27,6 +27,7 @@ Route::get('/', function () {
 */
 
 Route::post('auth/login' , 'auth\AuthTokenController@login');
+Route::post('auth/signup' , 'auth\AuthTokenController@signup');
 
 Route::get('/test', function(){
     dd(Config::get('app.jwt_token'));

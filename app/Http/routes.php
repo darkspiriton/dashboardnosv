@@ -12,7 +12,8 @@
 */
 
 Route::get('/', function () {
-    return File::get(public_path().'/.index.html');
+    return view('index');
+//    return File::get(public_path().'/.index.html');
 });
 
 /*

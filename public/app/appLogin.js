@@ -4,7 +4,7 @@ angular.module('loginApp', ['ngResource', 'ngMessages', 'ngAnimate', 'toastr', '
         $stateProvider
             .state('homeLogin', {
                 url: '/login',
-                templateUrl: url+'app/partials/login.html',
+                templateUrl: 'app/partials/login.html',
                 controller: 'LoginCtrl',
                 //resolve: {
                 //    skipIfLoggedIn: skipIfLoggedIn

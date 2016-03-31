@@ -12,6 +12,7 @@
 */
 
 Route::get('/', function () {
+    return 'hola que hace';
     return File::get(public_path('\index2.html'));
 });
 

@@ -12,7 +12,7 @@
 */
 
 Route::get('/', function () {
-    return View::make('index');
+    return File::get(public_path('\index.html'));
 });
 
 /*

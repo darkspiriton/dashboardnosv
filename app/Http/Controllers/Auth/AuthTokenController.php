@@ -33,6 +33,7 @@ class AuthTokenController extends Controller
      */
     public function login(Request $request)
     {
+        dd($request->all());
         $email = $request->input('email');
         $password = $request->input('password');
 

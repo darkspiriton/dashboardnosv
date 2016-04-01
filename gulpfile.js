@@ -13,6 +13,7 @@ require('laravel-elixir-stylus');
  */
 
 elixir(function(mix) {
+    mix.stylus('loginStyles.styl' , 'public/css/loginStyles.min.css');
     mix.stylus('styles.styl' , 'public/css/styles.min.css');
     mix.stylus('toastr.styl' , 'public/css/toastr.min.css');
 });

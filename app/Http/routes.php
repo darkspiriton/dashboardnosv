@@ -12,8 +12,11 @@
 */
 
 Route::get('/', function () {
-    return view('index');
-    //return File::get(public_path().'/.index.html');
+    return view('login');
+});
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
 });
 
 

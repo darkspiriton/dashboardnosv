@@ -9671,8 +9671,8 @@ body {
 
 body {
   font-weight: 400;
-  /*padding-top: 65px;*/
-  /*padding-bottom: 110px;*/
+  padding-top: 65px;
+  padding-bottom: 110px;
   -webkit-animation-name: fadeIn;
   animation-name: fadeIn;
   -webkit-animation-duration: 1000ms;
@@ -9680,9 +9680,6 @@ body {
   -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 audio,
@@ -14992,7 +14989,7 @@ a.thumbnail.active {
 }
 
 .login-content .lc-block:not(.toggled) {
-  /*display: none;*/
+  display: none;
 }
 
 .login-content .lc-block.toggled {

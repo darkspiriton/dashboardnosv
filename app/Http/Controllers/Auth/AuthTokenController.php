@@ -47,7 +47,7 @@ class AuthTokenController extends Controller
 
             return response()->json(['token' => $this->createToken($user)]);
         } else {
-            return response()->json(['message' => 'Wrong email and/or password'], 401);
+            return response()->json(['message' => 'El usuario y/o contraseña no son validos'], 401);
         }
     }
 

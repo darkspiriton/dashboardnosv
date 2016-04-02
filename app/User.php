@@ -25,6 +25,6 @@ class User extends Model
     ];
 
     public function role(){
-        return $this->hasOne('Dashboard\Role','foreign_key','role_id');
+        return $this->belongsTo(Role::class);
     }
 }

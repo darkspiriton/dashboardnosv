@@ -975,4 +975,3 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
     }]);
 
 })(window, window.angular);
-//# sourceMappingURL=satellizer.js.map

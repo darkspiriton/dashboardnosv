@@ -22,7 +22,7 @@
 </head>
 
 <body class="login-content" ng-app="loginApp">
-<div> HOlasasfsaf</div>
+
 <div ui-view></div>
 
 <!-- Javascript Libraries -->

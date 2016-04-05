@@ -18,8 +18,8 @@ class Role extends Model
         'abrev', 'description',
     ];
 
-    public function user()
+    public function users()
     {
-        return $this->belongsTo('App\User','foreign_key','id');
+        return $this->hasMany(User::class);
     }
 }

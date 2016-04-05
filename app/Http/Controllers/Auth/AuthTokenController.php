@@ -38,14 +38,15 @@ class AuthTokenController extends Controller
 
         $user = User::where('email','=', $email)->first();
 
+
         if (!$user) {
             return response()->json(['message' => 'El usuario y/o contraseña no son validos'], 401);
         }
 
         if (Hash::check($password, $user->password)) {
             unset($user->password);
-
-            return response()->json(['token' => $this->createToken($user)]);
+            $rol=$user->role->abrev;
+            return response()->json(['token' => $this->createToken($user),'rol'=> $rol]);
         } else {
             return response()->json(['message' => 'El usuario y/o contraseña no son validos'], 401);
         }

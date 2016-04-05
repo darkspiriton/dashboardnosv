@@ -91,7 +91,7 @@
 </section>
 
 <footer id="footer">
-    Copyright &copy; 2015 Material Admin
+    Copyright &copy; 2016 NosVenden.com | DashBoard
 
     <ul class="f-menu">
         <li><a href="#">Home</a></li>
@@ -125,18 +125,22 @@
 <script src="js/functions.js"></script>
 <script src="js/demo.js"></script>
 
+<!-- Others Libraries -->
+<script type="text/javascript" src="http://s3.amazonaws.com/codecademy-content/courses/hour-of-code/js/alphabet.js"></script>
+
 <!-- Third-party Libraries -->
-<script src="/app/lib/angular/angular.js"></script>
-<script src="/app/lib/angular/angular-animate.js"></script>
-<script src="/app/lib/angular/angular-messages.js"></script>
-<script src="/app/lib/angular/angular-resource.js"></script>
-<script src="/app/lib/angular/angular-sanitize.js"></script>
-<script src="/app/lib/angular/angular-ui-router.js"></script>
-<script src="/app/lib/angular/angular-toastr.tpls.js"></script>
-<script src="/app/lib/satellizer.js"></script>
+<script src="app/lib/angular/angular.js"></script>
+<script src="app/lib/angular/angular-animate.js"></script>
+<script src="app/lib/angular/angular-messages.js"></script>
+<script src="app/lib/angular/angular-resource.js"></script>
+<script src="app/lib/angular/angular-sanitize.js"></script>
+<script src="app/lib/angular/angular-ui-router.js"></script>
+<script src="app/lib/angular/angular-toastr.tpls.js"></script>
+<script src="app/lib/satellizer.js"></script>
 
 <!-- Application Code -->
 <script src="app/app.js"></script>
+<script src="app/controllers/homeCtrl.js"></script>
 
 </body>
 </html>

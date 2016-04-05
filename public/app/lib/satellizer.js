@@ -30,8 +30,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
       authHeader: 'Authorization',
       authToken: 'Bearer',
       storageType: 'localStorage',
-      configRole : 'role',
-      roleName: 'levelRole',
       configRoutes : 'routes',
       nameRoutes: 'routesList',
       providers: {
@@ -328,8 +326,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
           }
 
           var accessToken = response && response.access_token;
-          var token,abrev,routes;
-          var roleName = config.roleName;
+          var token,routes;
           var nameRoutes = config.nameRoutes;
 
           if (accessToken) {
@@ -343,7 +340,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
           if (!token && response) {
             var tokenRootData = config.tokenRoot && config.tokenRoot.split('.').reduce(function(o, x) { return o[x]; }, response.data);
             token = tokenRootData ? tokenRootData[config.tokenName] : response.data && response.data[config.tokenName];
-            abrev = response.data && response.data[config.configRole];
             routes = response.data && response.data[config.configRoutes];
           }
 
@@ -353,7 +349,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
           }
 
           storage.set(tokenName, token);
-          storage.set(roleName, abrev);
           storage.set(nameRoutes, routes);
         };
 

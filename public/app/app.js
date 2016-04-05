@@ -4,10 +4,11 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
         $stateProvider
             .state('home', {
                 url: '/home',
-                templateUrl: 'app/partials/dashHome.html',
+                templateUrl: 'app/partials/efecto.html',
+                controller: 'homeCtrl'
             }).state('other', {
                 url: '/registro_de_alcanse',
-                templateUrl: 'app/partials/efecto.html',
+                templateUrl: 'app/partials/dashHome.html',
             });
 
         $urlRouterProvider.otherwise('/home');
@@ -66,25 +67,20 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
     .controller('appCtrl', function AppCtrl($state, $log, $scope, $window, $auth, storage) {
         $scope.pageTitle = 'Home';
 
-
         if ($auth.isAuthenticated()) {
-            $scope.rol = storage.get('levelRole');
-            var list = storage.get('routesList')
-
-            $scope.urls = list.split(",");
-
             $scope.logout = function(){
                 storage.removeStorage();
                 $window.location.href = "/";
             };
 
+            var list = storage.get('routesList');
+            if (!list)$scope.logout();
+            $scope.urls = list.split(",");
+
             $scope.$on('$stateChangeSuccess', function (event, toState) {
 
-                //Pruebas
-                $log.log($scope.urls);
-                $log.log(toState.url);
-                $log.log($scope.urls.indexOf(toState.url));
-                $log.log(toState);
+                //Pruebas rutas
+                $log.log([$scope.urls,toState.url,$scope.urls.indexOf(toState.url)]);
 
                 //si no los tiene que los redirija a /home
                 if($scope.urls.indexOf(toState.url) === -1){

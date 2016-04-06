@@ -35,5 +35,6 @@ Route::post('auth/login' , 'Auth\AuthTokenController@login');
 Route::post('auth/signup' , 'Auth\AuthTokenController@signup');
 
 Route::get('/test', function(){
-    dd(Config::get('app.jwt_token'));
+    return response()->json([ 'role' => 'VEN' , 'routes' => Config::get('angularJSRoutes.VEN')]);
+    dd(Config::get('angularJSRoutes.GOD'));
 });

@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Material Admin</title>
+    <title>NosVenden | DashBoard</title>
 
     <!-- Vendor CSS -->
     <link href="vendors/bower_components/material-design-iconic-font/css/material-design-iconic-font.min.css" rel="stylesheet">
@@ -22,7 +22,7 @@
 </head>
 
 <body class="login-content" ng-app="loginApp">
-<div> HOlasasfsaf</div>
+
 <div ui-view></div>
 
 <!-- Javascript Libraries -->

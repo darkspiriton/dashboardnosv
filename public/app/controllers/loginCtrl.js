@@ -8,7 +8,7 @@ angular.module('loginApp')
             $auth.login($scope.user)
                 .then(function() {
                     toastr.success('Se a identificado correctamente!');
-                    //$window.location.href = '/dashboard';
+                    $window.location.href = '/dashboard';
                 })
                 .catch(function(error) {
                     toastr.error(error.data.message);

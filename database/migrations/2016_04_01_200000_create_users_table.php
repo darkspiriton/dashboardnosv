@@ -29,7 +29,7 @@ class CreateUsersTable extends Migration
             $table->timestamps();
         });
 
-        Schema::table('users', function($table) {
+        Schema::table('users', function(Blueprint $table) {
             $table->foreign('role_id')->references('id')->on('roles');
         });
     }

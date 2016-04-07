@@ -20,6 +20,21 @@ class CreateProductsTable extends Migration
             $table->timestamps();
         });
 
+        Schema::create('types_attributes',function(Blueprint $table){
+            $table->increments('id');
+            $table->string('description',100);
+            $table->timestamps();
+        });
+
+        Schema::create('attributes',function(Blueprint $table){
+            $table->increments('id');
+            $table->integer('product_id')->unsigned();
+            $table->integer('type_id')->unsigned();
+            $table->string('valor',100);
+            $table->timestamps();
+            $table->foreign('product_id')->references('id')->on('products')->ondelete('cascade');
+            $table->foreign('type_id')->references('id')->on('types_attributes');
+        });
 
     }
 
@@ -30,6 +45,9 @@ class CreateProductsTable extends Migration
      */
     public function down()
     {
-        Schem::dropIfExist('products');
+        Schema::dropIfExists('attributes');
+        Schema::dropIfExists('types_attributes');
+        Schema::dropIfExists('products');
+
     }
 }

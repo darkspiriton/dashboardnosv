@@ -44,8 +44,8 @@ class CreateCustomerAllReferencesTable extends Migration
 
         // Addresses
         Schema::create('addresses', function(Blueprint $table){
-            $table->increments('address_id');
-            $table->integer('customer_id')->unsigned()->increments();
+            $table->increments('id');
+            $table->integer('customer_id')->unsigned();
             $table->string('ubigeo_id',6);
             $table->string('description');
             $table->string('reference');
@@ -59,8 +59,8 @@ class CreateCustomerAllReferencesTable extends Migration
         // Socials
         Schema::create('socials', function(Blueprint $table){
             $table->increments('social_id');
-            $table->integer('customer_id')->unsigned()->increments();
-            $table->integer('channel_id')->unsigned()->increments();
+            $table->integer('customer_id')->unsigned();
+            $table->integer('channel_id')->unsigned();
             $table->string('channel_url');
         });
 
@@ -72,8 +72,8 @@ class CreateCustomerAllReferencesTable extends Migration
         // Phones
         Schema::create('phones', function(Blueprint $table){
             $table->increments('phone_id');
-            $table->integer('customer_id')->unsigned()->increments();
-            $table->integer('operator_id')->unsigned()->increments();
+            $table->integer('customer_id')->unsigned();
+            $table->integer('operator_id')->unsigned();
             $table->string('phone_number', 50);
         });
 
@@ -90,12 +90,12 @@ class CreateCustomerAllReferencesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('customers');
-        Schema::dropIfExists('ubigeos');
-        Schema::dropIfExists('operators');
-        Schema::dropIfExists('channels');
         Schema::dropIfExists('addresses');
         Schema::dropIfExists('socials');
         Schema::dropIfExists('phones');
+        Schema::dropIfExists('ubigeos');
+        Schema::dropIfExists('operators');
+        Schema::dropIfExists('channels');
+        Schema::dropIfExists('customers');
     }
 }

@@ -3619,7 +3619,7 @@ namespace {
         }
         
         /**
-         * Get the hydrated models without eager loading.
+         * Get the hydrated Models without eager loading.
          *
          * @param array $columns
          * @return \Illuminate\Database\Eloquent\Model[] 
@@ -3630,7 +3630,7 @@ namespace {
         }
         
         /**
-         * Eager load the relationships for the models.
+         * Eager load the relationships for the Models.
          *
          * @param array $models
          * @return array 

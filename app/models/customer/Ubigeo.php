@@ -1,9 +1,9 @@
 <?php
 
-namespace Dashboard\models\customer;
+namespace Dashboard\Models\Customer;
 
 use Illuminate\Database\Eloquent\Model;
-use Dashboard\models\customer\Address;
+
 
 class Ubigeo extends Model
 {

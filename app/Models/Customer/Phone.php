@@ -1,12 +1,10 @@
 <?php
 
-namespace Dashboard\models\customer;
+namespace Dashboard\Models\Customer;
 
 use Illuminate\Database\Eloquent\Model;
-use Dashboard\models\customer\Customer;
-use Dashboard\models\customer\Operator;
 
-class Phones extends Model
+class Phone extends Model
 {
     public function customer(){
         return $this->belongsTo(Customer::class);

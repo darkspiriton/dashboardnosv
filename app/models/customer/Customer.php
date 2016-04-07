@@ -1,16 +1,13 @@
 <?php
 
-namespace Dashboard\models\customer;
+namespace Dashboard\Models\Customer;
 
 use Illuminate\Database\Eloquent\Model;
-use Dashboard\models\Customer\Phones;
-use Dashboard\models\customer\Address;
-use Dashboard\models\customer\Socials;
 
 class Customer extends Model
 {
     public function phones(){
-        return $this->hasMany(Phones::class);
+        return $this->hasMany(Phone::class);
     }
 
     public function addresses(){
@@ -18,6 +15,6 @@ class Customer extends Model
     }
 
     public function socials(){
-        return $this->hasMany(Socials::class);
+        return $this->hasMany(Social::class);
     }
 }

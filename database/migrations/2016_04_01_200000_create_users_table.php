@@ -22,7 +22,7 @@ class CreateUsersTable extends Migration
             $table->date('Birthdate');
             $table->char('sex', 1);
             $table->string('photo', 50);
-            $table->integer('role_id')->unsigned()->increments();
+            $table->integer('role_id')->unsigned();
             $table->string('user');
             $table->string('password');
             $table->boolean('state')->default(0);

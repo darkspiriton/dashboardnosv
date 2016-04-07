@@ -19,7 +19,7 @@ class UsersTableSeeder extends Seeder
             'email'     =>  'admin@nosvenden.com',
             'phone'     =>  '555-5555',
             'address'   =>  'Vasco da gama 269 - La Molina',
-            'Birthdate' =>  $faker->date(),
+            'Birth_date' =>  $faker->date(),
             'sex'       =>  'M',
             'photo'     =>  '1.jpg',
             'role_id'   =>  1,

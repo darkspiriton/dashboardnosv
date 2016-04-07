@@ -4,9 +4,10 @@ namespace Dashboard\Models\Customer;
 
 use Illuminate\Database\Eloquent\Model;
 
-
 class Address extends Model
 {
+    protected $table = 'addresses';
+
     public function customer(){
         return $this->belongsTo(Customer::class);
     }

@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Social extends Model
 {
+    protected $table = 'socials';
+
     public function customer(){
         return $this->belongsTo(Customer::class);
     }

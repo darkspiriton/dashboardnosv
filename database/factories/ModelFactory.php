@@ -20,7 +20,7 @@ $factory->define(Dashboard\User::class, function (Generator $faker) {
         'email'     =>  $faker->safeEmail,
         'phone'     =>  $faker->phoneNumber,
         'address'   =>  $faker->address,
-        'Birthdate' =>  $faker->date(),
+        'Birth_date' =>  $faker->date(),
         'sex'       =>  'M',
         'photo'     =>  $faker->imageUrl($width= 50 , $height=50),
         'role_id'   =>  $faker->randomFloat($nbMaxDecimals=0,$min=2,$max=5),

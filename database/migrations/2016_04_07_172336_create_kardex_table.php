@@ -35,8 +35,6 @@ class CreateKardexTable extends Migration
             $table->foreign('kardex_id')->references('id')->on('kardexs');
             $table->foreign('type_id')->references('id')->on('types_movements');
             $table->foreign('ship_id')->references('id')->on('shipments');
-
-
         });
     }
 

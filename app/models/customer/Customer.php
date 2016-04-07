@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Customer extends Model
 {
+    protected $table = 'customers';
+
     public function phones(){
         return $this->hasMany(Phone::class);
     }

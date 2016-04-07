@@ -27,15 +27,16 @@ class CreateCustomerAllReferencesTable extends Migration
             $table->string('UBIPRN',100);
             $table->string('UBIDST',6)->primary();
             $table->string('UBIDSN',100);
-            $table->string('STATUS',1);
+            $table->boolean('STATUS',1);
         });
 
-
+        // Operators
         Schema::create('operators', function(Blueprint $table){
             $table->increments('operator_id');
             $table->string('operator_name', 100);
         });
 
+        // Channels
         Schema::create('channels', function(Blueprint $table){
             $table->increments('channel_id');
             $table->string('channel_name');

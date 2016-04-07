@@ -46,8 +46,7 @@
 </header>
 
 <section id="main">
-    @include('layouts.dashMenu')
-    @include('layouts.dashOthersChat')
+    @yield('dashMenu')
 
     <section id="content">
         <div class="container">
@@ -139,8 +138,10 @@
 <script src="app/lib/satellizer.js"></script>
 
 <!-- Application Code -->
+
 <script src="app/app.js"></script>
-<script src="app/controllers/homeCtrl.js"></script>
+@yield('dashCtrls')
+
 
 </body>
 </html>

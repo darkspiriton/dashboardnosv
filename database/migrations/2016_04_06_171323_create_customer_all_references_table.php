@@ -17,6 +17,12 @@ class CreateCustomerAllReferencesTable extends Migration
             $table->increments('customer_id');
             $table->string('name');
             $table->integer('age');
+            $table->integer('user_id')->unsigned()->increments();
+            $table->timestamps();
+        });
+
+        Schema::table('customers', function(Blueprint $table){
+            $table->foreign('user_id')->references('user_id')->on('users');
         });
 
         // Ubigeos

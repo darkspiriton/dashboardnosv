@@ -13,24 +13,24 @@ class CreateUsersTable extends Migration
     public function up()
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->increments('id');
+            $table->increments('user_id');
             $table->string('first_name', 100);
             $table->string('last_name', 150);
             $table->string('email', 100)->unique();
             $table->string('phone');
             $table->string('address');
-            $table->date('Birthdate');
+            $table->date('Birth_date');
             $table->char('sex', 1);
             $table->string('photo', 50);
             $table->integer('role_id')->unsigned()->increments();
             $table->string('user');
             $table->string('password');
-            $table->boolean('state')->default(0);
+            $table->boolean('status')->default(0);
             $table->timestamps();
         });
 
         Schema::table('users', function(Blueprint $table) {
-            $table->foreign('role_id')->references('id')->on('roles');
+            $table->foreign('role_id')->references('role_id')->on('roles');
         });
     }
 

@@ -3,6 +3,7 @@
 namespace Dashboard;
 
 use Illuminate\Database\Eloquent\Model;
+use Dashboard\Role;
 
 class User extends Model
 {
@@ -12,7 +13,7 @@ class User extends Model
      * @var array
      */
     protected $fillable = [
-        'first_name', 'last_name', 'email', 'phone', 'address', 'Birthdate', 'sex', 'photo', 'role_id', 'user', 'state',
+        'first_name', 'last_name', 'email', 'phone', 'address', 'Birth_date', 'sex', 'photo', 'role_id', 'user', 'state',
     ];
 
     /**
@@ -25,6 +26,6 @@ class User extends Model
     ];
 
     public function role(){
-        return $this->hasOne('Dashboard\Role','foreign_key','role_id');
+        return $this->hasOne(Role::class);
     }
 }

@@ -3,6 +3,7 @@
 namespace Dashboard;
 
 use Illuminate\Database\Eloquent\Model;
+use Dashboard\User;
 
 class Role extends Model
 {
@@ -20,6 +21,6 @@ class Role extends Model
 
     public function user()
     {
-        return $this->belongsTo('App\User','foreign_key','id');
+        return $this->belongsTo(User::class);
     }
 }

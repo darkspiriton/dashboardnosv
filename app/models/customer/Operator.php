@@ -1,13 +1,12 @@
 <?php
 
-namespace Dashboard\models\customer;
+namespace Dashboard\Models\Customer;
 
 use Illuminate\Database\Eloquent\Model;
-use Dashboard\models\customer\Phones;
 
 class Operator extends Model
 {
     public function phones(){
-        return $this->hasMany(Phones::class);
+        return $this->hasMany(Phone::class);
     }
 }

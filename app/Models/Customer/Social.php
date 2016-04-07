@@ -1,12 +1,10 @@
 <?php
 
-namespace Dashboard\models\customer;
+namespace Dashboard\Models\Customer;
 
 use Illuminate\Database\Eloquent\Model;
-use Dashboard\models\customer\Channel;
-use Dashboard\models\customer\Customer;
 
-class Socials extends Model
+class Social extends Model
 {
     public function customer(){
         return $this->belongsTo(Customer::class);

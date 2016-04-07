@@ -14,15 +14,11 @@ class CreateCustomerAllReferencesTable extends Migration
     {
         // Customers
         Schema::create('customers', function(Blueprint $table){
-            $table->increments('customer_id');
+            $table->increments('id');
             $table->string('name');
             $table->integer('age');
             $table->integer('user_id')->unsigned()->increments();
             $table->timestamps();
-        });
-
-        Schema::table('customers', function(Blueprint $table){
-            $table->foreign('user_id')->references('user_id')->on('users');
         });
 
         // Ubigeos
@@ -38,54 +34,64 @@ class CreateCustomerAllReferencesTable extends Migration
 
         // Operators
         Schema::create('operators', function(Blueprint $table){
-            $table->increments('operator_id');
-            $table->string('operator_name', 100);
+            $table->increments('id');
+            $table->string('name', 100);
         });
 
         // Channels
         Schema::create('channels', function(Blueprint $table){
-            $table->increments('channel_id');
-            $table->string('channel_name');
+            $table->increments('id');
+            $table->string('name');
         });
 
         // Addresses
         Schema::create('addresses', function(Blueprint $table){
-            $table->increments('address_id');
+            $table->increments('id');
             $table->integer('customer_id')->unsigned()->increments();
             $table->string('ubigeo_id',6);
             $table->string('description');
             $table->string('reference');
         });
 
-        Schema::table('addresses',function(Blueprint $table){
-            $table->foreign('ubigeo_id')->references('UBIDST')->on('ubigeos');
-            $table->foreign('customer_id')->references('customer_id')->on('customers');
-        });
-
         // Socials
         Schema::create('socials', function(Blueprint $table){
-            $table->increments('social_id');
+            $table->increments('id');
             $table->integer('customer_id')->unsigned()->increments();
             $table->integer('channel_id')->unsigned()->increments();
             $table->string('channel_url');
         });
 
-        Schema::table('socials', function(Blueprint $table){
-            $table->foreign('customer_id')->references('customer_id')->on('customers');
-            $table->foreign('channel_id')->references('channel_id')->on('channels');
-        });
-
         // Phones
         Schema::create('phones', function(Blueprint $table){
-            $table->increments('phone_id');
+            $table->increments('id');
             $table->integer('customer_id')->unsigned()->increments();
             $table->integer('operator_id')->unsigned()->increments();
-            $table->string('phone_number', 50);
+            $table->string('number', 50);
+        });
+
+        /*
+         *
+            Relationships
+         *
+         */
+
+        Schema::table('customers', function(Blueprint $table){
+            $table->foreign('user_id')->references('id')->on('users');
+        });
+
+        Schema::table('addresses',function(Blueprint $table){
+            $table->foreign('ubigeo_id')->references('UBIDST')->on('ubigeos');
+            $table->foreign('customer_id')->references('id')->on('customers');
+        });
+
+        Schema::table('socials', function(Blueprint $table){
+            $table->foreign('customer_id')->references('id')->on('customers');
+            $table->foreign('channel_id')->references('id')->on('channels');
         });
 
         Schema::table('phones',function(Blueprint $table){
-            $table->foreign('customer_id')->references('customer_id')->on('customers');
-            $table->foreign('operator_id')->references('operator_id')->on('operators');
+            $table->foreign('customer_id')->references('id')->on('customers');
+            $table->foreign('operator_id')->references('id')->on('operators');
         });
     }
 
@@ -96,12 +102,12 @@ class CreateCustomerAllReferencesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('customers');
         Schema::dropIfExists('addresses');
         Schema::dropIfExists('ubigeos');
         Schema::dropIfExists('phones');
         Schema::dropIfExists('operators');
         Schema::dropIfExists('socials');
         Schema::dropIfExists('channels');
+        Schema::dropIfExists('customers');
     }
 }

@@ -14,7 +14,7 @@ class CreateOrdersAllReferencesTable extends Migration
     {
         // Orders
         Schema::create('orders', function(Blueprint $table){
-            $table->increments('order_id');
+            $table->increments('id');
             $table->integer('customer_id')->unsigned()->increments();
             $table->integer('user_id')->unsigned()->increments();
             $table->integer('status_id')->unsigned()->increments();
@@ -24,7 +24,7 @@ class CreateOrdersAllReferencesTable extends Migration
 
         // Orders Detail
         Schema::create('order_details', function(Blueprint $table){
-            $table->increments('detail_id');
+            $table->increments('id');
             $table->integer('order_id')->unsigned()->increments();
             $table->integer('product_id')->unsigned()->increments();
             $table->integer('quantity');
@@ -33,13 +33,13 @@ class CreateOrdersAllReferencesTable extends Migration
 
         // Orders status
         Schema::create('status_order', function(Blueprint $table){
-            $table->increments('status_id');
-            $table->string('status_name');
+            $table->increments('id');
+            $table->string('name');
         });
 
         // calls
         Schema::create('calls', function(Blueprint $table){
-            $table->increments('call_id');
+            $table->increments('id');
             $table->integer('order_id')->unsigned()->increments();
             $table->integer('status_id')->unsigned()->increments();
             $table->string('observation');
@@ -48,25 +48,30 @@ class CreateOrdersAllReferencesTable extends Migration
 
         // Orders status
         Schema::create('status_call', function(Blueprint $table){
-            $table->increments('status_id');
-            $table->string('status_name');
+            $table->increments('id');
+            $table->string('name');
         });
 
-        //RelationShips
+        /*
+         *
+            Relationships
+         *
+         */
+
         Schema::table('orders', function(Blueprint $table) {
-            $table->foreign('customer_id')->references('customer_id')->on('customers');
-            $table->foreign('user_id')->references('user_id')->on('users');
-            $table->foreign('status_id')->references('status_id')->on('status_order');
+            $table->foreign('customer_id')->references('id')->on('customers');
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('status_id')->references('id')->on('status_order');
         });
 
         Schema::table('calls', function(Blueprint $table) {
-            $table->foreign('order_id')->references('order_id')->on('orders');
-            $table->foreign('status_id')->references('status_id')->on('status_call');
+            $table->foreign('order_id')->references('id')->on('orders');
+            $table->foreign('status_id')->references('id')->on('status_call');
         });
 
         Schema::table('order_details', function(Blueprint $table) {
-            $table->foreign('order_id')->references('order_id')->on('orders');
-//            $table->foreign('product_id')->references('product_id')->on('products');
+            $table->foreign('order_id')->references('id')->on('orders');
+//            $table->foreign('product_id')->references('id')->on('products');
         });
     }
 
@@ -78,9 +83,10 @@ class CreateOrdersAllReferencesTable extends Migration
     public function down()
     {
         Schema::dropIfExists('order_details');
-        Schema::dropIfExists('orders');
-        Schema::dropIfExists('status_order');
         Schema::dropIfExists('calls');
         Schema::dropIfExists('status_call');
+        Schema::dropIfExists('orders');
+        Schema::dropIfExists('status_order');
+
     }
 }

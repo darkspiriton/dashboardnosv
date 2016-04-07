@@ -16,7 +16,7 @@ class Role extends Model
     protected $table = 'roles';
 
     protected $fillable = [
-        'abrev', 'description',
+        'abrev', 'name',
     ];
 
     public function user()

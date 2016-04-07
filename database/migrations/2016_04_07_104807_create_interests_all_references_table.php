@@ -14,7 +14,7 @@ class CreateInterestsAllReferencesTable extends Migration
     {
         // Interests
         Schema::create('interests', function(Blueprint $table){
-            $table->increments('interest_id');
+            $table->increments('id');
             $table->integer('status_id')->unsigned()->increments();
             $table->integer('channel_id')->unsigned()->increments();
             $table->integer('customer_id')->unsigned()->increments();
@@ -25,28 +25,33 @@ class CreateInterestsAllReferencesTable extends Migration
 
         // Interest Details
         Schema::create('interest_details', function(Blueprint $table){
-            $table->increments('detail_id');
+            $table->increments('id');
             $table->integer('interest_id')->unsigned()->increments();
             $table->integer('product_id')->unsigned()->increments();
         });
 
         // Interest Status
         Schema::create('status_interests',function(Blueprint $table){
-            $table->increments('status_id');
-            $table->string('status_name');
+            $table->increments('id');
+            $table->string('name');
         });
 
-        // Relationships
+        /*
+         *
+            Relationships
+         *
+         */
+
         Schema::table('interests', function(Blueprint $table){
-            $table->foreign('status_id')->references('status_id')->on('status_interests');
-            $table->foreign('channel_id')->references('channel_id')->on('channels');
-            $table->foreign('customer_id')->references('customer_id')->on('customers');
-            $table->foreign('user_id')->references('user_id')->on('users');
+            $table->foreign('status_id')->references('id')->on('status_interests');
+            $table->foreign('channel_id')->references('id')->on('channels');
+            $table->foreign('customer_id')->references('id')->on('customers');
+            $table->foreign('user_id')->references('id')->on('users');
         });
 
         Schema::table('interest_details', function(Blueprint $table){
-            $table->foreign('interest_id')->references('interest_id')->on('interests');
-//            $table->foreign('product_id')->references('product_id')->on('products');
+            $table->foreign('interest_id')->references('id')->on('interests');
+//            $table->foreign('product_id')->references('id')->on('products');
         });
 
     }

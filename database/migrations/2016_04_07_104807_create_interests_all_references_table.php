@@ -58,8 +58,8 @@ class CreateInterestsAllReferencesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('status_interests');
         Schema::dropIfExists('interest_details');
         Schema::dropIfExists('interests');
+        Schema::dropIfExists('status_interests');
     }
 }

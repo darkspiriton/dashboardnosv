@@ -24,7 +24,7 @@ class CreateRegistersScopeAllReferencesTable extends Migration
         // Scope Types
         Schema::create('types_scope', function(Blueprint $table){
             $table->increments('type_id');
-            $table->integer('type_name')->unsigned()->increments();
+            $table->string('type_name');
         });
 
         // Scope Details
@@ -55,8 +55,8 @@ class CreateRegistersScopeAllReferencesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('types_scope');
         Schema::dropIfExists('scope_details');
         Schema::dropIfExists('scopes');
+        Schema::dropIfExists('types_scope');
     }
 }

@@ -22,7 +22,7 @@ class CreateProductsTable extends Migration
 
         Schema::create('types_attributes',function(Blueprint $table){
             $table->increments('id');
-            $table->string('description',100);
+            $table->string('name',100);
             $table->timestamps();
         });
 

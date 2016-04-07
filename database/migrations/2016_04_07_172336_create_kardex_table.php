@@ -23,7 +23,7 @@ class CreateKardexTable extends Migration
 
         Schema::create('types_movements',function(Blueprint $table){
             $table->increments('id');
-            $table->string('description',100);
+            $table->string('name',100);
         });
 
         Schema::create('movements',function (Blueprint $table){
@@ -34,6 +34,8 @@ class CreateKardexTable extends Migration
             $table->date('date');
             $table->foreign('kardex_id')->references('id')->on('kardexs');
             $table->foreign('type_id')->references('id')->on('types_movements');
+            $table->foreign('ship_id')->references('id')->on('shipments');
+
 
         });
     }

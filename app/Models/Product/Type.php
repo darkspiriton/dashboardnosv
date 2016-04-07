@@ -24,6 +24,8 @@ class Type extends Model
         'password',
     ];
 
+    protected $table='types_attributes';
+
     public function attributes(){
         return $this->hasMany(Attribute::class);
     }

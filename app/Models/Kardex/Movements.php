@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class Movements extends Model
 {
+
+    protected $table='movements';
+
     public function kardex(){
         return $this->belongsTo(Kardex::class);
     }

@@ -19,7 +19,7 @@ class CreateShipmentTable extends Migration
 
         Schema::create('types_shipments', function(Blueprint $table){
             $table->increments('id');
-            $table->string('channel');
+            $table->string('name');
         });
 
         Schema::create('routes_sheets',function(Blueprint $table){
@@ -48,6 +48,7 @@ class CreateShipmentTable extends Migration
             $table->increments('id');
             $table->integer('route_sheet_id')->unsigned();
             $table->integer('shipment_id')->unsigned();
+            $table->string('observations');
             $table->foreign('route_sheet_id')->references('id')->on('routes_sheets');
             $table->foreign('shipment_id')->references('id')->on('shipments');
 

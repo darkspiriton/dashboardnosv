@@ -19,6 +19,7 @@ class CreateScopesAllReferencesTable extends Migration
             $table->integer('channel_id')->unsigned()->increments();
             $table->integer('type_id')->unsigned()->increments();
             $table->string('observation');
+            $table->timestamp('date');
         });
 
         // Scope Types
@@ -48,7 +49,7 @@ class CreateScopesAllReferencesTable extends Migration
 
         Schema::table('scope_details', function(Blueprint $table){
             $table->foreign('scope_id')->references('id')->on('scopes');
-//            $table->foreign('product_id')->references('id')->on('products');
+            $table->foreign('product_id')->references('id')->on('products');
         });
 
     }

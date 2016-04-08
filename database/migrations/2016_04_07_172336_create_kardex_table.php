@@ -31,7 +31,7 @@ class CreateKardexTable extends Migration
             $table->integer('ship_id')->unsigned();
             $table->integer('kardex_id')->unsigned();
             $table->integer('type_id')->unsigned();
-            $table->date('date');
+            $table->timestamp('date');
             $table->foreign('kardex_id')->references('id')->on('kardexs');
             $table->foreign('type_id')->references('id')->on('types_movements');
             $table->foreign('ship_id')->references('id')->on('shipments');

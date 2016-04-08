@@ -28,3 +28,32 @@ $factory->define(Dashboard\User::class, function (Generator $faker) {
         'password'  =>  bcrypt('123456'),
     ];
 });
+
+$factory->define(\Dashboard\Models\Customer\Customer::class, function (Generator $faker) {
+    return [
+        'name'  =>  $faker->name,
+        'age'   =>  $faker->randomFloat($nbMaxDecimals=0,$min=18,$max=30),
+    ];
+});
+
+$factory->define(\Dashboard\Models\Customer\Phone::class, function (Generator $faker) {
+    return [
+        'number'        =>  $faker->phoneNumber,
+        'operator_id'   =>  $faker->randomFloat($nbMaxDecimals=0,$min=1,$max=6),
+    ];
+});
+
+$factory->define(\Dashboard\Models\Customer\Social::class, function (Generator $faker) {
+    return [
+        'channel_url'=>  $faker->url,
+        'channel_id' =>  $faker->randomFloat($nbMaxDecimals=0,$min=1,$max=3),
+    ];
+});
+
+$factory->define(\Dashboard\Models\Customer\Address::class, function (Generator $faker) {
+    return [
+        'description'=>  $faker->text(200),
+        'reference' =>  $faker->text(200),
+        'ubigeo_id' =>  '150114',
+    ];
+});

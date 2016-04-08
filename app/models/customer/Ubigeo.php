@@ -8,6 +8,8 @@ class Ubigeo extends Model
 {
     protected $table = 'ubigeos';
 
+    public $timestamps = false;
+
     public function Adressess(){
         return $this->hasMany(Address::class);
     }

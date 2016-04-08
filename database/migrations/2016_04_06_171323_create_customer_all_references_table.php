@@ -81,7 +81,7 @@ class CreateCustomerAllReferencesTable extends Migration
         });
 
         Schema::table('addresses',function(Blueprint $table){
-            $table->foreign('ubigeo_id')->references('UBIDST')->on('ubigeos');
+//            $table->foreign('ubigeo_id')->references('UBIDST')->on('ubigeos');
             $table->foreign('customer_id')->references('id')->on('customers');
         });
 

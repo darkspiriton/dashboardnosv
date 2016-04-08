@@ -8,6 +8,8 @@ class Channel extends Model
 {
     protected $table = 'channels';
 
+    public $timestamps = false;
+
     public function socials(){
         return $this->hasMany(Social::class);
     }

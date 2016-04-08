@@ -3,6 +3,7 @@
 namespace Dashboard\Models\Customer;
 
 use Illuminate\Database\Eloquent\Model;
+use Dashboard\User;
 
 class Customer extends Model
 {
@@ -18,5 +19,9 @@ class Customer extends Model
 
     public function socials(){
         return $this->hasMany(Social::class);
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class);
     }
 }

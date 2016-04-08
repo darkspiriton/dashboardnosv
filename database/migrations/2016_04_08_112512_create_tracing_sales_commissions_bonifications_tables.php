@@ -22,7 +22,7 @@ class CreateTracingSalesCommissionsBonificationsTables extends Migration
         });
 
         // Sales
-        Schema::create('Sales', function(Blueprint $table){
+        Schema::create('sales', function(Blueprint $table){
             $table->increments('id');
             $table->integer('shipment_id')->unsigned();
             $table->float('total');

@@ -3,7 +3,7 @@
 namespace Dashboard;
 
 use Illuminate\Database\Eloquent\Model;
-use Dashboard\Role;
+use Dashboard\Models\Customer\Customer;
 
 class User extends Model
 {
@@ -27,5 +27,9 @@ class User extends Model
 
     public function role(){
         return $this->belongsTo(Role::class);
+    }
+
+    public function customers(){
+        return $this->hasMany(Customer::class);
     }
 }

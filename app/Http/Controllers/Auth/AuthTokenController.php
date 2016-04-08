@@ -46,7 +46,10 @@ class AuthTokenController extends Controller
         if (Hash::check($password, $user->password)) {
             unset($user->password);
             $rol=$user->role->abrev;
-            return response()->json(['token' => $this->createToken($user),'rol'=> $rol , 'routes' => Config::get('angularJSRoutes.$rol')]);
+            $token = $this->createToken($user);
+            $user->token = $token;
+            $user->save();
+            return response()->json(['token' => $token,'rol'=> $rol , 'routes' => Config::get('angularJSRoutes.'.$rol)]);
         } else {
             return response()->json(['message' => 'El usuario y/o contraseña no son validos'], 401);
         }

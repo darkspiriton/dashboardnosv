@@ -20,13 +20,9 @@
 
     <div class="clearfix"></div>
 
-    <!--<div class="checkbox">-->
-        <!--<label>-->
-            <!--<input type="checkbox" value="">-->
-            <!--<i class="input-helper"></i>-->
-            <!--No cerrar sesion-->
-        <!--</label>-->
-    <!--</div>-->
+    <form id="frm" action="/dashboard" method="post" style="display: none;">
+        <input type="text" name="token" id="token">
+    </form>
 
     <a href="#" class="btn btn-login btn-danger btn-float" ng-click="login()"><i class="md md-arrow-forward"></i></a>
 

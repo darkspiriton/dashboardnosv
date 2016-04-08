@@ -1,5 +1,8 @@
 angular.module('App')
-    .controller('homeCtrl', function() {
+    .controller('homeCtrl', function($scope, logout) {
+        $scope.logout = function () {
+            return  logout.logout();
+        }
         function Vector(x, y, z) {
             this.x = x;
             this.y = y;

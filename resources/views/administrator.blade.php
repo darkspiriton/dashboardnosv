@@ -21,7 +21,7 @@
                         <a href="#"><i class="md md-person"></i> Ver Perfil</a>
                     </li>
                     <li>
-                        <a href="#"><i class="md md-history"></i> Cerrar Sesion</a>
+                        <a href="#"><i class="md md-history" ng-click="logout()"></i> Cerrar Sesion</a>
                     </li>
                 </ul>
             </div>

@@ -64,6 +64,17 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
         };
 
     }])
+    .factory('logout', function(storage, $window){
+        logout = function(){
+            storage.removeStorage();
+            $window.location.href = "/";
+            console.log('l');
+        };
+
+        return {
+            logout: logout
+        }
+    })
     .controller('appCtrl', function AppCtrl($state, $log, $scope, $window, $auth, storage) {
         $scope.pageTitle = 'Home';
 

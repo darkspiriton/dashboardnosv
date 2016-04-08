@@ -11,12 +11,27 @@
 |
 */
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Config;
+use Dashboard\User;
+
 Route::get('/', function () {
     return view('login');
 });
 
-Route::get('/dashboard', function () {
-    return view('vendedor');
+
+Route::post('/dashboard', function (Request $request) {
+    $token = $request->input('token');
+    $user = User::where('token','=', $token)->first();
+    if ($user->role->abrev == 'GOD' ){
+        return view('god');
+    } else if ($user->role->abrev == 'ADM') {
+        return view('administrator');
+    } else if ($user->role->abrev == 'VEN') {
+        return view('vendedor');
+    } else if ($user->role->abrev == 'JVE') {
+        return view('vendedor');
+    }
 });
 
 
@@ -35,6 +50,6 @@ Route::post('auth/login' , 'Auth\AuthTokenController@login');
 Route::post('auth/signup' , 'Auth\AuthTokenController@signup');
 
 Route::get('/test', function(){
-    return response()->json([ 'role' => 'VEN' , 'routes' => Config::get('angularJSRoutes.VEN')]);
+    response()->json([ 'role' => 'VEN' , 'routes' => Config::get('angularJSRoutes.GOD')]);
     dd(Config::get('angularJSRoutes.GOD'));
 });

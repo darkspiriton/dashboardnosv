@@ -22,7 +22,7 @@ class CreateTracingSalesCommissionsBonificationsTables extends Migration
         });
 
         // Sales
-        Schema::create('Sales', function(Blueprint $table){
+        Schema::create('sales', function(Blueprint $table){
             $table->increments('id');
             $table->integer('shipment_id')->unsigned();
             $table->float('total');
@@ -59,7 +59,7 @@ class CreateTracingSalesCommissionsBonificationsTables extends Migration
             $table->foreign('user_id')->references('id')->on('users');
         });
 
-        Schema::table('Sales', function(Blueprint $table) {
+        Schema::table('sales', function(Blueprint $table) {
             $table->foreign('shipment_id')->references('id')->on('shipments');
         });
 
@@ -83,7 +83,7 @@ class CreateTracingSalesCommissionsBonificationsTables extends Migration
     {
         Schema::dropIfExists('bonifications');
         Schema::dropIfExists('commissions');
-        Schema::dropIfExists('Sales');
+        Schema::dropIfExists('sales');
         Schema::dropIfExists('tracing');
     }
 }

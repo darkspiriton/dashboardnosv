@@ -14,7 +14,7 @@ class CreateKardexTable extends Migration
     {
         Schema::create('kardexs', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('product_cod')->unique();
+            $table->integer('product_cod');
             $table->integer('product_id')->unsigned();
             $table->boolean('stock');
             $table->timestamps();

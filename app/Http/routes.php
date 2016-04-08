@@ -16,7 +16,7 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('administrator');
+    return view('vendedor');
 });
 
 

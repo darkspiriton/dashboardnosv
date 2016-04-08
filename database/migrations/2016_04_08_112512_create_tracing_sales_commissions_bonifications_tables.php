@@ -59,7 +59,7 @@ class CreateTracingSalesCommissionsBonificationsTables extends Migration
             $table->foreign('user_id')->references('id')->on('users');
         });
 
-        Schema::table('Sales', function(Blueprint $table) {
+        Schema::table('sales', function(Blueprint $table) {
             $table->foreign('shipment_id')->references('id')->on('shipments');
         });
 
@@ -83,7 +83,7 @@ class CreateTracingSalesCommissionsBonificationsTables extends Migration
     {
         Schema::dropIfExists('bonifications');
         Schema::dropIfExists('commissions');
-        Schema::dropIfExists('Sales');
+        Schema::dropIfExists('sales');
         Schema::dropIfExists('tracing');
     }
 }

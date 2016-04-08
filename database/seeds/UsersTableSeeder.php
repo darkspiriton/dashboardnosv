@@ -13,11 +13,11 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
 
-        DB::table('customers')->delete();
-        DB::table('operators')->delete();
-        DB::table('channels')->delete();
-        DB::table('users')->delete();
-        DB::table('roles')->delete();
+//        DB::table('customers')->delete();
+//        DB::table('operators')->delete();
+//        DB::table('channels')->delete();
+//        DB::table('users')->delete();
+//        DB::table('roles')->delete();
 
         DB::transaction(function () {
 
@@ -29,20 +29,20 @@ class UsersTableSeeder extends Seeder
                 ['abrev' => 'MOT', 'name' => 'Motorizado']
             ]);
 
-            DB::table('operators')->insert([
-                ['name' => 'Movistar'],
-                ['name' => 'Claro'],
-                ['name' => 'Entel'],
-                ['name' => 'Bitel'],
-                ['name' => 'Tuenti'],
-                ['name' => 'Virgin Mobile']
-            ]);
-
-            DB::table('channels')->insert([
-                ['name' => 'Facebook'],
-                ['name' => 'Twitter'],
-                ['name' => 'Whatsapp']
-            ]);
+//            DB::table('operators')->insert([
+//                ['name' => 'Movistar'],
+//                ['name' => 'Claro'],
+//                ['name' => 'Entel'],
+//                ['name' => 'Bitel'],
+//                ['name' => 'Tuenti'],
+//                ['name' => 'Virgin Mobile']
+//            ]);
+//
+//            DB::table('channels')->insert([
+//                ['name' => 'Facebook'],
+//                ['name' => 'Twitter'],
+//                ['name' => 'Whatsapp']
+//            ]);
         });
 
         $faker = Faker::create();
@@ -101,13 +101,13 @@ class UsersTableSeeder extends Seeder
             ],
         ]);
 
-        factory(Dashboard\User::class, 10)->create()->each(function($user){
-            $user->customers()->saveMany(factory(\Dashboard\Models\Customer\Customer::class, 3)->make())->each(function($customer){
+//        factory(Dashboard\User::class, 10)->create()->each(function($user){
+//            $user->customers()->saveMany(factory(\Dashboard\Models\Customer\Customer::class, 3)->make())->each(function($customer){
 //                $customer->phones()->saveMany(factory(\Dashboard\Models\Customer\Phone::class, 2)->make());
-                $customer->socials()->save(factory(\Dashboard\Models\Customer\Social::class)->make());
-                $customer->phones()->saveMany(factory(\Dashboard\Models\Customer\Address::class, 2)->make());
-            });
-        });
+//                $customer->socials()->save(factory(\Dashboard\Models\Customer\Social::class)->make());
+//                $customer->phones()->saveMany(factory(\Dashboard\Models\Customer\Address::class, 2)->make());
+//            });
+//        });
 
     }
 }

@@ -43,7 +43,7 @@ class CreateOrdersAllReferencesTable extends Migration
             $table->integer('order_id')->unsigned()->increments();
             $table->integer('status_id')->unsigned()->increments();
             $table->string('observation');
-            $table->date('date');
+            $table->timestamp('date');
         });
 
         // Orders status
@@ -71,7 +71,7 @@ class CreateOrdersAllReferencesTable extends Migration
 
         Schema::table('order_details', function(Blueprint $table) {
             $table->foreign('order_id')->references('id')->on('orders');
-//            $table->foreign('product_id')->references('id')->on('products');
+            $table->foreign('product_id')->references('id')->on('products');
         });
     }
 

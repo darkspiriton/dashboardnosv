@@ -51,7 +51,7 @@ class CreateInterestsAllReferencesTable extends Migration
 
         Schema::table('interest_details', function(Blueprint $table){
             $table->foreign('interest_id')->references('id')->on('interests');
-//            $table->foreign('product_id')->references('id')->on('products');
+            $table->foreign('product_id')->references('id')->on('products');
         });
 
     }

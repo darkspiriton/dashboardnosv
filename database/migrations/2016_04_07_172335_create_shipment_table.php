@@ -25,7 +25,7 @@ class CreateShipmentTable extends Migration
         Schema::create('routes_sheets',function(Blueprint $table){
             $table->increments('id');
             $table->integer('user_id')->unsigned();
-            $table->date('date');
+            $table->timestamp('date');
             $table->foreign('user_id')->references('id')->on('users');
         });
 
@@ -35,7 +35,7 @@ class CreateShipmentTable extends Migration
             $table->integer('address_id')->unsigned();
             $table->integer('shipment_status_id')->unsigned();
             $table->integer('type_ship_id')->unsigned();
-            $table->date('date');
+            $table->timestamp('date');
             $table->float('cost');
             $table->timestamps();
             $table->foreign('order_id')->references('id')->on('orders');

@@ -47,11 +47,11 @@ class CreateCustomerAllReferencesTable extends Migration
         // Addresses
         Schema::create('addresses', function(Blueprint $table){
             $table->increments('id');
-
             $table->integer('customer_id')->unsigned();
             $table->string('ubigeo_id',6);
             $table->string('description');
             $table->string('reference');
+            $table->timestamps();
         });
 
         // Socials

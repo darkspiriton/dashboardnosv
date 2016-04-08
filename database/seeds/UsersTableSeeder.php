@@ -103,7 +103,7 @@ class UsersTableSeeder extends Seeder
 
         factory(Dashboard\User::class, 10)->create()->each(function($user){
             $user->customers()->saveMany(factory(\Dashboard\Models\Customer\Customer::class, 3)->make())->each(function($customer){
-                $customer->phones()->saveMany(factory(\Dashboard\Models\Customer\Phone::class, 2)->make());
+//                $customer->phones()->saveMany(factory(\Dashboard\Models\Customer\Phone::class, 2)->make());
                 $customer->socials()->save(factory(\Dashboard\Models\Customer\Social::class)->make());
                 $customer->phones()->saveMany(factory(\Dashboard\Models\Customer\Address::class, 2)->make());
             });

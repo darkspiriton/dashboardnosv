@@ -35,14 +35,6 @@
                     </ul>
                 </li>
                 <li class="sub-menu">
-                    <a href="#"><i class="md md-now-widgets"></i> Kardex</a>
-                    <ul>
-                        <li><a href="widget-templates.html"> Agregar nuevo producto</a></li>
-                        <li><a href="widgets.html"> Agregar stock de productos </a></li>
-                        <li><a href="widgets.html"> Editar productos </a></li>
-                    </ul>
-                </li>
-                <li class="sub-menu">
                     <a href="#"><i class="md md-now-widgets"></i> Reportes</a>
                     <ul>
                         <li><a href="widget-templates.html"> Reporte de ventas</a></li>

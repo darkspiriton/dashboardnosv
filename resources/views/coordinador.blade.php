@@ -35,25 +35,16 @@
                     </ul>
                 </li>
                 <li class="sub-menu">
-                    <a href="#"><i class="md md-now-widgets"></i> Kardex</a>
-                    <ul>
-                        <li><a href="widget-templates.html"> Agregar nuevo producto</a></li>
-                        <li><a href="widgets.html"> Agregar stock de productos </a></li>
-                        <li><a href="widgets.html"> Editar productos </a></li>
-                    </ul>
-                </li>
-                <li class="sub-menu">
-                    <a href="#"><i class="md md-now-widgets"></i> Reportes</a>
+                    <a href="#"><i class="md md-now-widgets"></i> Pedidos confirmados</a>
                     <ul>
                         <li><a href="widget-templates.html"> Reporte de ventas</a></li>
-                        <li><a href="widgets.html"> Reporte de segumiento</a></li>
+                        <li><a href="widgets.html"> Reporte de ventas por producto</a></li>
                     </ul>
                 </li>
                 <li class="sub-menu">
-                    <a href="#"><i class="md md-now-widgets"></i> Usuarios</a>
+                    <a href="#"><i class="md md-format-underline"></i> Hoja de Rutas</a>
                     <ul>
-                        <li><a href="widget-templates.html"> Crear Usuarios</a></li>
-                        <li><a href="widgets.html"> Editar Usuarios</a></li>
+                        <li><a href="widget-templates.html"> Registro de seguimiento</a></li>
                     </ul>
                 </li>
             </ul>

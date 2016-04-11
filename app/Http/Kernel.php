@@ -26,9 +26,9 @@ class Kernel extends HttpKernel
         'web' => [
             \Dashboard\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-            \Illuminate\Session\Middleware\StartSession::class,
-            \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            \Dashboard\Http\Middleware\VerifyCsrfToken::class,
+            //\Illuminate\Session\Middleware\StartSession::class, 
+            //\Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            //\Dashboard\Http\Middleware\VerifyCsrfToken::class,
         ],
 
         'api' => [
@@ -45,7 +45,7 @@ class Kernel extends HttpKernel
      */
     protected $routeMiddleware = [
         'auth' => \Dashboard\Http\Middleware\Authenticate::class,
-        'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+        //'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest' => \Dashboard\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
     ];

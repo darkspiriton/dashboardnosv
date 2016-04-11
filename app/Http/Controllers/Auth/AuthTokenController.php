@@ -25,7 +25,7 @@ class AuthTokenController extends Controller
             'iat' => time(),
             'exp' => time() + (2 * 7 * 24 * 60 * 60)
         ];
-        return JWT::encode($payload, Config::get('app.token_secret'));
+        return JWT::encode($payload, Config::get('app.jwt_token'));
     }
 
     /**

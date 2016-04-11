@@ -11,22 +11,6 @@
 |
 */
 
-use Illuminate\Http\Request;
-use Dashboard\User;
-
-Route::post('/dashboard', function (Request $request) {
-    $token = $request->input('token');
-    $user = User::where('token','=', $token)->first();
-    if ($user->role->abrev == 'GOD' ){
-        return view('god');
-    } else if ($user->role->abrev == 'ADM') {
-        return view('administrator');
-    } else if ($user->role->abrev == 'VEN') {
-        return view('vendedor');
-    } else if ($user->role->abrev == 'JVE') {
-        return view('vendedor');
-    }
-});
 
 /*
 |--------------------------------------------------------------------------
@@ -38,19 +22,16 @@ Route::post('/dashboard', function (Request $request) {
 | kernel and includes session state, CSRF protection, and more.
 |
 */
-Route::get('/',['middleware'=>'web', function () {
+Route::get('/login',['middleware'=>'web', function () {
     return view('login');
 }]);
 
 Route::group(['prefix'=>'auth','middleware' => ['web']],function(){
-    Route::post('/login' , 'Auth\AuthTokenController@login');
-    Route::post('/signup' , 'Auth\AuthTokenController@signup');
+    Route::post('/login' ,'Auth\AuthTokenController@login');
+    Route::post('/signup' ,'Auth\AuthTokenController@signup');
 
 });
 
-Route::group(['prefix'=>'dashboard','middleware'=>['web','auth']],function(){
-    Route::get('/', function () {
-        return view('vendedor');
-    });
-
+Route::group(['prefix'=>'dashboard','middleware'=>['auth']],function(){
+    Route::post('/','Auth\AuthTokenController@dashboard');
 });

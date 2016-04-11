@@ -1,55 +1,28 @@
 @extends('layouts.dashboard')
 
 @section('dashMenu')
-    <aside id="sidebar">
-        <div class="sidebar-inner c-overflow">
-            <div class="profile-menu">
-                <a href="#">
-                    <div class="profile-pic">
-                        <img src="img/profile-pics/1.jpg" alt="">
-                    </div>
-
-                    <div class="profile-info">
-                        Malinda Hollaway
-
-                        <i class="md md-arrow-drop-down"></i>
-                    </div>
-                </a>
-
-                <ul class="main-menu">
-                    <li>
-                        <a href="#"><i class="md md-person"></i> Ver Perfil</a>
-                    </li>
-                    <li>
-                        <a href="#"><i class="md md-history"></i> Cerrar Sesion</a>
-                    </li>
-                </ul>
-            </div>
-
-            <ul class="main-menu">
-                <li class="active"><a href="#/"><i class="md md-home"></i> Inicio</a></li>
-                <li class="sub-menu">
-                    <a href="#"><i class="md md-format-underline"></i> Indicadores</a>
-                    <ul>
-                        <li><a href="widget-templates.html"> Indicadores de ventas</a></li>
-                    </ul>
-                </li>
-                <li class="sub-menu">
-                    <a href="#"><i class="md md-now-widgets"></i> Pedidos confirmados</a>
-                    <ul>
-                        <li><a href="widget-templates.html"> Reporte de ventas</a></li>
-                        <li><a href="widgets.html"> Reporte de ventas por producto</a></li>
-                    </ul>
-                </li>
-                <li class="sub-menu">
-                    <a href="#"><i class="md md-format-underline"></i> Hoja de Rutas</a>
-                    <ul>
-                        <li><a href="widget-templates.html"> Registro de seguimiento</a></li>
-                    </ul>
-                </li>
+    <ul class="main-menu">
+        <li class="active"><a href="#/"><i class="md md-home"></i> Inicio</a></li>
+        <li class="sub-menu">
+            <a href="#"><i class="md md-format-underline"></i> Indicadores</a>
+            <ul>
+                <li><a href="widget-templates.html"> Indicadores de ventas</a></li>
             </ul>
-        </div>
-    </aside>
+        </li>
+        <li class="sub-menu">
+            <a href="#"><i class="md md-now-widgets"></i> Pedidos confirmados</a>
+            <ul>
+                <li><a href="widget-templates.html"> Reporte de ventas</a></li>
+                <li><a href="widgets.html"> Reporte de ventas por producto</a></li>
+            </ul>
+        </li>
+        <li class="sub-menu">
+            <a href="#"><i class="md md-format-underline"></i> Hoja de Rutas</a>
+            <ul>
+                <li><a href="widget-templates.html"> Registro de seguimiento</a></li>
+            </ul>
+        </li>
+    </ul>
 @stop
 
 @section('dashCtrls')

@@ -30,6 +30,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
       authHeader: 'Authorization',
       authToken: 'Bearer',
       storageType: 'localStorage',
+      configRol : 'role',
+      nameRole : 'roleName',
+      configInfo : 'name',
+      nameInfo : 'fullName',
       configRoutes : 'routes',
       nameRoutes: 'routesList',
       providers: {
@@ -326,8 +330,10 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
           }
 
           var accessToken = response && response.access_token;
-          var token,routes;
+          var token,routes,role,name;
           var nameRoutes = config.nameRoutes;
+          var nameRole = config.nameRole;
+          var nameInfo = config.nameInfo;
 
           if (accessToken) {
             if (angular.isObject(accessToken) && angular.isObject(accessToken.data)) {
@@ -341,6 +347,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
             var tokenRootData = config.tokenRoot && config.tokenRoot.split('.').reduce(function(o, x) { return o[x]; }, response.data);
             token = tokenRootData ? tokenRootData[config.tokenName] : response.data && response.data[config.tokenName];
             routes = response.data && response.data[config.configRoutes];
+            role = response.data && response.data[config.configRol];
+            name = response.data && response.data[config.configInfo];
           }
 
           if (!token) {
@@ -350,6 +358,8 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
 
           storage.set(tokenName, token);
           storage.set(nameRoutes, routes);
+          storage.set(nameRole, role);
+          storage.set(nameInfo, name);
         };
 
         Shared.removeToken = function() {

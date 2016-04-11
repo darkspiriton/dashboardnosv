@@ -11,14 +11,6 @@
 |
 */
 
-Route::get('/', function () {
-    return view('login');
-});
-
-Route::get('/dashboard', function () {
-    return view('vendedor');
-});
-
 
 /*
 |--------------------------------------------------------------------------
@@ -30,11 +22,18 @@ Route::get('/dashboard', function () {
 | kernel and includes session state, CSRF protection, and more.
 |
 */
+Route::get('/',['middleware'=>'web', function () {
+    return view('login');
+}]);
 
-Route::post('auth/login' , 'Auth\AuthTokenController@login');
-Route::post('auth/signup' , 'Auth\AuthTokenController@signup');
+Route::group(['prefix'=>'auth','middleware' => ['web']],function(){
+    Route::post('/login' , 'Auth\AuthTokenController@login');
+    Route::post('/signup' , 'Auth\AuthTokenController@signup');
 
-Route::get('/test', function(){
-    return response()->json([ 'role' => 'VEN' , 'routes' => Config::get('angularJSRoutes.VEN')]);
-    dd(Config::get('angularJSRoutes.GOD'));
+});
+
+Route::group(['prefix'=>'dashboard','middleware'=>['web','auth']],function(){
+    Route::get('/', function () {
+        return view('vendedor');
+    });
 });

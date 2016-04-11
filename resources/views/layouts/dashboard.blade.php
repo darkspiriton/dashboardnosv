@@ -22,7 +22,7 @@
         </li>
 
         <li class="logo hidden-xs">
-            <a href="index.html">Material Admin</a>
+            <a href="#/" ng-bind-html="'Dashboard | ' + userInfo.role"></a>
         </li>
 
         <li class="pull-right">
@@ -46,7 +46,34 @@
 </header>
 
 <section id="main">
-    @yield('dashMenu')
+
+    <aside id="sidebar">
+        <div class="sidebar-inner c-overflow">
+            <div class="profile-menu">
+                <a href="#">
+                    <div class="profile-pic">
+                        <img src="img/profile-pics/1.jpg" alt="">
+                    </div>
+
+                    <div class="profile-info">
+                        <span ng-bind-html="userInfo.name"></span>
+                        <i class="md md-arrow-drop-down"></i>
+                    </div>
+                </a>
+
+                <ul class="main-menu">
+                    <li>
+                        <a href="#"><i class="md md-person"></i> Ver Perfil</a>
+                    </li>
+                    <li>
+                        <a href="#" ng-click="logout()"><i class="md md-history"></i> Cerrar Sesion</a>
+                    </li>
+                </ul>
+            </div>
+
+            @yield('dashMenu')
+        </div>
+    </aside>
 
     <section id="content">
         <div class="container">
@@ -54,16 +81,6 @@
                 <h2>Dashboard</h2>
 
                 <ul class="actions">
-                    <li>
-                        <a href="#">
-                            <i class="md md-trending-up"></i>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#">
-                            <i class="md md-done-all"></i>
-                        </a>
-                    </li>
                     <li class="dropdown">
                         <a href="#" data-toggle="dropdown">
                             <i class="md md-more-vert"></i>
@@ -71,13 +88,10 @@
 
                         <ul class="dropdown-menu dropdown-menu-right">
                             <li>
-                                <a href="#">Refresh</a>
+                                <a href="#">Recargar</a>
                             </li>
                             <li>
-                                <a href="#">Manage Widgets</a>
-                            </li>
-                            <li>
-                                <a href="#">Widgets Settings</a>
+                                <a href="#">Reportar un problema</a>
                             </li>
                         </ul>
                     </li>

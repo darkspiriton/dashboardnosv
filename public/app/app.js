@@ -74,16 +74,26 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
             };
 
             var list = storage.get('routesList');
-            if (!list)$scope.logout();
-            $scope.urls = list.split(",");
+            var urls = list.split(",");
+            var role = storage.get('roleName');
+            var name = storage.get('fullName');
+
+            //if (!list || !role || !name)$scope.logout();
+
+            $scope.userInfo = {
+                                urls : urls,
+                                role : role,
+                                name : name
+                              };
+            $log.log($scope.userInfo);
 
             $scope.$on('$stateChangeSuccess', function (event, toState) {
 
                 //Pruebas rutas
-                $log.log([$scope.urls,toState.url,$scope.urls.indexOf(toState.url)]);
+                $log.log([$scope.userInfo.urls,toState.url,$scope.userInfo.urls.indexOf(toState.url)]);
 
                 //si no los tiene que los redirija a /home
-                if($scope.urls.indexOf(toState.url) === -1){
+                if($scope.userInfo.urls.indexOf(toState.url) === -1){
                     event.preventDefault();
                     $state.go('home');
                 }

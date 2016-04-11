@@ -42,6 +42,27 @@ class Authenticate {
         {
             try{
                 $token = explode(' ', $request->header('Authorization'))[1];
+
+                $payload = (array) JWT::decode($token, Config::get('app.jwt_token'), array('HS256'));
+                if ($payload['exp'] < time())
+                {
+                    return response()->json(['message' => 'El Token Expiro']);
+                }
+                $request['user'] = $payload;
+                return $next($request);
+            }catch( DomainException $e){
+                return response()->json(['message' => 'El formato de la Key no es Valido'], 401);
+
+            }catch( ErrorException $e){
+                return response()->json(['message' => 'El formato del Header de la Key no es Valido'], 401);
+            }
+
+        } elseif ($request->input('Authorization'))
+        {
+            try{
+
+                $token = $request->input('Authorization');
+
                 $payload = (array) JWT::decode($token, Config::get('app.jwt_token'), array('HS256'));
 
                 if ($payload['exp'] < time())
@@ -52,10 +73,11 @@ class Authenticate {
                 $request['user'] = $payload;
 
                 return $next($request);
+            }catch( DomainException $e){
+                return response()->json(['message' => 'El formato de la Key no es Valido'], 401);
+
             }catch( ErrorException $e){
                 return response()->json(['message' => 'El formato del Header de la Key no es Valido'], 401);
-            } catch( DomainException $e){
-                return response()->json(['message' => 'El formato de la Key no es Valido'], 401);
             }
 
         }
@@ -64,5 +86,4 @@ class Authenticate {
             return response()->json(['message' => 'Por favor verificque que el request posee un campo de token valido'], 401);
         }
     }
-
 }

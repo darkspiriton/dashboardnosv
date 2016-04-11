@@ -22,7 +22,7 @@
 | kernel and includes session state, CSRF protection, and more.
 |
 */
-Route::get('/',['middleware'=>'web', function () {
+Route::get('/login',['middleware'=>'web', function () {
     return view('login');
 }]);
 

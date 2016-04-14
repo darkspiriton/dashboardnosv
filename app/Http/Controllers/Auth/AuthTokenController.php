@@ -27,7 +27,7 @@ class AuthTokenController extends Controller
         ];
         return JWT::encode($payload, Config::get('app.jwt_token'));
     }
-
+         
     /**
      * Log in with Email and Password.
      */

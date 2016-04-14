@@ -22,11 +22,12 @@
 | kernel and includes session state, CSRF protection, and more.
 |
 */
-Route::get('/login',['middleware'=>'web', function () {
+Route::get('/',['middleware'=>'web', function () {
     return view('login');
 }]);
 
 Route::group(['prefix'=>'auth','middleware' => ['web']],function(){
+
     Route::post('/login' ,'Auth\AuthTokenController@login');
     Route::post('/signup' ,'Auth\AuthTokenController@signup');
 
@@ -34,4 +35,14 @@ Route::group(['prefix'=>'auth','middleware' => ['web']],function(){
 
 Route::group(['prefix'=>'dashboard','middleware'=>['auth']],function(){
     Route::post('/','Auth\AuthTokenController@dashboard');
+});
+
+//API REST CRUD EMPREADOS
+Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
+    
+    Route::resource('user','UserController',
+                    ['only'=>['index','store','update','destroy','show']]);
+    Route::resource('products','ProductController',
+                    ['only'=>['index','store','update','destroy','show']]);
+
 });

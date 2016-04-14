@@ -5,6 +5,7 @@
 <link href="vendors/bower_components/material-design-iconic-font/css/material-design-iconic-font.min.css" rel="stylesheet">
 <link href="vendors/socicon/socicon.min.css" rel="stylesheet">
 <link href="vendors/socicon/socicon.min.css" rel="stylesheet">
+<link href="vendors/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css">
 
 <!-- CSS -->
 <link href="css/app.min.1.css" rel="stylesheet">

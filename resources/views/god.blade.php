@@ -16,16 +16,17 @@
                 <li><a href="widgets.html"> Reporte de segumiento</a></li>
             </ul>
         </li>
-        <li class="sub-menu">
-            <a href="#"><i class="md md-now-widgets"></i> Usuarios</a>
-            <ul>
-                <li><a href="widget-templates.html"> Crear Usuarios</a></li>
-                <li><a href="widgets.html"> Editar Usuarios</a></li>
-            </ul>
+        <li id="users">
+            <a href="#" ui-sref="Usuarios"><i class="md md-security"></i> Administrar usuarios</a>
+        </li>
+        <li id="comments">
+            <a href="#" ui-sref="Comentarios"><i class="md md-messenger"></i> Administrar comentarios</a>
         </li>
     </ul>
 @stop
 
 @section('dashCtrls')
     <script src="app/controllers/homeCtrl.js"></script>
+    <script src="app/controllers/usersCtrl.js"></script>
+    <script src="app/controllers/commentsCtrl.js"></script>
 @stop

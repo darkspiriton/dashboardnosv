@@ -15,8 +15,10 @@ require('laravel-elixir-stylus');
 elixir(function(mix) {
     mix.scripts(
         ['satellizer.js'],
-        'public/app/lib/satellizer.js'
+        'public/app/lib/satellizer.min.js'
     );
+    mix.sass('app1.css' , 'public/css/app.min.1.css');
+    mix.sass('app2.css' , 'public/css/app.min.2.css');
     mix.stylus('loginStyles.styl' , 'public/css/loginStyles.min.css');
     mix.stylus('styles.styl' , 'public/css/styles.min.css');
     mix.stylus('toastr.styl' , 'public/css/toastr.min.css');

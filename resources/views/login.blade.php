@@ -41,7 +41,7 @@
 <script src="/app/lib/angular/angular-sanitize.js"></script>
 <script src="/app/lib/angular/angular-ui-router.js"></script>
 <script src="/app/lib/angular/angular-toastr.tpls.js"></script>
-<script src="/app/lib/satellizer.js"></script>
+<script src="/app/lib/satellizer.min.js"></script>
 
 <!-- Application Code -->
 <script src="app/appLogin.js"></script>

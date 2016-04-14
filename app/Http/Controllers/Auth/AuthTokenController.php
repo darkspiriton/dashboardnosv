@@ -27,7 +27,7 @@ class AuthTokenController extends Controller
         ];
         return JWT::encode($payload, Config::get('app.jwt_token'));
     }
-
+         
     /**
      * Log in with Email and Password.
      */
@@ -85,5 +85,19 @@ class AuthTokenController extends Controller
         $user->save();
 
         return response()->json(['token' => $this->createToken($user)]);
+    }
+
+    public function dashboard(Request $request){
+        $token = $request->input('Authorization');
+        $user = User::where('token','=', $token)->first();
+        if ($user->role->abrev == 'GOD' ){
+            return view('god');
+        } else if ($user->role->abrev == 'ADM') {
+            return view('administrator');
+        } else if ($user->role->abrev == 'VEN') {
+            return view('vendedor');
+        } else if ($user->role->abrev == 'JVE') {
+            return view('vendedor');
+        }
     }
 }

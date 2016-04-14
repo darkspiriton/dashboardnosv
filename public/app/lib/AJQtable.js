@@ -10,9 +10,7 @@
 		actions 	= $scope.tableConfig.actions || [];
 		data 	= $scope.tableConfig.data || [];
 		config.configStatus  = ($scope.tableConfig.configStatus)?$scope.tableConfig.configStatus: 'sta';
-
-		//console.log([cols,actions,data,config.configStatus]);
-		//console.log(actions.length);
+		$scope.tableData || ($scope.tableData = [])
 
 		// Conpilar en angular las filas 
 		rowCompiler = function(nRow, aData, iDataIndex) {

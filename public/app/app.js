@@ -7,12 +7,9 @@ angular.module('App', [
                         'ui.router',
                         'satellizer',
                        ])
-    .config(function($stateProvider, $urlRouterProvider, $authProvider, $httpProvider) {
+    .config(function($stateProvider, $urlRouterProvider, $authProvider) {
         $authProvider.tokenName = "token";
         $authProvider.tokenPrefix = "DB_NV";
-
-        //$httpProvider.defaults.useXDomain = true;
-        //delete $httpProvider.defaults.headers.common['X-Requested-With'];
 
         $stateProvider
             .state('Home', {

@@ -69,7 +69,7 @@
 							temp[x] = acc.status(i, est);
 						else 
 							if ( val.constructor === Array)
-								temp[x] = (obj[val[0]]).substr(0, val[1]);
+								temp[x] = (obj[val[0]]).substr(0, val[1]) + ' ...';
 							else
 								temp[x] = obj[val];
 					});

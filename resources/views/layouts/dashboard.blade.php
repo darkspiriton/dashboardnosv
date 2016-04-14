@@ -96,9 +96,10 @@
                         </ul>
                     </li>
                 </ul>
-
             </div>
+
             <div ui-view></div>
+
         </div>
     </section>
 </section>
@@ -128,6 +129,7 @@
 <script src="vendors/bower_components/simpleWeather/jquery.simpleWeather.min.js"></script>
 <script src="vendors/bower_components/jquery.nicescroll/jquery.nicescroll.min.js"></script>
 <script src="vendors/bower_components/Waves/dist/waves.min.js"></script>
+<script src="vendors/bower_components/sweetalert/dist/sweetalert.min.js"></script>
 <script src="vendors/bootstrap-growl/bootstrap-growl.min.js"></script>
 <script src="vendors/bower_components/sweetalert/dist/sweetalert.min.js"></script>
 <script src="vendors/datatables/jquery.dataTables.min.js" type="text/javascript"></script>

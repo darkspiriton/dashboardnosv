@@ -53,5 +53,5 @@ angular.module('App')
                             {id: 4 , nom: "luis" , ape: "Game Master", cor : "luis@gmail.com", tel: "555-5555", dir: "Av. Arequipa 269 Lince", est : 0},
                             {id: 5 , nom: "luis" , ape: "Game Master", cor : "luis@gmail.com", tel: "555-5555", dir: "Av. Arequipa 269 Lince", est : 1}
                             ];
-        $('#tab_users').AJQtable('view', $scope, $compile);
+        //$('#tab_users').AJQtable('view', $scope, $compile);
     });

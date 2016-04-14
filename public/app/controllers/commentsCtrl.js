@@ -5,7 +5,6 @@ angular.module('App')
 
         $scope.tableConfig 	= 	{
                                     columns :	[
-                                                    {"sTitle": "id" , "bSortable" : false, "sWidth": "50px" },
                                                     {"sTitle": "Nombre", "bSortable" : false},
                                                     {"sTitle": "Correo", "bSortable" : false},
                                                     {"sTitle": "Comentario", "bSortable" : false},
@@ -21,11 +20,12 @@ angular.module('App')
                                                                 }
                                                     ],
                                                     ['actions', [
-                                                                    ['Eliminar', 'remove' ,'btn-danger']
+                                                                    ['Eliminar', 'remove' ,'btn-danger'],
+                                                                    ['ver', 'view' ,'btn-primary']
                                                                 ]
                                                     ]
                                                 ],
-                                    data  	: 	['id','name','email',['comment', 25],'stars','created_at','status','actions'],
+                                    data  	: 	['name','email',['comment', 25],'stars','created_at','status','actions'],
                                     configStatus : 'status'
                                 };
 
@@ -43,19 +43,67 @@ angular.module('App')
             });
 
         $scope.status = function( ind ) {
-            $.ajax({
-                url: 'http://api.nosvenden.com/api/comment/'+ $scope.tableData[ind].id,
-                type: 'PUT',
-                data: data,
-                dataType: 'json'
-            }).done(function(data) {
-                toastr.success(data);
-            }).error(function(err){
-                toastr.error(err);
-            });
+            swal({
+                    title: "¿Desea cambiar el estado de este comentario?",
+                    text: "",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "SI",
+                    cancelButtonText: "CANCELAR",
+                    closeOnConfirm: true
+                },
+                function() {
+                    $.ajax({
+                        url: 'http://api.nosvenden.com/api/comment/' + $scope.tableData[ind].id,
+                        type: 'PUT',
+                        data: data,
+                        dataType: 'json'
+                    }).done(function (data) {
+                        toastr.success('Se activo el comentario');
+                    }).error(function (err) {
+                        toastr.error('Ups algo paso con el servidor');
+                    });
+                });
+        };
+
+        $scope.remove = function( ind ) {
+            swal({
+                    title: "¿Desea eliminar este comentario?",
+                    text: "",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "SI",
+                    cancelButtonText: "CANCELAR",
+                    closeOnConfirm: true
+                },
+                function() {
+                    $.ajax({
+                        url: 'http://api.nosvenden.com/api/comment/' + $scope.tableData[ind].id,
+                        type: 'DELETE',
+                        data: data,
+                        dataType: 'json'
+                    }).done(function (data) {
+                        toastr.success('Se elimino correctamente');
+                    }).error(function (err) {
+                        toastr.error('Ups algo paso con el servidor');
+                    });
+                });
+        };
+
+        $scope.cambiaBoton = function (ind, dom){
+            $scope.tableData[ind].est = ($scope.tableData[ind].est == 0)? 1 : 0;
+            if ( $scope.tableData[ind].est == 1){
+                $(dom).removeClass('btn-danger');
+                $(dom).addClass('btn-success');
+                $(dom).html('Activo');
+            }else{
+                $(dom).removeClass('btn-success');
+                $(dom).addClass('btn-danger');
+                $(dom).html('Inactivo');
+            }
         }
-
-
 
 
     });

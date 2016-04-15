@@ -54,20 +54,25 @@ class UserController extends Controller
             }
             // Si el validador pasa, almacenamos el comentario
 
-            $user = User::find();
+            $userAux=DB::table('users')->where('email',$request->input('email'))->get();
 
-            $user = new User();
-            $user->first_name= $request->input('first_name');
-            $user->last_name= $request->input('last_name');
-            $user->email= $request->input('email');
-            $user->phone= $request->input('phone');
-            $user->address= $request->input('address');
-            $user->sex= $request->input('sex');
-            $user->role_id= $request->input('role_id');
-            //$user->user= $request->input('user');
-            $user->password= bcrypt($request->input('password'));
-            $user->save();
-            return response()->json(['message' => 'Se usuario agrego correctamente'],200);
+            if(count($userAux) == 0 ){
+                $user = new User();
+                $user->first_name= $request->input('first_name');
+                $user->last_name= $request->input('last_name');
+                $user->email= $request->input('email');
+                $user->phone= $request->input('phone');
+                $user->address= $request->input('address');
+                $user->sex= $request->input('sex');
+                $user->role_id= $request->input('role_id');
+                //$user->user= $request->input('user');
+                $user->password= bcrypt($request->input('password'));
+                $user->save();
+                return response()->json(['message' => 'Se usuario se agrego correctamente'],200);
+            }
+
+                return response()->json(['message' => 'El usuario ya esta registrado'],400);
+
         } catch (Exception $e) {
             // Si algo sale mal devolvemos un error.
             return \Response::json(['message' => 'Ocurrio un error al agregar usuario'], 500);

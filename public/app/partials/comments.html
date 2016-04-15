@@ -1,6 +1,9 @@
 <div class="card" >
     <div class="card-header bgm-blue">
-        <h2>Gestion de Clientes</h2>
+        <h2>Gestion de comentarios de pagina web</h2>
+        <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="list()"
+                data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
+                title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
     </div>
 
     <div class="card-body card-padding table-responsive">
@@ -8,4 +11,33 @@
             <table id="tab_users" class="table table-bordered table-striped" style="text-align:center;"></table>
         </div><br>
     </div><br>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="Modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bgm-teal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title c-white">Comentario de {{ comment.name }}</h4>
+            </div>
+            <div class="modal-body card-padding">
+                <form class="form-horizontal" autocomplete="off" submit="return false;">
+                     <div class="form-group">
+                        <label class="col-sm-2 control-label">Comentario: </label>
+                        <div class="col-sm-10 imput-pad">
+                            <div class="fg-line">
+                                <div class="col-sm-10" ng-bind-html="comment.message"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
 </div>

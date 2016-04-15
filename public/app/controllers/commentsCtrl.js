@@ -7,10 +7,10 @@ angular.module('App')
                                     columns :	[
                                                     {"sTitle": "Nombre", "bSortable" : false},
                                                     {"sTitle": "Correo", "bSortable" : false},
-                                                    {"sTitle": "Estrellas", "sWidth": "50px"},
-                                                    {"sTitle": "Fecha"},
+                                                    {"sTitle": "Estrellas", "sWidth": "1px"},
+                                                    {"sTitle": "Fecha", "sWidth": "160px", "aaSorting": 'desc'},
                                                     {"sTitle": "Estado" ,"bSearchable": false , "bSortable" : false , "sWidth": "80px"},
-                                                    {"sTitle": "Accion" , "bSearchable": false , "bSortable" : false , "sWidth": "80px"}
+                                                    {"sTitle": "Accion" , "bSearchable": false , "bSortable" : false , "sWidth": "180px"}
                                                 ],
                                     actions	:  	[
                                                     ['status',   {
@@ -45,6 +45,7 @@ angular.module('App')
         };
 
         $scope.list = function(){
+            $scope.updateList = true;
             var config = {
                             method: 'GET',
                             url: 'http://api.nosvenden.com/api/admin/comment',
@@ -53,9 +54,11 @@ angular.module('App')
             petition.custom(config).then(function(data){
                 $scope.tableData = data.comments;
                 $('#tab_users').AJQtable('view', $scope, $compile);
+                $scope.updateList = false;
             },function(error){
                 console.log(error);
                 toastr.error('Ups ocurrio un problema al cargar los registros.');
+                $scope.updateList = false;
             });
         };
 
@@ -80,7 +83,7 @@ angular.module('App')
                 });
         };
 
-        $scope.remove = function( ind ) {
+        $scope.remove = function( ind, dom ) {
             alertConfig.title = "¿Desea eliminar este comentario?";
             swal(alertConfig ,
                 function() {
@@ -91,12 +94,21 @@ angular.module('App')
                     };
                     petition.custom(config).then(function(data){
                         console.log(data);
-                        toastr.success(data.message);
+                        $('#tab_users').AJQtable('removeRow', dom.target , function(){
+                            toastr.success(data.message);
+                        });
+
                     },function(error){
                         console.log(error);
                         toastr.error('Ups algo paso con el servidor');
                     });
                 });
+        };
+
+        $scope.view = function( ind ){
+            $scope.comment.name = $scope.tableData[ind].name;
+            $scope.comment.message = $scope.tableData[ind].comment;
+            util.modal();
         };
 
         changeButton = function (ind, dom){
@@ -113,19 +125,8 @@ angular.module('App')
             }
         };
 
-        removeRow = function (boton){
-                var row = $(boton).closest("tr").get(0);
-                var rowE = $(boton).closest("tr");
-
-                rowE.fadeOut(750,function(){
-                    var dtable = $('#productos').dataTable();
-                    var Pos = dtable.fnGetPosition(row);
-                    dtable.fnDeleteRow(Pos);
-                });
-
-        };
-
         angular.element(document).ready(function(){
+            $scope.comment = {};
             $scope.list();
         });
     });

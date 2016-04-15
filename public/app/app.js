@@ -95,7 +95,6 @@ angular.module('App', ['ngResource','ngMessages','ngSanitize','ngAnimate','toast
                 $window[storageType].removeItem(roleName);
                 $window[storageType].removeItem(userName);
                 $window[storageType].removeItem(routeName);
-                return;
             }
         };
 
@@ -117,6 +116,10 @@ angular.module('App', ['ngResource','ngMessages','ngSanitize','ngAnimate','toast
                 $("body").animate({
                     scrollTop: 0
                 }, 1000);
+            },
+            modal : function ( id ) {
+                id || (id = 'Modal');
+                $('#'+ id).modal('show');
             }
         }
     })

@@ -76,7 +76,9 @@
     </aside>
 
     <section id="content">
-        <div class="container" style="height: 100%">
+
+        <div class="container">
+
 
             <div ui-view style=""></div>
 

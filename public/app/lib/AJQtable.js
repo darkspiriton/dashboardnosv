@@ -26,7 +26,7 @@
 				acc['actions'] = function(ind){
 					var btns = ''
 					for (x in acc.dataA){
-						btns = btns + '<button class="btn btn-xs '+ acc.dataA[x][2] +'" ng-click="'+ acc.dataA[x][1] +'(' + ind + ')" style="width: 82px;">'+ acc.dataA[x][0] +'</button>';
+						btns = btns + '<button class="btn btn-xs '+ acc.dataA[x][2] +'" ng-click="'+ acc.dataA[x][1] +'(' + ind + "," +"$event" + ')" style="width: 82px;">'+ acc.dataA[x][0] +'</button>';
 					}
 					return btns;
 				}
@@ -45,7 +45,7 @@
 		// Opciones de la tabla
 		options = {
 			fnCreatedRow: rowCompiler, 		// Al crear tabla conpilarla en angular
-			aoColumns: cols					// Columnas de tabla
+			aoColumns: cols,                // Columnas de tabla
 		};
 
 		// Inicializar la tabla
@@ -93,10 +93,27 @@
 		$(this[0]).dataTable().fnFilter(busqueda);
 	}
 
+	function removeRow ( dom, callback ){
+		console.log(dom);
+		var row2 = $(dom).closest("tr").get(0);
+		var row = $(dom).parent().parent()[0]
+		console.log(["FROM",row,row2]);
+		var rowE = $(dom).closest("tr");
+		console.log(['1',row, rowE]);
+		var dtable = $(this[0]).dataTable();
+		console.log(["TO",dtable.fnGetPosition(row), dtable.fnGetPosition(row2)]);
+		var pos = dtable.fnGetPosition(row);
+		rowE.fadeOut(750,function(){
+			dtable.fnDeleteRow(pos);
+		});
+		callback();
+	};
+
     var methods = {
         init : function(options) { console.log('indique accion') },
         view : view,
-        search : search
+        search : search,
+		removeRow : removeRow
     };
 
     $.fn.AJQtable = function(methodOrOptions) {

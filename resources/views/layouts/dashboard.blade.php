@@ -27,6 +27,12 @@
 
         <li class="pull-right">
             <ul class="top-menu">
+                <li id="toggle-width">
+                    <div class="toggle-switch">
+                        <input id="tw-switch" type="checkbox" hidden="hidden">
+                        <label for="tw-switch" class="ts-helper"></label>
+                    </div>
+                </li>
                 <li id="top-search">
                     <a class="tm-search" href="#"></a>
                 </li>

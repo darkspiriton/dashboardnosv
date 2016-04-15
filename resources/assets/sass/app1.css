@@ -2982,10 +2982,12 @@ th {
 .table > thead > tr > td,
 .table > tbody > tr > td,
 .table > tfoot > tr > td {
-  padding: 10px;
+  padding: 5px;
   line-height: 1.42857143;
   vertical-align: top;
   border-top: 1px solid #f0f0f0;
+  font-size: 15px;
+  font-family: Helvetica, Arial, sans-serif;
 }
 
 .table > thead > tr > th {
@@ -12682,7 +12684,7 @@ input:focus {
 .table > thead > tr > td:first-child,
 .table > tbody > tr > td:first-child,
 .table > tfoot > tr > td:first-child {
-  padding-left: 30px;
+  /*padding-left: 30px;*/
 }
 
 .table > thead > tr > th:last-child,
@@ -12691,7 +12693,7 @@ input:focus {
 .table > thead > tr > td:last-child,
 .table > tbody > tr > td:last-child,
 .table > tfoot > tr > td:last-child {
-  padding-right: 30px;
+  /*padding-right: 30px;*/
 }
 
 .table > tbody > tr.active > td,
@@ -14361,7 +14363,7 @@ a.thumbnail.active {
 }
 
 .modal .modal-body {
-  padding: 0 26px 10px;
+  padding: 10px 26px 10px;
 }
 
 .modal .modal-footer .btn-link {

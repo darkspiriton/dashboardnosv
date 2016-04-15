@@ -86,7 +86,7 @@
     </section>
 </section>
 
-<footer id="footer" style="height: 100%">
+<footer id="footer">
     Copyright &copy; 2016 NosVenden.com | DashBoard
 
     <ul class="f-menu">

@@ -1,12 +1,4 @@
-angular.module('App', [
-                        'ngResource',
-                        'ngMessages',
-                        'ngSanitize',
-                        'ngAnimate',
-                        'toastr',
-                        'ui.router',
-                        'satellizer',
-                       ])
+angular.module('App', ['ngResource','ngMessages','ngSanitize','ngAnimate','toastr','ui.router','satellizer',])
     .config(function($stateProvider, $urlRouterProvider, $authProvider) {
         $authProvider.tokenName = "token";
         $authProvider.tokenPrefix = "DB_NV";
@@ -31,45 +23,56 @@ angular.module('App', [
         $urlRouterProvider.otherwise('/home');
 
     })
-    .factory('method', function($http, $location, $httpParamSerializerJQLike){
+    .factory('petition', function($http, $location){
         var baseUrl =  function ( URL ) {
             var prot = $location.protocol();
             var host = $location.host();
             return prot + '://' + host + ':/' + URL;
-        }
-        var metService = {
-            get: function( URL ) {
-                var promise = $http.get( baseUrl( URL ) ).then(function (response) {
+        };
+
+        var promise;
+
+        return {
+
+            get: function( URL, data ) {
+                data || (data = {});
+                promise = $http.get( baseUrl(URL), data ).then(function(response){
                     return response.data;
                 });
+
                 return promise;
             },
-            post: function ( URL , postData) {
-                postData || (postData = {});
-                var promise = 	$http({
-                    method: 'POST',
-                    url: baseUrl( URL ),
-                    data: $httpParamSerializerJQLike( postData ),
-                    headers: {'Content-Type': 'application/x-www-form-urlencoded'}
-                }).then(function (response) {
+            post: function ( URL , data) {
+                data || (data = {});
+                promise = $http.post( baseUrl(URL), data ).then(function(response){
                     return response.data;
                 });
+
                 return promise;
             },
-            postFD :  function ( URL , postData) {
-                postData || (postData = {});
-                var promise = 	$http({
-                    method: 'POST',
-                    url: baseUrl( URL ),
-                    data: postData,
-                    headers: {'Content-Type': undefined}
-                }).then(function (response) {
+            put: function( URL, data ) {
+                data || (data = {});
+                promise = $http.put( baseUrl(URL), data ).then(function(response){
+                    return response.data;
+                });
+
+                return promise;
+            },
+            delete: function ( URL , data) {
+                data || (data = {});
+                promise = $http.delete( baseUrl(URL), data ).then(function(response){
+                    return response.data;
+                });
+
+                return promise;
+            },
+            custom :  function ( config ) {
+                promise = $http(config).then(function(response){
                     return response.data;
                 });
                 return promise;
             }
         };
-        return metService;
     })
     .factory('storage', ['$window', '$log', '$auth', function($window, $log , $auth) {
         var storageType = 'localStorage';

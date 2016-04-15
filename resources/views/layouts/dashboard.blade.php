@@ -77,26 +77,6 @@
 
     <section id="content">
         <div class="container">
-            <div class="block-header">
-                <h2>Dashboard</h2>
-
-                <ul class="actions">
-                    <li class="dropdown">
-                        <a href="#" data-toggle="dropdown">
-                            <i class="md md-more-vert"></i>
-                        </a>
-
-                        <ul class="dropdown-menu dropdown-menu-right">
-                            <li>
-                                <a href="#">Recargar</a>
-                            </li>
-                            <li>
-                                <a href="#">Reportar un problema</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
 
             <div ui-view></div>
 

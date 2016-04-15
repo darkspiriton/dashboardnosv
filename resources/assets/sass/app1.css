@@ -9670,6 +9670,7 @@ body {
 }
 
 body {
+  height: 100%;
   font-weight: 400;
   padding-top: 65px;
   padding-bottom: 110px;
@@ -16147,7 +16148,7 @@ body.login-content:before {
 }
 
 #footer {
-  position: absolute;
+  /*position: absolute;*/
   bottom: 0;
   text-align: center;
   width: 100%;

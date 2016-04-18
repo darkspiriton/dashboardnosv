@@ -7,27 +7,8 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    public function validar(){
+        return response()->json(['message'=> 'Autorizacion valida'],200);
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        return view('home');
-    }
-
-    public function validate(){
-        return response()->json(['message'=> 'Formato de Key Valido'],200);
     }
 }

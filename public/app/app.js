@@ -27,7 +27,7 @@ angular.module('App', ['ngResource','ngMessages','ngSanitize','ngAnimate','toast
         var baseUrl =  function ( URL ) {
             var prot = $location.protocol();
             var host = $location.host();
-            return prot + '://' + host + ':8000/' + URL;
+            return prot + '://' + host + '/' + URL;
         };
 
         var promise;

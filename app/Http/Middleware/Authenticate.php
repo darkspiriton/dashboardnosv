@@ -48,6 +48,9 @@ class Authenticate {
                 {
                     return response()->json(['message' => 'El Token Expiro'],404);
                 }
+                if($payload == null){
+                    return response()->json(['message' => 'El Token Alterado'],500);
+                }
                 $request['user'] = $payload;
                 return $next($request);
             }catch( DomainException $e){

@@ -46,7 +46,7 @@ class Authenticate {
                 $payload = (array) JWT::decode($token, Config::get('app.jwt_token'), array('HS256'));
                 if ($payload['exp'] < time())
                 {
-                    return response()->json(['message' => 'El Token Expiro']);
+                    return response()->json(['message' => 'El Token Expiro'],404);
                 }
                 $request['user'] = $payload;
                 return $next($request);

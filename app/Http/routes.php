@@ -37,6 +37,8 @@ Route::group(['prefix'=>'dashboard','middleware'=>['auth']],function(){
     Route::post('/','Auth\AuthTokenController@dashboard');
 });
 
+
+
 //API REST CRUD EMPREADOS
 Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
     
@@ -44,5 +46,6 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
                     ['only'=>['index','store','update','destroy','show']]);
     Route::resource('products','ProductController',
                     ['only'=>['index','store','update','destroy','show']]);
+    Route::get('validatekey','HomeController@validate');
 
 });

@@ -17,7 +17,11 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users= DB::table('users')->orderBy('created_at','desc')->get();
+        $users= DB::table('users')
+            ->join('roles','users.role_id','=','roles.id')
+            ->orderBy('users.role_id','asc')
+            ->select('users.id',DB::raw('CONCAT(users.first_name, " ", users.last_name) AS full_name'),'roles.name AS rol')
+            ->get();
         return response()->json(['users' => $users],200);
     }
 
@@ -89,10 +93,12 @@ class UserController extends Controller
     {
         try{
             $user = User::find($id);
+            $user->role;
+            $user->customers;
             if ($user !== null) {
                 return response()->json([
                         'message' => 'Mostrar detaller de user',
-                        'user' => $user
+                        'user' => $user,
                     ],200);
             }
             return \Response::json(['message' => 'No existe ese usuario'], 404);

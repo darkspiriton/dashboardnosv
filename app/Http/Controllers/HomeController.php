@@ -27,7 +27,7 @@ class HomeController extends Controller
         return view('home');
     }
 
-    public function validate(){
+    public function validar(){
         return response()->json(['message'=> 'Formato de Key Valido'],200);
     }
 }

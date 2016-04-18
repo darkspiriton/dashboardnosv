@@ -74,7 +74,7 @@ class ProductController extends Controller
             $product = Prodcut::find($id);
             if ($product !== null) {
                 //Falta traer detalle user
-                $attributes=$product->attributes();
+                $attributes=$product->attributes;
                 return response()->json([
                     'message' => 'Mostrar detalles de producto',
                     'product'=> $product,

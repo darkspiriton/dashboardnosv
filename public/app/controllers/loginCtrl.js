@@ -1,13 +1,31 @@
 angular.module('loginApp')
-    .controller('LoginCtrl', function($scope, $location, $auth, $window, toastr){
+    .controller('LoginCtrl', function($scope, $location, $auth, $window, toastr, $http){
+
         var redirect = function(){
-            var token = $window['localStorage'].getItem('DB_NV_token');
-            if (token)$('#token').val(token);
-            $('#frm').submit();
-        }
+            var token = $auth.getToken();
+            if (token){
+                $('#token').val(token);
+                $('#frm').submit();
+            }
+        };
+
+        var baseUrl =  function ( URL ) {
+            var prot = $location.protocol();
+            var host = $location.host();
+            return prot + '://' + host + '/' + URL;
+        };
 
         if ($auth.isAuthenticated()) {
-            redirect();
+            // authToken = 'Bearer' y authHeader = 'Authorization' son de SatellizerConfig
+            data = {};
+            var token  = 'Bearer' + ' ' + $auth.getToken();
+            $http.get( baseUrl('api/validate-key'), { headers : {'Authorization' : token }})
+                .then(function(response){
+                    console.log(response.data.message);
+                    redirect();
+                }, function(error){
+                    console.log(error.data.message);
+                });
         }
 
         $scope.login = function() {

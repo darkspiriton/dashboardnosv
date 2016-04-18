@@ -46,6 +46,6 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
                     ['only'=>['index','store','update','destroy','show']]);
     Route::resource('products','ProductController',
                     ['only'=>['index','store','update','destroy','show']]);
-    Route::get('validatekey','HomeController@validate');
+    Route::get('validate-key','HomeController@validar');
 
 });

@@ -73,7 +73,6 @@ angular.module('App')
                         params: data,
                     };
                     petition.custom(config).then(function(data){
-                        console.log(data);
                         toastr.success(data.message);
                         changeButton(ind , dom.target);
                     },function(error){
@@ -93,7 +92,6 @@ angular.module('App')
                         params: data,
                     };
                     petition.custom(config).then(function(data){
-                        console.log(data);
                         $('#tab_users').AJQtable('removeRow', dom.target , function(){
                             toastr.success(data.message);
                         });

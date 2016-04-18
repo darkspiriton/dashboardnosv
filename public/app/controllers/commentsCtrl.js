@@ -15,7 +15,7 @@ angular.module('App')
                                     actions	:  	[
                                                     ['status',   {
                                                                     0 : { txt : 'Inactivo' , cls : 'btn-danger' },
-                                                                    1 : { txt : 'Acitvo' ,  cls : 'btn-success', dis : false} ,
+                                                                    1 : { txt : 'Activo' ,  cls : 'btn-success', dis : false} ,
                                                                 }
                                                     ],
                                                     ['actions', [

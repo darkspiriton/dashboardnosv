@@ -156,9 +156,11 @@ class UserController extends Controller
             if ($user !==null){
                 if ($user->status == 1){
                     $user->status=0;
+                    $user->save();
                     return response()->json(['message' => 'Se desactivo correctamente el usuario'],200);
                 }elseIf($user->status == 0){
                     $user->status=1;
+                    $user->save();
                     return response()->json(['message' => 'Se activo correctamente el usuario'],200);
                 }
             }

@@ -99,20 +99,20 @@ angular.module('App', ['ngResource','ngMessages','ngSanitize','ngAnimate','toast
         };
 
     }])
-    .factory('util', function(){
+    .factory('util', function($location){
         return {
             liPage : function( name ){
                 $('li.active').removeClass('active');
                 $('li#' + name).addClass('active');
             },
             muestraformulario : function (){
-                $('#formulariohide').fadeIn(500);
+                $('#formulariohide').fadeIn('fast');
                 $('html, body').stop().animate({
                     scrollTop: $('#formulariohide').offset().top-100
                 }, 1000);
             },
             ocultaformulario : function (){
-                $('#formulariohide').fadeOut(500);
+                $('#formulariohide').fadeOut('fast');
                 $("body").animate({
                     scrollTop: 0
                 }, 1000);
@@ -120,6 +120,11 @@ angular.module('App', ['ngResource','ngMessages','ngSanitize','ngAnimate','toast
             modal : function ( id ) {
                 id || (id = 'Modal');
                 $('#'+ id).modal('show');
+            },
+            baseUrl : function ( URL ) {
+                var prot = $location.protocol();
+                var host = $location.host();
+                return prot + '://' + host + '/' + URL;
             }
         }
     })

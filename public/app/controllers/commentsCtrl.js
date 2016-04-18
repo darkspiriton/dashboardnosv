@@ -1,5 +1,5 @@
 angular.module('App')
-    .controller('commentsCtrl', function($scope, $compile, util, toastr, petition){
+    .controller('commentsCtrl', function($scope, $compile,$log , util, toastr, petition){
 
         util.liPage('comments');
 
@@ -53,10 +53,10 @@ angular.module('App')
                         };
             petition.custom(config).then(function(data){
                 $scope.tableData = data.comments;
-                $('#tab_users').AJQtable('view', $scope, $compile);
+                $('#table').AJQtable('view', $scope, $compile);
                 $scope.updateList = false;
             },function(error){
-                console.log(error);
+                $log.log(error);
                 toastr.error('Ups ocurrio un problema al cargar los registros.');
                 $scope.updateList = false;
             });
@@ -76,7 +76,7 @@ angular.module('App')
                         toastr.success(data.message);
                         changeButton(ind , dom.target);
                     },function(error){
-                        console.log(error);
+                        $log.log(error);
                         toastr.error('Ups algo paso con el servidor');
                     });
                 });
@@ -97,7 +97,7 @@ angular.module('App')
                         });
 
                     },function(error){
-                        console.log(error);
+                        $log.log(error);
                         toastr.error('Ups algo paso con el servidor');
                     });
                 });

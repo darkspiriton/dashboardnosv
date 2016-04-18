@@ -1422,3 +1422,9 @@ div.fc-row {
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
+
+/* Perosnal Styles */
+
+#formulariohide {
+  display: none;
+}

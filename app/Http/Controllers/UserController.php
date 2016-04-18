@@ -18,7 +18,7 @@ class UserController extends Controller
     public function index()
     {
         $users= DB::table('users')->orderBy('created_at','desc')->get();
-        return response()->json(['comments' => $users],200);
+        return response()->json(['users' => $users],200);
     }
 
     /**
@@ -115,7 +115,7 @@ class UserController extends Controller
         try{
             $user = User::find($id);
             if ($user !== null) {
-                
+
                 //Falta agregar la modificacion
                 $user->save();
                 return response()->json(['message' => 'Se actualizo correctamente'],200);

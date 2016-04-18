@@ -78,7 +78,7 @@ class ProductController extends Controller
                 return response()->json([
                     'message' => 'Mostrar detalles de producto',
                     'product'=> $product,
-                    'attributes' => $product->attributes,
+                    //'attributes' => $product->attributes,
                 ],200);
             }
             return \Response::json(['message' => 'No existe ese producto'], 404);

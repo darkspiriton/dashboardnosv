@@ -17,7 +17,11 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users= DB::table('users')->orderBy('created_at','desc')->get();
+        $users= DB::table('users')
+            ->join('roles','users.role_id','=','roles.id')
+            ->orderBy('users.role_id','asc')
+            ->select('users.id',DB::raw('CONCAT(users.first_name, " ", users.last_name) AS full_name'),'roles.name AS rol')
+            ->get();
         return response()->json(['users' => $users],200);
     }
 
@@ -89,10 +93,11 @@ class UserController extends Controller
     {
         try{
             $user = User::find($id);
+            $user->role;
             if ($user !== null) {
                 return response()->json([
                         'message' => 'Mostrar detaller de user',
-                        'user' => $user
+                        'user' => $user,
                     ],200);
             }
             return \Response::json(['message' => 'No existe ese usuario'], 404);
@@ -115,8 +120,19 @@ class UserController extends Controller
         try{
             $user = User::find($id);
             if ($user !== null) {
+                $user->first_name= $request->input('first_name');
+                $user->last_name= $request->input('last_name');
+                $user->email= $request->input('email');
+                $user->phone= $request->input('phone');
+                $user->address= $request->input('address');
+                $user->sex= $request->input('sex');
+                $user->role_id= $request->input('role_id');
+                $user->status= $request->input('status');
+                //$user->user= $request->input('user');
+                if($request->input('password') !== null ){
+                    $user->password= bcrypt($request->input('password'));
+                }
 
-                //Falta agregar la modificacion
                 $user->save();
                 return response()->json(['message' => 'Se actualizo correctamente'],200);
             }
@@ -137,9 +153,14 @@ class UserController extends Controller
     {
         try{
             $user = User::find($id);
-            if ($user !== null){
-                $user->delete();
-                return response()->json(['message' => 'Se elimino correctamente el usuario'],200);
+            if ($user !==null){
+                if ($user->status == 1){
+                    $user->status=0;
+                    return response()->json(['message' => 'Se desactivo correctamente el usuario'],200);
+                }elseIf($user->status == 0){
+                    $user->status=1;
+                    return response()->json(['message' => 'Se activo correctamente el usuario'],200);
+                }
             }
             return \Response::json(['message' => 'No existe ese usuario'], 404);
         }catch (ErrorException $e){

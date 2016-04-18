@@ -9,6 +9,5 @@ class HomeController extends Controller
 {
     public function validar(){
         return response()->json(['message'=> 'Autorizacion valida'],200);
-
     }
 }

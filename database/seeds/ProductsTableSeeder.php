@@ -27,6 +27,7 @@ class ProductsTableSeeder extends Seeder
                 'name' => $faker->colorName,
                 'price' => $faker->randomFloat( $nbMaxDecimals = 2, $min= 9, $max=100),
                 'product_code' => $faker->numberBetween($min = 1, $max = 90000),
+                'status' => $faker->randomFloat( $nbMaxDecimals = 0, $min= 0, $max=1),
             ));
             for($j=1;$j<=4;$j++){
                 DB::table('attributes')->insertGetId(array(

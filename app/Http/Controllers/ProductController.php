@@ -72,16 +72,14 @@ class ProductController extends Controller
     {
         try{
             $product = Prodcut::find($id);
+            $product->attributes;
             if ($product !== null) {
-                //Falta traer detalle user
-                $attributes=$product->attributes;
                 return response()->json([
                     'message' => 'Mostrar detalles de producto',
                     'product'=> $product,
-                    '$attributes'=> $attributes,
                 ],200);
             }
-            return \Response::json(['message' => 'No existe ese usuario'], 404);
+            return \Response::json(['message' => 'No existe ese producto'], 404);
 
         }catch (ErrorException $e){
             return \Response::json(['message' => 'Ocurrio un error'], 500);
@@ -111,9 +109,13 @@ class ProductController extends Controller
         try{
             $product = Product::find($id);
             if ($product !== null) {
-                //Falta agregar la modificacion
-
+                $product->first_name= $request->input('name');
+                $product->last_name= $request->input('price');
+                $product->email= $request->input('product_code');
                 $product->save();
+
+                //Falta agregar atributos de productos
+
                 return response()->json(['message' => 'Se actualizo correctamente'],200);
             }
             return \Response::json(['message' => 'No existe ese usuario'], 404);
@@ -133,8 +135,11 @@ class ProductController extends Controller
     {
         try{
             $product = Product::find($id);
-            if ($product !== null){
-                $product->delete();
+            if ($product == 1){
+                $product->status=0;
+                return response()->json(['message' => 'Se elimino correctamente el usuario'],200);
+            }elseif ($product == 1){
+                $product->status=1;
                 return response()->json(['message' => 'Se elimino correctamente el usuario'],200);
             }
             return \Response::json(['message' => 'No existe ese usuario'], 404);

@@ -17,7 +17,11 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users= DB::table('users')->orderBy('created_at','desc')->get();
+        $users= DB::table('users')
+            ->join('roles','users.role_id','=','roles.id')
+            ->orderBy('roles.name','asc')
+            ->select('users.id',DB::raw('CONCAT(users.first_name, " ", users.last_name) AS full_name'),'roles.name AS rol','users.status')
+            ->get();
         return response()->json(['users' => $users],200);
     }
 

@@ -1,9 +1,26 @@
+<div class="card" >
+    <div class="card-header bgm-blue">
+        <h2>Gestion de usarios de sistema</h2>
+        <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="list()"
+                data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
+                title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
+    </div>
+
+    <div class="card-body card-padding table-responsive">
+        <div class="col-sm-12">
+            <table id="table" class="table table-bordered table-striped" style="text-align:center;"></table>
+        </div><br>
+        <div class="card-footer">
+            <input  class="btn bgm-green waves-effect" type='submit' value='Nuevo registro' ng-click="new();">
+        </div>
+    </div><br>
+</div>
+
 <div class="card" id="formulariohide">
-    <div class="card-header bgm-green">
+    <div class="card-header bgm-blue">
         <h2>Crear Empleado</h2>
     </div>
 
-    ​
     <form name="formuser" id="form" class="form-horizontal" autocomplete="off" ng-submit="submit()">
 
         <div class="card-body card-padding" >
@@ -17,6 +34,7 @@
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-person"></i></span>
                         <div class="fg-line">
+                            <input ng-model="empleado.id" type="hidden">
                             <input ng-model="empleado.first_name" type="text" class="form-control" placeholder="Cesar Antonio" required>
                         </div>
                     </div>
@@ -99,7 +117,7 @@
                     <div class="input-group">
                         <div class="fg-line select ">
                             <select class="form-control" ng-model="empleado.role_id" required>
-                                <option value=""  disabled="disabled" select="true">Seleccione</option>
+                                <option value="" disabled="disabled" select="true">Seleccione</option>
                                 <option value="2">Administrador</option>
                                 <option value="4">Jefe de ventas</option>
                                 <option value="3">Vendedor</option>
@@ -112,69 +130,81 @@
 
             </div>
 
-             <!--<div class="form-group">-->
-                <!--<label class="col-sm-2 control-label">Cumpleaños</label>-->
-                <!--<div class="col-sm-4">-->
-                    <!--<div class="input-group">-->
-                        <!--<span class="input-group-addon"><i class="md md-event"></i></span>-->
-                        <!--<div class="dtp-container dropdown fg-line">-->
-                            <!--<input ng-model="birth_name" type="text" class="form-control date-time-picker" data-toggle="dropdown" placeholder="11/09/2014">-->
-                        <!--</div>-->
-                    <!--</div>-->
-
-                <!--</div>-->
-            <!--</div>-->
-
             <div class="form-group">
                 <label class="col-sm-2 control-label"></label>
                 <div class="col-sm-10">
                     <div class="input-group">
                         <div class="toggle-switch" data-ts-color="green">
                             <label for="ts4" class="ts-label">Activar cuenta</label>
-                            <input ng-model="empleado.status" id="ts4" type="checkbox" hidden="hidden" required>
+                            <input ng-model="empleado.status" id="ts4" type="checkbox" hidden="hidden">
                             <label for="ts4" class="ts-helper"></label>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!--<div class="form-group">-->
-                <!--<label class="col-sm-2 control-label"></label>-->
-                <!--<div class="col-sm-10">-->
-                    <!--<p class="f-500 c-black m-b-20">Sexo</p>-->
-                    <!--<select class="selectpicker bs-select-hidden">-->
-                        <!--<option>Mustard</option>-->
-                        <!--<option>Ketchup</option>-->
-                        <!--<option>Relish</option>-->
-                    <!--</select>-->
-                <!--</div>-->
-            <!--</div>-->
-
-            <!--<div class="form-group">-->
-                <!--<label class="col-sm-2 control-label">Foto</label>-->
-                <!--<div class="col-sm-10">-->
-                    <!--<p class="f-500 c-black m-b-20">Image Preview</p>-->
-                    <!--<div class="fileinput fileinput-new" data-provides="fileinput">-->
-                        <!--<div class="fileinput-preview thumbnail" data-trigger="fileinput"></div>-->
-                        <!--<div>-->
-                                    <!--<span class="btn btn-info btn-file waves-effect">-->
-                                        <!--<span class="fileinput-new">Select image</span>-->
-                                        <!--<span class="fileinput-exists">Change</span>-->
-                                        <!--<input type="file" name="...">-->
-                                    <!--</span>-->
-                            <!--<a href="#" class="btn btn-danger fileinput-exists waves-effect" data-dismiss="fileinput">Remove</a>-->
-                        <!--</div>-->
-                    <!--</div>-->
-                <!--</div>-->
-            <!--</div>-->
-
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <button ng-disabled="!formuser.$valid" ng-disabled="createUser" type="submit" class="btn btn-primary btn-sm waves-effect">Guardar</button>
-                    <a onclick="ocultaformulario();"  ng-click="cancelar()" class="btn btn-danger btn-sm waves-effect">Cancelar</a>
+                    <button ng-disabled="!formuser.$valid" ng-disabled="formSubmit" type="submit" class="btn btn-primary btn-sm waves-effect">Guardar</button>
+                    <a onclick="ocultaformulario();"  ng-click="cancel()" class="btn btn-danger btn-sm waves-effect">Cancelar</a>
                 </div>
             </div>
         </div>
     </form>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="Modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bgm-teal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title c-white">Detalle de usuario</h3>
+            </div>
+            <div class="modal-body card-padding">
+                <form class="form-horizontal" autocomplete="off" submit="return false;">
+                    <div class="form-group form-pad-top">
+                        <label class="col-sm-1"></label>
+                        <label class="col-sm-2 control-label">Nombres: </label>
+                        <label class="col-sm-3 control-label" style="text-align: left" ng-bind="userDetail.first_name"></label>
+
+                        <label class="col-sm-2 control-label">Apellidos: </label>
+                        <label class="col-sm-3 control-label" style="text-align: left" ng-bind="userDetail.last_name"></label>
+                        <label class="col-sm-1"></label>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-1"></label>
+                        <label class="col-sm-2 control-label">Direccion: </label>
+                        <label class="col-sm-3 control-label" style="text-align: left" ng-bind="userDetail.address"></label>
+
+                        <label class="col-sm-2 control-label">Email: </label>
+                        <label class="col-sm-3 control-label" style="text-align: left" ng-bind="userDetail.email"></label>
+                        <label class="col-sm-1"></label>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-1"></label>
+                        <label class="col-sm-2 control-label">Telefonos: </label>
+                        <label class="col-sm-3 control-label" style="text-align: left" ng-bind="userDetail.phone"></label>
+
+                        <label class="col-sm-2 control-label">Sexo: </label>
+                        <label class="col-sm-3 control-label" style="text-align: left" ng-bind="userDetail.sex"></label>
+                        <label class="col-sm-1"></label>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-1"></label>
+                        <label class="col-sm-2 control-label">Nombre de usuario: </label>
+                        <label class="col-sm-3 control-label" style="text-align: left" ng-bind="userDetail.user"></label>
+
+                        <label class="col-sm-2 control-label">Estado: </label>
+                        <label class="col-sm-3 control-label" style="text-align: left" ng-bind="getStatus(userDetail.status)"></label>
+                        <label class="col-sm-1"></label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

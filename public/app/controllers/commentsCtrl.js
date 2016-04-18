@@ -5,10 +5,10 @@ angular.module('App')
 
         $scope.tableConfig 	= 	{
                                     columns :	[
+                                                    {"sTitle": "Fecha", "sWidth": "160px", "aaSorting": 'desc'},
                                                     {"sTitle": "Nombre", "bSortable" : false},
                                                     {"sTitle": "Correo", "bSortable" : false},
                                                     {"sTitle": "Estrellas", "sWidth": "1px"},
-                                                    {"sTitle": "Fecha", "sWidth": "160px", "aaSorting": 'desc'},
                                                     {"sTitle": "Estado" ,"bSearchable": false , "bSortable" : false , "sWidth": "80px"},
                                                     {"sTitle": "Accion" , "bSearchable": false , "bSortable" : false , "sWidth": "180px"}
                                                 ],
@@ -24,7 +24,7 @@ angular.module('App')
                                                                 ]
                                                     ]
                                                 ],
-                                    data  	: 	['name','email','stars','created_at','status','actions'],
+                                    data  	: 	['created_at','name','email','stars','status','actions'],
                                     configStatus : 'status'
                                 };
 

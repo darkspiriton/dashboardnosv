@@ -66,7 +66,9 @@
             <div class="card-header">
                 <h2>Grupo de Caracteristicas</h2>
             </div>
-
+            <div class="attr-buttons">
+                <button type="button" class="btn btn-success btn-sm waves-effect">Agregar Grupo de caracteristicas</button>
+            </div>
             <div class="row">
                     <div class="attr-group col-xs-12 col-sm-6">
                         <h5> Grupo: 1 </h5>
@@ -101,7 +103,7 @@
                             </tbody>
                         </table>
                         <div class="attr-buttons">
-                            <button type="button" class="btn btn-success btn-sm waves-effect">Agregar Atributo</button>
+                            <button ng-click="showAttr()" type="button" class="btn btn-success btn-sm waves-effect">Agregar Atributo</button>
                             <button type="button" class="btn btn-primary btn-sm waves-effect">Duplicar grupo</button>
                             <button type="button" class="btn bgm-red btn-sm waves-effect">Eliminar grupo</button>
                         </div>
@@ -158,6 +160,52 @@
 
                         <label class="col-xs-4 col-xs-offset-1 col-sm-offset-0 col-sm-2 control-label">Estado: </label>
                         <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="getStatus(userDetail.status)"></label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="addAttr" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bgm-teal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title c-white">Agregar Atributo</h3>
+            </div>
+            <div class="modal-body card-padding">
+                <form name="addAttr" class="form-horizontal" autocomplete="off">
+                    <div class="form-group">
+                        <label class="col-xs-2 col-sm-2 control-label">Atributo</label>
+                        <div class="col-xs-10 col-sm-4">
+                            <div class="fg-line select">
+                                <select class="form-control" ng-change="attr_select()" ng-options="attributo.id as attributo.name for attributo in attributos" ng-model="attributo.id" required>
+                                    <option value="" disabled="disabled" select="true">Seleccione</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <label class="col-xs-2 col-sm-2 control-label">Valor</label>
+                        <div class="col-xs-10 col-sm-4">
+                            <div class="fg-line select">
+                                <select class="form-control" ng-options="attr_value.type_id as attr_value.valor for attr_value in attr_values" ng-model="attributo.val" required>
+                                    <option value="" disabled="disabled" select="true">Seleccione</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button ng-disabled="!addAttr.$valid" ng-click="addAttr()" type="button" class="btn btn-primary btn-sm waves-effect">Agregar</button>
+                            <a ng-click="cancel()" class="btn btn-danger btn-sm waves-effect">Cancelar</a>
+                        </div>
                     </div>
                 </form>
             </div>

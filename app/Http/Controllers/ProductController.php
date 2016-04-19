@@ -5,6 +5,7 @@ namespace Dashboard\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Dashboard\Http\Requests;
+use Dashboard\Models\Product\Product;
 
 class ProductController extends Controller
 {
@@ -16,7 +17,7 @@ class ProductController extends Controller
     public function index()
     {
         $products= DB::table('products')->orderBy('created_at','desc')->get();
-        return response()->json(['$products' => $products],200);
+        return response()->json(['products' => $products],200);
     }
 
 
@@ -71,7 +72,7 @@ class ProductController extends Controller
     public function show($id)
     {
         try{
-            $product = Prodcut::find($id);
+            $product = Product::find($id);
             $product->attributes;
             if ($product !== null) {
                 return response()->json([

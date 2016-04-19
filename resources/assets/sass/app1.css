@@ -3254,7 +3254,6 @@ legend {
 label {
   display: inline-block;
   max-width: 100%;
-  margin-bottom: 5px;
   font-weight: bold;
 }
 
@@ -13725,6 +13724,7 @@ html:not(.ie9) .select.fg-line:before {
 
 .control-label {
   font-weight: normal;
+  line-height: 35px;
 }
 
 /*

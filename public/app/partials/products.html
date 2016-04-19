@@ -1,6 +1,6 @@
 <div class="card" >
     <div class="card-header bgm-blue">
-        <h2>Gestion de usarios de sistema</h2>
+        <h2>Gestion de productos</h2>
         <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="list()"
                 data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
                 title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
@@ -8,7 +8,7 @@
 
     <div class="card-body card-padding table-responsive">
         <div class="col-sm-12">
-            <table id="table" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
+            <table id="table" class="table table-bordered table-striped" style="text-align:center;"></table>
         </div><br>
         <div class="card-footer">
             <input  class="btn bgm-green waves-effect" type='submit' value='Nuevo registro' ng-click="new();">
@@ -18,7 +18,7 @@
 
 <div class="card" id="formulariohide">
     <div class="card-header bgm-blue">
-        <h2>Crear Empleado</h2>
+        <h2>Crear Producto</h2>
     </div>
 
     <form name="formuser" id="form" class="form-horizontal" autocomplete="off" ng-submit="submit()">
@@ -29,8 +29,8 @@
             </div>
 
             <div class="form-group">
-                <label class="col-xs-2 col-sm-2 control-label">Nombres</label>
-                <div class="col-xs-10 col-sm-4">
+                <label class="col-sm-2 control-label">Nombres</label>
+                <div class="col-sm-4">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-person"></i></span>
                         <div class="fg-line">
@@ -40,20 +40,20 @@
                     </div>
                 </div>
 
-                <label class="col-xs-2 col-sm-2 control-label">Apellidos</label>
-                <div class="col-xs-10 col-sm-4">
+                <label class="col-sm-2 control-label">Apellidos</label>
+                <div class="col-sm-4">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-person"></i></span>
                         <div class="fg-line">
-                         <input ng-model="empleado.last_name" type="text" class="form-control" placeholder="Moreno Gomez" required>
+                            <input ng-model="empleado.last_name" type="text" class="form-control" placeholder="Moreno Gomez" required>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="col-xs-2 col-sm-2 control-label">Contraseña</label>
-                <div class="col-xs-10 col-sm-4">
+                <label class="col-sm-2 control-label">Contraseña</label>
+                <div class="col-sm-4">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-lock"></i></span>
                         <div class="fg-line">
@@ -64,8 +64,8 @@
             </div>
 
             <div class="form-group">
-                <label class="col-xs-2 col-sm-2 control-label">Email</label>
-                <div class="col-xs-10 col-sm-4">
+                <label class="col-sm-2 control-label">Email</label>
+                <div class="col-sm-4">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-email"></i></span>
                         <div class="fg-line">
@@ -73,8 +73,8 @@
                         </div>
                     </div>
                 </div>
-                <label class="col-xs-2 col-sm-2 control-label">Teléfono</label>
-                <div class="col-xs-10 col-sm-4">
+                <label class="col-sm-2 control-label">Teléfono</label>
+                <div class="col-sm-4">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-local-phone"></i></span>
                         <div class="fg-line">
@@ -86,8 +86,8 @@
 
 
             <div class="form-group">
-                <label class="col-xs-2 col-sm-2 control-label">Dirección</label>
-                <div class="col-xs-10 col-sm-10">
+                <label class="col-sm-2 control-label">Dirección</label>
+                <div class="col-sm-10">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-location-on"></i></span>
                         <div class="fg-line">
@@ -98,8 +98,8 @@
             </div>
 
             <div class="form-group">
-                <label class="col-xs-2 col-sm-2 control-label">Género</label>
-                <div class="col-xs-10 col-sm-4">
+                <label class="col-sm-2 control-label">Género</label>
+                <div class="col-sm-4">
                     <div class="input-group">
                         <div class="fg-line select">
                             <select class="form-control" ng-model="empleado.sex" required>
@@ -112,26 +112,31 @@
                     </div>
                 </div>
 
-                <label class="col-xs-2 col-sm-2 control-label">Rol</label>
-                <div class="col-xs-10 col-sm-4">
+                <label class="col-sm-2 control-label">Rol</label>
+                <div class="col-sm-4">
                     <div class="input-group">
                         <div class="fg-line select ">
-                            <select class="form-control" ng-options="role.id as role.name for role in roles" ng-model="empleado.role_id" required>
+                            <select class="form-control" ng-model="empleado.role_id" required>
                                 <option value="" disabled="disabled" select="true">Seleccione</option>
+                                <option value="2">Administrador</option>
+                                <option value="4">Jefe de ventas</option>
+                                <option value="3">Vendedor</option>
+                                <option value="5">Motorizado</option>
                             </select>
                         </div>
+
                     </div>
                 </div>
 
             </div>
 
             <div class="form-group">
-                <label class="col-xs-2 col-sm-2 control-label">Activar/Desactivar</label>
-                <div class="col-xs-10 col-sm-4">
+                <label class="col-sm-2 control-label"></label>
+                <div class="col-sm-10">
                     <div class="input-group">
                         <div class="toggle-switch" data-ts-color="green">
-                            <label for="ts4" class="ts-label"></label>
-                            <input ng-true-value="1" ng-false-value="0" ng-checked="empleado.status" ng-model="empleado.status" id="ts4" type="checkbox" hidden="hidden">
+                            <label for="ts4" class="ts-label">Activar cuenta</label>
+                            <input ng-model="empleado.status" id="ts4" type="checkbox" hidden="hidden">
                             <label for="ts4" class="ts-helper"></label>
                         </div>
                     </div>
@@ -141,7 +146,7 @@
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
                     <button ng-disabled="!formuser.$valid" ng-disabled="formSubmit" type="submit" class="btn btn-primary btn-sm waves-effect">Guardar</button>
-                    <a ng-click="cancel()" class="btn btn-danger btn-sm waves-effect">Cancelar</a>
+                    <a onclick="ocultaformulario();"  ng-click="cancel()" class="btn btn-danger btn-sm waves-effect">Cancelar</a>
                 </div>
             </div>
         </div>
@@ -155,37 +160,46 @@
             <div class="modal-header bgm-teal">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h3 class="modal-title c-white">Detalle de usuario</h3>
+                <h3 class="modal-title c-white">Detalle de producto</h3>
             </div>
             <div class="modal-body card-padding">
                 <form class="form-horizontal" autocomplete="off" submit="return false;">
                     <div class="form-group form-pad-top">
-                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-0 col-sm-2 control-label">Nombres: </label>
-                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="userDetail.first_name"></label>
+                        <label class="col-sm-1"></label>
+                        <label class="col-sm-2 control-label">Codigo: </label>
+                        <label class="col-sm-3 control-label" style="text-align: left" ng-bind="productDetail.product_code"></label>
 
-                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-0 col-sm-2 control-label">Apellidos: </label>
-                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="userDetail.last_name"></label>
+                        <label class="col-sm-2 control-label">Nombre: </label>
+                        <label class="col-sm-3 control-label" style="text-align: left" ng-bind="productDetail.name"></label>
+                        <label class="col-sm-1"></label>
                     </div>
                     <div class="form-group">
-                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-0 col-sm-2 control-label">Direccion: </label>
-                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="userDetail.address"></label>
-
-                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-0 col-sm-2 control-label">Email: </label>
-                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="userDetail.email"></label>
+                        <label class="col-sm-1"></label>
+                        <label class="col-sm-2 control-label">Precio: </label>
+                        <label class="col-sm-3 control-label" style="text-align: left" ng-bind="productDetail.price"></label>
                     </div>
                     <div class="form-group">
-                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-0 col-sm-2 control-label">Telefonos: </label>
-                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="userDetail.phone"></label>
-
-                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-0 col-sm-2 control-label">Sexo: </label>
-                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="userDetail.sex"></label>
+                        <label class="col-sm-1"></label>
+                        <label class="col-sm-2 control-label">Caracteristicas: </label>
+                        <label class="col-sm-3 control-label" style="text-align: left" ng-bind="productDetail.address"></label>
                     </div>
-                    <div class="form-group">
-                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-0 col-sm-2 control-label">Nombre de usuario: </label>
-                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="userDetail.user"></label>
+                    <div class="form-group form-pad-top">
+                        <label class="col-sm-1"></label>
+                        <label class="col-sm-2 control-label">Color: </label>
+                        <label class="col-sm-3 control-label" style="text-align: left">Azul - Amarillo - Negro</label>
 
-                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-0 col-sm-2 control-label">Estado: </label>
-                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="getStatus(userDetail.status)"></label>
+                        <label class="col-sm-2 control-label">Talla: </label>
+                        <label class="col-sm-3 control-label" style="text-align: left"> S - M - L</label>
+                        <label class="col-sm-1"></label>
+                    </div>
+                    <div class="form-group form-pad-top">
+                        <label class="col-sm-1"></label>
+                        <label class="col-sm-2 control-label">Temporada: </label>
+                        <label class="col-sm-3 control-label" style="text-align: left">Otoño</label>
+
+                        <label class="col-sm-2 control-label">Compocision: </label>
+                        <label class="col-sm-3 control-label" style="text-align: left">Algodon peruano</label>
+                        <label class="col-sm-1"></label>
                     </div>
                 </form>
             </div>

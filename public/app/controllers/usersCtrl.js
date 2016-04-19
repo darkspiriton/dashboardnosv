@@ -8,7 +8,7 @@ angular.module('App')
                                                     {"sTitle": "Nombre", "bSortable" : true},
                                                     {"sTitle": "Rol", "bSortable" : true},
                                                     {"sTitle": "Estado" ,"bSearchable": false , "bSortable" : false , "sWidth": "80px"},
-                                                    {"sTitle": "Accion" , "bSearchable": false , "bSortable" : false , "sWidth": "180px"}
+                                                    {"sTitle": "Accion" , "bSearchable": false , "bSortable" : false , "sWidth": "190px"}
                                                 ],
                                     actions	:  	[
                                                     ['status',   {
@@ -95,10 +95,7 @@ angular.module('App')
             var id = $scope.tableData[ind].id;
             petition.get('api/user/' + id)
                 .then(function(data){
-                    $log.log(data.user);
                     $scope.empleado = data.user;
-                    var role_id = $scope.empleado.role_id;
-                    $scope.empleado.role_id = role_id.toString();
                     $scope.empleado.password = '**********';
                     util.muestraformulario();
                 }, function(error){
@@ -143,6 +140,14 @@ angular.module('App')
             else return 'Inactivo';
         };
 
+        $scope.muertra = function(){
+            $log.log($scope.empleado.status);
+        };
+
+        $scope.muertra2 = function(){
+            $scope.empleado.status = true;
+        };
+
         changeButton = function (ind, dom){
             $scope.tableData[ind].status = ($scope.tableData[ind].status == 0)? 1 : 0;
             if ( $scope.tableData[ind].status == 1){
@@ -158,6 +163,14 @@ angular.module('App')
 
         angular.element(document).ready(function(){
             $scope.empleado = angular.copy($scope.empleadoClear);
+
+            $scope.roles = [
+                                {id : 2 , name : 'Administrador'},
+                                {id : 4 , name : 'Jefe de ventas'},
+                                {id : 3 , name : 'Vendedor'},
+                                {id : 5 , name : 'Motorizado'}
+                            ];
+
             $scope.list();
         });
     });

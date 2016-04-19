@@ -8,12 +8,12 @@ angular.module('App')
                                                     {"sTitle": "Nombre", "bSortable" : true},
                                                     {"sTitle": "Rol", "bSortable" : true},
                                                     {"sTitle": "Estado" ,"bSearchable": false , "bSortable" : false , "sWidth": "80px"},
-                                                    {"sTitle": "Accion" , "bSearchable": false , "bSortable" : false , "sWidth": "180px"}
+                                                    {"sTitle": "Accion" , "bSearchable": false , "bSortable" : false , "sWidth": "190px"}
                                                 ],
                                     actions	:  	[
                                                     ['status',   {
                                                                     0 : { txt : 'Inactivo' , cls : 'btn-danger' },
-                                                                    1 : { txt : 'Acitvo' ,  cls : 'btn-success', dis : false} ,
+                                                                    1 : { txt : 'Activo' ,  cls : 'btn-success' } ,
                                                                 }
                                                     ],
                                                     ['actions', [
@@ -70,7 +70,7 @@ angular.module('App')
             var id = $scope.tableData[ind].id;
             swal(alertConfig ,
                 function() {
-                    petition.custom('user', { id : id}).then(function(data){
+                    petition.delete('api/user/' + id ).then(function(data){
                         toastr.success(data.message);
                         changeButton(ind , dom.target);
                     },function(error){
@@ -96,8 +96,6 @@ angular.module('App')
             petition.get('api/user/' + id)
                 .then(function(data){
                     $scope.empleado = data.user;
-                    var role_id = $scope.empleado.role_id;
-                    $scope.empleado.role_id = role_id.toString();
                     $scope.empleado.password = '**********';
                     util.muestraformulario();
                 }, function(error){
@@ -108,7 +106,8 @@ angular.module('App')
         $scope.submit = function () {
             var method = ( $scope.empleado.id )?'PUT':'POST';
             var url = ( method == 'PUT')? util.baseUrl('api/user/' + $scope.empleado.id): util.baseUrl('api/user');
-
+            if ( $scope.empleado.password == '**********' )
+                $scope.empleado.password = null;
             var config = {
                             method: method,
                             url: url,
@@ -141,8 +140,29 @@ angular.module('App')
             else return 'Inactivo';
         };
 
+        changeButton = function (ind, dom){
+            $scope.tableData[ind].status = ($scope.tableData[ind].status == 0)? 1 : 0;
+            if ( $scope.tableData[ind].status == 1){
+                $(dom).removeClass('btn-danger');
+                $(dom).addClass('btn-success');
+                $(dom).html('Activo');
+            }else{
+                $(dom).removeClass('btn-success');
+                $(dom).addClass('btn-danger');
+                $(dom).html('Inactivo');
+            }
+        };
+
         angular.element(document).ready(function(){
             $scope.empleado = angular.copy($scope.empleadoClear);
+
+            $scope.roles = [
+                                {id : 2 , name : 'Administrador'},
+                                {id : 4 , name : 'Jefe de ventas'},
+                                {id : 3 , name : 'Vendedor'},
+                                {id : 5 , name : 'Motorizado'}
+                            ];
+
             $scope.list();
         });
     });

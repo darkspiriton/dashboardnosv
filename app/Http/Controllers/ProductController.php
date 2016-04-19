@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\DB;
 use Dashboard\Http\Requests;
 use Dashboard\Models\Product\Product;
 
-
 class ProductController extends Controller
 {
     /**
@@ -79,7 +78,6 @@ class ProductController extends Controller
     {
         try{
             $product = Product::find($id);
-
             if ($product !== null) {
                 return response()->json([
                     'message' => 'Mostrar detalles de producto',

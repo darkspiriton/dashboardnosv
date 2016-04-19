@@ -15,7 +15,7 @@ angular.module('App')
                                     actions	:  	[
                                                     ['status',   {
                                                                     0 : { txt : 'Inactivo' , cls : 'btn-danger' },
-                                                                    1 : { txt : 'Acitvo' ,  cls : 'btn-success', dis : false} ,
+                                                                    1 : { txt : 'Activo' ,  cls : 'btn-success', dis : false} ,
                                                                 }
                                                     ],
                                                     ['actions', [
@@ -92,7 +92,7 @@ angular.module('App')
                         params: data,
                     };
                     petition.custom(config).then(function(data){
-                        $('#tab_users').AJQtable('removeRow', dom.target , function(){
+                        $('#table').AJQtable('removeRow', dom.target , function(){
                             toastr.success(data.message);
                         });
 

@@ -6,6 +6,7 @@
 
 		// Datos de configuracion
 		var config = {};
+		var table;
 		cols 	= $scope.tableConfig.columns || [];
 		actions 	= $scope.tableConfig.actions || [];
 		data 	= $scope.tableConfig.data || [];
@@ -18,7 +19,7 @@
 			linker = $compile(nRow);
 			element = linker($scope);
 			return nRow = element;
-		}
+		};
 
 		for (i in actions) {
 			if ( actions[i][0]  === 'actions' ) {
@@ -45,14 +46,14 @@
 		// Opciones de la tabla
 		options = {
 			fnCreatedRow: rowCompiler, 		// Al crear tabla conpilarla en angular
-			aoColumns: cols,                // Columnas de tabla
+			aoColumns: cols                 // Columnas de tabla
 		};
 
 		// Inicializar la tabla
 		if ( ! $.fn.DataTable.isDataTable( this[0] ) ) 
-		  	var oTable = $(this[0]).dataTable(options);
+		  	oTable = $(this[0]).dataTable(options);
 		else
-			var oTable = $( this[0] ).dataTable();
+			oTable = $( this[0] ).dataTable();
 
 		// Limpiar registros
 		oTable.fnClearTable();
@@ -60,18 +61,19 @@
 		// Llenar de registros la tabla
 		if (actions.length > 0){
 				$.each($scope.tableData, function(i , obj){
-					var temp = []
+					var temp = [];
 					var est = obj[config.configStatus];
 					$.each( data , function(x, val){
-						if (val == 'actions')
+						if (val == 'actions'){
 							temp[x] = acc.actions(i);
-						else if (val == 'status')
+						} else if (val == 'status') {
 							temp[x] = acc.status(i, est);
-						else 
+						} else {
 							if ( val.constructor === Array)
 								temp[x] = (obj[val[0]]).substr(0, val[1]) + ' ...';
 							else
 								temp[x] = obj[val];
+						}
 					});
 					oTable.fnAddData(temp);
 				});
@@ -94,23 +96,18 @@
 	}
 
 	function removeRow ( dom, callback ){
-		console.log(dom);
-		var row2 = $(dom).closest("tr").get(0);
-		var row = $(dom).parent().parent()[0]
-		console.log(["FROM",row,row2]);
-		var rowE = $(dom).closest("tr");
-		console.log(['1',row, rowE]);
-		var dtable = $(this[0]).dataTable();
-		console.log(["TO",dtable.fnGetPosition(row), dtable.fnGetPosition(row2)]);
-		var pos = dtable.fnGetPosition(row);
-		rowE.fadeOut(750,function(){
-			dtable.fnDeleteRow(pos);
+		var oTable = $(this[0]).dataTable();
+		var element = $(dom).closest('tr');
+		var row = $(element).get(0);
+		var pos = oTable.fnGetPosition(row);
+		element.fadeOut(750,function(){
+			oTable.fnDeleteRow(pos);
 		});
 		callback();
 	};
 
     var methods = {
-        init : function(options) { console.log('indique accion') },
+        init : function() { console.log('indique accion') },
         view : view,
         search : search,
 		removeRow : removeRow

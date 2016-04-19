@@ -23,6 +23,17 @@ angular.module('App', ['ngResource','ngMessages','ngSanitize','ngAnimate','toast
         $urlRouterProvider.otherwise('/home');
 
     })
+    .directive('fileModel', function() {
+        return {
+            controller: function($parse, $element, $attrs, $scope){
+                var exp = $parse($attrs.fileModel);
+                $element.on('change', function(){
+                    exp.assign($scope, this.files);
+                    $scope.$apply();
+                });
+            }
+        }
+    })
     .factory('petition', function($http, $location){
         var baseUrl =  function ( URL ) {
             var prot = $location.protocol();

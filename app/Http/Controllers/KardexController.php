@@ -2,12 +2,11 @@
 
 namespace Dashboard\Http\Controllers;
 
-use Dashboard\Models\Kardex\Type_Attribute;
 use Illuminate\Http\Request;
-use Dashboard\Http\Requests;
-use Illuminate\Support\Facades\DB;
 
-class AttributeController extends Controller
+use Dashboard\Http\Requests;
+
+class KardexController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,14 +15,7 @@ class AttributeController extends Controller
      */
     public function index()
     {
-
-        $types=Type_Attribute::all();
-
-        foreach ($types as $type) {
-            $type->att;
-        }
-        return response()->json(['types' => $types],200);
-
+        //
     }
 
     /**
@@ -58,6 +50,16 @@ class AttributeController extends Controller
         //
     }
 
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        //
+    }
 
     /**
      * Update the specified resource in storage.

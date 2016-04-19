@@ -16,11 +16,20 @@ class ProductController extends Controller
      */
     public function index()
     {
+//        SELECT p.id, p.name, p.price,
+//        (select count(k.id) from kardexs k where product_id = p.id and k.stock = 1)
+//        FROM dashboard.products p;
         $products= DB::table('products')
             ->join('kardexs','kardexs.product_id','=','products.id')
-            ->select('name','product_code','price','status', DB::raw('COUNT(kardexs.id) AS cant'))
+            ->select('products.id','name','product_code','price','status', DB::raw('COUNT(kardexs.product_id) AS cant'))
             ->groupby('name')
             ->get();
+
+//        $count= DB::table('kardexs')
+//            ->select(DB::raw('COUNT(kardexs.product_id) AS cant)'))
+//            ->where('stock','1')
+//            ->get();
+//        dd($count);
 
         return response()->json(['$products' => $products],200);
     }
@@ -79,6 +88,10 @@ class ProductController extends Controller
         try{
             $product = Product::find($id);
             if ($product !== null) {
+                $kardexs=$product->kardexs;
+                foreach ($kardexs as $kardex ){
+                    $kardex->attributes;
+                }
                 return response()->json([
                     'message' => 'Mostrar detalles de producto',
                     'product'=> $product,
@@ -115,12 +128,11 @@ class ProductController extends Controller
         try{
             $product = Product::find($id);
             if ($product !== null) {
-                $product->first_name= $request->input('name');
-                $product->last_name= $request->input('price');
-                $product->email= $request->input('product_code');
+                $product->name = $request->input('name');
+                $product->price = $request->input('price');
+                $product->image = $request->input('image');
+                $product->product_code = $request->input('product_code');
                 $product->save();
-
-                //Falta agregar atributos de productos
 
                 return response()->json(['message' => 'Se actualizo correctamente'],200);
             }
@@ -143,12 +155,12 @@ class ProductController extends Controller
             $product = Product::find($id);
             if ($product == 1){
                 $product->status=0;
-                return response()->json(['message' => 'Se elimino correctamente el usuario'],200);
+                return response()->json(['message' => 'Se desactivo correctamente el producto'],200);
             }elseif ($product == 1){
                 $product->status=1;
-                return response()->json(['message' => 'Se elimino correctamente el usuario'],200);
+                return response()->json(['message' => 'Se activo correctamente el producto'],200);
             }
-            return \Response::json(['message' => 'No existe ese usuario'], 404);
+            return \Response::json(['message' => 'No existe el producto'], 404);
         }catch (ErrorException $e){
             return \Response::json(['message' => 'Ocurrio un error'], 500);
         }

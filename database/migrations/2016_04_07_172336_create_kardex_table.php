@@ -35,7 +35,7 @@ class CreateKardexTable extends Migration
             $table->foreign('type_id')->references('id')->on('types_attributes');
         });
 
-        Schema::create('kardexs_attributes',function(Blueprint $table){
+        Schema::create('attribute_kardex',function(Blueprint $table){
             $table->increments('id');
             $table->integer('kardex_id')->unsigned();
             $table->integer('attribute_id')->unsigned();
@@ -68,7 +68,7 @@ class CreateKardexTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('kardexs_attributes');
+        Schema::dropIfExists('attribute_kardex');
         Schema::dropIfExists('attributes');
         Schema::dropIfExists('types_attributes');
         Schema::dropIfExists('movements');

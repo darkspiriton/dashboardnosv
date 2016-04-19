@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use Dashboard\Http\Requests;
 use Dashboard\Models\Product\Product;
 
+
 class ProductController extends Controller
 {
     /**
@@ -16,7 +17,12 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products= DB::table('products')->orderBy('created_at','desc')->get();
+        $products= DB::table('products')
+            ->join('kardexs','kardexs.product_id','=','products.id')
+            ->select('name','product_code','price','status', DB::raw('COUNT(kardexs.id) AS cant'))
+            ->groupby('name')
+            ->get();
+
         return response()->json(['$products' => $products],200);
     }
 

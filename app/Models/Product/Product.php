@@ -2,7 +2,7 @@
 
 namespace Dashboard\Models\Product;
 
-use Dashboard\Dashboard\Models\Kardex\Kardex;
+use Dashboard\Models\Kardex\Kardex;
 use Illuminate\Database\Eloquent\Model;
 
 

@@ -1,9 +1,10 @@
 <?php
 
-namespace Dashboard\Dashboard\Models\Kardex;
+namespace Dashboard\Models\Kardex;
 
-use Dashboard\Models\Kardex\Kardex;
+
 use Illuminate\Database\Eloquent\Model;
+
 
 class Attribute extends Model
 {

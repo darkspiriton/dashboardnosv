@@ -29,10 +29,10 @@ class CreateKardexTable extends Migration
 
         Schema::create('attributes',function(Blueprint $table){
             $table->increments('id');
-            $table->increments('type_id')->unsigned();
+            $table->integer('type_id')->unsigned();
             $table->string('valor',100);
             $table->timestamps();
-            $table->foreign('type_id')->references('id')->on('types');
+            $table->foreign('type_id')->references('id')->on('types_attributes');
         });
 
         Schema::create('kardexs_attributes',function(Blueprint $table){
@@ -68,9 +68,9 @@ class CreateKardexTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('types');
-        Schema::dropIfExists('attributes');
         Schema::dropIfExists('kardexs_attributes');
+        Schema::dropIfExists('attributes');
+        Schema::dropIfExists('types_attributes');
         Schema::dropIfExists('movements');
         Schema::dropIfExists('types_movements');
         Schema::dropIfExists('kardexs');

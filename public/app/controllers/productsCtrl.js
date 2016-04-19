@@ -16,7 +16,7 @@ angular.module('App')
                 {"sTitle": "codigo", "bSortable" : true},
                 {"sTitle": "Nombre", "bSortable" : true},
                 {"sTitle": "Precio", "bSortable" : true},
-                {"sTitle": "Accion" , "bSearchable": false , "bSortable" : false , "sWidth": "180px"}
+                {"sTitle": "Accion" , "bSearchable": false , "bSortable" : false , "sWidth": "190px"}
             ],
             actions	:  	[
                             ['actions',
@@ -42,18 +42,10 @@ angular.module('App')
             closeOnConfirm: true
         };
 
-        $scope.empleadoClear = {
-            first_name: '',
-            last_name: '',
-            email: '',
-            phone: '',
-            address: '',
-            birth_date: '',
-            sex: '',
-            photo:'',
-            role_id: '',
-            password: '',
-            status: false
+        $scope.productClear = {
+            name: '',
+            price: '',
+            attributes: {}
         };
 
         $scope.list = function() {
@@ -118,22 +110,32 @@ angular.module('App')
         //};
 
         $scope.cancel = function () {
-            $scope.empleado = angular.copy($scope.empleadoClear);
+            $scope.product = angular.copy($scope.productClear);
             util.ocultaformulario();
         };
 
         $scope.new = function(){
-            $scope.empleado = angular.copy($scope.empleadoClear);
+            $scope.product = angular.copy($scope.productClear);
             util.muestraformulario();
         };
 
-        $scope.getStatus = function( status ){
-            if (status == 1)return 'Activo';
-            else return 'Inactivo';
-        };
+        //$scope.getStatus = function( status ){
+        //    if (status == 1)return 'Activo';
+        //    else return 'Inactivo';
+        //};
 
         angular.element(document).ready(function(){
-            //$scope.empleado = angular.copy($scope.empleadoClear);
+            $scope.product = angular.copy($scope.productClear);
             $scope.list();
+
+
+            //Tabla de pruebas
+            options = {
+                aoColumns: [
+                    {"sTitle": "Atributo", "bSortable" : true},
+                    {"sTitle": "Valor", "bSortable" : true},
+                    {"sTitle": "Accion" , "bSearchable": false , "bSortable" : false , "sWidth": "190px"}
+                ]
+            };
         });
     });

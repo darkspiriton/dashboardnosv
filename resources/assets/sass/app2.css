@@ -1432,3 +1432,22 @@ div.fc-row {
 .w-100 {
   width: 100% !important;
 }
+
+.table-attr th,
+.table-attr td {
+  padding: 5px;
+}
+
+.table-attr thead tr th {
+  background: #2196F3;
+  color: #FFF;
+  text-align: center;
+}
+
+.attr-buttons {
+  padding: 15px;
+}
+
+.attr-group {
+  margin-bottom: 30px;
+}

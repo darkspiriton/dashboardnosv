@@ -140,14 +140,6 @@ angular.module('App')
             else return 'Inactivo';
         };
 
-        $scope.muertra = function(){
-            $log.log($scope.empleado.status);
-        };
-
-        $scope.muertra2 = function(){
-            $scope.empleado.status = true;
-        };
-
         changeButton = function (ind, dom){
             $scope.tableData[ind].status = ($scope.tableData[ind].status == 0)? 1 : 0;
             if ( $scope.tableData[ind].status == 1){

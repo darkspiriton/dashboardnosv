@@ -16,9 +16,16 @@ angular.module('App')
                 {"sTitle": "codigo", "bSortable" : true},
                 {"sTitle": "Nombre", "bSortable" : true},
                 {"sTitle": "Precio", "bSortable" : true},
+                {"sTitle": "Cant", "bSortable" : true, "sWidth": "1px"},
+                {"sTitle": "Estado", "bSortable" : true, "sWidth": "80px"},
                 {"sTitle": "Accion" , "bSearchable": false , "bSortable" : false , "sWidth": "190px"}
             ],
             actions	:  	[
+                            ['status',   {
+                                            0 : { txt : 'Inactivo' , cls : 'btn-danger' },
+                                            1 : { txt : 'Activo' ,  cls : 'btn-success' } ,
+                                        }
+                            ],
                             ['actions',
                                 [
                                     ['ver', 'view' ,'btn-info'],
@@ -26,7 +33,7 @@ angular.module('App')
                                 ]
                             ]
                         ],
-            data  	: 	['product_code','name','price','actions'],
+            data  	: 	['product_code','name','price','cant','status','actions'],
             configStatus : 'status'
         };
 
@@ -49,7 +56,7 @@ angular.module('App')
         };
 
         $scope.list = function() {
-            petition.get('api/products')
+            petition.get('api/product')
                 .then(function(data){
                     $scope.tableData = data.products;
                     $('#table').AJQtable('view', $scope, $compile);
@@ -61,10 +68,26 @@ angular.module('App')
                 });
         };
 
+        $scope.listAttr = function() {
+            petition.get('api/attribute')
+                .then(function(data){
+                    $scope.attributos = data.types;
+                    console.log($scope.attrs);
+                }, function(error){
+                    console.log(error);
+                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                });
+        };
+
+        $scope.attr_select = function(){
+            $scope.attr_values = $scope.attributos[$scope.attributo.id - 1].att;
+        };
+
         $scope.view = function( ind ){
             var id = $scope.tableData[ind].id;
-            petition.get('api/products/' + id)
+            petition.get('api/product/' + id)
                 .then(function(data){
+                    $log.log(data);
                     $scope.productDetail = data.product;
                     util.modal();
                 }, function(error){
@@ -119,6 +142,10 @@ angular.module('App')
             util.muestraformulario();
         };
 
+        $scope.showAttr = function (){
+            util.modal('addAttr');
+        }
+
         //$scope.getStatus = function( status ){
         //    if (status == 1)return 'Activo';
         //    else return 'Inactivo';
@@ -127,7 +154,7 @@ angular.module('App')
         angular.element(document).ready(function(){
             $scope.product = angular.copy($scope.productClear);
             $scope.list();
-
+            $scope.listAttr();
 
             //Tabla de pruebas
             options = {

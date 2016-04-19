@@ -18,11 +18,11 @@ class ProductController extends Controller
     {
         $products= DB::table('products')
             ->join('kardexs','kardexs.product_id','=','products.id')
-            ->select('name','product_code','price','status', DB::raw('COUNT(kardexs.id) AS cant'))
+            ->select('products.id','name','product_code','price','status', DB::raw('COUNT(kardexs.id) AS cant'))
             ->groupby('name')
             ->get();
 
-        return response()->json(['$products' => $products],200);
+        return response()->json(['products' => $products],200);
     }
 
 

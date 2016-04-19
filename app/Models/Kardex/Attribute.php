@@ -10,6 +10,10 @@ class Attribute extends Model
 {
     protected $table='attributes';
 
+    protected $hidden = [
+        'created_at','updated_at','pivot'
+    ];
+
     public function kardexs()
     {
         return $this->belongsToMany(Kardex::class);

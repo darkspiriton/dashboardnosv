@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Kardex extends Model
 {
 
+    protected $hidden = [
+        'created_at','updated_at'
+    ];
     protected  $table='kardexs';
 
     public function movements(){

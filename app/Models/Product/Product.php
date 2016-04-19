@@ -22,7 +22,7 @@ class Product extends Model
      * @var array
      */
     protected $hidden = [
-        'password',
+        'password','created_at','updated_at'
     ];
     
     protected  $table='products';

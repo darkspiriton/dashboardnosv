@@ -15,13 +15,13 @@ class ProductsTableSeeder extends Seeder
         $faker = Faker::create();
 
         DB::transaction(function () {
-            DB::table('types_attributes')->insert(['name' => 'Marca']);
-            DB::table('types_attributes')->insert(['name' => 'Color']);
-            DB::table('types_attributes')->insert(['name' => 'Talla']);
-            DB::table('types_attributes')->insert(['name' => 'Categoria']);
+            DB::table('attributes')->insert(['name' => 'Marca']);
+            DB::table('attributes')->insert(['name' => 'Color']);
+            DB::table('attributes')->insert(['name' => 'Talla']);
+            DB::table('attributes')->insert(['name' => 'Categoria']);
         });
 
-        for($i=0;$i<100;$i++)
+        for($i=0;$i<20;$i++)
         {
             $idProduct = DB::table('products')->insertGetId(array(
                 'name' => $faker->colorName,
@@ -30,13 +30,13 @@ class ProductsTableSeeder extends Seeder
                 'status' => $faker->randomFloat( $nbMaxDecimals = 0, $min= 0, $max=1),
             ));
             for($j=1;$j<=4;$j++){
-                DB::table('attributes')->insertGetId(array(
+                DB::table('details_attributes')->insertGetId(array(
                     'product_id' => $idProduct,
                     'type_id' => $j,
                     'valor' =>  $faker->colorName,
                 ));
             }
-            $random = $faker->randomFloat( $nbMaxDecimals = 0, $min= 1, $max=10);
+            $random = $faker->randomFloat( $nbMaxDecimals = 0, $min= 1, $max=5);
             for($z=0;$z<=$random;$z++){
                 DB::table('kardexs')->insertGetId(array(
                     'product_id' => $idProduct,

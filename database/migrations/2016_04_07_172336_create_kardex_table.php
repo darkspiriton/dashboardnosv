@@ -21,6 +21,29 @@ class CreateKardexTable extends Migration
             $table->foreign('product_id')->references('id')->on('products');
         });
 
+        Schema::create('types_attributes',function(Blueprint $table){
+            $table->increments('id');
+            $table->string('name',100);
+            $table->timestamps();
+        });
+
+        Schema::create('attributes',function(Blueprint $table){
+            $table->increments('id');
+            $table->increments('type_id')->unsigned();
+            $table->string('valor',100);
+            $table->timestamps();
+            $table->foreign('type_id')->references('id')->on('types');
+        });
+
+        Schema::create('kardexs_attributes',function(Blueprint $table){
+            $table->increments('id');
+            $table->integer('kardex_id')->unsigned();
+            $table->integer('attribute_id')->unsigned();
+            $table->timestamps();
+            $table->foreign('kardex_id')->references('id')->on('kardexs')->ondelete('cascade');
+            $table->foreign('attribute_id')->references('id')->on('attributes');
+        });
+
         Schema::create('types_movements',function(Blueprint $table){
             $table->increments('id');
             $table->string('name',100);
@@ -45,6 +68,9 @@ class CreateKardexTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('types');
+        Schema::dropIfExists('attributes');
+        Schema::dropIfExists('kardexs_attributes');
         Schema::dropIfExists('movements');
         Schema::dropIfExists('types_movements');
         Schema::dropIfExists('kardexs');

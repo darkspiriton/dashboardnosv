@@ -57,7 +57,7 @@ class UsersTableSeeder extends Seeder
                 'sex'       =>  'M',
                 'photo'     =>  '1.jpg',
                 'role_id'   =>  1,
-                'user'      =>  'Admin',
+                'status'    =>  1,
                 'password'  =>  bcrypt('123456'),
             ],
             [
@@ -70,7 +70,7 @@ class UsersTableSeeder extends Seeder
                 'sex'       =>  'M',
                 'photo'     =>  '1.jpg',
                 'role_id'   =>  3,
-                'user'      =>  'Vendedor',
+                'status'    =>  1,
                 'password'  =>  bcrypt('123456'),
             ],
             [
@@ -83,7 +83,7 @@ class UsersTableSeeder extends Seeder
                 'sex'       =>  'M',
                 'photo'     =>  '1.jpg',
                 'role_id'   =>  2,
-                'user'      =>  'Admin',
+                'status'    =>  1,
                 'password'  =>  bcrypt('123456'),
             ],
             [
@@ -96,7 +96,7 @@ class UsersTableSeeder extends Seeder
                 'sex'       =>  'M',
                 'photo'     =>  '1.jpg',
                 'role_id'   =>  4,
-                'user'      =>  'coordinador',
+                'status'    =>  1,
                 'password'  =>  bcrypt('123456'),
             ],
         ]);

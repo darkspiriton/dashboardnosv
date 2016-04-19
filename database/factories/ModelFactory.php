@@ -24,7 +24,7 @@ $factory->define(Dashboard\User::class, function (Generator $faker) {
         'sex'       =>  'M',
         'photo'     =>  $faker->imageUrl($width= 50 , $height=50),
         'role_id'   =>  $faker->randomFloat($nbMaxDecimals=0,$min=2,$max=5),
-        'user'      =>  $faker->userName,
+        'status' => $faker->randomFloat( $nbMaxDecimals = 0, $min= 0, $max=1),
         'password'  =>  bcrypt('123456'),
     ];
 });

@@ -18,31 +18,49 @@ class ProductsTableSeeder extends Seeder
             DB::table('types_attributes')->insert(['name' => 'Marca']);
             DB::table('types_attributes')->insert(['name' => 'Color']);
             DB::table('types_attributes')->insert(['name' => 'Talla']);
-            DB::table('types_attributes')->insert(['name' => 'Categoria']);
         });
 
-        for($i=0;$i<100;$i++)
+        DB::transaction(function () {
+            DB::table('attributes')->insert(['type_id' => 1,'valor'=> 'MARCA1' ]);
+            DB::table('attributes')->insert(['type_id' => 1,'valor'=> 'MARCA2' ]);
+            DB::table('attributes')->insert(['type_id' => 1,'valor'=> 'MARCA3' ]);
+            DB::table('attributes')->insert(['type_id' => 1,'valor'=> 'MARCA4' ]);
+
+            DB::table('attributes')->insert(['type_id' => 2,'valor'=> 'COLOR1' ]);
+            DB::table('attributes')->insert(['type_id' => 2,'valor'=> 'COLOR2' ]);
+            DB::table('attributes')->insert(['type_id' => 2,'valor'=> 'COLOR3' ]);
+            DB::table('attributes')->insert(['type_id' => 2,'valor'=> 'COLOR4' ]);
+
+            DB::table('attributes')->insert(['type_id' => 3,'valor'=> 'TALLA1' ]);
+            DB::table('attributes')->insert(['type_id' => 3,'valor'=> 'TALLA2' ]);
+            DB::table('attributes')->insert(['type_id' => 3,'valor'=> 'TALLA3' ]);
+            DB::table('attributes')->insert(['type_id' => 3,'valor'=> 'TALLA4' ]);
+        });
+
+        for($i=0;$i<20;$i++)
         {
             $idProduct = DB::table('products')->insertGetId(array(
                 'name' => $faker->colorName,
                 'price' => $faker->randomFloat( $nbMaxDecimals = 2, $min= 9, $max=100),
+                'image' => $faker->imageUrl($width = 200, $height = 180),
                 'product_code' => $faker->numberBetween($min = 1, $max = 90000),
                 'status' => $faker->randomFloat( $nbMaxDecimals = 0, $min= 0, $max=1),
             ));
-            for($j=1;$j<=4;$j++){
-                DB::table('attributes')->insertGetId(array(
-                    'product_id' => $idProduct,
-                    'type_id' => $j,
-                    'valor' =>  $faker->colorName,
-                ));
-            }
-            $random = $faker->randomFloat( $nbMaxDecimals = 0, $min= 1, $max=10);
+
+            $random = $faker->randomFloat( $nbMaxDecimals = 0, $min= 1, $max=5);
             for($z=0;$z<=$random;$z++){
-                DB::table('kardexs')->insertGetId(array(
+                $idKardex =  DB::table('kardexs')->insertGetId(array(
                     'product_id' => $idProduct,
                     'product_cod' => $z,
                     'stock' => $faker->boolean(40) ,
                 ));
+
+                for($j=1;$j<=3;$j++){
+                    DB::table('kardexs_attributes')->insertGetId(array(
+                        'kardex_id' => $idKardex,
+                        'attribute_id' => $j
+                    ));
+                }
             }
         }
     }

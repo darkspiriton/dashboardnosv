@@ -23,11 +23,9 @@ class CreateUsersTable extends Migration
             $table->char('sex', 1);
             $table->string('photo', 50);
             $table->integer('role_id')->unsigned();
-            //$table->string('user');
             $table->string('password');
             $table->string('token')->nullable();
             $table->boolean('status')->default(0);
-            $table->boolean('status');
             $table->timestamps();
         });
 

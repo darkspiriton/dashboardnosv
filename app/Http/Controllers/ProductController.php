@@ -5,6 +5,8 @@ namespace Dashboard\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Dashboard\Http\Requests;
+use Dashboard\Models\Product\Product;
+
 
 class ProductController extends Controller
 {
@@ -15,7 +17,12 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products= DB::table('products')->orderBy('created_at','desc')->get();
+        $products= DB::table('products')
+            ->join('kardexs','kardexs.product_id','=','products.id')
+            ->select('name','product_code','price','status', DB::raw('COUNT(kardexs.id) AS cant'))
+            ->groupby('name')
+            ->get();
+
         return response()->json(['$products' => $products],200);
     }
 
@@ -71,12 +78,13 @@ class ProductController extends Controller
     public function show($id)
     {
         try{
-            $product = Prodcut::find($id);
-            $product->attributes;
+            $product = Product::find($id);
+
             if ($product !== null) {
                 return response()->json([
                     'message' => 'Mostrar detalles de producto',
                     'product'=> $product,
+                    //'attributes' => $product->attributes,
                 ],200);
             }
             return \Response::json(['message' => 'No existe ese producto'], 404);

@@ -1,6 +1,6 @@
 <?php
 
-namespace Dashboard\Dashboard\Models\Kardex;
+namespace Dashboard\Models\Kardex;
 
 use Illuminate\Database\Eloquent\Model;
 

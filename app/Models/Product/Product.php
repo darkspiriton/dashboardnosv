@@ -2,6 +2,7 @@
 
 namespace Dashboard\Models\Product;
 
+use Dashboard\Models\Kardex\Kardex;
 use Illuminate\Database\Eloquent\Model;
 
 
@@ -23,9 +24,11 @@ class Product extends Model
     protected $hidden = [
         'password',
     ];
+    
+    protected  $table='products';
 
-    public function attributes(){
-        return $this->hasMany(Attribute::class);
+    public function kardexs(){
+        return $this->hasMany(Kardex::class);
     }
 
 }

@@ -17,20 +17,12 @@ class ProductController extends Controller
      */
     public function index()
     {
-//        SELECT p.id, p.name, p.price,
-//        (select count(k.id) from kardexs k where product_id = p.id and k.stock = 1)
-//        FROM dashboard.products p;
+
         $products= DB::table('products')
             ->join('kardexs','kardexs.product_id','=','products.id')
-            ->select('products.id','name','product_code','price','status', DB::raw('COUNT(kardexs.product_id) AS cant'))
+            ->select('products.id','name','product_code','price','status', DB::raw('COUNT(case kardexs.stock WHEN 1 then 1 else null end ) AS cant'))
             ->groupby('name')
             ->get();
-
-//        $count= DB::table('kardexs')
-//            ->select(DB::raw('COUNT(kardexs.product_id) AS cant)'))
-//            ->where('stock','1')
-//            ->get();
-//        dd($count);
 
         return response()->json(['$products' => $products],200);
     }
@@ -38,7 +30,6 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-
         if (!is_array($request->all())) {
             return response()->json(['message' => 'request must be an array'],401);
         }
@@ -46,8 +37,13 @@ class ProductController extends Controller
         $rules = [
             'name'      => 'required',
             'price'      => 'required',
+            'image'     => '',
             'product_code'     => 'required',
+            'status'        => 'required',            
+            //falta validar los atributos
         ];
+
+        //Se va a pasar datos del producto, attributos y su cantidad
 
         try {
             // Ejecutamos el validador y en caso de que falle devolvemos la respuesta
@@ -61,12 +57,15 @@ class ProductController extends Controller
             $productAux=DB::table('products')->where('product_code',$request->input('product_code'))->get();
 
             if(count($productAux) == 0 ){
-                $productAux = new Product();
-                $productAux->first_name= $request->input('name');
-                $productAux->last_name= $request->input('price');
-                $productAux->email= $request->input('product_code');
-                //Falta agregar atributos de productos
-                $productAux->save();
+                $product = new Product();
+                $product->name= $request->input('name');
+                $product->price= $request->input('price');
+                $product->image= $request->input('image');
+                $product->product_code= $request->input('product_code');
+                $product->status= $request->input('status');
+                $product->save();
+
+                //Falta Agregar atributos de productos
                 return response()->json(['message' => 'El producto se agrego correctamente'],200);
             }
 
@@ -108,17 +107,6 @@ class ProductController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -136,10 +124,14 @@ class ProductController extends Controller
                 $product->product_code = $request->input('product_code');
                 $product->save();
 
+                $product = DB::table('products')->where('name','=',$request->input('name'))->get();
+                $cant = $request->input('cant');
+                $attributes=$request->input('attributes');
+
+                $this->addKardex($product->id,$cant,$attributes);
                 return response()->json(['message' => 'Se actualizo correctamente'],200);
             }
             return \Response::json(['message' => 'No existe ese usuario'], 404);
-
         }catch (ErrorException $e){
             return \Response::json(['message' => 'Ocurrio un error'], 500);
         }
@@ -155,16 +147,22 @@ class ProductController extends Controller
     {
         try{
             $product = Product::find($id);
-            if ($product == 1){
-                $product->status=0;
+            if ($product->status == 1){
+                $product->status = 0 ;
+                $product->save();
                 return response()->json(['message' => 'Se desactivo correctamente el producto'],200);
-            }elseif ($product == 1){
-                $product->status=1;
+            }elseif ($product->status == 0){
+                $product->status = 1;
+                $product->save();
                 return response()->json(['message' => 'Se activo correctamente el producto'],200);
             }
             return \Response::json(['message' => 'No existe el producto'], 404);
         }catch (ErrorException $e){
             return \Response::json(['message' => 'Ocurrio un error'], 500);
         }
+    }
+
+    private function addKardex($id,$cant,$attributes){
+
     }
 }

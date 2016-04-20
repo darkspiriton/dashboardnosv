@@ -10,7 +10,7 @@
 | and give it the controller to call when that URI is requested.
 |
 */
-use Illuminate\Http\Request;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -27,26 +27,21 @@ Route::get('/',['middleware'=>'web', function () {
 }]);
 
 Route::group(['prefix'=>'auth','middleware' => ['web']],function(){
-
     Route::post('/login' ,'Auth\AuthTokenController@login');
     Route::post('/signup' ,'Auth\AuthTokenController@signup');
-
 });
 
 Route::group(['prefix'=>'dashboard','middleware'=>['auth']],function(){
     Route::post('/','Auth\AuthTokenController@dashboard');
 });
 
-
-
 //API REST CRUD EMPREADOS
 Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
-    
     Route::resource('user','UserController',
                     ['only'=>['index','store','update','destroy','show']]);
     Route::resource('product','ProductController',
                     ['only'=>['index','store','update','destroy','show']]);
+    Route::resource('attribute','AttributeController',
+                    ['only'=>['index','store','update','destroy','show']]);
     Route::get('validatekey','HomeController@validar');
-    Route::resource('attribute','AttributeController');
-
 });

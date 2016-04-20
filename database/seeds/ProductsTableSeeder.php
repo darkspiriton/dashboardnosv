@@ -56,9 +56,22 @@ class ProductsTableSeeder extends Seeder
                 ));
 
                 for($j=1;$j<=3;$j++){
-                    DB::table('kardexs_attributes')->insertGetId(array(
+
+                    switch ($j){
+                        case 1:
+                            $t=$faker->randomFloat( $nbMaxDecimals = 0, $min= 1, $max=4);
+                            break;
+                        case 2:
+                            $t=$faker->randomFloat( $nbMaxDecimals = 0, $min= 5, $max=8);
+                            break;
+                        case 3:
+                            $t=$faker->randomFloat( $nbMaxDecimals = 0, $min= 9, $max=12);
+                            break;
+                    }
+
+                    DB::table('attribute_kardex')->insertGetId(array(
                         'kardex_id' => $idKardex,
-                        'attribute_id' => $j
+                        'attribute_id' => $t
                     ));
                 }
             }

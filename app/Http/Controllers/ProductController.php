@@ -22,8 +22,7 @@ class ProductController extends Controller
             ->select('products.id','name','product_code','price','status', DB::raw('COUNT(case kardexs.stock WHEN 1 then 1 else null end ) AS cant'))
             ->groupby('name')
             ->get();
-
-        return response()->json(['$products' => $products],200);
+        return response()->json(['products' => $products],200);
     }
 
 

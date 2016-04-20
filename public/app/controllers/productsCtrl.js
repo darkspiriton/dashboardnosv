@@ -18,7 +18,7 @@ angular.module('App')
                 {"sTitle": "Precio", "bSortable" : true},
                 {"sTitle": "Cant", "bSortable" : true, "sWidth": "1px"},
                 {"sTitle": "Estado", "bSortable" : true, "sWidth": "80px"},
-                {"sTitle": "Accion" , "bSearchable": false , "bSortable" : false , "sWidth": "190px"}
+                {"sTitle": "Accion" , "bSearchable": false , "bSortable" : false , "sWidth": "270px"}
             ],
             actions	:  	[
                             ['status',   {
@@ -29,7 +29,8 @@ angular.module('App')
                             ['actions',
                                 [
                                     ['ver', 'view' ,'btn-info'],
-                                    ['Editar', 'edit' ,'btn-primary']
+                                    ['Editar', 'edit' ,'btn-primary'],
+                                    ['kardex', 'edit' ,'bgm-teal']
                                 ]
                             ]
                         ],
@@ -51,8 +52,13 @@ angular.module('App')
 
         $scope.productClear = {
             name: '',
-            price: '',
+            price: null,
             attributes: {}
+        };
+
+        $scope.newAttrClear = {
+            id : null,
+            val_id : null
         };
 
         $scope.list = function() {
@@ -79,10 +85,6 @@ angular.module('App')
                 });
         };
 
-        $scope.attr_select = function(){
-            $scope.attr_values = $scope.attributos[$scope.attributo.id - 1].att;
-        };
-
         $scope.view = function( ind ){
             var id = $scope.tableData[ind].id;
             petition.get('api/product/' + id)
@@ -92,6 +94,21 @@ angular.module('App')
                     util.modal();
                 }, function(error){
                     toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                });
+        };
+
+        $scope.status = function( ind, dom ) {
+            alertConfig.title = "¿Desea cambiar el estado del usuario?";
+            var id = $scope.tableData[ind].id;
+            swal(alertConfig ,
+                function() {
+                    petition.delete('api/product/' + id ).then(function(data){
+                        toastr.success(data.message);
+                        changeButton(ind , dom.target);
+                    },function(error){
+                        $log.log(error);
+                        toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                    });
                 });
         };
 
@@ -137,24 +154,55 @@ angular.module('App')
             util.ocultaformulario();
         };
 
+        $scope.cancel2 = function () {
+            $log.log($scope.product);
+        };
+
         $scope.new = function(){
             $scope.product = angular.copy($scope.productClear);
             util.muestraformulario();
         };
-
-        $scope.showAttr = function (){
-            util.modal('addAttr');
-        }
 
         //$scope.getStatus = function( status ){
         //    if (status == 1)return 'Activo';
         //    else return 'Inactivo';
         //};
 
+
+        // Adds Attributes
+
+        $scope.showAttr = function (){
+            util.modal('addAttr');
+        };
+
+        $scope.attr_select = function(){
+            $scope.newAttr.id = $scope.attributos[$scope.attr_index].id;
+            $scope.attr_values = $scope.attributos[$scope.attr_index].att;
+        };
+
+        $scope.cancelAddAttr = function(){
+            $scope.newAttr = angular.copy($scope.newAttrClear);
+        };
+
+        changeButton = function (ind, dom){
+            $scope.tableData[ind].status = ($scope.tableData[ind].status == 0)? 1 : 0;
+            if ( $scope.tableData[ind].status == 1){
+                $(dom).removeClass('btn-danger');
+                $(dom).addClass('btn-success');
+                $(dom).html('Activo');
+            }else{
+                $(dom).removeClass('btn-success');
+                $(dom).addClass('btn-danger');
+                $(dom).html('Inactivo');
+            }
+        };
+
         angular.element(document).ready(function(){
             $scope.product = angular.copy($scope.productClear);
+            $scope.newAttr = angular.copy($scope.newAttrClear);
             $scope.list();
             $scope.listAttr();
+
 
             //Tabla de pruebas
             options = {

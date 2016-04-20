@@ -115,6 +115,7 @@
                     <div class="col-sm-offset-2 col-sm-10">
                         <button ng-disabled="!formuser.$valid" ng-disabled="formSubmit"  ng-click="submit()" type="button" class="btn btn-primary btn-sm waves-effect">Guardar</button>
                         <a ng-click="cancel()" class="btn btn-danger btn-sm waves-effect">Cancelar</a>
+                        <a ng-click="cancel2()" class="btn btn-danger btn-sm waves-effect">scope</a>
                     </div>
                 </div>
             </form>
@@ -185,7 +186,7 @@
                         <label class="col-xs-2 col-sm-2 control-label">Atributo</label>
                         <div class="col-xs-10 col-sm-4">
                             <div class="fg-line select">
-                                <select class="form-control" ng-change="attr_select()" ng-options="attributo.id as attributo.name for attributo in attributos" ng-model="attributo.id" required>
+                                <select class="form-control" ng-change="attr_select()" ng-options="index as attributo.name for (index, attributo) in attributos" ng-model="attr_index" required>
                                     <option value="" disabled="disabled" select="true">Seleccione</option>
                                 </select>
                             </div>
@@ -194,7 +195,7 @@
                         <label class="col-xs-2 col-sm-2 control-label">Valor</label>
                         <div class="col-xs-10 col-sm-4">
                             <div class="fg-line select">
-                                <select class="form-control" ng-options="attr_value.type_id as attr_value.valor for attr_value in attr_values" ng-model="attributo.val" required>
+                                <select class="form-control" ng-options="attr_value.id as attr_value.valor for attr_value in attr_values" ng-model="newAttr.val_id" required>
                                     <option value="" disabled="disabled" select="true">Seleccione</option>
                                 </select>
                             </div>
@@ -204,7 +205,7 @@
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-10">
                             <button ng-disabled="!addAttr.$valid" ng-click="addAttr()" type="button" class="btn btn-primary btn-sm waves-effect">Agregar</button>
-                            <a ng-click="cancel()" class="btn btn-danger btn-sm waves-effect">Cancelar</a>
+                            <button ng-click="cancelAddAttr()" type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
                         </div>
                     </div>
                 </form>

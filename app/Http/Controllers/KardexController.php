@@ -15,7 +15,7 @@ class KardexController extends Controller
      */
     public function index()
     {
-        //
+        
     }
 
     /**

@@ -9,6 +9,10 @@ class Customer extends Model
 {
     protected $table = 'customers';
 
+    protected $hidden = [
+        'created_at','updated_at'
+    ];
+
     public function phones(){
         return $this->hasMany(Phone::class);
     }

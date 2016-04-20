@@ -8,6 +8,10 @@ class Phone extends Model
 {
     protected $table = 'phones';
 
+    protected $hidden = [
+        'created_at','updated_at'
+    ];
+
     public $timestamps = false;
 
     public function customer(){

@@ -16,7 +16,7 @@ angular.module('App')
                 {"sTitle": "Nombre", "bSortable" : true},
                 {"sTitle": "Edad", "bSortable" : true},
                 {"sTitle": "Estado" ,"bSearchable": false , "bSortable" : false , "sWidth": "80px"},
-                {"sTitle": "Accion" , "bSearchable": false , "bSortable" : false , "sWidth": "380px"}
+                {"sTitle": "Accion" , "bSearchable": false , "bSortable" : false , "sWidth": "470px"}
             ],
             actions	:  	[
                 ['status',   {
@@ -26,6 +26,7 @@ angular.module('App')
                 ],
                 ['actions', [
                     ['ver', 'view' ,'btn-info'],
+                    ['Editar', 'edit' ,'bgm-teal'],
                     ['Dirreccion', 'address' ,'bgm-indigo'],
                     ['Telefono', 'phone' ,'bgm-blue'],
                     ['Redes', 'social' ,'bgm-lightblue']

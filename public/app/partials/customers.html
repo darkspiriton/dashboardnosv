@@ -21,7 +21,7 @@
         <h2>Crear/Editar Cliente</h2>
     </div>
 
-    <form name="customer" id="form" class="form-horizontal" autocomplete="off">
+    <form name="customerForm" id="form" class="form-horizontal" autocomplete="off">
 
         <div class="card-body card-padding" >
             <div class="card-header">
@@ -35,7 +35,7 @@
                         <span class="input-group-addon"><i class="md md-person"></i></span>
                         <div class="fg-line">
                             <input ng-model="customer.id" type="hidden">
-                            <input ng-model="customer.name" type="text" class="form-control" placeholder="Cesar Antonio" required>
+                            <input ng-model="customer.name" type="text" class="form-control" required>
                         </div>
                     </div>
                 </div>
@@ -45,7 +45,7 @@
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-person"></i></span>
                         <div class="fg-line">
-                            <input integer ng-maxlength="2" ng-model="customer.age" type="text" class="form-control" placeholder="Moreno Gomez" required>
+                            <input integer ng-maxlength="2" ng-model="customer.age" type="text" class="form-control" required>
                         </div>
                     </div>
                 </div>
@@ -66,7 +66,7 @@
 
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <button ng-disabled="!customer.$valid" ng-disabled="formSubmit" ng-click="submit()" type="button" class="btn btn-primary btn-sm waves-effect">Guardar</button>
+                    <button ng-disabled="!customerForm.$valid" ng-disabled="formSubmit" ng-click="submit()" type="button" class="btn btn-primary btn-sm waves-effect">Guardar</button>
                     <a ng-click="cancel()" class="btn btn-danger btn-sm waves-effect">Cancelar</a>
                 </div>
             </div>

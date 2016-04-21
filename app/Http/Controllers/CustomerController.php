@@ -38,6 +38,7 @@ class CustomerController extends Controller
      */
     public function store(Request $request)
     {
+        $user=$request->input('user');
         if (!is_array($request->all())) {
             return response()->json(['message' => 'request must be an array'],401);
         }
@@ -59,15 +60,13 @@ class CustomerController extends Controller
                 return response()->json(['message' => 'No posee todo los campos necesario para crear un cliente'],401);
             }
             // Si el validador pasa, almacenamos el comentario
-            $customer=DB::table('customers')->where('email',$request->input('email'))->get();
 
-            if(count($customer) == 0 ){
-                $customer = new Customer();
-                $customer->name= $request->input('name');
-                $customer->age= $request->input('age');
-                $customer->status= $request->input('status');
-                $customer->user_id= $request->input('user_id');
-                $customer->save();
+            $customer = new Customer();
+            $customer->name= $request->input('name');
+            $customer->age= $request->input('age');
+            $customer->status= $request->input('status');
+            $customer->user_id= $user['sub'];
+            $customer->save();
 
 //              $address = $request->input('address');
 //              $customer->addresses($address);
@@ -78,11 +77,8 @@ class CustomerController extends Controller
 //              $social = $request->input('address');
 //              $customer->addresses($social);
 
-                //Falta Agregar atributos de productos
-                return response()->json(['message' => 'El cliente se agrego correctamente'],200);
-            }
-
-            return response()->json(['message' => 'El cliente ya esta registrado'],400);
+            //Falta Agregar atributos de productos
+            return response()->json(['message' => 'El cliente se agrego correctamente'],200);
 
         } catch (Exception $e) {
             // Si algo sale mal devolvemos un error.
@@ -139,8 +135,6 @@ class CustomerController extends Controller
     public function update(Request $request, $id)
     {
         $user=$request->input('user');
-        dd($user['sub']);
-        return response()->json(['message' => $request->input('user')],200);
 
         if (!is_array($request->all())) {
             return response()->json(['message' => 'request must be an array'],401);
@@ -165,7 +159,7 @@ class CustomerController extends Controller
             // Si el validador pasa, almacenamos el comentario
             $customer=Customer::find($id);
 
-            if(count($customer) == 0 ){
+            if(count($customer) != 0 ){
                 $customer->name= $request->input('name');
                 $customer->age= $request->input('age');
                 $customer->status= $request->input('status');

@@ -2,7 +2,10 @@
 
 namespace Dashboard\Http\Controllers;
 
+use Dashboard\Models\Kardex\Group_Attribute;
+use Dashboard\Models\Kardex\Kardex;
 use Illuminate\Http\Request;
+use Dashboard\Models\Product\Product;
 
 use Dashboard\Http\Requests;
 
@@ -15,7 +18,11 @@ class KardexController extends Controller
      */
     public function index()
     {
-        
+        $kardexs= Product::all();
+        foreach ($kardexs as $kardex){
+            $kardex->kardexs;
+        }
+        return response()->json(['products' => $kardexs],200);
     }
 
     /**
@@ -36,7 +43,7 @@ class KardexController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
     }
 
     /**
@@ -47,7 +54,26 @@ class KardexController extends Controller
      */
     public function show($id)
     {
-        //
+        try{
+            $kardex = Kardex::find($id);
+
+            if ($kardex !== null) {
+               $kardex->group_kardex->attributes;
+                //$group = Group_Attribute::find($idG);
+                //$group->group_kardex;
+                //$group = Group_Attribute::find($idAux);
+                
+                return response()->json([
+                    'message' => 'Mostrar detalles de producto',
+                    'kardex'=> $kardex,
+                    //'attributes' => $product->attributes,
+                ],200);
+            }
+            return \Response::json(['message' => 'No existe ese producto'], 404);
+
+        }catch (ErrorException $e){
+            return \Response::json(['message' => 'Ocurrio un error'], 500);
+        }
     }
 
     /**

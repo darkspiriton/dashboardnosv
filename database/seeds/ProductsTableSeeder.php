@@ -47,14 +47,11 @@ class ProductsTableSeeder extends Seeder
                 'status' => $faker->randomFloat( $nbMaxDecimals = 0, $min= 0, $max=1),
             ));
 
-            $random = $faker->randomFloat( $nbMaxDecimals = 0, $min= 1, $max=5);
-            for($z=0;$z<=$random;$z++){
-                $idKardex =  DB::table('kardexs')->insertGetId(array(
+            $random1 = $faker->randomFloat( $nbMaxDecimals = 0, $min= 1, $max=5);
+            for($x=0;$x<=$random1;$x++){
+                $global_attribute_id = DB::table('groups_attributes')->insertGetId(array(
                     'product_id' => $idProduct,
-                    'product_cod' => $z,
-                    'stock' => $faker->boolean(40) ,
                 ));
-
                 for($j=1;$j<=3;$j++){
 
                     switch ($j){
@@ -70,11 +67,25 @@ class ProductsTableSeeder extends Seeder
                     }
 
                     DB::table('attribute_kardex')->insertGetId(array(
-                        'kardex_id' => $idKardex,
+                        'group_attribute_id' => $global_attribute_id,
                         'attribute_id' => $t
                     ));
                 }
+
+                $random2 = $faker->randomFloat( $nbMaxDecimals = 0, $min= 1, $max=5);
+                for($z=0;$z<=$random2;$z++){
+                    DB::table('kardexs')->insertGetId(array(
+                        'group_attribute_id' => $global_attribute_id,
+                        'product_id' => $idProduct,
+                        'stock' => $faker->boolean(40) ,
+                    ));
+
+
+                }
             }
+
+
+
         }
     }
 }

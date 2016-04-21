@@ -12,13 +12,21 @@ class CreateKardexTable extends Migration
      */
     public function up()
     {
+        Schema::create('groups_attributes',function(Blueprint $table){
+            $table->increments('id');
+            $table->integer('product_id')->unsigned();
+            $table->timestamps();
+            $table->foreign('product_id')->references('id')->on('products');
+        });
+
         Schema::create('kardexs', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('product_cod');
             $table->integer('product_id')->unsigned();
+            $table->integer('group_attribute_id')->unsigned();
             $table->boolean('stock');
             $table->timestamps();
             $table->foreign('product_id')->references('id')->on('products');
+            $table->foreign('group_attribute_id')->references('id')->on('groups_attributes');
         });
 
         Schema::create('types_attributes',function(Blueprint $table){
@@ -35,12 +43,12 @@ class CreateKardexTable extends Migration
             $table->foreign('type_id')->references('id')->on('types_attributes');
         });
 
-        Schema::create('attribute_kardex',function(Blueprint $table){
+        Schema::create('attributes_kardexs',function(Blueprint $table){
             $table->increments('id');
-            $table->integer('kardex_id')->unsigned();
+            $table->integer('group_attribute_id')->unsigned();
             $table->integer('attribute_id')->unsigned();
             $table->timestamps();
-            $table->foreign('kardex_id')->references('id')->on('kardexs')->ondelete('cascade');
+            $table->foreign('group_attribute_id')->references('id')->on('groups_attributes');
             $table->foreign('attribute_id')->references('id')->on('attributes');
         });
 
@@ -68,12 +76,13 @@ class CreateKardexTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('attribute_kardex');
+        Schema::dropIfExists('attributes_kardexs');
         Schema::dropIfExists('attributes');
         Schema::dropIfExists('types_attributes');
         Schema::dropIfExists('movements');
         Schema::dropIfExists('types_movements');
         Schema::dropIfExists('kardexs');
+        Schema::dropIfExists('groups_attributes');
 
     }
 }

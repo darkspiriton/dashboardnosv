@@ -44,6 +44,19 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
     Route::resource('attribute','AttributeController',
                     ['only'=>['index','store','update','destroy','show']]);
     Route::resource('customer','CustomerController',
-        ['only'=>['index','store','update','destroy','show']]);
-    Route::get('validatekey','HomeController@validar');
+                    ['only'=>['index','store','update','destroy','show']]);
+    Route::resource('kardex','KardexController',
+                    ['only'=>['index','store','update','destroy','show']]);
+    Route::group(['prefix'=>'ubigeo','middleware'=>['auth']],function(){
+        Route::get('/departamento','UbigeoController@departamento');
+        Route::get('/provincia/{provincia}','UbigeoController@provincia');
+        Route::get('/distrito/{distrito}','UbigeoController@distrito');
+    });
+    Route::group(['prefix'=>'operador','middleware'=>['auth']],function(){
+        Route::get('/','OperadorController@index');
+    });
+    Route::group(['prefix'=>'social','middleware'=>['auth']],function(){
+        Route::get('/','SocialController@index');
+    });
+    Route::get('validate-key','HomeController@validar');
 });

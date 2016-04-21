@@ -16,8 +16,10 @@ class Kardex extends Model
         return $this->hasMany(Movements::class);
     }
 
-    public function attributes(){
-        return $this->belongsToMany(Attribute::class);
+    public function group_kardex(){
+        return $this->belongsTo(Group_Attribute::class);
     }
+
+
 }
 

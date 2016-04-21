@@ -1451,3 +1451,8 @@ div.fc-row {
 .attr-group {
   margin-bottom: 30px;
 }
+.groups-attr {
+  padding: 20px 0;
+  margin: 10px 0 20px 0;
+  border: 1px solid rgb(224,224,224);
+}

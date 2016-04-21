@@ -1,4 +1,4 @@
-angular.module('App', ['ngResource','ngMessages','ngSanitize','ngAnimate','toastr','ui.router','satellizer',])
+angular.module('App', ['ngResource','ngMessages','ngSanitize','ngAnimate','toastr','ui.router','satellizer'])
     .config(function($stateProvider, $urlRouterProvider, $authProvider) {
         $authProvider.tokenName = "token";
         $authProvider.tokenPrefix = "DB_NV";
@@ -8,16 +8,6 @@ angular.module('App', ['ngResource','ngMessages','ngSanitize','ngAnimate','toast
                 url: '/home',
                 templateUrl: 'app/partials/efecto.html',
                 controller: 'homeCtrl'
-            })
-            .state('Usuarios', {
-                url: '/Adminitracion-de-usuarios',
-                templateUrl: 'app/partials/users.html',
-                controller : 'usersCtrl'
-            })
-            .state('Comentarios', {
-                url: '/Adminitracion-de-comentarios',
-                templateUrl: 'app/partials/comments.html',
-                controller : 'commentsCtrl'
             });
 
         $urlRouterProvider.otherwise('/home');

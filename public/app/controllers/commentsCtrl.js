@@ -1,5 +1,13 @@
 angular.module('App')
-    .controller('commentsCtrl', function($scope, $compile,$log , util, toastr, petition){
+    .config(function($stateProvider) {
+        $stateProvider
+            .state('Comentarios', {
+                url: '/Adminitracion-de-comentarios',
+                templateUrl: 'app/partials/comments.html',
+                controller : 'commentsCtrl'
+            });
+    })
+    .controller('commentsCtrl', function($scope, $compile, $log, util, toastr, petition){
 
         util.liPage('comments');
 

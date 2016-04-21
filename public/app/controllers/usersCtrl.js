@@ -1,4 +1,12 @@
 angular.module('App')
+    .config(function($stateProvider) {
+        $stateProvider
+            .state('Usuarios', {
+                url: '/Adminitracion-de-usuarios',
+                templateUrl: 'app/partials/users.html',
+                controller : 'usersCtrl'
+            });
+    })
     .controller('usersCtrl', function($scope, $compile, $log, util, petition, toastr){
 
         util.liPage('users');

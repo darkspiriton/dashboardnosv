@@ -1,4 +1,4 @@
-angular.module('App', ['ngResource','ngMessages','ngSanitize','ngAnimate','toastr','ui.router','satellizer',])
+angular.module('App', ['ngResource','ngMessages','ngSanitize','ngAnimate','toastr','ui.router','satellizer'])
     .config(function($stateProvider, $urlRouterProvider, $authProvider) {
         $authProvider.tokenName = "token";
         $authProvider.tokenPrefix = "DB_NV";
@@ -8,16 +8,6 @@ angular.module('App', ['ngResource','ngMessages','ngSanitize','ngAnimate','toast
                 url: '/home',
                 templateUrl: 'app/partials/efecto.html',
                 controller: 'homeCtrl'
-            })
-            .state('Usuarios', {
-                url: '/Adminitracion-de-usuarios',
-                templateUrl: 'app/partials/users.html',
-                controller : 'usersCtrl'
-            })
-            .state('Comentarios', {
-                url: '/Adminitracion-de-comentarios',
-                templateUrl: 'app/partials/comments.html',
-                controller : 'commentsCtrl'
             });
 
         $urlRouterProvider.otherwise('/home');
@@ -108,7 +98,6 @@ angular.module('App', ['ngResource','ngMessages','ngSanitize','ngAnimate','toast
                 $window[storageType].removeItem(routeName);
             }
         };
-
     }])
     .factory('util', function($location){
         return {
@@ -131,6 +120,10 @@ angular.module('App', ['ngResource','ngMessages','ngSanitize','ngAnimate','toast
             modal : function ( id ) {
                 id || (id = 'Modal');
                 $('#'+ id).modal('show');
+            },
+            modalClose : function ( id ) {
+                id || (id = 'Modal');
+                $('#'+ id).modal('hide');
             },
             baseUrl : function ( URL ) {
                 var prot = $location.protocol();

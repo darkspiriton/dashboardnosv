@@ -53,7 +53,7 @@ angular.module('App')
         $scope.productClear = {
             name: '',
             price: null,
-            attributes: {}
+            groupAttr: []
         };
 
         $scope.newAttrClear = {
@@ -78,7 +78,6 @@ angular.module('App')
             petition.get('api/attribute')
                 .then(function(data){
                     $scope.attributos = data.types;
-                    console.log($scope.attrs);
                 }, function(error){
                     console.log(error);
                     toastr.error('Ups ocurrio un problema: ' + error.data.message);
@@ -163,15 +162,16 @@ angular.module('App')
             util.muestraformulario();
         };
 
-        //$scope.getStatus = function( status ){
-        //    if (status == 1)return 'Activo';
-        //    else return 'Inactivo';
-        //};
+        $scope.getStatus = function( status ){
+            if (status == 1)return 'Activo';
+            else return 'Inactivo';
+        };
 
 
         // Adds Attributes
 
-        $scope.showAttr = function (){
+        $scope.showAttr = function ( item ){
+            $scope.index = $scope.product.groupAttr.indexOf(item);
             util.modal('addAttr');
         };
 
@@ -183,6 +183,65 @@ angular.module('App')
         $scope.cancelAddAttr = function(){
             $scope.newAttr = angular.copy($scope.newAttrClear);
         };
+
+        $scope.addAttrGrp = function(){
+            var count =0;
+            for(i in  $scope.product.groupAttr[$scope.index].attributes){
+                if($scope.newAttr.id == $scope.product.groupAttr[$scope.index].attributes[i].id){
+                    count++;
+                    $scope.product.groupAttr[$scope.index].attributes[i] = angular.copy($scope.newAttr);
+                }
+            }
+
+            if (count == 0)$scope.product.groupAttr[$scope.index].attributes.push(angular.copy($scope.newAttr));
+            util.modalClose('addAttr');
+        };
+
+        $scope.removeAttr = function( grpAttr, item ){
+            $log.log([grpAttr, item]);
+
+            var index = $scope.product.groupAttr.indexOf(grpAttr);
+            var itemIndex = $scope.product.groupAttr[index].attributes.indexOf(item);
+            $scope.product.groupAttr[index].attributes.splice(itemIndex, 1);
+        };
+
+        $scope.addGrpAttr = function(){
+            $scope.count += 1;
+            $scope.product.groupAttr.push({ id : $scope.count , attributes : [] });
+        };
+
+        $scope.removeGrpAttr = function( item ){
+            var index = $scope.product.groupAttr.indexOf(item);
+            $scope.product.groupAttr.splice(index, 1);
+        };
+
+        $scope.duplicateGrpAttr = function( item ){
+            $scope.count += 1;
+            item.id = $scope.count;
+            $scope.product.groupAttr.push(angular.copy(angular.copy(item)));
+        };
+
+        $scope.attrName = function( ind ){
+            for(i in  $scope.attributos){
+                if(ind == $scope.attributos[i].id){
+                    return $scope.attributos[i].name;
+                }
+            }
+        };
+
+        $scope.attrValueName = function( ind , ind2){
+            for(i in  $scope.attributos){
+                if(ind == $scope.attributos[i].id){
+                    for(x in  $scope.attributos[i].att){
+                        if(ind2 == $scope.attributos[i].att[x].id){
+                            return $scope.attributos[i].att[x].valor;
+                        }
+                    }
+                }
+            }
+        };
+
+        // end Attributes
 
         changeButton = function (ind, dom){
             $scope.tableData[ind].status = ($scope.tableData[ind].status == 0)? 1 : 0;
@@ -200,17 +259,9 @@ angular.module('App')
         angular.element(document).ready(function(){
             $scope.product = angular.copy($scope.productClear);
             $scope.newAttr = angular.copy($scope.newAttrClear);
+            $scope.count = 0;
+            $scope.index = null;
             $scope.list();
             $scope.listAttr();
-
-
-            //Tabla de pruebas
-            options = {
-                aoColumns: [
-                    {"sTitle": "Atributo", "bSortable" : true},
-                    {"sTitle": "Valor", "bSortable" : true},
-                    {"sTitle": "Accion" , "bSearchable": false , "bSortable" : false , "sWidth": "190px"}
-                ]
-            };
         });
     });

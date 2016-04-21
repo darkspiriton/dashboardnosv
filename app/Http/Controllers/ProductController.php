@@ -19,7 +19,7 @@ class ProductController extends Controller
 
         $products= DB::table('products')
             ->join('kardexs','kardexs.product_id','=','products.id')
-            ->select('products.id','name','product_code','price','status', DB::raw('COUNT(case kardexs.stock WHEN 1 then 1 else null end ) AS cant'))
+            ->select('products.id','products.image','name','product_code','price','status', DB::raw('COUNT(case kardexs.stock WHEN 1 then 1 else null end ) AS cant'))
             ->groupby('name')
             ->get();
         return response()->json(['products' => $products],200);

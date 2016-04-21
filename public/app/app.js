@@ -108,7 +108,6 @@ angular.module('App', ['ngResource','ngMessages','ngSanitize','ngAnimate','toast
                 $window[storageType].removeItem(routeName);
             }
         };
-
     }])
     .factory('util', function($location){
         return {
@@ -131,6 +130,10 @@ angular.module('App', ['ngResource','ngMessages','ngSanitize','ngAnimate','toast
             modal : function ( id ) {
                 id || (id = 'Modal');
                 $('#'+ id).modal('show');
+            },
+            modalClose : function ( id ) {
+                id || (id = 'Modal');
+                $('#'+ id).modal('hide');
             },
             baseUrl : function ( URL ) {
                 var prot = $location.protocol();

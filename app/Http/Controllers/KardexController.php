@@ -2,7 +2,6 @@
 
 namespace Dashboard\Http\Controllers;
 
-use Dashboard\Models\Kardex\Group_Attribute;
 use Dashboard\Models\Kardex\Kardex;
 use Illuminate\Http\Request;
 use Dashboard\Models\Product\Product;
@@ -58,10 +57,15 @@ class KardexController extends Controller
             $kardex = Kardex::find($id);
 
             if ($kardex !== null) {
-               $kardex->group_kardex->attributes;
-                //$group = Group_Attribute::find($idG);
-                //$group->group_kardex;
-                //$group = Group_Attribute::find($idAux);
+                $productAux= DB::table('products')
+                        ->select('kardexs.id','types_attributes.name','attributes.valor')
+                        ->join('kardexs','kardexs.product_id','=','products.id')
+                        ->join('attributes','attributes.id','=','attribute_kardex.attribute_id')
+                        ->join('types_attributes','types_attributes.id','=','attributes.type_id')
+                        ->where('kardexs.product_id','=',$id)
+                        ->orderby('kardexs.id')
+                        ->distinct('kardexs.id','types_attributes.name','attributes.valor')
+                        ->get();
                 
                 return response()->json([
                     'message' => 'Mostrar detalles de producto',
@@ -70,7 +74,6 @@ class KardexController extends Controller
                 ],200);
             }
             return \Response::json(['message' => 'No existe ese producto'], 404);
-
         }catch (ErrorException $e){
             return \Response::json(['message' => 'Ocurrio un error'], 500);
         }

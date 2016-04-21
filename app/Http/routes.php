@@ -47,16 +47,27 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
                     ['only'=>['index','store','update','destroy','show']]);
     Route::resource('kardex','KardexController',
                     ['only'=>['index','store','update','destroy','show']]);
-    Route::group(['prefix'=>'ubigeo','middleware'=>['auth']],function(){
+    Route::group(['prefix'=>'ubigeo'],function(){
         Route::get('/departamento','UbigeoController@departamento');
         Route::get('/provincia/{provincia}','UbigeoController@provincia');
         Route::get('/distrito/{distrito}','UbigeoController@distrito');
     });
-    Route::group(['prefix'=>'operador','middleware'=>['auth']],function(){
+    Route::group(['prefix'=>'operador'],function(){
         Route::get('/','OperadorController@index');
     });
-    Route::group(['prefix'=>'social','middleware'=>['auth']],function(){
+    Route::group(['prefix'=>'social'],function(){
         Route::get('/','SocialController@index');
     });
+    Route::group(['prefix'=>'customer/add'],function(){
+        Route::post('/address/{address}','CustomerController@addressAdd');
+        Route::post('/phone/{phone}','CustomerController@phoneAdd');
+        Route::post('/social/{social}','CustomerController@socialAdd');
+    });
+    Route::group(['prefix'=>'customer/add'],function(){
+        Route::put('/address/{address}','CustomerController@addressUpdate');
+        Route::put('/phone/{phone}','CustomerController@phoneUpdate');
+        Route::put('/social/{social}','CustomerController@socialUpdate');
+    });
+    
     Route::get('validate-key','HomeController@validar');
 });

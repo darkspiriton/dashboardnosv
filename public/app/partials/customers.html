@@ -94,7 +94,7 @@
                     </div>
                     <div class="form-group">
                         <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Direcciones: </label>
-                        <div class="col-xs-6 col-sm-9">
+                        <div class="col-xs-6 col-sm-8">
                             <div ng-repeat="address in customerDetail.addresses" style="padding: 20px 0 0 0;">
                                 <p ng-bind="'ubicacion: ' + address.ubigeo.UBIPRN + ' - ' + address.ubigeo.UBIDEN + ' - ' + address.ubigeo.UBIDSN"></p>
                                 <p ng-bind="'descripcion: ' + address.description"></p>
@@ -105,7 +105,7 @@
                     </div>
                     <div class="form-group">
                         <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Telefonos: </label>
-                        <div class="col-xs-6 col-sm-9">
+                        <div class="col-xs-6 col-sm-8">
                             <div ng-repeat="phnoe in customerDetail.phones" style="padding: 20px 0 0 0;">
                                 <p ng-bind="'operador: ' + phnoe.operator.name"></p>
                                 <p ng-bind="'numero: ' + phnoe.number"></p>
@@ -115,7 +115,7 @@
                     </div>
                     <div class="form-group">
                         <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Redes sociales: </label>
-                        <div class="col-xs-6 col-sm-9">
+                        <div class="col-xs-6 col-sm-8">
                             <div ng-repeat="social in customerDetail.socials" style="padding: 20px 0 0 0;">
                                 <p ng-bind="'Red social: ' + social.channel.name"></p>
                                 <p ng-bind="'Url: ' + social.channel_url"></p>

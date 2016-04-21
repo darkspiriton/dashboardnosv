@@ -33,4 +33,5 @@
     <script src="app/controllers/usersCtrl.js"></script>
     <script src="app/controllers/commentsCtrl.js"></script>
     <script src="app/controllers/productsCtrl.js"></script>
+    <script src="app/controllers/kardex.js"></script>
 @stop

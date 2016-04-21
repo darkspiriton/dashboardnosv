@@ -21,7 +21,7 @@
         <h2>Crear/Editar Cliente</h2>
     </div>
 
-    <form name="customer" id="form" class="form-horizontal" autocomplete="off">
+    <form name="customerForm" id="form" class="form-horizontal" autocomplete="off">
 
         <div class="card-body card-padding" >
             <div class="card-header">
@@ -35,7 +35,7 @@
                         <span class="input-group-addon"><i class="md md-person"></i></span>
                         <div class="fg-line">
                             <input ng-model="customer.id" type="hidden">
-                            <input ng-model="customer.name" type="text" class="form-control" placeholder="Cesar Antonio" required>
+                            <input ng-model="customer.name" type="text" class="form-control" required>
                         </div>
                     </div>
                 </div>
@@ -45,7 +45,7 @@
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-person"></i></span>
                         <div class="fg-line">
-                            <input integer ng-maxlength="2" ng-model="customer.age" type="text" class="form-control" placeholder="Moreno Gomez" required>
+                            <input integer ng-maxlength="2" ng-model="customer.age" type="text" class="form-control" required>
                         </div>
                     </div>
                 </div>
@@ -66,7 +66,7 @@
 
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <button ng-disabled="!customer.$valid" ng-disabled="formSubmit" ng-click="submit()" type="button" class="btn btn-primary btn-sm waves-effect">Guardar</button>
+                    <button ng-disabled="!customerForm.$valid" ng-disabled="formSubmit" ng-click="submit()" type="button" class="btn btn-primary btn-sm waves-effect">Guardar</button>
                     <a ng-click="cancel()" class="btn btn-danger btn-sm waves-effect">Cancelar</a>
                 </div>
             </div>
@@ -94,7 +94,7 @@
                     </div>
                     <div class="form-group">
                         <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Direcciones: </label>
-                        <div class="col-xs-6 col-sm-9">
+                        <div class="col-xs-6 col-sm-8">
                             <div ng-repeat="address in customerDetail.addresses" style="padding: 20px 0 0 0;">
                                 <p ng-bind="'ubicacion: ' + address.ubigeo.UBIPRN + ' - ' + address.ubigeo.UBIDEN + ' - ' + address.ubigeo.UBIDSN"></p>
                                 <p ng-bind="'descripcion: ' + address.description"></p>
@@ -105,7 +105,7 @@
                     </div>
                     <div class="form-group">
                         <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Telefonos: </label>
-                        <div class="col-xs-6 col-sm-9">
+                        <div class="col-xs-6 col-sm-8">
                             <div ng-repeat="phnoe in customerDetail.phones" style="padding: 20px 0 0 0;">
                                 <p ng-bind="'operador: ' + phnoe.operator.name"></p>
                                 <p ng-bind="'numero: ' + phnoe.number"></p>
@@ -115,7 +115,7 @@
                     </div>
                     <div class="form-group">
                         <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Redes sociales: </label>
-                        <div class="col-xs-6 col-sm-9">
+                        <div class="col-xs-6 col-sm-8">
                             <div ng-repeat="social in customerDetail.socials" style="padding: 20px 0 0 0;">
                                 <p ng-bind="'Red social: ' + social.channel.name"></p>
                                 <p ng-bind="'Url: ' + social.channel_url"></p>

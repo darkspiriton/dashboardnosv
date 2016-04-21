@@ -7,7 +7,7 @@ angular.module('App')
                 controller : 'productsCtrl'
             });
     })
-    .controller('productsCtrl', function($scope, $compile, $log, util, petition, toastr){
+    .controller('productsCtrl', function($scope, $compile, $state, $log, util, petition, toastr){
 
         util.liPage('products');
 
@@ -30,7 +30,7 @@ angular.module('App')
                                 [
                                     ['ver', 'view' ,'btn-info'],
                                     ['Editar', 'edit' ,'btn-primary'],
-                                    ['kardex', 'edit' ,'bgm-teal']
+                                    ['kardex', 'kardex' ,'bgm-teal']
                                 ]
                             ]
                         ],
@@ -254,6 +254,10 @@ angular.module('App')
                 $(dom).addClass('btn-danger');
                 $(dom).html('Inactivo');
             }
+        };
+
+        $scope.kardex = function( ind ){
+            $state.go("Kardex", { id: $scope.tableData[ind].id });
         };
 
         angular.element(document).ready(function(){

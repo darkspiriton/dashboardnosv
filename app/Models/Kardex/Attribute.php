@@ -3,6 +3,7 @@
 namespace Dashboard\Models\Kardex;
 
 
+use Dashboard\Dashboard\Models\Kardex\Attribute_Kardex;
 use Illuminate\Database\Eloquent\Model;
 
 
@@ -14,11 +15,11 @@ class Attribute extends Model
         'created_at','updated_at','pivot'
     ];
 
-    public function kardexs()
+    public function attributes_kardexs()
     {
-        return $this->belongsToMany(Kardex::class);
+        return $this->hasMany(Attribute_Kardex::class);
     }
-
+    
     public function type(){
         return $this->belongsTo(Type_Attribute::class);
     }

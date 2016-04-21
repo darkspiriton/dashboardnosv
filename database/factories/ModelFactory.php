@@ -33,6 +33,7 @@ $factory->define(\Dashboard\Models\Customer\Customer::class, function (Generator
     return [
         'name'  =>  $faker->name,
         'age'   =>  $faker->randomFloat($nbMaxDecimals=0,$min=18,$max=30),
+        'status'   =>  $faker->randomFloat($nbMaxDecimals=0,$min=0,$max=1)
     ];
 });
 

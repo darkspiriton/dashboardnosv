@@ -140,7 +140,50 @@ class CustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $user=$request->input('user');
+        dd($user['sub']);
+        return response()->json(['message' => $request->input('user')],200);
+
+        if (!is_array($request->all())) {
+            return response()->json(['message' => 'request must be an array'],401);
+        }
+
+        // Creamos las reglas de validación
+        $rules = [
+            'name'      => 'required',
+            'age'      => 'required',
+            'status'        => 'required',
+        ];
+
+        //Se va a pasar datos del producto, attributos y su cantidad
+
+        try {
+            // Ejecutamos el validador y en caso de que falle devolvemos la respuesta
+            // con los errores
+            $validator = \Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return response()->json(['message' => 'No posee todo los campos necesario para crear un cliente'],401);
+            }
+            // Si el validador pasa, almacenamos el comentario
+            $customer=Customer::find($id);
+
+            if(count($customer) == 0 ){
+                $customer->name= $request->input('name');
+                $customer->age= $request->input('age');
+                $customer->status= $request->input('status');
+                $customer->user_id= $user['sub'];
+                $customer->save();
+
+                //Falta Agregar atributos de productos
+                return response()->json(['message' => 'El cliente se agrego correctamente'],200);
+            }
+
+            return response()->json(['message' => 'El cliente ya esta registrado'],400);
+
+        } catch (Exception $e) {
+            // Si algo sale mal devolvemos un error.
+            return \Response::json(['message' => 'Ocurrio un error al agregar cliente'], 500);
+        }
     }
 
     /**
@@ -166,5 +209,72 @@ class CustomerController extends Controller
         }catch (ErrorException $e){
             return \Response::json(['message' => 'Ocurrio un error'], 500);
         }
+    }
+
+    public function addressAdd(Request $request,$id){
+        if (!is_array($request->all())) {
+            return response()->json(['message' => 'request must be an array'],401);
+        }
+        // Creamos las reglas de validación
+        $rules = [
+            'ubigeo_id'      => 'required',
+            'price'      => 'required',
+            'image'     => 'required',
+            'product_code'     => 'required',
+            'status'        => 'required',
+            //falta validar los atributos
+        ];
+
+        //Se va a pasar datos del producto, attributos y su cantidad
+        try {
+            // Ejecutamos el validador y en caso de que falle devolvemos la respuesta
+            // con los errores
+            $validator = \Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return response()->json(['message' => 'No posee todo los campos necesario para crear un producto'],401);
+            }
+            // Si el validador pasa, almacenamos el comentario
+
+            $productAux=DB::table('products')->where('product_code',$request->input('product_code'))->get();
+
+            if(count($productAux) == 0 ){
+                $product = new Product();
+                $product->name= $request->input('name');
+                $product->price= $request->input('price');
+                $product->image= $request->input('image');
+                $product->product_code= $request->input('product_code');
+                $product->status= $request->input('status');
+                $product->save();
+
+                //Falta Agregar atributos de productos
+                return response()->json(['message' => 'El producto se agrego correctamente'],200);
+            }
+
+            return response()->json(['message' => 'El producto ya esta registrado'],400);
+
+        } catch (Exception $e) {
+            // Si algo sale mal devolvemos un error.
+            return \Response::json(['message' => 'Ocurrio un error al agregar producto'], 500);
+        }
+    }
+
+    public function phoneAdd(Request $request,$id){
+
+    }
+
+    public function socialAdd(Request $request,$id){
+
+    }
+
+    public function addressUpdate(Request $request,$id){
+
+    }
+
+    public function phoneUpdate(Request $request,$id){
+
+    }
+
+    public function socialUpdate(Request $request,$id){
+
     }
 }

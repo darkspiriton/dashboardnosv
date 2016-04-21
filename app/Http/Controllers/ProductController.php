@@ -16,10 +16,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-
         $products= DB::table('products')
             ->join('kardexs','kardexs.product_id','=','products.id')
-            ->select('products.id','name','product_code','price','status', DB::raw('COUNT(case kardexs.stock WHEN 1 then 1 else null end ) AS cant'))
+            ->select('products.id','products.image','name','product_code','price','status', DB::raw('COUNT(case kardexs.stock WHEN 1 then 1 else null end ) AS cant'))
             ->groupby('name')
             ->get();
         return response()->json(['products' => $products],200);
@@ -35,7 +34,7 @@ class ProductController extends Controller
         $rules = [
             'name'      => 'required',
             'price'      => 'required',
-            'image'     => '',
+            'image'     => 'required',
             'product_code'     => 'required',
             'status'        => 'required',            
             //falta validar los atributos
@@ -86,13 +85,33 @@ class ProductController extends Controller
         try{
             $product = Product::find($id);
             if ($product !== null) {
+
+//                SELECt DISTINCT  k.product_id,att.valor FROM kardexs k
+//                join attribute_kardex a
+//                on a.kardex_id=k.id
+//                join attributes att
+//                on att.id=a.attribute_id
+//                where k.product_id=1;
+
+//                $productAux= DB::table('kardexs')
+//                        ->select('kardexs.id','types_attributes.name','attributes.valor')
+//                        ->join('attribute_kardex','attribute_kardex.kardex_id','=','kardexs.id')
+//                        ->join('attributes','attributes.id','=','attribute_kardex.attribute_id')
+//                        ->join('types_attributes','types_attributes.id','=','attributes.type_id')
+//                        ->where('kardexs.product_id','=',$id)
+//                        ->orderby('kardexs.id')
+//                        ->distinct('kardexs.id','types_attributes.name','attributes.valor')
+//                        ->get();
+
+                //$productAux2 = DB::select('')
+
                 $kardexs=$product->kardexs;
                 foreach ($kardexs as $kardex ){
                     $kardex->attributes;
                 }
                 return response()->json([
                     'message' => 'Mostrar detalles de producto',
-                    'product'=> $product,
+                    'product'=> $kardexs,
                     //'attributes' => $product->attributes,
                 ],200);
             }

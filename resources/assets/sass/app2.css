@@ -1456,3 +1456,12 @@ div.fc-row {
   margin: 10px 0 20px 0;
   border: 1px solid rgb(224,224,224);
 }
+
+.pad-t-15 {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.table-address p {
+  font-size: 12px;
+}

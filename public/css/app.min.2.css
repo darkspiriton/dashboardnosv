@@ -1165,4 +1165,11 @@ div.fc-row {
   margin: 10px 0 20px 0;
   border: 1px solid #e0e0e0; }
 
+.pad-t-15 {
+  padding-top: 15px;
+  padding-bottom: 15px; }
+
+.table-address p {
+  font-size: 12px; }
+
 /*# sourceMappingURL=app.min.2.css.map */

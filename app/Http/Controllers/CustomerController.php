@@ -2,6 +2,7 @@
 
 namespace Dashboard\Http\Controllers;
 
+use Dashboard\Models\Customer\Address;
 use Dashboard\Models\Customer\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -216,10 +217,8 @@ class CustomerController extends Controller
         // Creamos las reglas de validación
         $rules = [
             'ubigeo_id'      => 'required',
-            'price'      => 'required',
-            'image'     => 'required',
-            'product_code'     => 'required',
-            'status'        => 'required',
+            'description'      => 'required',
+            'reference'      => 'required',
             //falta validar los atributos
         ];
 
@@ -229,26 +228,26 @@ class CustomerController extends Controller
             // con los errores
             $validator = \Validator::make($request->all(), $rules);
             if ($validator->fails()) {
-                return response()->json(['message' => 'No posee todo los campos necesario para crear un producto'],401);
+                return response()->json(['message' => 'No posee todo los campos necesario para crear un direccion'],401);
             }
             // Si el validador pasa, almacenamos el comentario
+            $customer=Customer::find($id);
 
-            $productAux=DB::table('products')->where('product_code',$request->input('product_code'))->get();
+            if(count($customer) !== 0 ){
+                $direccion = new Address();
+                $direccion->customer_id= $id;
+                $direccion->price= $request->input('ubigeo_id');
+                $direccion->image= $request->input('description');
+                $direccion->product_code= $request->input('reference');
+                $direccion->status= $request->input('status');
 
-            if(count($productAux) == 0 ){
-                $product = new Product();
-                $product->name= $request->input('name');
-                $product->price= $request->input('price');
-                $product->image= $request->input('image');
-                $product->product_code= $request->input('product_code');
-                $product->status= $request->input('status');
-                $product->save();
+                $customer->addresses()->save($direccion);
 
                 //Falta Agregar atributos de productos
-                return response()->json(['message' => 'El producto se agrego correctamente'],200);
+                return response()->json(['message' => 'La direccion se agrego correctamente'],200);
             }
 
-            return response()->json(['message' => 'El producto ya esta registrado'],400);
+            return response()->json(['message' => 'El usuario no esta registrado'],400);
 
         } catch (Exception $e) {
             // Si algo sale mal devolvemos un error.
@@ -257,11 +256,88 @@ class CustomerController extends Controller
     }
 
     public function phoneAdd(Request $request,$id){
+        if (!is_array($request->all())) {
+            return response()->json(['message' => 'request must be an array'],401);
+        }
+        // Creamos las reglas de validación
+        $rules = [
+            'operator_id'      => 'required',
+            'number'      => 'required',
+            //falta validar los atributos
+        ];
 
+        //Se va a pasar datos del producto, attributos y su cantidad
+        try {
+            // Ejecutamos el validador y en caso de que falle devolvemos la respuesta
+            // con los errores
+            $validator = \Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return response()->json(['message' => 'No posee todo los campos necesario para crear un telefono'],401);
+            }
+            // Si el validador pasa, almacenamos el comentario
+            $customer=Customer::find($id);
+
+            if(count($customer) !== 0 ){
+                $phone = new Phone();
+                $phone->customer_id= $id;
+                $phone->operator_id= $request->input('operator_id');
+                $phone->number= $request->input('number');
+
+                $customer->phones()->save($phone);
+
+                //Falta Agregar atributos de productos
+                return response()->json(['message' => 'El telefono se agrego correctamente'],200);
+            }
+
+            return response()->json(['message' => 'El usuario no esta registrado'],400);
+
+        } catch (Exception $e) {
+            // Si algo sale mal devolvemos un error.
+            return \Response::json(['message' => 'Ocurrio un error al agregar producto'], 500);
+        }
     }
 
     public function socialAdd(Request $request,$id){
+        if (!is_array($request->all())) {
+            return response()->json(['message' => 'request must be an array'],401);
+        }
+        // Creamos las reglas de validación
+        $rules = [
+            'channel_id'      => 'required',
+            'channel_url'      => 'required',
+            
+            //falta validar los atributos
+        ];
 
+        //Se va a pasar datos del producto, attributos y su cantidad
+        try {
+            // Ejecutamos el validador y en caso de que falle devolvemos la respuesta
+            // con los errores
+            $validator = \Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return response()->json(['message' => 'No posee todo los campos necesario para crear un cuenta'],401);
+            }
+            // Si el validador pasa, almacenamos el comentario
+            $customer=Customer::find($id);
+
+            if(count($customer) !== 0 ){
+                $social = new Social();
+                $social->customer_id= $id;
+                $social->channel_id= $request->input('channel_id');
+                $social->channel_url= $request->input('channel_url');                
+
+                $customer->socials()->save($social);
+
+                //Falta Agregar atributos de productos
+                return response()->json(['message' => 'La cuenta se agrego correctamente'],200);
+            }
+
+            return response()->json(['message' => 'El usuario no esta registrado'],400);
+
+        } catch (Exception $e) {
+            // Si algo sale mal devolvemos un error.
+            return \Response::json(['message' => 'Ocurrio un error al agregar producto'], 500);
+        }
     }
 
     public function addressUpdate(Request $request,$id){

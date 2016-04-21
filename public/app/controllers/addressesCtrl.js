@@ -1,22 +1,32 @@
 angular.module('App')
     .config(function($stateProvider) {
         $stateProvider
-            .state('Clientes', {
-                url: '/Adminitracion-de-clientes',
-                templateUrl: 'app/partials/customers.html',
-                controller : 'customersCtrl'
+            .state('Direcciones', {
+                url: '/Adminitracion-de-direcciones/:id',
+                templateUrl: 'app/partials/addresses.html',
+                controller : 'addressesCtrl'
             });
+            //.state('Telefonos', {
+            //    url: '/Adminitracion-de-telfonos',
+            //    templateUrl: 'app/partials/phones.html',
+            //    controller : 'phonesCtrl'
+            //})
+            //.state('Socials', {
+            //    url: '/Adminitracion-de-redes-social',
+            //    templateUrl: 'app/partials/socials.html',
+            //    controller : 'socialsCtrl'
+            //});
     })
-    .controller('customersCtrl', function($scope, $compile, $state, $log, util, petition, toastr){
+    .controller('addressesCtrl', function($scope, $compile,$routeParams, $log, util, petition, toastr){
 
-        util.liPage('clientes');
+        util.liPage('direcciones');
 
         $scope.tableConfig 	= 	{
             columns :	[
                 {"sTitle": "Nombre", "bSortable" : true},
                 {"sTitle": "Edad", "bSortable" : true},
                 {"sTitle": "Estado" ,"bSearchable": false , "bSortable" : false , "sWidth": "80px"},
-                {"sTitle": "Accion" , "bSearchable": false , "bSortable" : false , "sWidth": "380px"}
+                {"sTitle": "Accion" , "bSearchable": false , "bSortable" : false , "sWidth": "190px"}
             ],
             actions	:  	[
                 ['status',   {
@@ -26,9 +36,7 @@ angular.module('App')
                 ],
                 ['actions', [
                     ['ver', 'view' ,'btn-info'],
-                    ['Dirreccion', 'address' ,'bgm-indigo'],
-                    ['Telefono', 'phone' ,'bgm-blue'],
-                    ['Redes', 'social' ,'bgm-lightblue']
+                    ['Editar', 'edit' ,'btn-primary']
                 ]
                 ]
             ],
@@ -48,16 +56,16 @@ angular.module('App')
             closeOnConfirm: true
         };
 
-        $scope.customerClear = {
+        $scope.addressClear = {
             name: '',
             age: '',
             status: 0
         };
 
         $scope.list = function() {
-            petition.get('api/customer')
+            petition.get('api/address/' + $scope.id)
                 .then(function(data){
-                    $scope.tableData = data.customers;
+                    $scope.tableData = data.addresses;
                     $('#table').AJQtable('view', $scope, $compile);
                     $scope.updateList = false;
                 }, function(error){
@@ -82,29 +90,18 @@ angular.module('App')
                 });
         };
 
-        $scope.view = function( ind ){
-            var id = $scope.tableData[ind].id;
-            petition.get('api/customer/' + id)
-                .then(function(data){
-                    $scope.customerDetail = data.customer;
-                    util.modal();
-                }, function(error){
-                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
-                });
-        };
-
         $scope.edit = function( ind ){
-            $scope.customer = angular.copy($scope.tableData[ind]);
+            $scope.address = angular.copy($scope.tableData[ind]);
             util.muestraformulario();
         };
 
         $scope.submit = function () {
-            var method = ( $scope.customer.id )?'PUT':'POST';
-            var url = ( method == 'PUT')? util.baseUrl('api/customer/' + $scope.customer.id): util.baseUrl('api/customer');
+            var method = ( $scope.address.id )?'PUT':'POST';
+            var url = ( method == 'PUT')? util.baseUrl('api/customer/' + $scope.address.id): util.baseUrl('api/customer');
             var config = {
                 method: method,
                 url: url,
-                params: $scope.customer
+                params: $scope.address
             };
             $scope.formSubmit=true;
             petition.custom(config).then(function(data){
@@ -119,12 +116,12 @@ angular.module('App')
         };
 
         $scope.cancel = function () {
-            $scope.customer = angular.copy($scope.customerClear);
+            $scope.address = angular.copy($scope.addressClear);
             util.ocultaformulario();
         };
 
         $scope.new = function(){
-            $scope.customer = angular.copy($scope.customerClear);
+            $scope.address = angular.copy($scope.addressClear);
             util.muestraformulario();
         };
 
@@ -146,13 +143,9 @@ angular.module('App')
             }
         };
 
-        // Addresses
-        $scope.address = function( ind ){
-            $state.go("Direcciones", { id: $scope.tableData[ind].id });
-        };
-
         angular.element(document).ready(function(){
-            $scope.customer = angular.copy($scope.customerClear);
+            $scope.id = $stateParams.id;
+            $scope.address = angular.copy($scope.addressClear);
             $scope.list();
         });
     });

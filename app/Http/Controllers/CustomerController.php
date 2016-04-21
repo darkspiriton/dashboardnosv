@@ -44,10 +44,8 @@ class CustomerController extends Controller
         // Creamos las reglas de validación
         $rules = [
             'name'      => 'required',
-            'price'      => 'required',
-            'image'     => 'required',
-            'product_code'     => 'required',
-            'status'        => 'required',
+            'age'      => 'required',
+            'status'     => 'required',
             //falta validar los atributos
         ];
 

@@ -1,0 +1,44 @@
+<div class="form-group">
+    <label class="col-xs-2 col-sm-2 control-label">Otros Telefonos</label>
+    <div class="col-xs-10 col-sm-10">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="row">
+                    <div class="col-xs-12 col-sm-3 pad-t-15">
+                        <div class="fg-line select">
+                            <select class="form-control" ng-options="attr_value.id as attr_value.valor for attr_value in attr_values" ng-model="newAttr.val_id" required>
+                                <option value="" disabled="disabled" select="true">Seleccione</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-3 pad-t-15">
+                        <input type="text" class="form-control" placeholder="Numero" required>
+                    </div>
+                    <div class="col-xs-12 col-sm-2 pad-t-15">
+                        <button ng-disabled="!formuser.$valid" ng-disabled="formSubmit" type="button" class="btn btn-primary btn-sm waves-effect">Añadir</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row groups-attr">
+            <div class="col-xs-12 col-sm-6">
+                <table class="table table-bordered w-100 table-attr text-center">
+                    <thead>
+                    <tr>
+                        <th>Atributo</th><th>Valor</th><th>Accion</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="phone in customer.phones">
+                        <td ng-bind="phone.operator.name"></td>
+                        <td  ng-bind="phone.number"></td>
+                        <td style="width: 80px;">
+                            <button class="btn btn-xs btn-danger" ng-click="removePhone(phone,$event)" style="width: 82px;">Quitar</button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

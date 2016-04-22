@@ -408,14 +408,15 @@ class CustomerController extends Controller
         }
     }
 
-    public function socialUpdate(Request $request,$id){
+    public function socialUpdate(Request $request){
         if (!is_array($request->all())) {
             return response()->json(['message' => 'request must be an array'],401);
         }
         // Creamos las reglas de validación
         $rules = [
-            'channel_id'      => 'required',
-            'channel_url'      => 'required',
+            'channel_id'    => 'required',
+            'channel_url'   => 'required',
+            'id'            => 'required'
         ];
 
 
@@ -427,14 +428,12 @@ class CustomerController extends Controller
                 return response()->json(['message' => 'No posee todo los campos necesario para actualizar una cuenta'],401);
             }
             // Si el validador pasa, almacenamos el comentario
-            $social=Social::find($id);
+            $social=Social::find($request->input('id'));
 
             if(count($social) !== 0 ){
-                $customer = new Customer($social->customer_id);
                 $social->channel_id= $request->input('channel_id');
                 $social->channel_url= $request->input('channel_url');
-
-                $customer->socials()->save($social);
+                $social->save();
 
                 //Falta Agregar atributos de productos
                 return response()->json(['message' => 'La cuenta se actualizo correctamente'],200);

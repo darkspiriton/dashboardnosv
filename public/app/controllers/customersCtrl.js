@@ -17,7 +17,7 @@ angular.module('App')
                 {"sTitle": "Telefono", "bSortable" : true},
                 {"sTitle": "Edad", "bSortable" : true},
                 {"sTitle": "Estado" ,"bSearchable": false , "bSortable" : false , "sWidth": "80px"},
-                {"sTitle": "Accion" , "bSearchable": false , "bSortable" : false , "sWidth": "470px"}
+                {"sTitle": "Accion" , "bSearchable": false , "bSortable" : false , "sWidth": "190px"}
             ],
             actions	:  	[
                 ['status',   {
@@ -27,10 +27,7 @@ angular.module('App')
                 ],
                 ['actions', [
                     ['ver', 'view' ,'btn-info'],
-                    ['Editar', 'edit' ,'bgm-teal'],
-                    ['Dirreccion', 'address' ,'bgm-indigo'],
-                    ['Telefono', 'phone' ,'bgm-blue'],
-                    ['Redes', 'social' ,'bgm-lightblue']
+                    ['Editar', 'edit' ,'bgm-teal']
                 ]
                 ]
             ],
@@ -148,9 +145,17 @@ angular.module('App')
             }
         };
 
-        // Addresses
-        $scope.address = function( ind ){
-            $state.go("Direcciones", { id: $scope.tableData[ind].id });
+        // Redirect
+        $scope.address = function(){
+            $state.go("Direcciones", { id: $scope.customer.id });
+        };
+
+        $scope.phone = function( ind ){
+            $state.go("Telefonos", { id: $scope.customer.id });
+        };
+
+        $scope.social = function( ind ){
+            $state.go("Socials", { id: $scope.customer.id });
         };
 
         angular.element(document).ready(function(){

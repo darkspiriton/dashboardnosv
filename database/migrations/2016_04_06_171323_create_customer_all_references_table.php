@@ -16,7 +16,8 @@ class CreateCustomerAllReferencesTable extends Migration
         Schema::create('customers', function(Blueprint $table){
             $table->increments('id');
             $table->string('name');
-            $table->integer('age');
+            $table->date('age');
+            $table->string('phone',12);
             $table->boolean('status');
             $table->integer('user_id')->unsigned()->increments();
             $table->timestamps();

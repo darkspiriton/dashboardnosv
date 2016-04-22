@@ -8104,7 +8104,11 @@ body #content {
 #sidebar .main-menu > li.sub-menu.active > ul {
   display: block; }
 
-#sidebar .main-menu > li.active > a {
+#sidebar > li.active > a {
+  color: #262626;
+  background-color: #F4F4F4; }
+
+#sidebar .main-menu li.sub-menu ul > li.active > a {
   color: #262626;
   background-color: #F4F4F4; }
 

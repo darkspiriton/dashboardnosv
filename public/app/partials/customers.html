@@ -35,7 +35,7 @@
                         <span class="input-group-addon"><i class="md md-person"></i></span>
                         <div class="fg-line">
                             <input ng-model="customer.id" type="hidden">
-                            <input ng-model="customer.name" type="text" class="form-control" required>
+                            <input ng-model="customer.name" type="text" class="form-control" placeholder="johnny depp" required>
                         </div>
                     </div>
                 </div>
@@ -43,15 +43,25 @@
                 <label class="col-xs-2 col-sm-2 control-label">edad</label>
                 <div class="col-xs-10 col-sm-4">
                     <div class="input-group">
-                        <span class="input-group-addon"><i class="md md-person"></i></span>
+                        <span class="input-group-addon"><i class="md  md-looks-2  md-keyboard-capslock"></i></span>
                         <div class="fg-line">
-                            <input integer ng-maxlength="2" ng-model="customer.age" type="text" class="form-control" required>
+                            <input integer ng-maxlength="2" ng-model="customer.age" type="text" class="form-control" placeholder="20" required>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="form-group">
+                <label class="col-xs-2 col-sm-2 control-label">Telefono</label>
+                <div class="col-xs-10 col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-smartphone"></i></span>
+                        <div class="fg-line">
+                            <input ng-model="customer.phone" type="text" class="form-control" placeholder="955654265" required>
+                        </div>
+                    </div>
+                </div>
+
                 <label class="col-xs-2 col-sm-2 control-label">Activar/Desactivar</label>
                 <div class="col-xs-10 col-sm-4">
                     <div class="input-group">

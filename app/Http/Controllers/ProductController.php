@@ -5,6 +5,8 @@ namespace Dashboard\Http\Controllers;
 use Dashboard\Models\Kardex\Attribute;
 use Dashboard\Models\Kardex\Group_Attribute;
 use Dashboard\Models\Kardex\Kardex;
+use Dashboard\Models\Kardex\Type_Attribute;
+use Dashboard\Models\Product\Type;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Dashboard\Http\Requests;
@@ -190,6 +192,11 @@ class ProductController extends Controller
         }catch (ErrorException $e){
             return \Response::json(['message' => 'Ocurrio un error'], 500);
         }
+    }
+    
+    public function types(){
+        $types= Type::all();
+        return response()->json(['$types' => $types],200);
     }
 
     private function addKardex($id,$cant,$attributes){

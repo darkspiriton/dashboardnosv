@@ -30,5 +30,9 @@ class Product extends Model
     public function kardexs(){
         return $this->hasMany(Kardex::class);
     }
+    
+    public function type(){
+        return $this->belongsTo(Type::class);
+    }
 
 }

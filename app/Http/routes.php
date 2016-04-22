@@ -52,6 +52,9 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
         Route::get('/provincia/{provincia}','UbigeoController@provincia');
         Route::get('/distrito/{distrito}','UbigeoController@distrito');
     });
+    Route::group(['prefix'=>'type_product'],function(){
+        Route::get('/','ProductController@types');
+    });
     Route::group(['prefix'=>'operador'],function(){
         Route::get('/','OperadorController@index');
     });

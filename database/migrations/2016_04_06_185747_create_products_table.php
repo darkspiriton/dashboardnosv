@@ -12,6 +12,15 @@ class CreateProductsTable extends Migration
      */
     public function up()
     {
+        Schema::create('types_products', function(Blueprint $table){
+            $table->increments('id');
+            $table->string('name');
+            $table->timestamps();
+
+        });
+
+
+
         Schema::create('products', function(Blueprint $table){
             $table->increments('id');
             $table->string('name');
@@ -19,8 +28,11 @@ class CreateProductsTable extends Migration
             $table->string('image');
             $table->string('product_code');
             $table->boolean('status');
+            $table->integer('type_product_id')->unsigned()->increments();
             $table->timestamps();
-        });       
+            $table->foreign('type_product_id')->references('id')->on('types_products');
+
+        });
 
     }
 
@@ -33,6 +45,7 @@ class CreateProductsTable extends Migration
     {
 
         Schema::dropIfExists('products');
+        Schema::dropIfExists('types_products');
 
     }
 }

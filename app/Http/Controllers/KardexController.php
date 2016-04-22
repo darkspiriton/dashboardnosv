@@ -5,7 +5,7 @@ namespace Dashboard\Http\Controllers;
 use Dashboard\Models\Kardex\Kardex;
 use Illuminate\Http\Request;
 use Dashboard\Models\Product\Product;
-
+use DB;
 use Dashboard\Http\Requests;
 
 class KardexController extends Controller
@@ -22,16 +22,6 @@ class KardexController extends Controller
             $kardex->kardexs;
         }
         return response()->json(['products' => $kardexs],200);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -57,19 +47,20 @@ class KardexController extends Controller
             $kardex = Kardex::find($id);
 
             if ($kardex !== null) {
-                $productAux= DB::table('products')
-                        ->select('kardexs.id','types_attributes.name','attributes.valor')
-                        ->join('kardexs','kardexs.product_id','=','products.id')
-                        ->join('attributes','attributes.id','=','attribute_kardex.attribute_id')
-                        ->join('types_attributes','types_attributes.id','=','attributes.type_id')
-                        ->where('kardexs.product_id','=',$id)
-                        ->orderby('kardexs.id')
-                        ->distinct('kardexs.id','types_attributes.name','attributes.valor')
+                $productAux= DB::table('products AS p')
+                        ->select('k.id','ta.name','att.valor')
+                        ->join('kardexs AS k','k.product_id','=','p.id')
+                        ->join('groups_attributes AS g','g.id','=','k.group_attribute_id')
+                        ->join('attributes_kardexs AS attk','attk.group_attribute_id','=','g.id')
+                        ->join('attributes AS att','att.id','=','attk.attribute_id')
+                        ->join('types_attributes AS ta','ta.id','=','att.type_id')
+                        ->where('k.id','=',$id)
+                        //->distinct('kardexs.id','types_attributes.name','attributes.valor')
                         ->get();
                 
                 return response()->json([
                     'message' => 'Mostrar detalles de producto',
-                    'kardex'=> $kardex,
+                    'kardex'=> $productAux,
                     //'attributes' => $product->attributes,
                 ],200);
             }
@@ -77,17 +68,6 @@ class KardexController extends Controller
         }catch (ErrorException $e){
             return \Response::json(['message' => 'Ocurrio un error'], 500);
         }
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
     }
 
     /**

@@ -2,6 +2,11 @@
 
 namespace Dashboard\Http\Controllers;
 
+use Dashboard\Models\Kardex\Attribute;
+use Dashboard\Models\Kardex\Group_Attribute;
+use Dashboard\Models\Kardex\Kardex;
+use Dashboard\Models\Kardex\Type_Attribute;
+use Dashboard\Models\Product\Type;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Dashboard\Http\Requests;
@@ -36,7 +41,8 @@ class ProductController extends Controller
             'price'      => 'required',
             'image'     => 'required',
             'product_code'     => 'required',
-            'status'        => 'required',            
+            'status'        => 'required',
+            'type_product'        => 'required',
             //falta validar los atributos
         ];
 
@@ -60,7 +66,17 @@ class ProductController extends Controller
                 $product->image= $request->input('image');
                 $product->product_code= $request->input('product_code');
                 $product->status= $request->input('status');
+                $product->type_product= $request->input('type_product');
                 $product->save();
+
+                $groups=$request->input('groups');
+
+                foreach($groups as $group){
+                    $lastProduct = DB::table('products')
+                        ->orderBy('id','desc')
+                        ->first();
+                    $this->addKardex($lastProduct->id,$group->cant,$group->attributes);
+                }
 
                 //Falta Agregar atributos de productos
                 return response()->json(['message' => 'El producto se agrego correctamente'],200);
@@ -177,8 +193,38 @@ class ProductController extends Controller
             return \Response::json(['message' => 'Ocurrio un error'], 500);
         }
     }
+    
+    public function types(){
+        $types= Type::all();
+        return response()->json(['$types' => $types],200);
+    }
 
     private function addKardex($id,$cant,$attributes){
 
+
+        $group= new Group_Attribute();
+        $group->product_id=$id;
+        $group->save();
+
+        $lastGroup = DB::table('groups_attributes')
+            ->where('product_id','=',$id)
+            ->orderBy('id','desc')
+            ->first();
+
+        foreach($attributes as $attribute ){
+            $a = new Attribute();
+            $a->attribute_id = $attribute->attribute_id;
+            $lastGroup->attributes()->save($a);
+        }
+
+        for ($i=0;$i<$cant;$i++){
+            $k = new Kardex();
+            $k->product_id=$id;
+            $k->stock=true;
+            $lastGroup->kardexs()->save($k);
+        }
+
     }
+
+
 }

@@ -73,4 +73,8 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
     });
 
     Route::get('validate-key','HomeController@validar');
+
+    Route::resource('scope','ScopeController',
+        ['only'=>['index','store','update','destroy','show']]);
+
 });

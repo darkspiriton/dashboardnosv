@@ -66,10 +66,10 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
         Route::post('/phone/{phone}','CustomerController@phoneAdd');
         Route::post('/social/{social}','CustomerController@socialAdd');
     });
-    Route::group(['prefix'=>'customer/add'],function(){
-        Route::put('/address/{address}','CustomerController@addressUpdate');
-        Route::put('/phone/{phone}','CustomerController@phoneUpdate');
-        Route::put('/social/{social}','CustomerController@socialUpdate');
+    Route::group(['prefix'=>'customer/upd'],function(){
+        Route::put('/address','CustomerController@addressUpdate');
+        Route::put('/phone','CustomerController@phoneUpdate');
+        Route::put('/social','CustomerController@socialUpdate');
     });
 
     Route::get('validate-key','HomeController@validar');

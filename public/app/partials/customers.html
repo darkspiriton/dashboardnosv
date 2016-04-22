@@ -45,7 +45,7 @@
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md  md-looks-2  md-keyboard-capslock"></i></span>
                         <div class="fg-line">
-                            <input integer ng-maxlength="2" ng-model="customer.age" type="text" class="form-control" placeholder="20" required>
+                            <input ng-model="customer.age" type="date" class="form-control" placeholder="20/07/1993" required>
                         </div>
                     </div>
                 </div>
@@ -74,10 +74,16 @@
                 </div>
             </div>
 
+
+
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
                     <button ng-disabled="!customerForm.$valid" ng-disabled="formSubmit" ng-click="submit()" type="button" class="btn btn-primary btn-sm waves-effect">Guardar</button>
-                    <a ng-click="cancel()" class="btn btn-danger btn-sm waves-effect">Cancelar</a>
+                    <a ng-click="cancel()" class="btn btn-danger btn-sm waves-effect ">Cancelar</a>
+                    <a ng-click="social()" class="btn bgm-lightblue btn-sm waves-effect pull-right m-l-10">Redes Sociales</a>
+                    <a ng-click="phone()" class="btn bgm-blue btn-sm waves-effect pull-right m-l-10">Telefonos</a>
+                    <a ng-click="address()" class="btn bgm-indigo btn-sm waves-effect pull-right">Direcciones</a>
+
                 </div>
             </div>
         </div>
@@ -102,6 +108,13 @@
                         <label class="col-xs-4 col-xs-offset-1 col-sm-offset-0 col-sm-2 control-label">Edad: </label>
                         <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="customerDetail.age"></label>
                     </div>
+                    <div class="form-group form-pad-top">
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Telefono: </label>
+                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="customerDetail.phone"></label>
+
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-0 col-sm-2 control-label">Estado: </label>
+                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="getStatus(customerDetail.status)"></label>
+                    </div>
                     <div class="form-group">
                         <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Direcciones: </label>
                         <div class="col-xs-6 col-sm-8">
@@ -114,7 +127,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Telefonos: </label>
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Otros Telefonos: </label>
                         <div class="col-xs-6 col-sm-8">
                             <div ng-repeat="phnoe in customerDetail.phones" style="padding: 20px 0 0 0;">
                                 <p ng-bind="'operador: ' + phnoe.operator.name"></p>

@@ -58,7 +58,7 @@ class CreateCustomerAllReferencesTable extends Migration
 
         // Socials
         Schema::create('socials', function(Blueprint $table){
-            $table->increments('social_id');
+            $table->increments('id');
             $table->integer('customer_id')->unsigned();
             $table->integer('channel_id')->unsigned();
             $table->string('channel_url');

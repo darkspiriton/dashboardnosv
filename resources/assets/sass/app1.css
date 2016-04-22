@@ -10452,7 +10452,7 @@ body #content {
   display: block;
 }
 
-#sidebar .main-menu > li.active > a {
+#sidebar  > li.active > a {
   color: #262626;
   background-color: #F4F4F4;
 }

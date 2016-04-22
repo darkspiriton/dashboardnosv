@@ -31,6 +31,7 @@ class UbigeoController extends Controller
             ->distinct('UBIDEN')
             ->select('UBIPRV','UBIPRN')
             ->where('UBIDEP',$id)
+            ->where('UBIPRN','<>','')
             ->get();
         if($provincias !== null){
             return response()->json([
@@ -51,11 +52,12 @@ class UbigeoController extends Controller
             ->distinct('UBIDEN')
             ->select('UBIDST','UBIDSN')
             ->where('UBIPRV',$id)
+            ->where('UBIDSN','<>','')
             ->get();
         if($distritos !== null){
             return response()->json([
                 'message' => 'Mostrar todas las provincias',
-                'provincias'=> $distritos,
+                'distritos'=> $distritos,
                 //'attributes' => $product->attributes,
             ],200);
         } else{

@@ -1,6 +1,6 @@
 <div class="card" >
     <div class="card-header bgm-blue">
-        <h2>Gestion de clientes</h2>
+        <h2>Gestion de direcciones de: {{ customerName }}</h2>
         <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="list()"
                 data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
                 title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
@@ -11,7 +11,9 @@
             <table id="table" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
         </div><br>
         <div class="card-footer">
-            <input  class="btn bgm-green waves-effect" type='submit' value='Nuevo registro' ng-click="new();">
+            <input class="btn bgm-green waves-effect m-t-15" type='submit' value='Nuevo registro' ng-click="new();">
+            <input class="btn bgm-teal waves-effect pull-right m-t-15 m-l-10" type='submit' value='Editar Redes Sociales' ng-click="social();">
+            <input class="btn bgm-indigo waves-effect pull-right m-t-15" type='submit' value='Editar Telefonos' ng-click="phone();">
         </div>
     </div><br>
 </div>
@@ -21,7 +23,7 @@
         <h2>Crear/Editar Direcciones</h2>
     </div>
 
-    <form name="customer" id="form" class="form-horizontal" autocomplete="off">
+    <form name="addressForm" id="form" class="form-horizontal" autocomplete="off">
 
         <div class="card-body card-padding" >
             <div class="card-header">
@@ -29,28 +31,28 @@
             </div>
 
             <div class="form-group">
-                <label class="col-xs-2 col-sm-2 control-label">Direccion</label>
+                <label class="col-xs-2 col-sm-2 control-label">Ubicacion</label>
                 <div class="col-xs-10 col-sm-10">
                     <div class="row" ng-form name="address">
                         <div class="col-xs-12 pad-t-15">
                             <div class="row">
                                 <div class="col-xs-4 col-sm-3">
                                     <div class="fg-line select">
-                                        <select class="form-control" ng-options="attr_value.id as attr_value.valor for attr_value in attr_values" ng-model="ubigeo.dep_id" required>
+                                        <select class="form-control" ng-options="dep.UBIDEP as dep.UBIDEN for dep in ubigeo.dep" ng-model="ubigeo.dep_id" required>
                                             <option value="" disabled="disabled" select="true">Seleccione</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-xs-4 col-sm-3">
                                     <div class="fg-line select">
-                                        <select class="form-control" ng-options="attr_value.id as attr_value.valor for attr_value in attr_values" ng-model="ubigeo.pro_id" required>
+                                        <select class="form-control" ng-options="pro.UBIPRV as pro.UBIPRN for pro in ubigeo.pro" ng-model="ubigeo.pro_id" required>
                                             <option value="" disabled="disabled" select="true">Seleccione</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-xs-4 col-sm-3">
                                     <div class="fg-line select">
-                                        <select class="form-control" ng-options="attr_value.id as attr_value.valor for attr_value in attr_values" ng-model="newAddress.ubigeo_id" required>
+                                        <select class="form-control" ng-options="dis.UBIDST as dis.UBIDSN for dis in ubigeo.dis" ng-model="address.ubigeo_id" required>
                                             <option value="" disabled="disabled" select="true">Seleccione</option>
                                         </select>
                                     </div>
@@ -65,10 +67,10 @@
                 <label class="col-xs-2 control-label">Descripcion</label>
                 <div class="col-xs-10">
                     <div class="input-group">
-                        <span class="input-group-addon"><i class="md md-person"></i></span>
+                        <span class="input-group-addon"><i class="md  md-description"></i></span>
                         <div class="fg-line">
-                            <input ng-model="customer.id" type="hidden">
-                            <input ng-model="customer.name" type="text" class="form-control" required>
+                            <input ng-model="address.id" type="hidden">
+                            <input ng-model="address.description" type="text" class="form-control" required>
                         </div>
                     </div>
                 </div>
@@ -78,9 +80,9 @@
                 <label class="col-xs-2 control-label">Referencia</label>
                 <div class="col-xs-10">
                     <div class="input-group">
-                        <span class="input-group-addon"><i class="md md-person"></i></span>
+                        <span class="input-group-addon"><i class="md md-aspect-ratio"></i></span>
                         <div class="fg-line">
-                            <input integer ng-maxlength="2" ng-model="customer.age" type="text" class="form-control" required>
+                            <input ng-model="address.reference" type="text" class="form-control" required>
                         </div>
                     </div>
                 </div>
@@ -88,7 +90,7 @@
 
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <button ng-disabled="!customer.$valid" ng-disabled="formSubmit" ng-click="submit()" type="button" class="btn btn-primary btn-sm waves-effect">Guardar</button>
+                    <button ng-disabled="!addressForm.$valid" ng-disabled="formSubmit" ng-click="submit()" type="button" class="btn btn-primary btn-sm waves-effect">Guardar</button>
                     <a ng-click="cancel()" class="btn btn-danger btn-sm waves-effect">Cancelar</a>
                 </div>
             </div>

@@ -66,7 +66,7 @@ class ProductsTableSeeder extends Seeder
                             break;
                     }
 
-                    DB::table('attribute_kardex')->insertGetId(array(
+                    DB::table('attributes_kardexs')->insertGetId(array(
                         'group_attribute_id' => $global_attribute_id,
                         'attribute_id' => $t
                     ));

@@ -23,4 +23,6 @@
 @section('dashCtrls')
     <script src="app/controllers/homeCtrl.js"></script>
     <script src="app/controllers/customersCtrl.js"></script>
+    <script src="app/controllers/addressesCtrl.js"></script>
+    <script src="app/controllers/phonesCtrl.js"></script>
 @stop

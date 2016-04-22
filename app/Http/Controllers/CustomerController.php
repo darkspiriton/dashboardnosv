@@ -4,9 +4,11 @@ namespace Dashboard\Http\Controllers;
 
 use Dashboard\Models\Customer\Address;
 use Dashboard\Models\Customer\Customer;
+use Dashboard\Models\Customer\Phone;
 use Dashboard\Models\Customer\Social;
 use Illuminate\Http\Request;
 use Dashboard\Http\Requests;
+use Illuminate\Support\Facades\DB;
 
 class CustomerController extends Controller
 {
@@ -48,7 +50,7 @@ class CustomerController extends Controller
                 ->where('phone',$request->input('phone'))
                 ->get();
 
-            if($customer != null){
+            if($customer == null){
 
                 // Ejecutamos el validador y en caso de que falle devolvemos la respuesta
                 // con los errores
@@ -68,6 +70,7 @@ class CustomerController extends Controller
                 //Falta Agregar atributos de productos
                 return response()->json(['message' => 'El cliente se agrego correctamente'],200);
             }
+            return response()->json(['message' => 'El usuario y/o numero ya se encuentra registrado'],401);
         } catch (Exception $e) {
             // Si algo sale mal devolvemos un error.
             return \Response::json(['message' => 'Ocurrio un error al agregar cliente'], 500);
@@ -322,12 +325,13 @@ class CustomerController extends Controller
         }
     }
 
-    public function addressUpdate(Request $request,$id){
+    public function addressUpdate(Request $request){
         if (!is_array($request->all())) {
             return response()->json(['message' => 'request must be an array'],401);
         }
         // Creamos las reglas de validación
         $rules = [
+            'id'             => 'required',
             'ubigeo_id'      => 'required',
             'description'      => 'required',
             'reference'      => 'required',
@@ -343,15 +347,13 @@ class CustomerController extends Controller
                 return response()->json(['message' => 'No posee todo los campos necesario para actualizar una dirección'],401);
             }
             // Si el validador pasa, almacenamos el comentario
-            $direccion = Address::find($id);
+            $direccion = Address::find($request->input('id'));
 
             if(count($direccion) !== 0 ){
-                $customer=Customer::find($direccion->customer_id);
                 $direccion->ubigeo_id= $request->input('ubigeo_id');
                 $direccion->description= $request->input('description');
                 $direccion->reference= $request->input('reference');
-
-                $customer->addresses()->save($direccion);
+                $direccion->save();
 
                 //Falta Agregar atributos de productos
                 return response()->json(['message' => 'La direccion se actualizo correctamente'],200);
@@ -366,14 +368,15 @@ class CustomerController extends Controller
 
     }
 
-    public function phoneUpdate(Request $request,$id){
+    public function phoneUpdate(Request $request){
         if (!is_array($request->all())) {
             return response()->json(['message' => 'request must be an array'],401);
         }
         // Creamos las reglas de validación
         $rules = [
-            'operator_id'      => 'required',
-            'number'      => 'required',
+            'operator_id'   => 'required',
+            'number'        => 'required',
+            'id'            => 'required',
             //falta validar los atributos
         ];
 
@@ -386,15 +389,12 @@ class CustomerController extends Controller
                 return response()->json(['message' => 'No posee todo los campos necesario para actualizar un teléfono'],401);
             }
             // Si el validador pasa, almacenamos el comentario
-            $phone = Address::find($id);
+            $phone = Phone::find($request->input('id'));
 
             if(count($phone) !== 0 ){
-                $customer=Customer::find($phone->customer_id);
-                $phone = new Phone();
-                $phone->operator_id= $request->input('operator_id');
-                $phone->number= $request->input('number');
-
-                $customer->phones()->save($phone);
+                $phone->operator_id = $request->input('operator_id');
+                $phone->number = $request->input('number');
+                $phone->save();
 
                 //Falta Agregar atributos de productos
                 return response()->json(['message' => 'El teléfono se actualizo correctamente'],200);

@@ -6,68 +6,44 @@ angular.module('App')
                 templateUrl: 'app/partials/addresses.html',
                 controller : 'addressesCtrl'
             });
-            //.state('Telefonos', {
-            //    url: '/Adminitracion-de-telfonos',
-            //    templateUrl: 'app/partials/phones.html',
-            //    controller : 'phonesCtrl'
-            //})
-            //.state('Socials', {
-            //    url: '/Adminitracion-de-redes-social',
-            //    templateUrl: 'app/partials/socials.html',
-            //    controller : 'socialsCtrl'
-            //});
     })
-    .controller('addressesCtrl', function($scope, $compile,$routeParams, $log, util, petition, toastr){
+    .controller('addressesCtrl', function($scope, $compile, $state,$stateParams, $log, util, petition, toastr){
 
         util.liPage('direcciones');
 
         $scope.tableConfig 	= 	{
             columns :	[
-                {"sTitle": "Nombre", "bSortable" : true},
-                {"sTitle": "Edad", "bSortable" : true},
-                {"sTitle": "Estado" ,"bSearchable": false , "bSortable" : false , "sWidth": "80px"},
-                {"sTitle": "Accion" , "bSearchable": false , "bSortable" : false , "sWidth": "190px"}
+                {"sTitle": "Ubicacion", "bSortable" : true},
+                {"sTitle": "Direccion", "bSortable" : true},
+                {"sTitle": "Referencia", "bSortable" : true},
+                {"sTitle": "Accion" , "bSearchable": false , "bSortable" : false , "sWidth": "100px"}
             ],
             actions	:  	[
-                ['status',   {
-                    0 : { txt : 'Inactivo' , cls : 'btn-danger' },
-                    1 : { txt : 'Activo' ,  cls : 'btn-success' } ,
-                }
-                ],
                 ['actions', [
-                    ['ver', 'view' ,'btn-info'],
                     ['Editar', 'edit' ,'btn-primary']
                 ]
                 ]
             ],
-            data  	: 	['name','age','status','actions'],
+            data  	: 	['ubi','description','reference','actions'],
             configStatus : 'status'
         };
 
-        var alertConfig = {
-            title: "¿Esta seguro?",
-            text: "",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: "SI",
-            cancelButtonColor: "#212121",
-            cancelButtonText: "CANCELAR",
-            closeOnConfirm: true
-        };
-
         $scope.addressClear = {
-            name: '',
-            age: '',
-            status: 0
+            id: null,
+            description : null,
+            reference: null,
+            ubigeo_id: null
         };
 
         $scope.list = function() {
-            petition.get('api/address/' + $scope.id)
+            petition.get('api/customer/' + $scope.id)
                 .then(function(data){
-                    $scope.tableData = data.addresses;
-                    $('#table').AJQtable('view', $scope, $compile);
-                    $scope.updateList = false;
+                    $scope.customerName = angular.copy(data.customer.name);
+                    $scope.ubgeoNames(data.customer.addresses , function( addresses ){
+                        $scope.tableData = addresses;
+                        $('#table').AJQtable('view', $scope, $compile);
+                        $scope.updateList = false;
+                    });
                 }, function(error){
                     console.log(error);
                     toastr.error('Ups ocurrio un problema: ' + error.data.message);
@@ -75,29 +51,70 @@ angular.module('App')
                 });
         };
 
-        $scope.status = function( ind, dom ) {
-            alertConfig.title = "¿Desea cambiar el estado del cliente?";
-            var id = $scope.tableData[ind].id;
-            swal(alertConfig ,
-                function() {
-                    petition.delete('api/customer/' + id ).then(function(data){
-                        toastr.success(data.message);
-                        changeButton(ind , dom.target);
-                    },function(error){
-                        $log.log(error);
-                        toastr.error('Ups ocurrio un problema: ' + error.data.message);
-                    });
+        $scope.ubgeoNames = function( addresses, callback ){
+            for(var  i in addresses){
+                addresses[i].ubi = addresses[i].ubigeo.UBIDEN + ' - ' +
+                                    addresses[i].ubigeo.UBIPRN + ' - ' +
+                                    addresses[i].ubigeo.UBIDSN;
+            }
+            callback(addresses);
+        };
+
+        $scope.listDepa = function() {
+            console.log('1');
+            petition.get('api/ubigeo/departamento')
+                .then(function(data){
+                    $scope.ubigeo.dep = data.departamentos;
+                    $scope.ubigeo.pro = [];
+                    $scope.ubigeo.dis = [];
+                }, function(error){
+                    console.log(error);
+                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
                 });
         };
 
+        $scope.listProv = function() {
+            console.log('2');
+            petition.get('api/ubigeo/provincia/' + $scope.ubigeo.dep_id)
+                .then(function(data){
+                    $scope.ubigeo.pro = data.provincias;
+                    $scope.ubigeo.dis = [];
+                }, function(error){
+                    console.log(error);
+                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                });
+        };
+
+        $scope.listDist = function() {
+            console.log('3');
+            petition.get('api/ubigeo/distrito/' + $scope.ubigeo.pro_id)
+                .then(function(data){
+                    $scope.ubigeo.dis = data.distritos;
+                }, function(error){
+                    console.log(error);
+                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                });
+        };
+
+        $scope.$watch('ubigeo.dep_id', function() {
+            $scope.listProv();
+        });
+
+        $scope.$watch('ubigeo.pro_id', function() {
+            $scope.listDist();
+        });
+
+
         $scope.edit = function( ind ){
             $scope.address = angular.copy($scope.tableData[ind]);
+            $scope.ubigeo.dep_id = $scope.tableData[ind].ubigeo.UBIDEP;
+            $scope.ubigeo.pro_id = $scope.tableData[ind].ubigeo.UBIPRV;
             util.muestraformulario();
         };
 
         $scope.submit = function () {
             var method = ( $scope.address.id )?'PUT':'POST';
-            var url = ( method == 'PUT')? util.baseUrl('api/customer/' + $scope.address.id): util.baseUrl('api/customer');
+            var url = ( method == 'PUT')? util.baseUrl('api/customer/upd/address'): util.baseUrl('api/customer/add/address/' + $scope.id);
             var config = {
                 method: method,
                 url: url,
@@ -121,31 +138,25 @@ angular.module('App')
         };
 
         $scope.new = function(){
+            $scope.ubigeo.dep_id = null;
+            $scope.ubigeo.pro_id = null;
             $scope.address = angular.copy($scope.addressClear);
             util.muestraformulario();
         };
 
-        $scope.getStatus = function( status ){
-            if (status == 1)return 'Activo';
-            else return 'Inactivo';
+        $scope.phone = function(){
+            $state.go("Telefonos", { id: $scope.id });
         };
 
-        changeButton = function (ind, dom){
-            $scope.tableData[ind].status = ($scope.tableData[ind].status == 0)? 1 : 0;
-            if ( $scope.tableData[ind].status == 1){
-                $(dom).removeClass('btn-danger');
-                $(dom).addClass('btn-success');
-                $(dom).html('Activo');
-            }else{
-                $(dom).removeClass('btn-success');
-                $(dom).addClass('btn-danger');
-                $(dom).html('Inactivo');
-            }
+        $scope.social = function(){
+            $state.go("Socials", { id: $scope.id });
         };
 
         angular.element(document).ready(function(){
             $scope.id = $stateParams.id;
             $scope.address = angular.copy($scope.addressClear);
+            $scope.ubigeo = {};
             $scope.list();
+            $scope.listDepa();
         });
     });

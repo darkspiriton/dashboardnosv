@@ -5,7 +5,6 @@ namespace Dashboard\Http\Controllers;
 use Dashboard\Models\Kardex\Attribute;
 use Dashboard\Models\Kardex\Group_Attribute;
 use Dashboard\Models\Kardex\Kardex;
-use Dashboard\Models\Kardex\Type_Attribute;
 use Dashboard\Models\Product\Type;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -81,7 +80,6 @@ class ProductController extends Controller
                 //Falta Agregar atributos de productos
                 return response()->json(['message' => 'El producto se agrego correctamente'],200);
             }
-
             return response()->json(['message' => 'El producto ya esta registrado'],400);
 
         } catch (Exception $e) {

@@ -39,33 +39,46 @@ Route::group(['prefix'=>'dashboard','middleware'=>['auth']],function(){
 Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
     Route::resource('user','UserController',
                     ['only'=>['index','store','update','destroy','show']]);
+
     Route::resource('product','ProductController',
                     ['only'=>['index','store','update','destroy','show']]);
+
     Route::resource('attribute','AttributeController',
                     ['only'=>['index','store','update','destroy','show']]);
+
     Route::resource('customer','CustomerController',
                     ['only'=>['index','store','update','destroy','show']]);
+
     Route::resource('kardex','KardexController',
                     ['only'=>['index','store','update','destroy','show']]);
+
+    Route::resource('interest','InterestController',
+        ['only'=>['index','store','update','show']]);
+    
     Route::group(['prefix'=>'ubigeo'],function(){
         Route::get('/departamento','UbigeoController@departamento');
         Route::get('/provincia/{provincia}','UbigeoController@provincia');
         Route::get('/distrito/{distrito}','UbigeoController@distrito');
     });
+
     Route::group(['prefix'=>'type_product'],function(){
         Route::get('/','ProductController@types');
     });
+
     Route::group(['prefix'=>'operador'],function(){
         Route::get('/','OperadorController@index');
     });
+    
     Route::group(['prefix'=>'social'],function(){
         Route::get('/','SocialController@index');
     });
+
     Route::group(['prefix'=>'customer/add'],function(){
         Route::post('/address/{address}','CustomerController@addressAdd');
         Route::post('/phone/{phone}','CustomerController@phoneAdd');
         Route::post('/social/{social}','CustomerController@socialAdd');
     });
+
     Route::group(['prefix'=>'customer/upd'],function(){
         Route::put('/address','CustomerController@addressUpdate');
         Route::put('/phone','CustomerController@phoneUpdate');
@@ -75,6 +88,6 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
     Route::get('validate-key','HomeController@validar');
 
     Route::resource('scope','ScopeController',
-        ['only'=>['index','store','update','destroy','show']]);
+        ['only'=>['index','store','update','show']]);
 
 });

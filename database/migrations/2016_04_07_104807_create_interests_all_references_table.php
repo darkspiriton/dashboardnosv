@@ -20,7 +20,7 @@ class CreateInterestsAllReferencesTable extends Migration
             $table->integer('customer_id')->unsigned()->increments();
             $table->integer('user_id')->unsigned()->increments();
             $table->string('observation');
-            $table->timestamp('date');
+            $table->timestamps();
         });
 
         // Interest Details

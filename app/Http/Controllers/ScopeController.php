@@ -2,6 +2,7 @@
 
 namespace Dashboard\Http\Controllers;
 
+use Dashboard\Models\Scope\Detail;
 use Dashboard\Models\Scope\Scope;
 use Illuminate\Http\Request;
 
@@ -59,13 +60,14 @@ class ScopeController extends Controller
             $scope->name= strtolower($name);
             $scope->save();
 
-            $details = $request->input('scopes');
+            $detalles = $request->input('scopes');
 
-            foreach ($details as $detail){
-                //Scope ID & product ID
-                //Que se vincule a SCOPES
+            foreach ($detalles as $detalle){
+                $detail= New Detail();
+                $detail->scope_id=$scope->id;
+                $detail->product_id=$detalle->product_id;
+                $scope->details()->save($detail);
             }
-
 
             //Falta Agregar atributos de productos
             return response()->json(['message' => 'El cliente se agrego correctamente'],200);
@@ -85,7 +87,24 @@ class ScopeController extends Controller
      */
     public function show($id)
     {
-        //
+        try{
+            $scope = Scope::find($id);
+            if ($scope !== null) {
+
+                $scope->details;
+
+                return response()->json([
+                    'message' => 'Mostrar detalles de producto',
+                    'scope'=> $scope,
+
+                    //'attributes' => $product->attributes,
+                ],200);
+            }
+            return \Response::json(['message' => 'No existe ese producto'], 404);
+
+        }catch (ErrorException $e){
+            return \Response::json(['message' => 'Ocurrio un error'], 500);
+        }
     }
 
     /**
@@ -97,17 +116,29 @@ class ScopeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
-    }
+        $user=$request->input('user');
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        try{
+            $scope = Scope::find($id);
+            if ($scope !== null) {
+                $name = $request->input('name');
+                $scope->user_id= $user['sub'];
+                $scope->channel_id= $request->input('channel_id');
+                $scope->type_id= $request->input('type_id');
+                $scope->observation= $request->input('observation');
+                $scope->name= strtolower($name);
+                $scope->save();
+
+//                $product = DB::table('products')->where('name','=',$request->input('name'))->get();
+//                $cant = $request->input('cant');
+//                $attributes=$request->input('attributes');
+//                $this->addKardex($product->id,$cant,$attributes);
+
+                return response()->json(['message' => 'Se actualizo correctamente'],200);
+            }
+            return \Response::json(['message' => 'No existe ese usuario'], 404);
+        }catch (ErrorException $e){
+            return \Response::json(['message' => 'Ocurrio un error'], 500);
+        }
     }
 }

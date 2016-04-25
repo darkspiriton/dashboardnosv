@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Scope extends Model
 {
-    protected  $table='scopes';
+    protected  $table = 'scopes';
+    public $timestamps = false;
 
     public function type(){
         return $this->belongsTo(Type::class);

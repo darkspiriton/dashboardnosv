@@ -31,7 +31,7 @@ class KardexController extends Controller
      */
     public function store(Request $request)
     {
-
+        
     }
 
     /**

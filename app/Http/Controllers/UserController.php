@@ -33,7 +33,6 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-
         if (!is_array($request->all())) {
             return response()->json(['message' => 'request must be an array'],401);
         }
@@ -56,8 +55,8 @@ class UserController extends Controller
             if ($validator->fails()) {
                 return response()->json(['message' => 'No posee todo los campos necesario para crear un usuario'],401);
             }
-            // Si el validador pasa, almacenamos el comentario
 
+            // Si el validador pasa, almacenamos el comentario
             $userAux=DB::table('users')->where('email',$request->input('email'))->get();
 
             if(count($userAux) == 0 ){

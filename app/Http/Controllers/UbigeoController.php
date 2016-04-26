@@ -22,8 +22,7 @@ class UbigeoController extends Controller
             return response()->json([
                 'message' => 'No se encuentran los departamentos'                
             ],404);
-        }
-        
+        }        
     }
 
     public function provincia($id){

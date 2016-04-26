@@ -103,7 +103,7 @@ class ProductController extends Controller
         if (!$product)
             return $temp;
         else
-            return product_code_generate();
+            return $this->product_code_generate();
     }
 
     private function addKardex($id,$cant,$attributes){

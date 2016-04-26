@@ -43,17 +43,26 @@ class AttributeController extends Controller
      */
     public function show($id)
     {
-        $attributes =  DB::table('attributes_kardexs')
-                            ->select(array('attributes_kardexs.id','types_attributes.name', 'attributes.valor'))
-                            ->join('attributes', function ($join) {
-                                    $join->on('attributes_kardexs.attribute_id', '=', 'attributes.id');
+        try{
+            $attributes =  DB::table('attributes_kardexs')
+                                ->select(array('attributes_kardexs.id','types_attributes.name', 'attributes.valor'))
+                                ->join('attributes', function ($join) {
+                                        $join->on('attributes_kardexs.attribute_id', '=', 'attributes.id');
+                                    })
+                                ->join('types_attributes', function ($join) {
+                                    $join->on('attributes.type_id', '=', 'types_attributes.id');
                                 })
-                            ->join('types_attributes', function ($join) {
-                                $join->on('attributes.type_id', '=', 'types_attributes.id');
-                            })
-                            ->where('group_attribute_id',$id)
-                            ->get();
-        return response()->json(['attributes' => $attributes],200);
+                                ->where('group_attribute_id',$id)
+                                ->get();
+            if($attributes != null){
+                return response()->json(['attributes' => $attributes],200);
+            }else{
+                return response()->json(['message' => 'No se encontro los atributos'],404);
+            }
+        }catch(ErrorException $e){
+            return response()->json(['message' => 'Ocurrio un error'],500);
+        }
+        
     }
 
 

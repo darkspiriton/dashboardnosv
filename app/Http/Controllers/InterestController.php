@@ -40,7 +40,6 @@ class InterestController extends Controller
             'channel_id'      => 'required',
             'customer_id'      => 'required',
             'observation'      => 'required',
-            //falta validar los atributos
         ];
 
         try {
@@ -55,25 +54,26 @@ class InterestController extends Controller
             $interest = new Interest();
             $interest->user_id= $user['sub'];
             $interest->channel_id= $request->input('channel_id');
-            $interest->status_id= $request->input('status_id');
             $interest->customer_id= $request->input('customer_id');
+            $interest->status_id= $request->input('status_id');
             $interest->observation= $request->input('observation');
             $interest->save();
 
-            $detalles = $request->input('interests');
+            //Falta validar la creacion de detalle del Interes 26-04-2016
+            $details = $request->input('interests');
             $interestAux = DB::table('interests')
                         ->where('customer_id','=',$request->input('customer_id'))
                         ->orderBy('created_at','desc')
                         ->first();
 
-//            foreach ($detalles as $detalle){
-//                $detail= New Detail();
-//                $detail->interest_id=$interestAux->id;
-//                $detail->product_id=$detalle->product_id;
-//                $interestAux->details()->save($detail);
-//            }
+            //Recorrer el detalle de ordenes y agregarlos
+            foreach ($details as $detail){
+                $interestDetail= New Detail();
+                $interestDetail->interest_id=$interestAux->id;
+                $interestDetail->product_id=$detail->product_id;
+                $interestAux->details()->save($interestDetail);
+            }
 
-            //Falta Agregar atributos de productos
             return response()->json(['message' => 'El registro de interes se agrego correctamente'],200);
 
         } catch (Exception $e) {
@@ -103,8 +103,6 @@ class InterestController extends Controller
                 return response()->json([
                     'message' => 'Mostrar detalles de registro de interes',
                     'interest'=> $interest,
-
-                    //'attributes' => $product->attributes,
                 ],200);
             }
             return \Response::json(['message' => 'No existe ese registro de interes'], 404);
@@ -134,7 +132,7 @@ class InterestController extends Controller
                 $interest->observation= $request->input('observation');
                 $interest->save();
 
-                //falta vincular el detalle
+                //Faltar vincular la actualizacion del detalle del interes
 
                 return response()->json(['message' => 'Se actualizo correctamente el registro de interes'],200);
             }
@@ -152,6 +150,7 @@ class InterestController extends Controller
      */
     public function destroy($id)
     {
+        //Esto no elimina la orden de pedido solo actualiza su estado
         try{
             $interest = Interest::find($id);
             if ($interest->status == 1){

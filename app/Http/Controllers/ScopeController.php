@@ -36,11 +36,10 @@ class ScopeController extends Controller
 
         // Creamos las reglas de validación
         $rules = [
-            'channel_id'      => 'required',
+            'channel_id'   => 'required',
             'type_id'      => 'required',
-            'observation'     => 'required',
-            'name'     => 'required',
-            //falta validar los atributos
+            'observation'  => 'required',
+            'name'         => 'required',
         ];
 
         try {
@@ -60,16 +59,21 @@ class ScopeController extends Controller
             $scope->name= strtolower($name);
             $scope->save();
 
-            $detalles = $request->input('scopes');
+            //Falta validar la creacion de detalle de alcance 26-04-2016
+            $details = $request->input('scopes');
+            $scopeAux = DB::table('orders')
+                ->where('customer_id','=',$request->input('customer_id'))
+                ->orderBy('created_at','desc')
+                ->first();
 
-            foreach ($detalles as $detalle){
-                $detail= New Detail();
-                $detail->scope_id=$scope->id;
-                $detail->product_id=$detalle->product_id;
-                $scope->details()->save($detail);
+            //Recorrer el detalle de alcance y los agrega
+            foreach ($details as $detail) {
+                $scopeDetail = New Detail();
+                $scopeDetail->scope_id = $scopeAux->id;
+                $scopeDetail->product_id = $detail->product_id;
+                $scopeAux->details()->save($scopeDetail);
             }
 
-            //Falta Agregar atributos de productos
             return response()->json(['message' => 'El cliente se agrego correctamente'],200);
 
         } catch (Exception $e) {
@@ -96,8 +100,6 @@ class ScopeController extends Controller
                 return response()->json([
                     'message' => 'Mostrar detalles de producto',
                     'scope'=> $scope,
-
-                    //'attributes' => $product->attributes,
                 ],200);
             }
             return \Response::json(['message' => 'No existe ese producto'], 404);
@@ -129,6 +131,7 @@ class ScopeController extends Controller
                 $scope->name= strtolower($name);
                 $scope->save();
 
+                //Faltar vincular la actualizacion del detalle del alcance
 //                $product = DB::table('products')->where('name','=',$request->input('name'))->get();
 //                $cant = $request->input('cant');
 //                $attributes=$request->input('attributes');

@@ -17,9 +17,9 @@ class Shipment extends Model
         return $this->belongsTo(Type::class);
     }
 
-    public function routes(){
-        return $this->hasMany(Route::class);
-    }
+//    public function routes(){
+//        return $this->hasMany(Route::class);
+//    }
 
     public function order(){
         return $this->belongsTo(Order::class);

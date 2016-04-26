@@ -28,6 +28,6 @@ class Interest extends Model
     }
     
     public function details(){
-        return $this->hasMany(Interest::class);
+        return $this->hasMany(Detail::class);
     }
 }

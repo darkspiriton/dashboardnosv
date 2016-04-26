@@ -2,11 +2,10 @@
 
 namespace Dashboard\Http\Controllers;
 
-use Dashboard\Models\Interest\Detail;
 use Dashboard\Models\Interest\Interest;
 use Illuminate\Http\Request;
-
 use Dashboard\Http\Requests;
+use Illuminate\Support\Facades\DB;
 
 class InterestController extends Controller
 {
@@ -65,14 +64,14 @@ class InterestController extends Controller
             $interestAux = DB::table('interests')
                         ->where('customer_id','=',$request->input('customer_id'))
                         ->orderBy('created_at','desc')
-                        ->get();
+                        ->first();
 
-            foreach ($detalles as $detalle){
-                $detail= New Detail();
-                $detail->interest_id=$interestAux->id;
-                $detail->product_id=$detalle->product_id;
-                $interestAux->details()->save($detail);
-            }
+//            foreach ($detalles as $detalle){
+//                $detail= New Detail();
+//                $detail->interest_id=$interestAux->id;
+//                $detail->product_id=$detalle->product_id;
+//                $interestAux->details()->save($detail);
+//            }
 
             //Falta Agregar atributos de productos
             return response()->json(['message' => 'El registro de interes se agrego correctamente'],200);

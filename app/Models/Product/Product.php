@@ -2,6 +2,7 @@
 
 namespace Dashboard\Models\Product;
 
+use Dashboard\Models\Interest\Detail;
 use Dashboard\Models\Kardex\Kardex;
 use Illuminate\Database\Eloquent\Model;
 
@@ -33,6 +34,10 @@ class Product extends Model
     
     public function type(){
         return $this->belongsTo(Type::class);
+    }
+
+    public function details(){
+        return $this->hasMany(Detail::class);
     }
 
 }

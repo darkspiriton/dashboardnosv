@@ -54,6 +54,9 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
 
     Route::resource('interest','InterestController',
         ['only'=>['index','store','update','show']]);
+
+    Route::resource('order','OrderController',
+        ['only'=>['index','store','update','destroy','show']]);
     
     Route::group(['prefix'=>'ubigeo'],function(){
         Route::get('/departamento','UbigeoController@departamento');

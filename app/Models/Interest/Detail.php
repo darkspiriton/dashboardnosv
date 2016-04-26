@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Detail extends Model
 {
+    protected $table = 'interest_details';
+    
     public function product(){
         return $this->belongsTo(Product::class);
     }

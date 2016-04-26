@@ -279,7 +279,7 @@ angular.module('App')
                 $(dom).removeClass('btn-danger');
                 $(dom).addClass('btn-success');
                 $(dom).html('Activo');
-            }else{
+            } else {
                 $(dom).removeClass('btn-success');
                 $(dom).addClass('btn-danger');
                 $(dom).html('Inactivo');
@@ -290,9 +290,17 @@ angular.module('App')
             $state.go("Kardex", { id: $scope.tableData[ind].id });
         };
 
+        $scope.$watch("productDetail.image", function( newVal, oldVal, scope ){
+            if (!newVal) return;
+            var route = 'img/products/' + newVal;
+            route = util.baseUrl(route);
+            scope.viewImage = route;
+        });
+
         angular.element(document).ready(function(){
             $scope.product = angular.copy($scope.productClear);
             $scope.newAttr = angular.copy($scope.newAttrClear);
+            $scope.productDetail = {};
             $scope.count = 0;
             $scope.index = null;
             $scope.list();

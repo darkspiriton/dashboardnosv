@@ -39,7 +39,7 @@ class ScopeController extends Controller
             'channel_id'   => 'required',
             'type_id'      => 'required',
             'observation'  => 'required',
-            'name'         => 'required',
+            'name'         => 'required'
         ];
 
         try {

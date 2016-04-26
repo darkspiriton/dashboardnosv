@@ -15,6 +15,26 @@ class ProductsTableSeeder extends Seeder
         $faker = Faker::create();
 
         DB::transaction(function () {
+            DB::table('status_interests')->insert(['name' => 'Status 1']);
+            DB::table('status_interests')->insert(['name' => 'Status 2']);
+            DB::table('status_interests')->insert(['name' => 'Status 3']);
+            DB::table('status_interests')->insert(['name' => 'Status 4']);
+            DB::table('status_interests')->insert(['name' => 'Status 5']);
+            DB::table('status_interests')->insert(['name' => 'Status 6']);
+            DB::table('status_interests')->insert(['name' => 'Status 7']);
+        });
+
+        DB::transaction(function () {
+            DB::table('types_scope')->insert(['name' => 'Tiempo 1']);
+            DB::table('types_scope')->insert(['name' => 'Tiempo 2']);
+            DB::table('types_scope')->insert(['name' => 'Tiempo 3']);
+            DB::table('types_scope')->insert(['name' => 'Tiempo 4']);
+            DB::table('types_scope')->insert(['name' => 'Tiempo 5']);
+            DB::table('types_scope')->insert(['name' => 'Tiempo 6']);
+            DB::table('types_scope')->insert(['name' => 'Tiempo 7']);
+        });
+
+        DB::transaction(function () {
             DB::table('types_products')->insert(['name' => 'Bolsa']);
             DB::table('types_products')->insert(['name' => 'Blusa']);
             DB::table('types_products')->insert(['name' => 'Ropa']);

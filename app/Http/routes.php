@@ -61,7 +61,7 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
 
     //Rutas para API REST Registro de Interes
     Route::resource('interest','InterestController',
-        ['only'=>['index','store','update','show']]);
+        ['only'=>['index','store','update','destroy','show']]);
 
     //Rutas para API REST Orden de Pedido
     Route::resource('order','OrderController',

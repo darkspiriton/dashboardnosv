@@ -3,6 +3,7 @@
 namespace Dashboard\Http\Controllers;
 
 use Dashboard\Models\Interest\Interest;
+use Dashboard\Models\Scope\Scope;
 use Illuminate\Http\Request;
 use Dashboard\Http\Requests;
 use Illuminate\Support\Facades\DB;
@@ -142,25 +143,15 @@ class InterestController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function destroy(Request $request,$id)
     {
         //Esto no elimina la orden de pedido solo actualiza su estado
         try{
-            $interest = Interest::find($id);
-            if ($interest->status == 1){
-                $interest->status = 0 ;
-                $interest->save();
+            $scope = Scope::find($id);
+            if($scope != null) {
+                $scope->status_id=$request->input('status_id');
+                $scope->save();
                 return response()->json(['message' => 'Se desactivo correctamente el registro de interes'],200);
-            }elseif ($interest->status == 0){
-                $interest->status = 1;
-                $interest->save();
-                return response()->json(['message' => 'Se activo correctamente el registro de interes'],200);
             }
             return \Response::json(['message' => 'No existe el registro de interes'], 404);
         }catch (ErrorException $e){

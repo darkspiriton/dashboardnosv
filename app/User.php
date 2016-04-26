@@ -2,6 +2,9 @@
 
 namespace Dashboard;
 
+use Dashboard\Models\Interest\Interest;
+use Dashboard\Models\Order\Order;
+use Dashboard\Models\Scope\Scope;
 use Illuminate\Database\Eloquent\Model;
 use Dashboard\Models\Customer\Customer;
 
@@ -29,5 +32,17 @@ class User extends Model
 
     public function customers(){
         return $this->hasMany(Customer::class);
+    }
+
+    public function scopes(){
+        return $this->hasMany(Scope::class);
+    }
+
+    public function interests(){
+        return $this->hasMany(Interest::class);
+    }
+
+    public function orders(){
+        return $this->hasMany(Order::class);
     }
 }

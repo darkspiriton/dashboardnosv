@@ -2,6 +2,8 @@
 
 namespace Dashboard\Models\Customer;
 
+use Dashboard\Models\Interest\Interest;
+use Dashboard\Models\Order\Order;
 use Illuminate\Database\Eloquent\Model;
 use Dashboard\User;
 
@@ -28,4 +30,14 @@ class Customer extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
+
+    public function interests(){
+        return $this->hasMany(Interest::class);
+    }
+
+    public function orders(){
+        return $this->hasMany(Order::class);
+    }
+
+    
 }

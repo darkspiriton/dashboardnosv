@@ -32,17 +32,6 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-//            return url('img/products');
-//        var_dump(json_decode($request->input('groupAttr'), true));
-//        return response()->json($request->all(),200);
-//        $name = $request->file('img');
-//
-//        echo $name->getClientOriginalExtension().'   ';
-//        echo $name->getClientMimeType().'   ';
-//        echo $name->getClientSize().'   ';
-////        $name = $name['name'];
-//        echo $name->getClientOriginalName();
-//        return '';
 
         // Creamos las reglas de validación
         $rules = [

@@ -2,6 +2,8 @@
 
 namespace Dashboard\Models\Scope;
 
+use Dashboard\Models\Customer\Channel;
+use Dashboard\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Scope extends Model
@@ -16,4 +18,13 @@ class Scope extends Model
     public function details(){
         return $this->hasMany(Detail::class);
     }
+
+    public function channel(){
+        return $this->belongsTo(Channel::class);
+    }
+    
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
+
 }

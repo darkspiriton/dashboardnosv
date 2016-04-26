@@ -151,19 +151,15 @@ class ScopeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         //Esto no elimina la orden de pedido solo actualiza su estado
         try{
             $scope = Scope::find($id);
-            if ($scope->status == 1){
-                $interest->status = 0 ;
-                $interest->save();
+            if($scope != null) {
+                $scope->status_id=$request->input('status_id');
+                $scope->save();
                 return response()->json(['message' => 'Se desactivo correctamente el registro de interes'],200);
-            }elseif ($interest->status == 0){
-                $interest->status = 1;
-                $interest->save();
-                return response()->json(['message' => 'Se activo correctamente el registro de interes'],200);
             }
             return \Response::json(['message' => 'No existe el registro de interes'], 404);
         }catch (ErrorException $e){

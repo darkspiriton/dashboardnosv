@@ -15,12 +15,11 @@ class KardexController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $kardexs= Product::all();
-        foreach ($kardexs as $kardex){
-            $kardex->kardexs;
-        }
+        $id = $request->input('id');
+        $kardexs= Product::find($id);
+        $kardexs->kardexs;
         return response()->json(['products' => $kardexs],200);
     }
 

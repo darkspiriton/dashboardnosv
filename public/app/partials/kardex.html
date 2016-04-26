@@ -1,6 +1,6 @@
 <div class="card" >
     <div class="card-header bgm-blue">
-        <h2>Gestion de productos</h2>
+        <h2>Vista de Kardex de producto {{ productName }}</h2>
         <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="list()"
                 data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
                 title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
@@ -25,43 +25,23 @@
             </div>
             <div class="modal-body card-padding">
                 <form class="form-horizontal" autocomplete="off" submit="return false;">
-                    <div class="form-group form-pad-top">
-                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Codigo: </label>
-                        <label class="col-xs-6 col-sm-2 control-label" style="text-align: left" ng-bind="productDetail.product_code"></label>
-
-                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-0 col-sm-2 control-label">Nombre: </label>
-                        <label class="col-xs-6 col-sm-4 control-label" style="text-align: left" ng-bind="productDetail.name"></label>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">precio: </label>
-                        <label class="col-xs-6 col-sm-2 control-label" style="text-align: left" ng-bind="productDetail.price"></label>
-
-                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-0 col-sm-2 control-label">Imagen: </label>
-                        <img class="col-xs-6 col-sm-4 control-label" ng-src="{{productDetail.image}}"/>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Estado: </label>
-                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="getStatus(productDetail.status)"></label>
-                    </div>
-                    <div class="form-group">
+                    <div class="form-group m-b-0">
                         <div class="row">
-                            <div ng-repeat="kardex in productDetail.kardexs">
-                                <div class="attr-group col-xs-12 col-sm-6">
-                                    <table class="table table-bordered w-100 table-attr text-center">
-                                        <thead>
-                                        <tr>
-                                            <th>Atributo</th>
-                                            <th>Valor</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr ng-repeat="attribute in kardex.attributes">
-                                            <td>Atributo name</td>
-                                            <td>{{ attribute.valor }}</td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+                            <div class="attr-group col-xs-12 m-b-0">
+                                <table class="table table-bordered w-100 table-attr text-center">
+                                    <thead>
+                                    <tr>
+                                        <th>Atributo</th>
+                                        <th>Valor</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="attribute in kardexAttributes">
+                                        <td>{{ attribute.name }}</td>
+                                        <td>{{ attribute.valor }}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>

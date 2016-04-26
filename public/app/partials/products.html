@@ -33,8 +33,8 @@
                         <div class="input-group">
                             <span class="input-group-addon"><i class="md md-person"></i></span>
                             <div class="fg-line">
-                                <input ng-model="empleado.id" type="hidden">
-                                <input ng-model="empleado.first_name" type="text" class="form-control" placeholder="Kasandra" required>
+                                <input ng-model="product.id" type="hidden">
+                                <input ng-model="product.name" type="text" class="form-control" placeholder="Kasandra" required>
                             </div>
                         </div>
                     </div>
@@ -44,7 +44,7 @@
                         <div class="input-group">
                             <span class="input-group-addon"><i class="md md-person"></i></span>
                             <div class="fg-line">
-                                <input ng-model="empleado.last_name" type="text" class="form-control" placeholder="65.00" required>
+                                <input ng-model="product.price" type="text" class="form-control" placeholder="65.00" required>
                             </div>
                         </div>
                     </div>
@@ -54,9 +54,34 @@
                     <label class="col-xs-2 col-sm-2 control-label">Imagen de producto (500x400 px)</label>
                     <div class="col-xs-10 col-sm-4">
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="md md-lock"></i></span>
+                            <span class="input-group-addon"><i class="md md-picture-in-picture"></i></span>
                             <div class="fg-line">
-                                <input type="file" class="form-control input-sm" file-model="product.img" ng-required="imgRequired">
+                                <input type="file" class="form-control input-sm" file-model="product.img" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <label class="col-xs-2 col-sm-2 control-label">Tipo de producto</label>
+                    <div class="col-xs-10 col-sm-4">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="md md-list"></i></span>
+                            <div class="fg-line select">
+                                <select class="form-control" ng-options="type.id as type.name for type in typeProduct" ng-model="product.type_product_id" required>
+                                    <option value="" disabled="disabled" select="true">Seleccione</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-xs-2 col-sm-2 control-label">Activar/Desactivar</label>
+                    <div class="col-xs-10 col-sm-4">
+                        <div class="input-group">
+                            <div class="toggle-switch" data-ts-color="green">
+                                <label for="ts4" class="ts-label"></label>
+                                <input ng-true-value="1" ng-false-value="0" ng-checked="product.status" ng-model="product.status" id="ts4" type="checkbox" hidden="hidden">
+                                <label for="ts4" class="ts-helper"></label>
                             </div>
                         </div>
                     </div>
@@ -73,7 +98,7 @@
             <div class="row groups-attr">
                     <div ng-repeat="grp in product.groupAttr">
                         <div class="attr-group col-xs-12 col-sm-6">
-                            <h5> Grupo: {{ grp.id }} </h5>
+                            <h5> Cantidad (stock): {{ grp.quantity }} </h5>
                             <table id="table_none" class="table table-bordered w-100 table-attr text-center">
                                 <thead>
                                     <tr>
@@ -91,7 +116,8 @@
                                 </tbody>
                             </table>
                             <div class="attr-buttons">
-                                <button ng-click="showAttr(grp)" type="button" class="btn btn-success btn-sm waves-effect">Agregar Atributo</button>
+                                <button ng-click="showAttr(grp)" type="button" class="btn btn-success btn-sm waves-effect">Agregar o Reemplazar Atributo</button>
+                                <button ng-click="showQuant(grp)" type="button" class="btn bgm-purple btn-sm waves-effect">Agregar Cantidad</button>
                                 <button ng-click="duplicateGrpAttr(grp)" type="button" class="btn btn-primary btn-sm waves-effect">Duplicar grupo</button>
                                 <button ng-click="removeGrpAttr(grp)" type="button" class="btn bgm-red btn-sm waves-effect">Eliminar grupo</button>
                             </div>
@@ -104,7 +130,7 @@
                     <div class="col-sm-offset-2 col-sm-10">
                         <button ng-disabled="!formuser.$valid" ng-disabled="formSubmit"  ng-click="submit()" type="button" class="btn btn-primary btn-sm waves-effect">Guardar</button>
                         <a ng-click="cancel()" class="btn btn-danger btn-sm waves-effect">Cancelar</a>
-                        <a ng-click="cancel2()" class="btn btn-danger btn-sm waves-effect">scope</a>
+                        <a ng-click="submit2()" class="btn btn-danger btn-sm waves-effect">scope</a>
                     </div>
                 </div>
             </form>
@@ -119,7 +145,7 @@
             <div class="modal-header bgm-teal">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h3 class="modal-title c-white">Detalle de usuario</h3>
+                <h3 class="modal-title c-white">Detalle de producto: {{ productDetail.name }}</h3>
             </div>
             <div class="modal-body card-padding">
                 <form class="form-horizontal" autocomplete="off" submit="return false;">
@@ -135,7 +161,7 @@
                         <label class="col-xs-6 col-sm-2 control-label" style="text-align: left" ng-bind="productDetail.price"></label>
 
                         <label class="col-xs-4 col-xs-offset-1 col-sm-offset-0 col-sm-2 control-label">Imagen: </label>
-                        <img class="col-xs-6 col-sm-4 control-label" ng-src="{{productDetail.image}}"/>
+                        <img class="col-xs-6 col-sm-4 control-label" ng-src="{{ util.baseUrl('img/products/') + productDetail.image}}"/>
                     </div>
                     <div class="form-group">
                         <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Estado: </label>
@@ -143,8 +169,8 @@
                     </div>
                     <div class="form-group">
                         <div class="row">
-                            <div ng-repeat="kardex in productDetail.kardexs">
-                                <div class="attr-group col-xs-12 col-sm-6">
+                            <div ng-repeat="GroupAttributes in productGroupAttributes">
+                                <div class="attr-group col-xs-12">
                                     <table class="table table-bordered w-100 table-attr text-center">
                                         <thead>
                                             <tr>
@@ -153,8 +179,8 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr ng-repeat="attribute in kardex.attributes">
-                                                <td>Atributo name</td>
+                                            <tr ng-repeat="attribute in GroupAttributes">
+                                                <td>{{ attribute.name }}</td>
                                                 <td>{{ attribute.valor }}</td>
                                             </tr>
                                         </tbody>
@@ -207,6 +233,39 @@
                         <div class="col-sm-offset-2 col-sm-10">
                             <button ng-disabled="!addAttr.$valid" ng-click="addAttrGrp()" type="button" class="btn btn-primary btn-sm waves-effect">Agregar</button>
                             <button ng-click="cancelAddAttr()" type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="addQuant" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bgm-teal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                    <h3 class="modal-title c-white">Agregar Cantidad</h3>
+            </div>
+            <div class="modal-body card-padding">
+                <form name="addQuant" class="form-horizontal" autocomplete="off">
+                    <div class="form-group">
+                        <label class="col-xs-2 col-sm-5 control-label">Ingrese la cantidad de productos</label>
+                        <div class="col-xs-10 col-sm-2">
+                            <input ng-model="quantity" type="text" class="form-control" placeholder="25" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button ng-disabled="!addQuant.$valid" ng-click="addQuantGrp()" type="button" class="btn btn-primary btn-sm waves-effect">Agregar</button>
+                            <button ng-click="cancelAddQuant()" type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
                         </div>
                     </div>
                 </form>

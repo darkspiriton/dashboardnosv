@@ -16,14 +16,12 @@ class AttributeController extends Controller
      */
     public function index()
     {
-
         $types=Type_Attribute::all();
 
         foreach ($types as $type) {
             $type->att;
         }
         return response()->json(['types' => $types],200);
-
     }
 
     /**
@@ -45,7 +43,17 @@ class AttributeController extends Controller
      */
     public function show($id)
     {
-        //
+        $attributes =  DB::table('attributes_kardexs')
+                            ->select(array('attributes_kardexs.id','types_attributes.name', 'attributes.valor'))
+                            ->join('attributes', function ($join) {
+                                    $join->on('attributes_kardexs.attribute_id', '=', 'attributes.id');
+                                })
+                            ->join('types_attributes', function ($join) {
+                                $join->on('attributes.type_id', '=', 'types_attributes.id');
+                            })
+                            ->where('group_attribute_id',$id)
+                            ->get();
+        return response()->json(['attributes' => $attributes],200);
     }
 
 

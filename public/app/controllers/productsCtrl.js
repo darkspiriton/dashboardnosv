@@ -7,7 +7,7 @@ angular.module('App')
                 controller : 'productsCtrl'
             });
     })
-    .controller('productsCtrl', function($scope, $compile, $state, $log, util, petition, toastr){
+    .controller('productsCtrl', function($scope, $compile, $state, $log, util, petition, toformData, toastr){
 
         util.liPage('products');
 
@@ -52,7 +52,10 @@ angular.module('App')
 
         $scope.productClear = {
             name: '',
+            img: null,
             price: null,
+            status : 0,
+            type_product_id: null,
             groupAttr: []
         };
 
@@ -84,12 +87,22 @@ angular.module('App')
                 });
         };
 
+        $scope.listTypeProduct = function() {
+            petition.get('api/type_product')
+                .then(function(data){
+                    $scope.typeProduct = data.types;
+                }, function(error){
+                    console.log(error);
+                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                });
+        };
+
         $scope.view = function( ind ){
             var id = $scope.tableData[ind].id;
-            petition.get('api/product/' + id)
+            petition.get('api/product/group_attributes/' + id )
                 .then(function(data){
-                    $log.log(data);
-                    $scope.productDetail = data.product;
+                    $scope.productGroupAttributes = data.grp_attributes;
+                    $scope.productDetail = angular.copy($scope.tableData[ind]);
                     util.modal();
                 }, function(error){
                     toastr.error('Ups ocurrio un problema: ' + error.data.message);
@@ -125,28 +138,28 @@ angular.module('App')
         //            toastr.error('Ups ocurrio un problema: ' + error.data.message);
         //        });
         //};
-        //
-        //$scope.submit = function () {
-        //    var method = ( $scope.empleado.id )?'PUT':'POST';
-        //    var url = ( method == 'PUT')? util.baseUrl('api/user/' + $scope.empleado.id): util.baseUrl('api/user');
-        //    if ( $scope.empleado.password == '**********' )
-        //        $scope.empleado.password = null;
-        //    var config = {
-        //        method: method,
-        //        url: url,
-        //        params: $scope.empleado
-        //    };
-        //    $scope.formSubmit=true;
-        //    petition.custom(config).then(function(data){
-        //        toastr.success(data.message);
-        //        $scope.formSubmit=false;
-        //        $scope.list();
-        //        util.ocultaformulario();
-        //    }, function(error){
-        //        toastr.error('Ups ocurrio un problema: ' + error.data.message);
-        //        $scope.formSubmit=false;
-        //    });
-        //};
+
+        $scope.submit = function () {
+            var method = ( $scope.product.id )?'PUT':'POST';
+            var url = ( method == 'PUT')? util.baseUrl('api/product/' + $scope.product.id): util.baseUrl('api/product');
+            var config = {
+                method: method,
+                url: url,
+                data: toformData.dataFile($scope.product),
+                headers: {'Content-Type': undefined}
+            };
+            $scope.formSubmit=true;
+            $log.log($scope.product);
+            petition.custom(config).then(function(data){
+                toastr.success(data.message);
+                $scope.formSubmit=false;
+                $scope.list();
+                util.ocultaformulario();
+            }, function(error){
+                toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                $scope.formSubmit=false;
+            });
+        };
 
         $scope.cancel = function () {
             $scope.product = angular.copy($scope.productClear);
@@ -167,7 +180,6 @@ angular.module('App')
             else return 'Inactivo';
         };
 
-
         // Adds Attributes
 
         $scope.showAttr = function ( item ){
@@ -181,7 +193,7 @@ angular.module('App')
         };
 
         $scope.cancelAddAttr = function(){
-            $scope.newAttr = angular.copy($scope.newAttrClear);
+            util.modalClose('addAttr');
         };
 
         $scope.addAttrGrp = function(){
@@ -195,6 +207,9 @@ angular.module('App')
 
             if (count == 0)$scope.product.groupAttr[$scope.index].attributes.push(angular.copy($scope.newAttr));
             util.modalClose('addAttr');
+
+            $scope.attr_index = null;
+            $scope.newAttr.val_id = null;
         };
 
         $scope.removeAttr = function( grpAttr, item ){
@@ -216,7 +231,7 @@ angular.module('App')
         };
 
         $scope.duplicateGrpAttr = function( item ){
-            $scope.count += 1;
+            $scope.count++;
             item.id = $scope.count;
             $scope.product.groupAttr.push(angular.copy(angular.copy(item)));
         };
@@ -239,6 +254,21 @@ angular.module('App')
                     }
                 }
             }
+        };
+
+        $scope.showQuant = function ( item ){
+            $scope.index = $scope.product.groupAttr.indexOf(item);
+            util.modal('addQuant');
+        };
+
+        $scope.cancelAddQuant = function(){
+            util.modalClose('addAttr');
+        };
+
+        $scope.addQuantGrp = function(){
+            $scope.product.groupAttr[$scope.index].quantity = angular.copy($scope.quantity);
+            util.modalClose('addQuant');
+            $scope.quantity = null;
         };
 
         // end Attributes
@@ -267,5 +297,6 @@ angular.module('App')
             $scope.index = null;
             $scope.list();
             $scope.listAttr();
+            $scope.listTypeProduct();
         });
     });

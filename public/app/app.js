@@ -24,6 +24,32 @@ angular.module('App', ['ngResource','ngMessages','ngSanitize','ngAnimate','toast
             }
         }
     })
+    .factory('toformData',  function(){
+        dataFile = function( data ){
+            if ( undefined === data ) return data;
+            var formData = new FormData();
+            angular.forEach(data, function(value, key){
+                if (value instanceof FileList){
+                    if (value.length === 1)
+                        formData.append(key , value[0]);
+                    else {
+                        angular.forEach(value , function(file, index){
+                            formData.append(key + '_' + index , file);
+                        });
+                    }
+                } else if( value instanceof Array){
+                    formData.append(key, angular.toJson(value));
+                } else {
+                    formData.append(key, value);
+                }
+            });
+            return formData;
+        }
+
+        return {
+            dataFile : dataFile
+        }
+    })
     .factory('petition', function($http, $location){
         var baseUrl =  function ( URL ) {
             var prot = $location.protocol();

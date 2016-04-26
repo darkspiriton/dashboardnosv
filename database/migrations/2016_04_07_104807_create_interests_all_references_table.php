@@ -41,7 +41,6 @@ class CreateInterestsAllReferencesTable extends Migration
             Relationships
          *
          */
-
         Schema::table('interests', function(Blueprint $table){
             $table->foreign('status_id')->references('id')->on('status_interests');
             $table->foreign('channel_id')->references('id')->on('channels');

@@ -11,7 +11,6 @@
 |
 */
 
-
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -109,6 +108,7 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
 
     //Ruta para validar valide-key
     Route::get('validate-key','HomeController@validar');
+
 });
 
 Route::get('/test', function(\Illuminate\Http\Request $request){

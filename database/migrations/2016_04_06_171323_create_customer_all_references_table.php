@@ -77,7 +77,6 @@ class CreateCustomerAllReferencesTable extends Migration
             Relationships
          *
          */
-
         Schema::table('customers', function(Blueprint $table){
             $table->foreign('user_id')->references('id')->on('users');
         });

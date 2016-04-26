@@ -26,7 +26,7 @@ class CreateProductsTable extends Migration
             $table->string('name');
             $table->string('price');
             $table->string('image');
-            $table->string('product_code');
+            $table->string('product_code',12);
             $table->boolean('status');
             $table->integer('type_product_id')->unsigned()->increments();
             $table->timestamps();

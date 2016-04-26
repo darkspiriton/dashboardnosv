@@ -2,8 +2,9 @@
 
 namespace Dashboard\Http\Controllers;
 
-use Dashboard\Models\Kardex\Attribute;
-use Dashboard\Models\Kardex\Group_Attribute;
+//use Dashboard\Models\Kardex\Attribute;
+use Dashboard\Dashboard\Models\Kardex\AttributesKardex;
+use Dashboard\Models\Kardex\GroupAttribute;
 use Dashboard\Models\Kardex\Kardex;
 use Dashboard\Models\Product\Type;
 use Illuminate\Http\Request;
@@ -31,18 +32,27 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        if (!is_array($request->all())) {
-            return response()->json(['message' => 'request must be an array'],401);
-        }
+//            return url('img/products');
+//        var_dump(json_decode($request->input('groupAttr'), true));
+//        return response()->json($request->all(),200);
+//        $name = $request->file('img');
+//
+//        echo $name->getClientOriginalExtension().'   ';
+//        echo $name->getClientMimeType().'   ';
+//        echo $name->getClientSize().'   ';
+////        $name = $name['name'];
+//        echo $name->getClientOriginalName();
+//        return '';
+
         // Creamos las reglas de validación
         $rules = [
-            'name'      => 'required',
-            'price'      => 'required',
-            'image'     => 'required',
-            'product_code'     => 'required',
+            'name'          => 'required',
+            'price'         => 'required',
+            'img'           => 'required',
+            'groupAttr'     => 'required',
             'status'        => 'required',
-            'type_product'        => 'required',
-            //falta validar los atributos
+            'type_product_id'   => 'required',
+            'groupAttr.*.quantity'   => 'required'
         ];
 
         //Se va a pasar datos del producto, attributos y su cantidad
@@ -56,35 +66,62 @@ class ProductController extends Controller
             }
             // Si el validador pasa, almacenamos el comentario
 
-            $productAux=DB::table('products')->where('product_code',$request->input('product_code'))->get();
 
-            if(count($productAux) == 0 ){
-                $product = new Product();
-                $product->name= $request->input('name');
-                $product->price= $request->input('price');
-                $product->image= $request->input('image');
-                $product->product_code= $request->input('product_code');
-                $product->status= $request->input('status');
-                $product->type_product= $request->input('type_product');
-                $product->save();
+            $produt_code = $this->product_code_generate(); // obetener un codigo unico
 
-                $groups=$request->input('groups');
+            $image = $request->file('img'); // referencia a la imagen
+            $image_name = $produt_code.'.'.$image->getClientOriginalExtension();
+            $image_folder = 'img/products/';
+            $image->move(public_path($image_folder), $image_name); // moviendo imagen a images folder
 
-                foreach($groups as $group){
-                    $lastProduct = DB::table('products')
-                        ->orderBy('id','desc')
-                        ->first();
-                    $this->addKardex($lastProduct->id,$group->cant,$group->attributes);
-                }
+            $product = new Product();
+            $product->name= $request->input('name');
+            $product->price= $request->input('price');
+            $product->image= $image_name;
+            $product->product_code = $produt_code;
+            $product->status= $request->input('status');
+            $product->type_product_id= $request->input('type_product_id');
+            $product->save();
 
-                //Falta Agregar atributos de productos
-                return response()->json(['message' => 'El producto se agrego correctamente'],200);
+            $groups = json_decode($request->input('groupAttr'), true);
+
+            foreach($groups as $group){
+                $this->addKardex($product->id, $group['quantity'] , $group['attributes']);
             }
-            return response()->json(['message' => 'El producto ya esta registrado'],400);
+            //Falta Agregar atributos de productos
+            return '}]),'.response()->json(['message' => 'El producto se agrego correctamente'],200);
 
         } catch (Exception $e) {
             // Si algo sale mal devolvemos un error.
             return \Response::json(['message' => 'Ocurrio un error al agregar producto'], 500);
+        }
+    }
+
+    private function product_code_generate(){
+        $temp = (string)rand(100000,999999).(string)rand(100000,999999);
+        $product = DB::table('products')->where('product_code','=', $temp)->first();
+        if (!$product)
+            return $temp;
+        else
+            return product_code_generate();
+    }
+
+    private function addKardex($id,$cant,$attributes){
+        $group= new GroupAttribute();
+        $group->product_id=$id;
+        $group->save();
+
+        foreach($attributes as $attribute ){
+            $k_attr = new AttributesKardex();
+            $k_attr->attribute_id = $attribute['val_id'];
+            $group->attributes()->save($k_attr);
+        }
+
+        for ($i=0;$i<$cant;$i++){
+            $kard = new Kardex();
+            $kard->product_id=$id;
+            $kard->stock=true;
+            $group->kardexs()->save($kard);
         }
     }
 
@@ -194,34 +231,34 @@ class ProductController extends Controller
     
     public function types(){
         $types= Type::all();
-        return response()->json(['$types' => $types],200);
+        return response()->json(['types' => $types],200);
     }
 
-    private function addKardex($id,$cant,$attributes){
+    public function group_attributes($id){
+        $attributes =  DB::table('groups_attributes')
+            ->select(array('attributes_kardexs.group_attribute_id','types_attributes.name', 'attributes.valor'))
+            ->join('attributes_kardexs', function ($join) {
+                $join->on('attributes_kardexs.group_attribute_id', '=', 'groups_attributes.id');
+            })
+            ->join('attributes', function ($join) {
+                $join->on('attributes_kardexs.attribute_id', '=', 'attributes.id');
+            })
+            ->join('types_attributes', function ($join) {
+                $join->on('attributes.type_id', '=', 'types_attributes.id');
+            })
+            ->where('product_id',$id)
+            ->get();
 
 
-        $group= new Group_Attribute();
-        $group->product_id=$id;
-        $group->save();
-
-        $lastGroup = DB::table('groups_attributes')
-            ->where('product_id','=',$id)
-            ->orderBy('id','desc')
-            ->first();
-
-        foreach($attributes as $attribute ){
-            $a = new Attribute();
-            $a->attribute_id = $attribute->attribute_id;
-            $lastGroup->attributes()->save($a);
+        $result = array();
+        foreach($attributes as $d){
+            if(!isset($result[$d->group_attribute_id])){
+                $result[$d->group_attribute_id] = array();
+            }
+            $result[$d->group_attribute_id][] = $d;
         }
 
-        for ($i=0;$i<$cant;$i++){
-            $k = new Kardex();
-            $k->product_id=$id;
-            $k->stock=true;
-            $lastGroup->kardexs()->save($k);
-        }
-
+        return response()->json(['grp_attributes' => $result],200);
     }
 
 

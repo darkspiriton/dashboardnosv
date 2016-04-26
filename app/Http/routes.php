@@ -45,8 +45,9 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
     //Rutas para API REST de Productos
     Route::resource('product','ProductController',
                     ['only'=>['index','store','update','destroy','show']]);
-
     //Rutas para API REST de Attribute
+    Route::get('product/group_attributes/{id}','ProductController@group_attributes');
+
     Route::resource('attribute','AttributeController',
                     ['only'=>['index','store','update','destroy','show']]);
 
@@ -108,4 +109,8 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
 
     //Ruta para validar valide-key
     Route::get('validate-key','HomeController@validar');
+});
+
+Route::get('/test', function(\Illuminate\Http\Request $request){
+    return '=)';
 });

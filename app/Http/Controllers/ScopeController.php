@@ -5,6 +5,7 @@ namespace Dashboard\Http\Controllers;
 use Dashboard\Models\Scope\Detail;
 use Dashboard\Models\Scope\Scope;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 use Dashboard\Http\Requests;
 
@@ -168,6 +169,21 @@ class ScopeController extends Controller
             return \Response::json(['message' => 'No existe el registro de interes'], 404);
         }catch (ErrorException $e){
             return \Response::json(['message' => 'Ocurrio un error'], 500);
+        }
+    }
+
+    public function types(){
+        $types = DB::table('types_scope')->get();
+        if(!is_null($types)){
+            return response()->json([
+                'message' => 'Mostrar todos los canales',
+                'types'=> $types,
+                //'attributes' => $product->attributes,
+            ],200);
+        } else{
+            return response()->json([
+                'message' => 'No se encuentran los tipos de alcanse'
+            ],404);
         }
     }
 }

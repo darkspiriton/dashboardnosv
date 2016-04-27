@@ -43,8 +43,13 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
                     ['only'=>['index','store','update','destroy','show']]);
 
     //Rutas para API REST de Productos
-    Route::resource('product','ProductController',
-                    ['only'=>['index','store','update','destroy','show']]);
+    Route::group(['prefix'=>'product'],function(){
+        Route::resource('/','ProductController',
+            ['only'=>['index','store','update','destroy','show']]);
+        Route::get('/types','ProductController@types');
+        Route::get('/type/{id}','ProductController@type_products');
+    });
+
     //Rutas para API REST de Attribute
     Route::get('product/group_attributes/{id}','ProductController@group_attributes');
 
@@ -68,19 +73,17 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
         ['only'=>['index','store','update','destroy','show']]);
 
     //Rutas para API REST Registro de alcance
-    Route::resource('scope','ScopeController',
-        ['only'=>['index','store','update','show']]);
+    Route::group(['prefix'=>'scope'],function(){
+        Route::resource('/','ScopeController',
+            ['only'=>['index','store','update','show']]);
+        Route::get('/types', 'ScopeController@types');
+    });
 
     //Rutas para API REST UBIGEO
     Route::group(['prefix'=>'ubigeo'],function(){
         Route::get('/departamento','UbigeoController@departamento');
         Route::get('/provincia/{provincia}','UbigeoController@provincia');
         Route::get('/distrito/{distrito}','UbigeoController@distrito');
-    });
-
-    //Rutas para consultar tipos de productos
-    Route::group(['prefix'=>'type_product'],function(){
-        Route::get('/','ProductController@types');
     });
 
     //Rutas para consultar tipos de operador de celular
@@ -106,6 +109,9 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
         Route::put('/phone','CustomerController@phoneUpdate');
         Route::put('/social','CustomerController@socialUpdate');
     });
+
+    //Rutas para Socials
+    Route::get('/channel', 'SocialController@index');
 
     //Ruta para validar valide-key
     Route::get('validate-key','HomeController@validar');

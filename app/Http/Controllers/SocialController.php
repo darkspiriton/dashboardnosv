@@ -15,7 +15,7 @@ class SocialController extends Controller
                 'message' => 'Mostrar todos los canales',
                 'socials'=> $socials,
                 //'attributes' => $product->attributes,
-            ],200);
+            ],200);            
         } else{
             return response()->json([
                 'message' => 'No se encuentran los canales'

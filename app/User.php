@@ -4,7 +4,9 @@ namespace Dashboard;
 
 use Dashboard\Models\Interest\Interest;
 use Dashboard\Models\Order\Order;
+use Dashboard\Models\Sale\Commission;
 use Dashboard\Models\Scope\Scope;
+use Dashboard\Models\Shipment\Tracing;
 use Illuminate\Database\Eloquent\Model;
 use Dashboard\Models\Customer\Customer;
 
@@ -50,9 +52,13 @@ class User extends Model
 //        return $this->hasMany(Bonification::class);
 //    }
 
-//    public function tracings(){
-//        return $this->hasMany();
-//    }
+    public function tracings(){
+        return $this->hasMany(Tracing::class);
+    }
+
+    public function commissions(){
+        return $this->hasMany(Commission::class);
+    }
 
 
 }

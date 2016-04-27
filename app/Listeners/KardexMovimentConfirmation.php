@@ -13,7 +13,7 @@ class KardexMovimentConfirmation
      */
     public function __construct()
     {
-        //
+
     }
 
     /**
@@ -24,6 +24,8 @@ class KardexMovimentConfirmation
      */
     public function handle(ShipmentWasRegister $event)
     {
-        //Falta implementar logica para separar los productos del kardex cambiarles de estados        
+        //Falta implementar logica para separar los productos del kardex cambiarles de estados
+        
+        $data=$event->getData();
     }
 }

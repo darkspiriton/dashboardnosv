@@ -3,6 +3,7 @@
 namespace Dashboard\Dashboard\Models\Shipment;
 
 use Dashboard\Models\Customer\Address;
+use Dashboard\Models\Kardex\Movements;
 use Dashboard\Models\Order\Order;
 use Illuminate\Database\Eloquent\Model;
 
@@ -29,17 +30,17 @@ class Shipment extends Model
         return $this->belongsTo(Address::class);
     }
 
-//    public function sales(){
-//        return $this->hasMany(Sale::class);
-//    }
+    public function sales(){
+        return $this->hasMany(Sale::class);
+    }
 
-//    public function tracings(){
-//        return $this->hasMany(Tracing::class);
-//    }
+    public function tracings(){
+        return $this->hasMany(Tracing::class);
+    }
 
-//    public function movements(){
-//        return $this->hasMany();
-//    }
+    public function movements(){
+        return $this->hasMany(Movements::class);
+    }
 
 
 }

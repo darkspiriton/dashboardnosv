@@ -19,6 +19,10 @@ class ScopeController extends Controller
     public function index()
     {
         $scopes = Scope::all();
+        foreach($scopes as $scope){
+            $scope->type;
+            $scope->channel;
+        }
         return response()->json(['scopes' => $scopes],200);
     }
 
@@ -61,21 +65,17 @@ class ScopeController extends Controller
             $scope->save();
 
             //Falta validar la creacion de detalle de alcance 26-04-2016
-            $details = $request->input('scopes');
-            $scopeAux = DB::table('orders')
-                ->where('customer_id','=',$request->input('customer_id'))
-                ->orderBy('created_at','desc')
-                ->first();
+            $details = $request->input('products');
 
             //Recorrer el detalle de alcance y los agrega
             foreach ($details as $detail) {
                 $scopeDetail = New Detail();
-                $scopeDetail->scope_id = $scopeAux->id;
-                $scopeDetail->product_id = $detail->product_id;
-                $scopeAux->details()->save($scopeDetail);
+                $scopeDetail->scope_id = $scope->id;
+                $scopeDetail->product_id = $detail['id'];
+                $scope->details()->save($scopeDetail);
             }
 
-            return response()->json(['message' => 'El cliente se agrego correctamente'],200);
+            return response()->json(['message' => 'El registro se agrego correctamente'],200);
 
         } catch (Exception $e) {
             // Si algo sale mal devolvemos un error.
@@ -96,7 +96,16 @@ class ScopeController extends Controller
             $scope = Scope::find($id);
             if ($scope !== null) {
 
-                $scope->details;
+                foreach( $scope->details as $detail){
+                    $detail->product->typeProduct;
+
+//                    foreach($detail->product as $product){
+//                        $product['product']->type;
+//                    }
+                }
+
+                $scope->channel;
+                $scope->type;
 
                 return response()->json([
                     'message' => 'Mostrar detalles de producto',

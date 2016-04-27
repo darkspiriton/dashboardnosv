@@ -2,6 +2,7 @@
 
 namespace Dashboard\Models\Customer;
 
+use Dashboard\Models\Scope\Scope;
 use Illuminate\Database\Eloquent\Model;
 
 class Channel extends Model
@@ -12,5 +13,9 @@ class Channel extends Model
 
     public function socials(){
         return $this->hasMany(Social::class);
+    }
+
+    public function scope(){
+        return $this->hasMany(Scope::class);
     }
 }

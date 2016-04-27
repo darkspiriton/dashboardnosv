@@ -21,6 +21,20 @@
 			return nRow = element;
 		};
 
+		function searchObject(obj, prop) {
+
+			if(typeof obj === 'undefined') {
+				return false;
+			}
+
+			var _index = prop.indexOf('.')
+			if(_index > -1) {
+				return searchObject(obj[prop.substring(0, _index)], prop.substr(_index + 1));
+			}
+
+			return obj[prop];
+		}
+
 		for (i in actions) {
 			if ( actions[i][0]  === 'actions' ) {
 	            acc['dataA'] =  actions[i][1];
@@ -70,9 +84,9 @@
 							temp[x] = acc.status(i, est);
 						} else {
 							if ( val.constructor === Array)
-								temp[x] = (obj[val[0]]).substr(0, val[1]) + ' ...';
+								temp[x] = (searchObject(obj,val[0])).substr(0, val[1]) + ' ...';
 							else
-								temp[x] = obj[val];
+								temp[x] = searchObject(obj,val);
 						}
 					});
 					oTable.fnAddData(temp);

@@ -44,11 +44,11 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
 
     //Rutas para API REST de Productos
     Route::group(['prefix'=>'product'],function(){
-        Route::resource('/','ProductController',
-            ['only'=>['index','store','update','destroy','show']]);
         Route::get('/types','ProductController@types');
         Route::get('/type/{id}','ProductController@type_products');
     });
+    Route::resource('/product','ProductController',
+        ['only'=>['index','store','update','destroy','show']]);
 
     //Rutas para API REST de Attribute
     Route::get('product/group_attributes/{id}','ProductController@group_attributes');
@@ -74,10 +74,10 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
 
     //Rutas para API REST Registro de alcance
     Route::group(['prefix'=>'scope'],function(){
-        Route::resource('/','ScopeController',
-            ['only'=>['index','store','update','show']]);
         Route::get('/types', 'ScopeController@types');
     });
+    Route::resource('/scope','ScopeController',
+        ['only'=>['index','store','update','show']]);
 
     //Rutas para API REST UBIGEO
     Route::group(['prefix'=>'ubigeo'],function(){

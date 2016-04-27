@@ -93,9 +93,8 @@ class OrderController extends Controller
             $order = Order::find($id);
             if ($order !== null) {
                 $order->details;
-                $order->customer;
-                //Falta crear shipments y vincularlo
-                //$order->shipments;
+                $order->customer;                
+                $order->shipments;
                 $order->calls;
                 $order->status;
                 $order->user;
@@ -131,7 +130,6 @@ class OrderController extends Controller
                 $order->save();
 
                 //Faltar vincular la actualizacion del detalle de la orden de pedido
-
                 return response()->json(['message' => 'Se actualizo correctamente la orden de pedido'],200);
             }
             return \Response::json(['message' => 'No existe esa orden de pedido'], 404);
@@ -154,9 +152,9 @@ class OrderController extends Controller
             if($order != null) {
                 $order->status_id=$request->input('status_id');
                 $order->save();
-                return response()->json(['message' => 'Se desactivo correctamente el registro de interes'],200);
+                return response()->json(['message' => 'Se actualizo correctamente el registro de pedido'],200);
             }
-                return \Response::json(['message' => 'No existe el registro de interes'], 404);
+                return \Response::json(['message' => 'No existe el registro de pedido'], 404);
         }catch (ErrorException $e){
             return \Response::json(['message' => 'Ocurrio un error'], 500);
         }

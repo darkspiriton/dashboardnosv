@@ -28,5 +28,18 @@ class Shipment extends Model
     public function address(){
         return $this->belongsTo(Address::class);
     }
-    
+
+//    public function sales(){
+//        return $this->hasMany(Sale::class);
+//    }
+
+//    public function tracings(){
+//        return $this->hasMany(Tracing::class);
+//    }
+
+//    public function movements(){
+//        return $this->hasMany();
+//    }
+
+
 }

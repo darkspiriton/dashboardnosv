@@ -45,4 +45,14 @@ class User extends Model
     public function orders(){
         return $this->hasMany(Order::class);
     }
+
+//    public function bonifications(){
+//        return $this->hasMany(Bonification::class);
+//    }
+
+//    public function tracings(){
+//        return $this->hasMany();
+//    }
+
+
 }

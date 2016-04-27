@@ -70,6 +70,10 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
     Route::resource('scope','ScopeController',
         ['only'=>['index','store','update','show']]);
 
+    //Rutas para API REST Registro de envio
+    Route::resource('shipment','ShipmentController',
+        ['only'=>['index','store','update','show','destroy']]);
+
     //Rutas para API REST UBIGEO
     Route::group(['prefix'=>'ubigeo'],function(){
         Route::get('/departamento','UbigeoController@departamento');

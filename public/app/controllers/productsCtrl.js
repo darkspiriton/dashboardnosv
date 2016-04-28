@@ -88,7 +88,7 @@ angular.module('App')
         };
 
         $scope.listTypeProduct = function() {
-            petition.get('api/type_product')
+            petition.get('api/product/types')
                 .then(function(data){
                     $scope.typeProduct = data.types;
                 }, function(error){

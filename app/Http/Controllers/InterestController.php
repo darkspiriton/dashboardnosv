@@ -2,6 +2,7 @@
 
 namespace Dashboard\Http\Controllers;
 
+use Dashboard\Models\Interest\Detail;
 use Dashboard\Models\Interest\Interest;
 use Dashboard\Models\Scope\Scope;
 use Illuminate\Http\Request;
@@ -18,6 +19,10 @@ class InterestController extends Controller
     public function index()
     {
         $interests = Interest::all();
+        foreach($interests as $interest){
+            $interest->channel;
+            $interest->customer;
+        }
         return response()->json(['interests' => $interests],200);
     }
 
@@ -37,10 +42,9 @@ class InterestController extends Controller
 
         // Creamos las reglas de validación
         $rules = [
-            'status_id'      => 'required',
-            'channel_id'      => 'required',
-            'customer_id'      => 'required',
-            'observation'      => 'required',
+            'channel_id'    => 'required',
+            'customer_id'   => 'required',
+            'observation'   => 'required',
         ];
 
         try {
@@ -56,23 +60,19 @@ class InterestController extends Controller
             $interest->user_id= $user['sub'];
             $interest->channel_id= $request->input('channel_id');
             $interest->customer_id= $request->input('customer_id');
-            $interest->status_id= $request->input('status_id');
+            $interest->status_id= 1;
             $interest->observation= $request->input('observation');
             $interest->save();
 
             //Falta validar la creacion de detalle del Interes 26-04-2016
-            $details = $request->input('interests');
-            $interestAux = DB::table('interests')
-                        ->where('customer_id','=',$request->input('customer_id'))
-                        ->orderBy('created_at','desc')
-                        ->first();
+            $details = $request->input('products');
 
             //Recorrer el detalle de ordenes y agregarlos
             foreach ($details as $detail){
                 $interestDetail= New Detail();
-                $interestDetail->interest_id=$interestAux->id;
-                $interestDetail->product_id=$detail->product_id;
-                $interestAux->details()->save($interestDetail);
+                $interestDetail->interest_id =$interest->id;
+                $interestDetail->product_id = $detail['id'];
+                $interest->details()->save($interestDetail);
             }
 
             return response()->json(['message' => 'El registro de interes se agrego correctamente'],200);
@@ -95,7 +95,10 @@ class InterestController extends Controller
             $interest = Interest::find($id);
             if ($interest !== null) {
 
-                $interest->details;
+//                $interest->details;
+                foreach( $interest->details as $detail){
+                    $detail->product->typeProduct;
+                }
                 $interest->customer;
                 $interest->status;
                 $interest->channel;
@@ -149,7 +152,7 @@ class InterestController extends Controller
         try{
             $scope = Scope::find($id);
             if($scope != null) {
-                $scope->status_id=$request->input('status_id');
+                $scope->status_id = $request->input('status_id');
                 $scope->save();
                 return response()->json(['message' => 'Se desactivo correctamente el registro de interes'],200);
             }

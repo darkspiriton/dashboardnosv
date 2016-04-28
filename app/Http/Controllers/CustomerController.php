@@ -446,4 +446,9 @@ class CustomerController extends Controller
             return \Response::json(['message' => 'Ocurrio un error al agregar producto'], 500);
         }
     }
+
+    public function search($string){
+        $customer = Customer::where('name','LIKE','%'.$string.'%')->orWhere('phone','LIKE','%'.$string.'%')->get();
+        return response()->json( ['customers' => $customer] ,200);
+    }
 }

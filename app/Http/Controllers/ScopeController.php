@@ -5,6 +5,7 @@ namespace Dashboard\Http\Controllers;
 use Dashboard\Models\Scope\Detail;
 use Dashboard\Models\Scope\Scope;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 use Dashboard\Http\Requests;
 
@@ -18,6 +19,10 @@ class ScopeController extends Controller
     public function index()
     {
         $scopes = Scope::all();
+        foreach($scopes as $scope){
+            $scope->type;
+            $scope->channel;
+        }
         return response()->json(['scopes' => $scopes],200);
     }
 
@@ -60,21 +65,17 @@ class ScopeController extends Controller
             $scope->save();
 
             //Falta validar la creacion de detalle de alcance 26-04-2016
-            $details = $request->input('scopes');
-            $scopeAux = DB::table('orders')
-                ->where('customer_id','=',$request->input('customer_id'))
-                ->orderBy('created_at','desc')
-                ->first();
+            $details = $request->input('products');
 
             //Recorrer el detalle de alcance y los agrega
             foreach ($details as $detail) {
                 $scopeDetail = New Detail();
-                $scopeDetail->scope_id = $scopeAux->id;
-                $scopeDetail->product_id = $detail->product_id;
-                $scopeAux->details()->save($scopeDetail);
+                $scopeDetail->scope_id = $scope->id;
+                $scopeDetail->product_id = $detail['id'];
+                $scope->details()->save($scopeDetail);
             }
 
-            return response()->json(['message' => 'El cliente se agrego correctamente'],200);
+            return response()->json(['message' => 'El registro se agrego correctamente'],200);
 
         } catch (Exception $e) {
             // Si algo sale mal devolvemos un error.
@@ -95,7 +96,12 @@ class ScopeController extends Controller
             $scope = Scope::find($id);
             if ($scope !== null) {
 
-                $scope->details;
+                foreach( $scope->details as $detail){
+                    $detail->product->typeProduct;
+                }
+
+                $scope->channel;
+                $scope->type;
 
                 return response()->json([
                     'message' => 'Mostrar detalles de producto',
@@ -164,6 +170,21 @@ class ScopeController extends Controller
             return \Response::json(['message' => 'No existe el registro de interes'], 404);
         }catch (ErrorException $e){
             return \Response::json(['message' => 'Ocurrio un error'], 500);
+        }
+    }
+
+    public function types(){
+        $types = DB::table('types_scope')->get();
+        if(!is_null($types)){
+            return response()->json([
+                'message' => 'Mostrar todos los canales',
+                'types'=> $types,
+                //'attributes' => $product->attributes,
+            ],200);
+        } else{
+            return response()->json([
+                'message' => 'No se encuentran los tipos de alcanse'
+            ],404);
         }
     }
 }

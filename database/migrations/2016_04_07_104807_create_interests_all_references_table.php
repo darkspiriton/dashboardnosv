@@ -15,11 +15,11 @@ class CreateInterestsAllReferencesTable extends Migration
         // Interests
         Schema::create('interests', function(Blueprint $table){
             $table->increments('id');
-            $table->integer('status_id')->unsigned()->increments();
-            $table->integer('channel_id')->unsigned()->increments();
-            $table->integer('customer_id')->unsigned()->increments();
             $table->integer('user_id')->unsigned()->increments();
+            $table->integer('customer_id')->unsigned()->increments();
+            $table->integer('channel_id')->unsigned()->increments();
             $table->string('observation');
+            $table->integer('status_id')->unsigned()->increments();
             $table->timestamps();
         });
 

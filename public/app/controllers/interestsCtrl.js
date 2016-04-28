@@ -1,34 +1,39 @@
 angular.module('App')
     .config(function($stateProvider) {
         $stateProvider
-            .state('Alcanses', {
-                url: '/Adminitracion-de-registro-de-alcanse',
-                templateUrl: 'app/partials/scopes.html',
-                controller : 'scopesCtrl'
+            .state('Intereses', {
+                url: '/Adminitracion-de-registro-de-interes',
+                templateUrl: 'app/partials/interests.html',
+                controller : 'interestsCtrl'
             });
     })
-    .controller('scopesCtrl', function($scope, $compile, $state, $log, util, petition, toformData, toastr){
+    .controller('interestsCtrl', function($scope, $compile, $state, $log, util, petition, toformData, toastr){
 
-        util.liPage('alcanses');
+        util.liPage('intereses');
 
         $scope.tableConfig 	= 	{
             columns :	[
                 {"sTitle": "Fecha", "sWidth": "160px", "aaSorting": 'desc'},
                 {"sTitle": "Canal", "bSortable" : true, "sWidth": "160px"},
-                {"sTitle": "Tipo", "bSortable" : true, "sWidth": "160px"},
                 {"sTitle": "Cliente", "bSortable" : true},
                 {"sTitle": "Obervacion", "bSortable" : true},
+                {"sTitle": "Estado", "bSortable" : true},
                 {"sTitle": "Accion" , "bSearchable": false , "bSortable" : false , "sWidth": "190px"}
             ],
             actions	:  	[
+                ['status',   {
+                    1 : { txt : 'Sin atender' , cls : 'btn-danger'},
+                    2 : { txt : 'Atendido' ,  cls : 'btn-success', dis : false } ,
+                }
+                ],
                 ['actions',
                     [
                         ['ver', 'view' ,'btn-info']
                     ]
                 ]
             ],
-            data  	: 	['date','channel.name','type.name','name','observation','actions'],
-            configStatus : 'status'
+            data  	: 	['created_at','channel.name','customer.name','observation','status','actions'],
+            configStatus : 'status_id'
         };
 
         var alertConfig = {
@@ -43,11 +48,10 @@ angular.module('App')
             closeOnConfirm: true
         };
 
-        $scope.scopeClear = {
+        $scope.interestClear = {
             id : null,
-            name: null,
+            customer_id: null,
             channel_id: null,
-            type_id: null,
             observation : null,
             products: []
         };
@@ -60,9 +64,9 @@ angular.module('App')
         };
 
         $scope.list = function() {
-            petition.get('api/scope')
+            petition.get('api/interest')
                 .then(function(data){
-                    $scope.tableData = data.scopes;
+                    $scope.tableData = data.interests;
                     $('#table').AJQtable('view', $scope, $compile);
                     $scope.updateList = false;
                 }, function(error){
@@ -82,14 +86,21 @@ angular.module('App')
                 });
         };
 
-        $scope.listTypes = function() {
-            petition.get('api/scope/types')
+        $scope.listSearch = function() {
+            $scope.listView = true;
+            $scope.interest.customer_id = null;
+            petition.get('api/customer/search/' + $scope.search)
                 .then(function(data){
-                    $scope.types = data.types;
+                    $scope.customers = data.customers;
                 }, function(error){
                     console.log(error);
                     toastr.error('Ups ocurrio un problema: ' + error.data.message);
                 });
+        };
+
+        $scope.selectCustomer = function(i){
+            $scope.interest.customer_id = $scope.customers[i].id;
+            $scope.search = $scope.customers[i].name;
         };
 
         $scope.listProductTypes = function() {
@@ -114,9 +125,9 @@ angular.module('App')
 
         $scope.view = function( ind ){
             var id = $scope.tableData[ind].id;
-            petition.get('api/scope/' + id )
+            petition.get('api/interest/' + id )
                 .then(function(data){
-                    $scope.scopeDetail = data.scope;
+                    $scope.interestDetail = data.interest;
                     util.modal();
                 }, function(error){
                     toastr.error('Ups ocurrio un problema: ' + error.data.message);
@@ -127,15 +138,15 @@ angular.module('App')
             alertConfig.title = "¿Todo es correcto? Una ves registrado no podra ser editado y/o eliminado";
             swal(alertConfig ,
                 function() {
-                    var method = ( $scope.scope.id ) ? 'PUT' : 'POST';
-                    var url = ( method == 'PUT') ? util.baseUrl('api/scope/' + $scope.product.id) : util.baseUrl('api/scope');
+                    var method = ( $scope.interest.id ) ? 'PUT' : 'POST';
+                    var url = ( method == 'PUT') ? util.baseUrl('api/interest/' + $scope.product.id) : util.baseUrl('api/interest');
                     var config = {
                         method: method,
                         url: url,
-                        data: $scope.scope
+                        data: $scope.interest
                     };
                     $scope.formSubmit = true;
-                    $log.log($scope.scope);
+                    $log.log($scope.interest);
                     petition.custom(config).then(function (data) {
                         toastr.success(data.message);
                         $scope.formSubmit = false;
@@ -156,10 +167,12 @@ angular.module('App')
         $scope.new = function(){
             $scope.clear();
             util.muestraformulario();
+            $scope.listPositiontion();
         };
 
         $scope.clear = function(){
-            $scope.scope = angular.copy($scope.scopeClear);
+            $scope.search = null;
+            $scope.interest = angular.copy($scope.interestClear);
             $scope.viewProducts = [];
         };
 
@@ -169,34 +182,43 @@ angular.module('App')
             if(!$scope.product.index)return false;
             var product = {id : $scope.products[prd.index].id};
             var productView = {
-                    name : $scope.products[prd.index].name,
-                    type_name : $scope.productTypes[prd.type].name
-                };
+                name : $scope.products[prd.index].name,
+                type_name : $scope.productTypes[prd.type].name
+            };
 
-            for(var i in $scope.scope.products){
-                if ( product.id == $scope.scope.products[i].id)return false;
+            for(var i in $scope.interest.products){
+                if ( product.id == $scope.interest.products[i].id)return false;
             }
 
             $scope.viewProducts.push(productView);
-            $scope.scope.products.push(product);
+            $scope.interest.products.push(product);
 
             $scope.product = angular.copy($scope.productClear);
             $scope.products = [];
         };
 
         $scope.removePrd = function( i ){
-            $scope.scope.products.splice(i, 1);
+            $scope.interest.products.splice(i, 1);
             $scope.viewProducts.splice(i, 1);
         };
 
         // end Attributes
 
+        $scope.getStatus = function( status ){
+            if (status == 2)return 'Atendido';
+            else return 'Sin atender';
+        };
+
+        $scope.listPositiontion = function(){
+            var pos = $('#searchCustomer').offset();
+            $("#list").css({top: pos.top - 35, left: pos.left});
+        };
+
         angular.element(document).ready(function(){
-            $scope.scope = angular.copy($scope.scopeClear);
+            $scope.interest = angular.copy($scope.interestClear);
             $scope.product = angular.copy($scope.productClear);
             $scope.list();
             $scope.listChannels();
-            $scope.listTypes();
             $scope.listProductTypes();
         });
     });

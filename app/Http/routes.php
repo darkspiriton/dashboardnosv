@@ -42,8 +42,13 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
                     ['only'=>['index','store','update','destroy','show']]);
 
     //Rutas para API REST de Productos
-    Route::resource('product','ProductController',
-                    ['only'=>['index','store','update','destroy','show']]);
+    Route::group(['prefix'=>'product'],function(){
+        Route::get('/types','ProductController@types');
+        Route::get('/type/{id}','ProductController@type_products');
+    });
+    Route::resource('/product','ProductController',
+        ['only'=>['index','store','update','destroy','show']]);
+
     //Rutas para API REST de Attribute
     Route::get('product/group_attributes/{id}','ProductController@group_attributes');
 
@@ -53,6 +58,7 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
     //Rutas para API REST de Clientes
     Route::resource('customer','CustomerController',
                     ['only'=>['index','store','update','destroy','show']]);
+    Route::get('customer/search/{string}', 'CustomerController@search');
 
     //Rutas para API REST Kardex
     Route::resource('kardex','KardexController',
@@ -67,7 +73,10 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
         ['only'=>['index','store','update','destroy','show']]);
 
     //Rutas para API REST Registro de alcance
-    Route::resource('scope','ScopeController',
+    Route::group(['prefix'=>'scope'],function(){
+        Route::get('/types', 'ScopeController@types');
+    });
+    Route::resource('/scope','ScopeController',
         ['only'=>['index','store','update','show']]);
 
     //Rutas para API REST Registro de envio
@@ -83,11 +92,6 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
         Route::get('/departamento','UbigeoController@departamento');
         Route::get('/provincia/{provincia}','UbigeoController@provincia');
         Route::get('/distrito/{distrito}','UbigeoController@distrito');
-    });
-
-    //Rutas para consultar tipos de productos
-    Route::group(['prefix'=>'type_product'],function(){
-        Route::get('/','ProductController@types');
     });
 
     //Rutas para consultar tipos de operador de celular
@@ -113,6 +117,9 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
         Route::put('/phone','CustomerController@phoneUpdate');
         Route::put('/social','CustomerController@socialUpdate');
     });
+
+    //Rutas para Socials
+    Route::get('/channel', 'SocialController@index');
 
     //Ruta para validar valide-key
     Route::get('validate-key','HomeController@validar');

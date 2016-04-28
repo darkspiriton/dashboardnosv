@@ -1172,4 +1172,10 @@ div.fc-row {
 .table-address p {
   font-size: 12px; }
 
+.search-list {
+  position: absolute; }
+
+.search-list .dropdown-menu {
+  display: block; }
+
 /*# sourceMappingURL=app.min.2.css.map */

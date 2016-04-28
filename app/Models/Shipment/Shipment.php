@@ -1,10 +1,11 @@
 <?php
 
-namespace Dashboard\Dashboard\Models\Shipment;
+namespace Dashboard\Models\Shipment;
 
 use Dashboard\Models\Customer\Address;
 use Dashboard\Models\Kardex\Movements;
 use Dashboard\Models\Order\Order;
+use Dashboard\Models\Sale\Sale;
 use Illuminate\Database\Eloquent\Model;
 
 class Shipment extends Model
@@ -41,6 +42,4 @@ class Shipment extends Model
     public function movements(){
         return $this->hasMany(Movements::class);
     }
-
-
 }

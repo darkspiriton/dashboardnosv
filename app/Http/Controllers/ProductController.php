@@ -6,7 +6,7 @@ namespace Dashboard\Http\Controllers;
 use Dashboard\Dashboard\Models\Kardex\AttributesKardex;
 use Dashboard\Models\Kardex\GroupAttribute;
 use Dashboard\Models\Kardex\Kardex;
-use Dashboard\Models\Product\Type;
+use Dashboard\Models\Product\TypeProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Dashboard\Http\Requests;
@@ -219,7 +219,7 @@ class ProductController extends Controller
     }
     
     public function types(){
-        $types= Type::all();
+        $types= TypeProduct::all();
         return response()->json(['types' => $types],200);
     }
 
@@ -238,7 +238,6 @@ class ProductController extends Controller
             ->where('product_id',$id)
             ->get();
 
-
         $result = array();
         foreach($attributes as $d){
             if(!isset($result[$d->group_attribute_id])){
@@ -248,5 +247,14 @@ class ProductController extends Controller
         }
 
         return response()->json(['grp_attributes' => $result],200);
+    }
+
+    public function type_products($id){
+        $type = TypeProduct::find($id) ;
+        $type->products;
+        if (!is_null($type))
+            return response()->json([ 'type' => $type ],200);
+        else
+            return response()->json(['message' => 'No se encuentraron productos con el termino de busqueda'],404);
     }
 }

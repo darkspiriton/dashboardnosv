@@ -4,7 +4,7 @@ namespace Dashboard\Models\Product;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Type extends Model
+class TypeProduct extends Model
 {
     protected $table='types_products';
 

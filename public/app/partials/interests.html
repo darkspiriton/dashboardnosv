@@ -1,6 +1,6 @@
 <div class="card" >
     <div class="card-header bgm-blue">
-        <h2>Gestion de registros de alcanse</h2>
+        <h2>Gestion de registros de interes</h2>
         <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="list()"
                 data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
                 title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
@@ -18,48 +18,35 @@
 
 <div class="card" id="formulariohide">
     <div class="card-header bgm-blue">
-        <h2>Crear registro de alcanse</h2>
+        <h2>Crear registro de interest</h2>
     </div>
 
     <div class="card-body card-padding" >
         <div class="card-header">
-            <h2>Datos de alcanse</h2>
+            <h2>Datos de interest</h2>
         </div>
 
         <form name="form" id="form" class="form-horizontal" autocomplete="off">
-            <input type="hidden" ng-model="scope.id">
+            <input type="hidden" ng-model="interest.id">
             <div class="form-group">
                 <label class="col-xs-2 col-sm-2 control-label">Canal de atencion</label>
                 <div class="col-xs-10 col-sm-4">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-list"></i></span>
                         <div class="fg-line select">
-                            <select class="form-control" ng-options="social.id as social.name for social in socials" ng-model="scope.channel_id" required>
+                            <select class="form-control" ng-options="social.id as social.name for social in socials" ng-model="interest.channel_id" required>
                                 <option value="" disabled="disabled" select="true">Seleccione</option>
                             </select>
                         </div>
                     </div>
                 </div>
 
-                <label class="col-xs-2 col-sm-2 control-label">Tipo de alcanse</label>
-                <div class="col-xs-10 col-sm-4">
+                <label class="col-xs-2 col-sm-1 control-label">Cliente</label>
+                <div class="col-xs-10 col-sm-5">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-list"></i></span>
-                        <div class="fg-line select">
-                            <select class="form-control" ng-options="type.id as type.name for type in types" ng-model="scope.type_id" required>
-                                <option value="" disabled="disabled" select="true">Seleccione</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label class="col-xs-2 col-sm-2 control-label">Nombre de cliente</label>
-                <div class="col-xs-10 col-sm-10">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="md md-account-circle"></i></span>
-                        <input type="text" class="form-control input-sm" ng-model="scope.name" required>
+                        <input type="hidden" ng-model="interest.customer_id" required>
+                        <input id="searchCustomer" ng-change="listSearch()" ng-blur="listView=false" type="text" class="form-control input-sm" ng-model="search" required>
                     </div>
                 </div>
             </div>
@@ -69,7 +56,7 @@
                 <div class="col-xs-10 col-sm-10">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-receipt"></i></span>
-                        <input type="text" class="form-control input-sm" ng-model="scope.observation" required>
+                        <input type="text" class="form-control input-sm" ng-model="interest.observation" required>
                     </div>
                 </div>
             </div>
@@ -139,6 +126,14 @@
     </div>
 </div>
 
+<div id="list" class="search-list" style="top: 580px; left: 1236.64px; position: absolute;">
+    <ul ng-show="listView" class="dropdown-menu dm-icon">
+        <li ng-repeat="customer in customers" ng-click="selectCustomer($index)">
+            <a ui-sref="Intereses">{{ customer.name + ' - ' + customer.phone }}</a>
+        </li>
+    </ul>
+</div>
+
 <!-- Modal -->
 <div class="modal fade" id="Modal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
@@ -146,28 +141,28 @@
             <div class="modal-header bgm-teal">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h3 class="modal-title c-white">Registro de alcanse de: {{ scopeDetail.name }}</h3>
+                <h3 class="modal-title c-white">Registro de alcanse de: {{ interestDetail.customer.name }}</h3>
             </div>
             <div class="modal-body card-padding">
                 <form class="form-horizontal" autocomplete="off" submit="return false;">
                     <div class="form-group form-pad-top">
                         <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Canal: </label>
-                        <label class="col-xs-6 col-sm-2 control-label" style="text-align: left" ng-bind="scopeDetail.channel.name"></label>
-
-                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-0 col-sm-2 control-label">Tipo: </label>
-                        <label class="col-xs-6 col-sm-4 control-label" style="text-align: left" ng-bind="scopeDetail.type.name"></label>
+                        <label class="col-xs-6 col-sm-2 control-label" style="text-align: left" ng-bind="interestDetail.channel.name"></label>
                     </div>
                     <div class="form-group">
                         <label class="col-xs-12 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Cliente: </label>
-                        <label class="col-xs-12 col-sm-8 control-label" style="text-align: left" ng-bind="scopeDetail.name"></label>
+                        <label class="col-xs-12 col-sm-8 control-label" style="text-align: left" ng-bind="interestDetail.customer.name"></label>
                     </div>
                     <div class="form-group">
                         <label class="col-xs-12 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Cbervación: </label>
-                        <label class="col-xs-12 col-sm-8 control-label" style="text-align: left" ng-bind="scopeDetail.observation"></label>
+                        <label class="col-xs-12 col-sm-8 control-label" style="text-align: left" ng-bind="interestDetail.observation"></label>
                     </div>
                     <div class="form-group">
                         <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Fecha: </label>
-                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="scopeDetail.date"></label>
+                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="interestDetail.created_at"></label>
+
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Estado: </label>
+                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="getStatus(interestDetail.status_id)"></label>
                     </div>
                     <div class="form-group">
                         <label class="col-xs-12 col-xs-offset-1 col-sm-offset-1 col-sm-5 control-label">Productos interesados</label>
@@ -184,7 +179,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr ng-repeat="detail in scopeDetail.details">
+                                    <tr ng-repeat="detail in interestDetail.details">
                                         <td>{{ detail.product.type_product.name }}</td>
                                         <td>{{ detail.product.name }}</td>
                                         <td>{{ detail.product.price }}</td>

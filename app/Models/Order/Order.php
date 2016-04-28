@@ -2,7 +2,8 @@
 
 namespace Dashboard\Models\Order;
 
-use Dashboard\Dashboard\Models\Shipment\Shipment;
+
+use Dashboard\Models\Shipment\Shipment;
 use Dashboard\Models\Customer\Customer;
 use Dashboard\User;
 use Illuminate\Database\Eloquent\Model;

@@ -249,6 +249,4 @@ class ProductController extends Controller
 
         return response()->json(['grp_attributes' => $result],200);
     }
-
-
 }

@@ -118,6 +118,5 @@ class SaleController extends Controller
         }catch (ErrorException $e){
             return \Response::json(['message' => 'Ocurrio un error'], 500);
         }
-
     }
 }

@@ -149,13 +149,18 @@ angular.module('App')
         };
 
         $scope.cancel = function () {
-            $scope.product = angular.copy($scope.productClear);
+            $scope.clear();
             util.ocultaformulario();
         };
 
         $scope.new = function(){
-            $scope.product = angular.copy($scope.productClear);
+            $scope.clear();
             util.muestraformulario();
+        };
+
+        $scope.clear = function(){
+            $scope.scope = angular.copy($scope.scopeClear);
+            $scope.viewProducts = [];
         };
 
         // Adds Products

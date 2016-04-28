@@ -160,14 +160,20 @@ angular.module('App')
         };
 
         $scope.cancel = function () {
-            $scope.product = angular.copy($scope.productClear);
+            $scope.clear();
             util.ocultaformulario();
         };
 
         $scope.new = function(){
-            $scope.product = angular.copy($scope.productClear);
+            $scope.clear();
             util.muestraformulario();
             $scope.listPositiontion();
+        };
+
+        $scope.clear = function(){
+            $scope.search = null;
+            $scope.interest = angular.copy($scope.interestClear);
+            $scope.viewProducts = [];
         };
 
         // Adds Products

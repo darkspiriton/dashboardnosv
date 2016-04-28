@@ -128,8 +128,8 @@
 
 <div id="list" class="search-list" style="top: 580px; left: 1236.64px; position: absolute;">
     <ul ng-show="listView" class="dropdown-menu dm-icon">
-        <li ng-repeat="customer in customers">
-            <a ng-click="selectCustomer($index)" ui-sref="Intereses">{{ customer.name + ' - ' + customer.phone }}</a>
+        <li ng-repeat="customer in customers" ng-click="selectCustomer($index)">
+            <a ui-sref="Intereses">{{ customer.name + ' - ' + customer.phone }}</a>
         </li>
     </ul>
 </div>

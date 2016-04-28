@@ -112,12 +112,12 @@ class SaleController extends Controller
                 $sale->save();
 
                 //Falta calculo de comisiones
-
                 return response()->json(['message' => 'Se actualizo correctamente la venta'],200);
             }
             return \Response::json(['message' => 'No existe esa venta'], 404);
         }catch (ErrorException $e){
             return \Response::json(['message' => 'Ocurrio un error'], 500);
         }
+
     }
 }

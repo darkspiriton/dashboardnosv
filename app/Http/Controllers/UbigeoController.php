@@ -43,7 +43,6 @@ class UbigeoController extends Controller
                 'message' => 'No se encuentran las provincias'                
             ],404);
         }
-        
     }
 
     public function distrito($id){
@@ -64,6 +63,5 @@ class UbigeoController extends Controller
                 'message' => 'No se encuentrarn los distritos'
             ],404);
         }
-        
     }
 }

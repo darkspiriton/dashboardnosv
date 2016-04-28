@@ -59,6 +59,7 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
     //Rutas para API REST de Clientes
     Route::resource('customer','CustomerController',
                     ['only'=>['index','store','update','destroy','show']]);
+    Route::get('customer/search/{string}', 'CustomerController@search');
 
     //Rutas para API REST Kardex
     Route::resource('kardex','KardexController',

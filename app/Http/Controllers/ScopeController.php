@@ -98,10 +98,6 @@ class ScopeController extends Controller
 
                 foreach( $scope->details as $detail){
                     $detail->product->typeProduct;
-
-//                    foreach($detail->product as $product){
-//                        $product['product']->type;
-//                    }
                 }
 
                 $scope->channel;

@@ -2,6 +2,7 @@
 
 namespace Dashboard\Models\Order;
 
+use Dashboard\Models\Shipment\Shipment;
 use Dashboard\Models\Customer\Customer;
 use Dashboard\User;
 use Illuminate\Database\Eloquent\Model;
@@ -33,8 +34,8 @@ class Order extends Model
         return $this->belongsTo(User::class);
     }
 
-//    public function shipment(){
-//        return $this->hasMany();
-//    }
+    public function shipment(){
+        return $this->hasMany(Shipment::class);
+    }
 
 }

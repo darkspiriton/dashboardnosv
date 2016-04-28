@@ -1,7 +1,8 @@
 <?php
 
-namespace Dashboard\Dashboard\Models\Shipment;
+namespace Dashboard\Models\Shipment;
 
+use Dashboard\Models\Order\Order;
 use Illuminate\Database\Eloquent\Model;
 
 class Shipment extends Model
@@ -18,5 +19,9 @@ class Shipment extends Model
 
     public function routes(){
         return $this->hasMany(Route::class);
+    }
+
+    public function order(){
+        return $this->belongsTo(Order::class);
     }
 }

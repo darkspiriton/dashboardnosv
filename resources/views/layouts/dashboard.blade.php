@@ -128,7 +128,6 @@
 <script src="js/charts.js"></script>
 <script src="js/charts.js"></script>
 <script src="js/functions.js"></script>
-<script src="js/demo.js"></script>
 
 <!-- Others Libraries -->
 <script type="text/javascript" src="http://s3.amazonaws.com/codecademy-content/courses/hour-of-code/js/alphabet.js"></script>

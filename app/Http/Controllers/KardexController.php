@@ -91,6 +91,30 @@ class KardexController extends Controller
     {
         //
     }
-    
+
+   public function stock($id){
+//       $kardexs = DB::table('kardexs as k')
+//                    ->select(array('k.id', 'p.name', 'p.price',DB::raw('GROUP_CONCAT(a.valor order by a.valor asc SEPARATOR " ") as attrs')))
+//                    ->join('products as p', function ($join) {
+//                        $join->on('k.product_id', '=', 'p.id');
+//                    })
+//                    ->join('groups_attributes as ga', function ($join) {
+//                        $join->on('k.group_attribute_id', '=', 'ga.id');
+//                    })
+//                    ->join('attributes_kardexs as ak', function ($join) {
+//                        $join->on('ga.id', '=', 'ak.group_attribute_id');
+//                    })
+//                    ->join('attributes as a', function ($join) {
+//                        $join->on('ak.attribute_id', '=', 'a.id');
+//                    })
+//                    ->where('k.product_id',$id)
+//                    ->where('k.stock',1)
+//                    ->groupBy('k.id')
+//                    ->get();
+
+       $kardexs = new Kardex();
+       $kardexs = $kardexs->getKardexStock($id);
+       return response()->json(['kardexs' => $kardexs],200);
+   }
     
 }

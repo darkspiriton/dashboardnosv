@@ -70,8 +70,7 @@ $factory->define(\Dashboard\Models\Order\Order::class, function (Generator $fake
 
 $factory->define(\Dashboard\Models\Order\Detail::class , function (Generator $faker) {
     return [
-        'product_id'=>  $faker->randomFloat($nbMaxDecimals=0,$min=1,$max=20),
-        'quantity' =>  $faker->randomFloat($nbMaxDecimals=0,$min=1,$max=2),
+        'kardex_id'=>  $faker->randomFloat($nbMaxDecimals=0,$min=1,$max=50),
         'price' =>  $faker->randomFloat($nbMaxDecimals=2,$min=35,$max=70)
     ];
 });

@@ -64,6 +64,7 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
     //Rutas para API REST Kardex
     Route::resource('kardex','KardexController',
                     ['only'=>['index','store','update','destroy','show']]);
+    Route::get('kardex/stock/{id}', 'KardexController@stock');
 
     //Rutas para API REST Registro de Interes
     Route::resource('interest','InterestController',

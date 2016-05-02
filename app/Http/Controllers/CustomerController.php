@@ -9,6 +9,7 @@ use Dashboard\Models\Customer\Social;
 use Illuminate\Http\Request;
 use Dashboard\Http\Requests;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class CustomerController extends Controller
 {
@@ -20,6 +21,7 @@ class CustomerController extends Controller
     public function index()
     {
         $customers = Customer::all();
+        $date= Carbon::now();
         return response()->json(['customers' => $customers],200);
     }
 
@@ -93,6 +95,7 @@ class CustomerController extends Controller
                 $addresses = $customer->addresses;
                 $phones = $customer->phones;
                 $socials = $customer->socials;
+
 
                 foreach ($addresses as $address){
                     $address->ubigeo;

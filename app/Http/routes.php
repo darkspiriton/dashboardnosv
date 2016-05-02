@@ -113,6 +113,10 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
         Route::post('/social/{social}','CustomerController@socialAdd');
     });
 
+    //Rutas para agregar clientes
+    Route::resource('user','UserController',
+        ['only'=>['index','store','update','destroy','show']]);
+
     //Rutas para actualizar clientes
     Route::group(['prefix'=>'customer/upd'],function(){
         Route::put('/address','CustomerController@addressUpdate');
@@ -126,6 +130,14 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
     //Ruta para validar valide-key
     Route::get('validate-key','HomeController@validar');
 
+    //RUTAS EXPERIMENTALES
+    //Rutas para API REST auxproducts
+//    Route::resource('auxproduct','AuxProductController',
+//        ['only'=>['index','store','update','show']]);
+//    Route::resource('auxmovement','AuxMovementController',
+//        ['only'=>['index','store','update','show']]);
+//    Route::resource('provider','AuxProviderController',
+//        ['only'=>['index','store','update','show']]);
 });
 
 Route::get('/test', function(\Illuminate\Http\Request $request){

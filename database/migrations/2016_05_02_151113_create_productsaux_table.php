@@ -14,7 +14,8 @@ class CreateProductsauxTable extends Migration
     {
         Schema::create('alarms', function(Blueprint $table){
             $table->increments('id');
-            $table->string('name');
+            $table->integer('day');
+            $table->integer('count');
             $table->timestamps();
         });
 
@@ -55,11 +56,11 @@ class CreateProductsauxTable extends Migration
         Schema::create('auxmovements', function(Blueprint $table){
             $table->increments('id');
             $table->integer('product_id')->unsigned()->increments();
-            $table->float('date');
-            $table->string('date_shipment');
+            $table->date('date');
+            $table->date('date_shipment');
             $table->string('situation',12);
             $table->timestamps();
-            $table->foreign('product_id')->references('id')->on('products');
+            $table->foreign('product_id')->references('id')->on('auxproducts');
         });
     }
 
@@ -70,11 +71,11 @@ class CreateProductsauxTable extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('auxproducts');
+        Schema::dropIfExists('auxmovements');
         Schema::dropIfExists('alarms');
         Schema::dropIfExists('sizes');
         Schema::dropIfExists('colors');
         Schema::dropIfExists('providers');
-        Schema::dropIfExists('auxproducts');
-        Schema::dropIfExists('auxmovements');
     }
 }

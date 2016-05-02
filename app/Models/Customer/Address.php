@@ -2,6 +2,7 @@
 
 namespace Dashboard\Models\Customer;
 
+use Dashboard\Models\Shipment\Shipment;
 use Illuminate\Database\Eloquent\Model;
 
 class Address extends Model
@@ -18,5 +19,9 @@ class Address extends Model
 
     public function ubigeo(){
         return $this->belongsTo(Ubigeo::class);
+    }
+
+    public function shipments(){
+        return $this->hasMany(Shipment::class);
     }
 }

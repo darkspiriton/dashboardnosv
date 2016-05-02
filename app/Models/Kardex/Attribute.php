@@ -3,7 +3,7 @@
 namespace Dashboard\Models\Kardex;
 
 
-use Dashboard\Dashboard\Models\Kardex\Attribute_Kardex;
+use Dashboard\Dashboard\Models\Kardex\AttributeKardex;
 use Illuminate\Database\Eloquent\Model;
 
 

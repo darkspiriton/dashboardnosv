@@ -35,6 +35,7 @@ class CustomerController extends Controller
         if (!is_array($request->all())) {
             return response()->json(['message' => 'request must be an array'],401);
         }
+
         // Creamos las reglas de validación
         $rules = [
             'name'      => 'required',
@@ -43,7 +44,6 @@ class CustomerController extends Controller
             'phone'     => 'required',
             //falta validar los atributos
         ];
-
 
         try {
             $customer= DB::table('customers')

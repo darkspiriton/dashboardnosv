@@ -7,7 +7,6 @@ use Dashboard\Models\Interest\Interest;
 use Dashboard\Models\Scope\Scope;
 use Illuminate\Http\Request;
 use Dashboard\Http\Requests;
-use Illuminate\Support\Facades\DB;
 
 class InterestController extends Controller
 {

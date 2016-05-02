@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Call extends Model
 {
+    protected $table='calls';
     public $timestamps = false;
 
     public function order(){

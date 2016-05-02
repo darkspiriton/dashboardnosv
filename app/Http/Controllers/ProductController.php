@@ -2,15 +2,16 @@
 
 namespace Dashboard\Http\Controllers;
 
-//use Dashboard\Models\Kardex\Attribute;
-use Dashboard\Dashboard\Models\Kardex\AttributesKardex;
-use Dashboard\Models\Kardex\GroupAttribute;
-use Dashboard\Models\Kardex\Kardex;
 use Dashboard\Models\Product\TypeProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Dashboard\Http\Requests;
 use Dashboard\Models\Product\Product;
+use Dashboard\Models\Kardex\GroupAttribute;
+use Dashboard\Dashboard\Models\Kardex\AttributesKardex;
+use Dashboard\Models\Kardex\Kardex;
+use Illuminate\Support\Facades\Event;
+use Dashboard\Events\KardexWasCreateProduct;
 
 class ProductController extends Controller
 {
@@ -32,7 +33,6 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-
         // Creamos las reglas de validación
         $rules = [
             'name'          => 'required',
@@ -45,7 +45,6 @@ class ProductController extends Controller
         ];
 
         //Se va a pasar datos del producto, attributos y su cantidad
-
         try {
             // Ejecutamos el validador y en caso de que falle devolvemos la respuesta
             // con los errores
@@ -54,7 +53,6 @@ class ProductController extends Controller
                 return response()->json(['message' => 'No posee todo los campos necesario para crear un producto'],401);
             }
             // Si el validador pasa, almacenamos el comentario
-
 
             $produt_code = $this->product_code_generate(); // obetener un codigo unico
 
@@ -67,32 +65,28 @@ class ProductController extends Controller
             $product->name= $request->input('name');
             $product->price= $request->input('price');
             $product->image= $image_name;
-            $product->product_code = $produt_code;
+            $product->product_code= $produt_code;
             $product->status= $request->input('status');
             $product->type_product_id= $request->input('type_product_id');
             $product->save();
 
             $groups = json_decode($request->input('groupAttr'), true);
 
+            $data['id'] = $product->id;
+//            $data['groups'] =  $request->input('groupAttr');
+            $data['groups'] =  $groups;
+            Event::fire(new KardexWasCreateProduct($data));
+
             foreach($groups as $group){
                 $this->addKardex($product->id, $group['quantity'] , $group['attributes']);
             }
-            //Falta Agregar atributos de productos
-            return '}]),'.response()->json(['message' => 'El producto se agrego correctamente'],200);
+
+            return response()->json(['message' => 'El producto se agrego correctamente'],200);
 
         } catch (Exception $e) {
             // Si algo sale mal devolvemos un error.
             return \Response::json(['message' => 'Ocurrio un error al agregar producto'], 500);
         }
-    }
-
-    private function product_code_generate(){
-        $temp = (string)rand(100000,999999).(string)rand(100000,999999);
-        $product = DB::table('products')->where('product_code','=', $temp)->first();
-        if (!$product)
-            return $temp;
-        else
-            return $this->product_code_generate();
     }
 
     private function addKardex($id,$cant,$attributes){
@@ -114,7 +108,16 @@ class ProductController extends Controller
         }
     }
 
-    /**
+    private function product_code_generate(){
+        $temp = (string)rand(100000,999999).(string)rand(100000,999999);
+        $product = DB::table('products')->where('product_code','=', $temp)->first();
+        if (!$product)
+            return $temp;
+        else
+            return $this->product_code_generate();
+    }
+
+   /**
      * Display the specified resource.
      *
      * @param  int  $id
@@ -125,26 +128,6 @@ class ProductController extends Controller
         try{
             $product = Product::find($id);
             if ($product !== null) {
-
-//                SELECt DISTINCT  k.product_id,att.valor FROM kardexs k
-//                join attribute_kardex a
-//                on a.kardex_id=k.id
-//                join attributes att
-//                on att.id=a.attribute_id
-//                where k.product_id=1;
-
-//                $productAux= DB::table('kardexs')
-//                        ->select('kardexs.id','types_attributes.name','attributes.valor')
-//                        ->join('attribute_kardex','attribute_kardex.kardex_id','=','kardexs.id')
-//                        ->join('attributes','attributes.id','=','attribute_kardex.attribute_id')
-//                        ->join('types_attributes','types_attributes.id','=','attributes.type_id')
-//                        ->where('kardexs.product_id','=',$id)
-//                        ->orderby('kardexs.id')
-//                        ->distinct('kardexs.id','types_attributes.name','attributes.valor')
-//                        ->get();
-
-                //$productAux2 = DB::select('')
-
                 $kardexs=$product->kardexs;
                 foreach ($kardexs as $kardex ){
                     $kardex->attributes;

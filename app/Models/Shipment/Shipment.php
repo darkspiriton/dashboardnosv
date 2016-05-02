@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Shipment extends Model
 {
+    protected $table='shipments';
 
     public function status(){
         return $this->belongsTo(Status::class);

@@ -5,7 +5,7 @@ namespace Dashboard\Models\Kardex;
 use Illuminate\Database\Eloquent\Model;
 
 
-class Type_Attribute extends Model
+class TypeAttribute extends Model
 {
     protected $table='types_attributes';
     

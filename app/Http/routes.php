@@ -46,6 +46,7 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
         Route::get('/types','ProductController@types');
         Route::get('/type/{id}','ProductController@type_products');
     });
+
     Route::resource('/product','ProductController',
         ['only'=>['index','store','update','destroy','show']]);
 

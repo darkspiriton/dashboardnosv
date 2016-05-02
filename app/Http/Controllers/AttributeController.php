@@ -2,7 +2,7 @@
 
 namespace Dashboard\Http\Controllers;
 
-use Dashboard\Models\Kardex\Type_Attribute;
+use Dashboard\Models\Kardex\TypeAttribute;
 use Illuminate\Http\Request;
 use Dashboard\Http\Requests;
 use Illuminate\Support\Facades\DB;
@@ -16,7 +16,7 @@ class AttributeController extends Controller
      */
     public function index()
     {
-        $types=Type_Attribute::all();
+        $types=TypeAttribute::all();
 
         foreach ($types as $type) {
             $type->att;
@@ -61,8 +61,7 @@ class AttributeController extends Controller
             }
         }catch(ErrorException $e){
             return response()->json(['message' => 'Ocurrio un error'],500);
-        }
-        
+        }        
     }
 
 

@@ -79,7 +79,7 @@ $factory->define(\Dashboard\Models\Order\Detail::class , function (Generator $fa
 $factory->define(\Dashboard\Models\Shipment\Shipment::class , function (Generator $faker) {
     return [
         'address_id'=>  $faker->randomFloat($nbMaxDecimals=0,$min=1,$max=60),
-        'shipment_status_id' =>  $faker->randomFloat($nbMaxDecimals=0,$min=1,$max=3),
+        'status_id' =>  $faker->randomFloat($nbMaxDecimals=0,$min=1,$max=3),
         'type_ship_id' =>  $faker->randomFloat($nbMaxDecimals=0,$min=1,$max=3),
         'date' =>  $faker->date(),
         'cost' =>  $faker->randomFloat($nbMaxDecimals=2,$min=10,$max=30)

@@ -8,6 +8,8 @@ use Illuminate\Foundation\Auth\User;
 
 class Tracing extends Model
 {
+
+    protected $table='tracing';
     public function shipment(){
         return $this->belongsTo(Shipment::class);
     }

@@ -10,7 +10,6 @@ class Detail extends Model
     public $timestamps = false;
 
     protected $table = 'order_details';
-
     public function order(){
         return $this->belongsTo(Order::class);
     }

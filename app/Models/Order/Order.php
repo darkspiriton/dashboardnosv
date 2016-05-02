@@ -10,8 +10,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Order extends Model
 {
-    public function customers(){
-        return $this->belongsTo(Customer::class);
+    protected $table = 'orders';
+
+    public function customer(){
+        return $this->belongsTo(Customer::class)->select('name');
     }
 
     public function calls(){
@@ -27,7 +29,7 @@ class Order extends Model
     }
 
     public function user(){
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class)->select(array('last_name', 'first_name'));
     }
 
     public function shipment(){

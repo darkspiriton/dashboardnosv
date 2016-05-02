@@ -13,8 +13,8 @@ class GroupAttribute extends Model
         return $this->hasMany(Kardex::class);
     }
 
-    public function attributes(){
-        return $this->hasMany(AttributesKardex::class);
+    public function attributes_kardex(){
+        return $this->hasMany(AttributesKardex::class)->select(array("id","group_attribute_id","attribute_id"));
     }
 
     public function product(){

@@ -60,5 +60,8 @@ class User extends Model
         return $this->hasMany(Commission::class);
     }
 
+    public function getFullNameAttribute(){
+        return $this->last_name.','.' '.$this->first_name;
+    }
 
 }

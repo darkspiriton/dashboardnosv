@@ -1,6 +1,6 @@
 <div class="card" >
     <div class="card-header bgm-blue">
-        <h2>Gestion de registros de interes</h2>
+        <h2>Gestion de pedidos</h2>
         <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="list()"
                 data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
                 title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
@@ -18,58 +18,35 @@
 
 <div class="card" id="formulariohide">
     <div class="card-header bgm-blue">
-        <h2>Crear registro de interest</h2>
+        <h2>Crear pedido</h2>
     </div>
 
     <div class="card-body card-padding" >
         <div class="card-header">
-            <h2>Datos de interest</h2>
+            <h2>Datos de pedido</h2>
         </div>
 
         <form name="form" id="form" class="form-horizontal" autocomplete="off">
-            <input type="hidden" ng-model="interest.id">
+            <input type="hidden" ng-model="order.id">
             <div class="form-group">
-                <label class="col-xs-2 col-sm-2 control-label">Canal de atencion</label>
-                <div class="col-xs-10 col-sm-4">
+                <label class="col-xs-12 col-sm-2 control-label">Cliente</label>
+                <div class="col-xs-12 col-sm-10">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-list"></i></span>
-                        <div class="fg-line select">
-                            <select class="form-control" ng-options="social.id as social.name for social in socials" ng-model="interest.channel_id" required>
-                                <option value="" disabled="disabled" select="true">Seleccione</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-                <label class="col-xs-2 col-sm-1 control-label">Cliente</label>
-                <div class="col-xs-10 col-sm-5">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="md md-list"></i></span>
-                        <input type="hidden" ng-model="interest.customer_id" required>
+                        <input type="hidden" ng-model="order.customer_id" required>
                         <input id="searchCustomer" ng-focus="listSearch()" ng-change="listSearch()" ng-blur="listView=false" type="text" class="form-control input-sm" ng-model="search" required>
                     </div>
                 </div>
             </div>
-
-            <div class="form-group">
-                <label class="col-xs-2 col-sm-2 control-label">Observacion</label>
-                <div class="col-xs-10 col-sm-10">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="md md-receipt"></i></span>
-                        <input type="text" class="form-control input-sm" ng-model="interest.observation" required>
-                    </div>
-                </div>
-            </div>
-
         </form>
 
         <div class="card-header">
-            <h2>Productos de interes</h2>
+            <h2>Productos del pedido</h2>
         </div>
         <div class="attr-buttons">
             <div class="row">
                 <label class="col-xs-12 col-sm-2 control-label text-right">Busqueda de productos</label>
-                <div class="col-xs-12 col-sm-3">
+                <div class="col-xs-12 col-sm-2">
                     <div class="fg-line select">
                         <select class="form-control" ng-change="listProduct(product.type)" ng-options="index as productType.name for (index, productType) in productTypes" ng-model="product.type" required>
                             <option value="" disabled="disabled" select="true">Seleccione categoria</option>
@@ -78,12 +55,19 @@
                 </div>
                 <div class="col-xs-12 col-sm-3">
                     <div class="fg-line select">
-                        <select class="form-control" ng-options="index as product.name for (index, product) in products" ng-model="product.index" required>
+                        <select class="form-control" ng-change="listKardex(product.index)" ng-options="index as product.name for (index, product) in products" ng-model="product.index" required>
                             <option value="" disabled="disabled" select="true">Seleccione producto</option>
                         </select>
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-2">
+                <div class="col-xs-12 col-sm-4">
+                    <div class="fg-line select">
+                        <select class="form-control" ng-options="index as (kardex.id + ' --- ' + kardex.name + ' --- ' + kardex.attrs + ' --- ' + kardex.price) for (index, kardex) in kardexs" ng-model="product.index" required>
+                            <option value="" disabled="disabled" select="true">Seleccione Caracteristicas</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-1">
                     <button ng-click="addPrd(product)" type="button" class="btn btn-success btn-sm waves-effect">Agregar</button>
                 </div>
             </div>
@@ -126,10 +110,10 @@
     </div>
 </div>
 
-<div id="list" class="search-list" style="top: 580px; left: 1236.64px; position: absolute;">
+<div id="list" class="search-list">
     <ul ng-show="listView" class="dropdown-menu dm-icon">
         <li ng-repeat="customer in customers" ng-click="selectCustomer($index)">
-            <a ui-sref="Intereses">{{ customer.name + ' - ' + customer.phone }}</a>
+            <a ui-sref="Pedidos">{{ customer.name + ' - ' + customer.phone }}</a>
         </li>
     </ul>
 </div>
@@ -141,28 +125,28 @@
             <div class="modal-header bgm-teal">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h3 class="modal-title c-white">Registro de alcanse de: {{ interestDetail.customer.name }}</h3>
+                <h3 class="modal-title c-white">Registro de alcanse de: {{ orderDetail.customer.name }}</h3>
             </div>
             <div class="modal-body card-padding">
                 <form class="form-horizontal" autocomplete="off" submit="return false;">
                     <div class="form-group form-pad-top">
                         <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Canal: </label>
-                        <label class="col-xs-6 col-sm-2 control-label" style="text-align: left" ng-bind="interestDetail.channel.name"></label>
+                        <label class="col-xs-6 col-sm-2 control-label" style="text-align: left" ng-bind="orderDetail.channel.name"></label>
                     </div>
                     <div class="form-group">
                         <label class="col-xs-12 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Cliente: </label>
-                        <label class="col-xs-12 col-sm-8 control-label" style="text-align: left" ng-bind="interestDetail.customer.name"></label>
+                        <label class="col-xs-12 col-sm-8 control-label" style="text-align: left" ng-bind="orderDetail.customer.name"></label>
                     </div>
                     <div class="form-group">
                         <label class="col-xs-12 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Cbervación: </label>
-                        <label class="col-xs-12 col-sm-8 control-label" style="text-align: left" ng-bind="interestDetail.observation"></label>
+                        <label class="col-xs-12 col-sm-8 control-label" style="text-align: left" ng-bind="orderDetail.observation"></label>
                     </div>
                     <div class="form-group">
                         <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Fecha: </label>
-                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="interestDetail.created_at"></label>
+                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="orderDetail.created_at"></label>
 
                         <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Estado: </label>
-                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="getStatus(interestDetail.status_id)"></label>
+                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="getStatus(orderDetail.status_id)"></label>
                     </div>
                     <div class="form-group">
                         <label class="col-xs-12 col-xs-offset-1 col-sm-offset-1 col-sm-5 control-label">Productos interesados</label>
@@ -179,7 +163,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr ng-repeat="detail in interestDetail.details">
+                                    <tr ng-repeat="detail in orderDetail.details">
                                         <td>{{ detail.product.type_product.name }}</td>
                                         <td>{{ detail.product.name }}</td>
                                         <td>{{ detail.product.price }}</td>

@@ -132,10 +132,10 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
 
     //RUTAS EXPERIMENTALES
     //Rutas para API REST auxproducts
-//    Route::resource('auxproduct','AuxProductController',
-//        ['only'=>['index','store','update','show']]);
-//    Route::resource('auxmovement','AuxMovementController',
-//        ['only'=>['index','store','update','show']]);
+    Route::resource('auxproduct','AuxProductController',
+        ['only'=>['index','store','update','show']]);
+    Route::resource('auxmovement','AuxMovementController',
+        ['only'=>['index','store','update','show']]);
 //    Route::resource('provider','AuxProviderController',
 //        ['only'=>['index','store','update','show']]);
 });

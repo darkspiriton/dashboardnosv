@@ -110,16 +110,16 @@
                                         <td ng-bind="attrName(attr.id)"></td>
                                         <td  ng-bind="attrValueName(attr.id, attr.val_id)"></td>
                                         <td style="width: 80px;">
-                                            <button class="btn btn-xs btn-danger" ng-click="removeAttr(grp,attr,$event)" style="width: 82px;">Quitar</button>
+                                            <button class="btn btn-xs btn-danger" ng-click="removeAttr($parent.$index,$index)" style="width: 82px;">Quitar</button>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
                             <div class="attr-buttons">
-                                <button ng-click="showAttr(grp)" type="button" class="btn btn-success btn-sm waves-effect">Agregar o Reemplazar Atributo</button>
-                                <button ng-click="showQuant(grp)" type="button" class="btn bgm-purple btn-sm waves-effect">Agregar Cantidad</button>
+                                <button ng-click="showAttr($index)" type="button" class="btn btn-success btn-sm waves-effect">Agregar o Reemplazar Atributo</button>
+                                <button ng-click="showQuant($index)" type="button" class="btn bgm-purple btn-sm waves-effect">Agregar Cantidad</button>
                                 <button ng-click="duplicateGrpAttr(grp)" type="button" class="btn btn-primary btn-sm waves-effect">Duplicar grupo</button>
-                                <button ng-click="removeGrpAttr(grp)" type="button" class="btn bgm-red btn-sm waves-effect">Eliminar grupo</button>
+                                <button ng-click="removeGrpAttr($index)" type="button" class="btn bgm-red btn-sm waves-effect">Eliminar grupo</button>
                             </div>
                         </div>
                      </div>
@@ -130,7 +130,6 @@
                     <div class="col-sm-offset-2 col-sm-10">
                         <button ng-disabled="!formuser.$valid" ng-disabled="formSubmit"  ng-click="submit()" type="button" class="btn btn-primary btn-sm waves-effect">Guardar</button>
                         <a ng-click="cancel()" class="btn btn-danger btn-sm waves-effect">Cancelar</a>
-                        -> Pendiente obtimizar *use $index
                     </div>
                 </div>
             </form>

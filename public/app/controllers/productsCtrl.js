@@ -140,35 +140,77 @@ angular.module('App')
         //};
 
         $scope.submit = function () {
-            var method = ( $scope.product.id )?'PUT':'POST';
-            var url = ( method == 'PUT')? util.baseUrl('api/product/' + $scope.product.id): util.baseUrl('api/product');
-            var config = {
-                method: method,
-                url: url,
-                data: toformData.dataFile($scope.product),
-                headers: {'Content-Type': undefined}
-            };
-            $scope.formSubmit=true;
-            $log.log($scope.product);
-            petition.custom(config).then(function(data){
-                toastr.success(data.message);
-                $scope.formSubmit=false;
-                $scope.list();
-                util.ocultaformulario();
-            }, function(error){
-                toastr.error('Ups ocurrio un problema: ' + error.data.message);
-                $scope.formSubmit=false;
-            });
+            var msg = productValidate();
+            if ( msg  == ""){
+                return $log.log('Good exelent !! ');
+                var method = ( $scope.product.id )?'PUT':'POST';
+                var url = ( method == 'PUT')? util.baseUrl('api/product/' + $scope.product.id): util.baseUrl('api/product');
+                var config = {
+                    method: method,
+                    url: url,
+                    data: toformData.dataFile($scope.product),
+                    headers: {'Content-Type': undefined}
+                };
+                $scope.formSubmit=true;
+                $log.log($scope.product);
+                petition.custom(config).then(function(data){
+                    toastr.success(data.message);
+                    $scope.formSubmit=false;
+                    $scope.list();
+                    util.ocultaformulario();
+                }, function(error){
+                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                    $scope.formSubmit=false;
+                });
+            } else {
+                toastr.error(msg);
+            }
         };
+
+        function productValidate(){
+            var grpAttTemp = removeQuantityValidate();
+
+            for(i in $scope.product.groupAttr){
+                if ($scope.product.groupAttr[i].quantity == undefined){
+                    return "Falta ingresar cantidad";
+                }
+            }
+
+            for(index in grpAttTemp){
+                for(index2 in  grpAttTemp){
+                    if( index2 <= index )continue;
+                    if (angular.equals(grpAttTemp[index],grpAttTemp[index2])){
+                        return "Se encontro grupo de attributos iguales";
+                    }
+                }
+            }
+
+            return "";
+        }
+
+        function removeQuantityValidate(){
+            var temp = angular.copy($scope.product.groupAttr);
+            for(i in temp) {
+                temp[i].quantity = undefined;
+                temp[i].id = undefined;
+            }
+            return temp;
+        }
 
         $scope.cancel = function () {
             $scope.product = angular.copy($scope.productClear);
             util.ocultaformulario();
         };
 
-        $scope.cancel2 = function () {
-            $log.log($scope.product);
-        };
+        //$scope.cancel2 = function () {
+        //    //$log.log($scope.product);
+        //    var msg = productValidate();
+        //    if ( msg == ''){
+        //        return $log.log('Good exelent !! ');
+        //    } else {
+        //        $log.info(msg);
+        //    }
+        //};
 
         $scope.new = function(){
             $scope.product = angular.copy($scope.productClear);
@@ -182,8 +224,8 @@ angular.module('App')
 
         // Adds Attributes
 
-        $scope.showAttr = function ( item ){
-            $scope.index = $scope.product.groupAttr.indexOf(item);
+        $scope.showAttr = function ( i ){
+            $scope.index = i;
             util.modal('addAttr');
         };
 
@@ -212,12 +254,8 @@ angular.module('App')
             $scope.newAttr.val_id = null;
         };
 
-        $scope.removeAttr = function( grpAttr, item ){
-            $log.log([grpAttr, item]);
-
-            var index = $scope.product.groupAttr.indexOf(grpAttr);
-            var itemIndex = $scope.product.groupAttr[index].attributes.indexOf(item);
-            $scope.product.groupAttr[index].attributes.splice(itemIndex, 1);
+        $scope.removeAttr = function( grpIndex, item ){
+            $scope.product.groupAttr[grpIndex].attributes.splice(item, 1);
         };
 
         $scope.addGrpAttr = function(){
@@ -226,14 +264,13 @@ angular.module('App')
         };
 
         $scope.removeGrpAttr = function( item ){
-            var index = $scope.product.groupAttr.indexOf(item);
-            $scope.product.groupAttr.splice(index, 1);
+            $scope.product.groupAttr.splice(item, 1);
         };
 
         $scope.duplicateGrpAttr = function( item ){
             $scope.count++;
             item.id = $scope.count;
-            $scope.product.groupAttr.push(angular.copy(angular.copy(item)));
+            $scope.product.groupAttr.push(angular.copy(item));
         };
 
         $scope.attrName = function( ind ){
@@ -256,8 +293,8 @@ angular.module('App')
             }
         };
 
-        $scope.showQuant = function ( item ){
-            $scope.index = $scope.product.groupAttr.indexOf(item);
+        $scope.showQuant = function ( grpIndex ){
+            $scope.index = grpIndex;
             util.modal('addQuant');
         };
 

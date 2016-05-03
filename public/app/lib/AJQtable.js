@@ -18,7 +18,7 @@
 			var element, linker;
 			linker = $compile(nRow);
 			element = linker($scope);
-			return nRow = element;
+			return element;
 		};
 
 		function searchObject(obj, prop) {

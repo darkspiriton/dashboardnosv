@@ -2,7 +2,6 @@
 
 namespace Dashboard\Models\Experimental;
 
-use Dashboard\Models\Kardex\Movements;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
@@ -26,6 +25,6 @@ class Product extends Model
     }
 
     public function movements(){
-        return $this->hasMany(Movements::class);
+        return $this->hasMany(Movement::class);
     }
 }

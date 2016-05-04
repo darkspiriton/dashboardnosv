@@ -9,6 +9,6 @@ class Movement extends Model
     protected $table = "auxmovements";
     
     public function product(){
-        return $this->belongsTo(Movement::class);
+        return $this->belongsTo(Product::class);
     }
 }

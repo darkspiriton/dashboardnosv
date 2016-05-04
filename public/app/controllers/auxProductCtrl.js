@@ -47,6 +47,16 @@ angular.module('App')
             count: null
         };
 
+        var newProvider =  {
+            id: 0,
+            name: '•-- Nuevo Proveedor --•'
+        };
+
+        var newColor =  {
+            id: 0,
+            name: '•-- Nuevo Color --•'
+        };
+
         $scope.list = function() {
             petition.get('api/auxproduct')
                 .then(function(data){
@@ -64,6 +74,7 @@ angular.module('App')
             petition.get('api/providers')
                 .then(function(data){
                     $scope.providers = data.providers;
+                    $scope.providers.push(newProvider);
                 }, function(error){
                     console.log(error);
                     toastr.error('Ups ocurrio un problema: ' + error.data.message);
@@ -84,6 +95,7 @@ angular.module('App')
             petition.get('api/colors')
                 .then(function(data){
                     $scope.colors = data.colors;
+                    $scope.colors.push(newColor);
                 }, function(error){
                     console.log(error);
                     toastr.error('Ups ocurrio un problema: ' + error.data.message);
@@ -129,8 +141,48 @@ angular.module('App')
             util.muestraformulario();
         };
 
+
+        // Events
+
+        $scope.eventProvider = function( v ){
+            if ( v != 0)return true;
+            $scope.product.provider_id = null;
+            $scope.newFeature.tittle = 'Nuevo Proveedor';
+            $scope.newFeature.label = 'Ingrese nombre de proveedor';
+            $scope.newFeature.url = 'api/auxproduct/set/provider';
+            $scope.newFeature.name = null;
+            util.modal('feature');
+        };
+
+        $scope.eventColor = function( v ){
+            if ( v != 0)return true;
+            $scope.product.color_id = null;
+            $scope.newFeature.tittle = 'Nuevo Color';
+            $scope.newFeature.label = 'Ingrese nombre de color';
+            $scope.newFeature.url = 'api/auxproduct/set/color';
+            $scope.newFeature.name = null;
+            util.modal('feature');
+        };
+
+        $scope.addFeature = function () {
+            petition.put($scope.newFeature.url,
+                {name: $scope.newFeature.name})
+                .then(function(data){
+                    toastr.success(data.message);
+                    util.modalClose('feature');
+                    $scope.listProviders();
+                    $scope.listColors();
+                }, function(error){
+                    console.log(error);
+                    toastr.error('Uyuyuy dice: ' + error.data.message);
+                });
+        };
+
+        // End events
+
         angular.element(document).ready(function(){
             $scope.product = angular.copy($scope.productClear);
+            $scope.newFeature = {};
             $scope.list();
             $scope.listProviders();
             $scope.listSizes();

@@ -162,19 +162,18 @@ class AuxProductController extends Controller
                 return response()->json(['message' => 'No posee todo los campos necesario para crear un nuevo proveedor'],401);
             }
 
-            $provider = DB::table('providers')
-                ->where('name','=',$request->input('name'))
-                ->get();
+            $provider = Provider::where('name','=',$request->input('name'))->exists();
 
-            if($provider == null){
+            if(!$provider){
 
                 $proveedor = new Provider();
                 $proveedor->name = $request->input('name');
+                $proveedor->save();
                 return response()->json(['message' => 'El nuevo proveedor se agrego correctamente'],200);
 
             } else {
 
-                return response()->json(['message' => 'El nombre del proveedor ya existe'],200);
+                return response()->json(['message' => 'El nombre del proveedor ya existe'],401);
             }
 
         } catch (Exception $e) {
@@ -197,19 +196,18 @@ class AuxProductController extends Controller
                 return response()->json(['message' => 'No posee todo los campos necesario para crear un nuevo color'],401);
             }
 
-            $color = DB::table('colors')
-                ->where('name','=',$request->input('name'))
-                ->get();
+            $color = Color::where('name','=',$request->input('name'))->exists();
 
-            if($color == null){
+            if(!$color){
 
                 $c = new Color();
                 $c->name = $request->input('name');
+                $c->save();
                 return response()->json(['message' => 'El nuevo color se agrego correctamente'],200);
 
             } else {
 
-                return response()->json(['message' => 'El nombre del color ya existe'],200);
+                return response()->json(['message' => 'El nombre del color ya existe'],401);
             }
 
         } catch (Exception $e) {

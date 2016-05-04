@@ -2,6 +2,7 @@
 
 namespace Dashboard\Http\Controllers;
 
+use Dashboard\Models\Experimental\Movement;
 use Dashboard\Models\Experimental\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -63,7 +64,42 @@ class AuxMovementController extends Controller
      */
     public function store(Request $request)
     {
+        // Creamos las reglas de validación
+        $rules = [
+            'product_id'    => 'required',
+            'date_shipment' => 'required',
+            'situation'     => 'required',
+            'status'        => 'required'
+        ];
 
+        //Se va a pasar datos del movimiento
+        try {
+            // Ejecutamos el validador y en caso de que falle devolvemos la respuesta
+            // con los errores
+            $validator = \Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return response()->json(['message' => 'No posee todo los campos necesario para crear un movimiento'],401);
+            }
+
+            $product=Product::find($request->input('product_id'));
+            $move=$product->movements->first();
+
+            if($move->status != 'vendido'){
+                $movement = new Movement();
+                $movement->product_id=$request->input('product_id');
+                $movement->date_shipment=$request->input('date_shipment');
+                $movement->status=$request->input('status');
+                if($request->input('situation') == 'retorno'){
+                    $movement->situation=$request->input('situation');
+                }
+                $movement->save();
+            }
+            return response()->json(['message' => 'El producto se agrego correctamente'],200);
+
+        } catch (Exception $e) {
+            // Si algo sale mal devolvemos un error.
+            return \Response::json(['message' => 'Ocurrio un error al agregar producto'], 500);
+        }
     }
 
     /**
@@ -90,9 +126,54 @@ class AuxMovementController extends Controller
         //
     }
 
-    public function search($string){
-        $product = Product::where('name','LIKE','%'.$string.'%')->orWhere('phone','LIKE','%'.$string.'%')->get();
-        return response()->json( ['customers' => $product] ,200);
+    public function sale(Request $request){
+        // Creamos las reglas de validación
+        $rules = [
+            'product_id'    => 'required',
+            'date_shipment' => 'required',
+            'situation'     => 'required',
+            'status'        => 'required'
+        ];
+
+        //Se va a pasar datos del movimiento
+        try {
+            // Ejecutamos el validador y en caso de que falle devolvemos la respuesta
+            // con los errores
+            $validator = \Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return response()->json(['message' => 'No posee todo los campos necesario para crear un movimiento'],401);
+            }
+
+            $product=Product::find($request->input('product_id'));
+            $move=$product->movements->first();
+
+            if($move->status != 'vendido'){
+                $movement = new Movement();
+                $movement->product_id=$request->input('product_id');
+                $movement->date_shipment=$request->input('date_shipment');
+                $movement->status=$request->input('status');
+                $movement->save();
+                
+                $product->status = 0;
+                $product->save();
+            }
+            return response()->json(['message' => 'La venta se agrego correctamente'],200);
+
+        } catch (Exception $e) {
+            // Si algo sale mal devolvemos un error.
+            return \Response::json(['message' => 'Ocurrio un error al agregar una venta'], 500);
+        }
+    }
+
+    public function movementPending(Request $request){
+        $product = DB::table('auxproducts AS p')
+            ->select(DB::raw('count(*) as cant'),'p.name','p.id')
+            ->join('auxmovements AS m','m.product_id','=','p.id')
+            ->where('name','LIKE','%'.$request->input('name').'%')
+            ->where('color_id','=',$request->input('color_id'))
+            ->where('size_id','=',$request->input('size_id'))
+            ->groupby('p.name')
+            ->orderby('cant','asc')->get();
     }
 
 }

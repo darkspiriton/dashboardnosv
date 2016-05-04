@@ -91,7 +91,7 @@ class AuthTokenController extends Controller
         $token = $request->input('Authorization');
         $user = User::where('token','=', $token)->first();
         if ($user->role->abrev == 'GOD' ){
-            return view('god');
+            return view('auxGod');
         } else if ($user->role->abrev == 'ADM') {
             return view('administrator');
         } else if ($user->role->abrev == 'VEN') {

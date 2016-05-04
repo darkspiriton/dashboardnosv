@@ -138,6 +138,10 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
         ['only'=>['index','store','update','show']]);
 //    Route::resource('provider','AuxProviderController',
 //        ['only'=>['index','store','update','show']]);
+
+    Route::get('providers', 'AuxProductController@getProviders');
+    Route::get('sizes', 'AuxProductController@getSizes');
+    Route::get('colors', 'AuxProductController@getColors');
 });
 
 Route::get('/test', function(\Illuminate\Http\Request $request){

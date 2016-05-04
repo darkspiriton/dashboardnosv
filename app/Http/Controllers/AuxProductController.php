@@ -3,6 +3,9 @@
 namespace Dashboard\Http\Controllers;
 
 use Dashboard\Events\ProductWasCreated;
+use Dashboard\Models\Experimental\Color;
+use Dashboard\Models\Experimental\Provider;
+use Dashboard\Models\Experimental\Size;
 use Illuminate\Support\Facades\Event;
 use Dashboard\Models\Experimental\Product;
 use Illuminate\Http\Request;
@@ -24,8 +27,9 @@ class AuxProductController extends Controller
         foreach ($products as $product){
             $product->size;
             $product->color;
+            $product->provider;
         }
-        return response()->json(['products',$products],200);
+        return response()->json(['products' => $products],200);
     }
 
     /**
@@ -95,7 +99,7 @@ class AuxProductController extends Controller
 
                 return response()->json(['message' => 'El producto se agrego correctamente'],200);
             } else {
-                return response()->json(['message' => 'El código del producto ya existe'],200);
+                return response()->json(['message' => 'El código del producto ya existe'],401);
             }
 
 
@@ -129,5 +133,22 @@ class AuxProductController extends Controller
         //
     }
 
+    public function getProviders(){
+        $providers = Provider::all();
+
+        return response()->json(['providers' => $providers ],200);
+    }
+
+    public function getSizes(){
+        $sizes = Size::all();
+
+        return response()->json(['sizes' => $sizes],200);
+    }
+
+    public function getColors(){
+        $colors = Color::all();
+
+        return response()->json(['colors' => $colors],200);
+    }
 
 }

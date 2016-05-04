@@ -26,6 +26,7 @@ class AuxProductController extends Controller
         foreach ($products as $product){
             $product->size;
             $product->color;
+            $product->move = $product->movements->first();
         }
         return response()->json(['products',$products],200);
     }
@@ -244,7 +245,6 @@ class AuxProductController extends Controller
             }
             $i=$codigo->cod;
         }
-       // dd($codigos);
         return response()->json(['codigos' =>$data],200);
     }
 

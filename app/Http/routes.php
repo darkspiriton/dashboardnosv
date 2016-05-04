@@ -138,14 +138,17 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
     Route::resource('auxmovement','AuxMovementController',
         ['only'=>['index','store','update','show']]);
 
+    Route::group(['prefix'=>'auxmovement/'],function(){
+        Route::post('/set/sale','AuxMovementController@sale'); 
+    });
+
     Route::group(['prefix'=>'auxproduct/'],function(){
-        Route::put('/set/movement','AuxProductController@addressUpdate');
-        Route::put('/set/color','AuxProductController@setColor');
-        Route::put('/set/provider','AuxProductController@setProvider');
+        Route::post('/set/movement','AuxProductController@addressUpdate');
+        Route::post('/set/color','AuxProductController@setColor');
+        Route::post('/set/provider','AuxProductController@setProvider');
         Route::get('/get/code','AuxProductController@getCod');
     });
 
-    
 //    Route::resource('provider','AuxProviderController',
 //        ['only'=>['index','store','update','show']]);
 

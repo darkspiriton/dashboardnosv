@@ -58,13 +58,15 @@ class AuxProductsTableSeeder extends Seeder
                 'name' => $faker->company,               
                 'status' => $faker->randomFloat( $nbMaxDecimals = 0, $min= 0, $max=1),
             ));
-
-            DB::table('auxmovements')->insertGetId(array(                
-                'product_id' => $idProduct,
-                'date' => $faker->dateTime($max = 'now', $timezone = date_default_timezone_get()),
-                'date_shipment' => $faker->dateTime($max = 'now', $timezone = date_default_timezone_get()),
-                'situation' => $faker->word,
-            ));
+            for($j=0;$j<5;$j++){
+                DB::table('auxmovements')->insertGetId(array(
+                    'product_id' => $idProduct,
+                    'date' => $faker->dateTime($max = 'now', $timezone = date_default_timezone_get()),
+                    'date_shipment' => $faker->dateTime($max = 'now', $timezone = date_default_timezone_get()),
+                    'situation' => $faker->word,
+                    'status' => $faker->word,
+                ));
+            }
         }
     }
 }

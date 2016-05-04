@@ -134,8 +134,18 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
     //Rutas para API REST auxproducts
     Route::resource('auxproduct','AuxProductController',
         ['only'=>['index','store','update','show']]);
+
     Route::resource('auxmovement','AuxMovementController',
         ['only'=>['index','store','update','show']]);
+
+    Route::group(['prefix'=>'auxproduct/'],function(){
+        Route::put('/set/movement','AuxProductController@addressUpdate');
+        Route::put('/set/color','AuxProductController@setColor');
+        Route::put('/set/provider','AuxProductController@setProvider');
+        Route::get('/get/code','AuxProductController@getCod');
+    });
+
+    
 //    Route::resource('provider','AuxProviderController',
 //        ['only'=>['index','store','update','show']]);
 });

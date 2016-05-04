@@ -84,5 +84,6 @@ class CreateKardexTable extends Migration
         Schema::dropIfExists('kardexs');
         Schema::dropIfExists('groups_attributes');
 
+
     }
 }

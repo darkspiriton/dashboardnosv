@@ -18,7 +18,7 @@ angular.module('App')
                 {"sTitle": "Nombre", "bSortable" : true},
                 {"sTitle": "Proveedor", "bSortable" : true},
                 {"sTitle": "Talla", "bSortable" : true},
-                {"sTitle": "Color" , "bSearchable": false}
+                {"sTitle": "Color" , "bSearchable": true}
             ],
             data  	: 	['created_at','cod','name','provider.name','size.name','color.name'],
             configStatus : 'status'

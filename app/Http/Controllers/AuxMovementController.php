@@ -15,38 +15,25 @@ class AuxMovementController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        // Creamos las reglas de validación
-        $rules = [
-            'name'          => 'required',
-            'color_id'         => 'required',
-            'size_id'     => 'required',
-        ];
 
-        //Se va a pasar datos del producto, attributos y su cantidad
+        //Se va a pasar datos del los producto, attributos y su cantidad
         try {
-            // Ejecutamos el validador y en caso de que falle devolvemos la respuesta
-            // con los errores
-            $validator = \Validator::make($request->all(), $rules);
-            if ($validator->fails()) {
-                return response()->json(['message' => 'No posee todo los campos necesario para crear un producto'],401);
-            }
 
-            $product = DB::table('auxproducts AS p')
-                                ->select(DB::raw('count(*) as cant'),'p.name','p.id')
-                                ->join('auxmovements AS m','m.product_id','=','p.id')
-                                ->where('name','LIKE','%'.$request->input('name').'%')
-                                ->where('color_id','=',$request->input('color_id'))
-                                ->where('size_id','=',$request->input('size_id'))
-                                ->groupby('p.name')
-                                ->orderby('cant','asc')->get();
-            
+            $products = DB::table('auxproducts AS p')
+                ->select(DB::raw('count(*) as cant'),'p.name','c.name AS color','s.name AS size','p.id','p.cod')
+                ->join('colors AS c','c.id','=','p.color_id')
+                ->join('sizes AS s','s.id','=','p.size_id')
+                ->join('auxmovements AS m','m.product_id','=','p.id')
+                ->groupby('p.name')
+                ->orderby('cant','asc')->get();
 
-            if($product != null){
-                return response()->json(['product' => $product],200);
+
+            if($products != null){
+                return response()->json(['products' => $products],200);
             } else {
-                return response()->json(['message' => 'No existe producto con esas caracteristicas'],401);
+                return response()->json(['message' => 'No hay productos en existencia'],401);
             }
 
         } catch (Exception $e) {

@@ -89,6 +89,50 @@ class AuxMovementController extends Controller
         }
     }
 
+    public function product_out(Request $request){
+        // Creamos las reglas de validación
+        $rules = [
+            'products'    => 'required',
+        ];
+
+        //Se va a pasar datos del movimiento
+        try {
+            // Ejecutamos el validador y en caso de que falle devolvemos la respuesta
+            // con los errores
+            $validator = \Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return response()->json(['message' => 'No posee todo los campos necesario para crear un movimiento'],401);
+            }
+
+            $products = $request->input('products');
+//            return response()->json($products, 200);
+
+            $response = array();
+
+            foreach($products as $product){
+                $prd = Product::find($product['id']);
+                if($prd->status == 0){
+                    $movement = new Movement();
+//                    $movement->product_id = $prd['id'];
+                    $movement->date_shipment = '1993-03-12';
+                    $movement->situation = 'salida';
+                    $movement->save();
+                    $prd->movements->save($movement);
+                    $prd->status = 1;
+                    $prd->save();
+                };
+                $response[] = $prd;
+            }
+
+            return response()->json(['message' => 'El producto se agrego correctamente',
+                                        'products' => $response],200);
+
+        } catch (Exception $e) {
+            // Si algo sale mal devolvemos un error.
+            return \Response::json(['message' => 'Ocurrio un error al agregar producto'], 500);
+        }
+    }
+
     /**
      * Display the specified resource.
      *

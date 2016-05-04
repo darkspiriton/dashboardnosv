@@ -62,11 +62,11 @@ angular.module('App')
             alertConfig.title = '¿Todo es correcto?'
             swal(alertConfig ,
                 function() {
-                    petition.post('api/auxproduct', $scope.product).then(function(data){
+                    petition.post('api/auxmovement/out',{products:  $scope.dataProducts} ).then(function(data){
                         toastr.success(data.message);
                         $scope.formSubmit=false;
                         $scope.list();
-                        util.ocultaformulario();
+                        //util.ocultaformulario();
                     }, function(error){
                         toastr.error('Uyuyuy dice: ' + error.data.message);
                         $scope.formSubmit=false;
@@ -82,10 +82,15 @@ angular.module('App')
                 }
             }
 
-            if (count == 0)$scope.products.push(angular.copy($scope.tableData[ind]));
+            if (count == 0){
+                $scope.dataProducts.push({id: $scope.tableData[ind].id});
+                $scope.products.push(angular.copy($scope.tableData[ind]));
+            }
+
         };
 
         $scope.removeProduct = function(i){
+            $scope.dataProducts.splice(i,1);
             $scope.products.splice(i,1);
         };
 
@@ -100,6 +105,7 @@ angular.module('App')
         };
 
         function resetProduct(){
+            $scope.dataProducts = angular.copy($scope.productsClear);
             $scope.products = angular.copy($scope.productsClear);
         }
 

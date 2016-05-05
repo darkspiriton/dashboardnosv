@@ -23,12 +23,13 @@ class AuxMovementController extends Controller
         try {
 
             $products = DB::table('auxproducts AS p')
-                ->select(DB::raw('count(*) as cant'),'p.name','c.name AS color','s.name AS size','p.id','p.cod')
+                ->select('p.name','c.name AS color','s.name AS size','p.id','p.cod')
                 ->join('colors AS c','c.id','=','p.color_id')
                 ->join('sizes AS s','s.id','=','p.size_id')
-                ->join('auxmovements AS m','m.product_id','=','p.id')
+                ->leftjoin('auxmovements AS m','m.product_id','=','p.id')
+                ->where('p.status','=',1)
                 ->groupby('p.name')
-                ->orderby('cant','asc')->get();
+                ->orderby('p.id','asc')->get();
 
 
             if($products != null){
@@ -111,15 +112,17 @@ class AuxMovementController extends Controller
 
             foreach($products as $product){
                 $prd = Product::find($product['id']);
-                if($prd->status == 0){
+                if($prd->status == 1){
                     $movement = new Movement();
 //                    $movement->product_id = $prd['id'];
-                    $movement->date_shipment = '1993-03-12';
-                    $movement->situation = 'salida';
-                    $movement->save();
-                    $prd->movements->save($movement);
-                    $prd->status = 1;
+                    $movement->date_shipment = '2000-03-12';
+                    $movement->situation = '';
+                    $movement->status = 'salida';
+//                    $movement->save();
+                    $prd->movements()->save($movement);
+                    $prd->status = 0;
                     $prd->save();
+
                 };
                 $response[] = $prd;
             }

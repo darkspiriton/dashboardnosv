@@ -12,6 +12,7 @@
         </div><br>
         <div class="card-footer">
             <input  class="btn bgm-green waves-effect" type='submit' value='Nuevo registro' ng-click="new();">
+            -- Optimizar listado
         </div>
     </div><br>
 </div>
@@ -35,6 +36,7 @@
                         <th>Nombre</th>
                         <th>Talla</th>
                         <th>Color</th>
+                        <th>F. Salida</th>
                         <th>Accion</th>
                     </tr>
                     </thead>
@@ -44,7 +46,10 @@
                         <td>{{ product.name }}</td>
                         <td>{{ product.size }}</td>
                         <td>{{ product.color }}</td>
-                        <td><button ng-click="removeProduct($index)" class="btn btn-danger btn-sm waves-effect">Eliminar</button></td>
+                        <td style="width: 160px">
+                            <input class="form-control input-sm" type="date" ng-model="products[$index].date" required>
+                        </td>
+                        <td style="width: 80px"><button ng-click="removeProduct($index)" class="btn btn-danger btn-sm waves-effect">Eliminar</button></td>
                     </tr>
                     </tbody>
                 </table>
@@ -56,6 +61,7 @@
                 <div class="col-sm-offset-2 col-sm-10">
                     <button ng-disabled="products.length == 0" ng-disabled="formSubmit"  ng-click="submit()" type="button" class="btn btn-primary btn-sm waves-effect">Guardar</button>
                     <a ng-click="cancel()" class="btn btn-danger btn-sm waves-effect">Cancelar</a>
+                    <a ng-click="cancel2()" class="btn btn-danger btn-sm waves-effect">Scope</a>
                 </div>
             </div>
         </form>

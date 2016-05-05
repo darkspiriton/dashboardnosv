@@ -27,6 +27,7 @@ class AuxProductController extends Controller
         foreach ($products as $product){
             $product->size;
             $product->color;
+            $product->provider;
             $product->move = $product->movements->first();
         }
         return response()->json(['products' => $products],200);

@@ -165,7 +165,7 @@ angular.module('App')
         };
 
         $scope.addFeature = function () {
-            petition.put($scope.newFeature.url,
+            petition.post($scope.newFeature.url,
                 {name: $scope.newFeature.name})
                 .then(function(data){
                     toastr.success(data.message);

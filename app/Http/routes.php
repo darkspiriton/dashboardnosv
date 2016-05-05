@@ -139,7 +139,8 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
         ['only'=>['index','store','update','show']]);
 
     Route::group(['prefix'=>'auxmovement/'],function(){
-        Route::post('/set/sale','AuxMovementController@sale'); 
+        Route::post('/set/sale','AuxMovementController@sale');
+        Route::get('/get/movement','AuxMovementController@movementPending');
     });
 
     Route::group(['prefix'=>'auxproduct/'],function(){
@@ -147,7 +148,16 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
         Route::post('/set/color','AuxProductController@setColor');
         Route::post('/set/provider','AuxProductController@setProvider');
         Route::get('/get/code','AuxProductController@getCod');
+
+        Route::get('/get/cantPro','AuxProductController@cantPro');
+        Route::get('/get/stockProd','AuxProductController@stockProd');
+        Route::get('/get/stockIni','AuxProductController@stockIni');
+        Route::get('/get/prodSize','AuxProductController@prodSize');
+        Route::get('/get/prodColor','AuxProductController@prodColor');
+        Route::get('/get/prodOutProvider','AuxProductController@prodOutProvider');
     });
+
+
 
 });
 

@@ -248,9 +248,70 @@ class AuxProductController extends Controller
         return response()->json(['codigos' =>$data],200);
     }
 
-    public function cantProduct(){
+    public function cantPro(){
+
+        $cant = DB::table('providers as pr')
+            ->select('pr.name',DB::raw('count(p.id) as cant'))
+            ->join('auxproducts as p','pr.id','=','p.provider_id')
+            ->groupby('pr.name')->get();
+        
+        return response()->json([''=>$cant],200);
+    }
+
+    public function stockProd(){
+
+        $stock = DB::table('auxproducts as p')
+                ->select('p.name',DB::raw('count(p.name) as cantP'))
+                ->where('p.status','=',1)
+                ->groupby('p.name')->get();
+
+        return response()->json(['stock'=>$stock],200);
+        
+    }
+
+    public function stockIni(){
+
+        $stock = DB::table('auxproducts as p')
+                ->select(DB::raw('count(p.name)'))
+                ->where('p.status','=','1')->get();
+
+        return response()->json(['stock'=>$stock],200);
+    }
+
+    public function prodSize(){
+
+        $productSize = DB::table('sizes as s')
+                ->select('p.name','s.name as size',DB::raw('count(p.size_id) as cant'))
+                ->join('auxproducts as p','s.id','=','p.size_id')
+                ->where('p.status','=','1')
+                ->groupby('p.name')->get();
+
+        return response()->json(['product'=>$productSize],200);
 
     }
 
+    public function prodColor(){
+
+        $productColor = DB::table('colors as c')
+            ->select('p.name','c.name as color',DB::raw('count(p.color_id) as cant'))
+            ->join('auxproducts as p','c.id','=','p.color_id')
+            ->where('p.status','=','1')
+            ->groupby('p.name')->get();
+        return response()->json(['products'=>$productColor],200);
+
+    }
+
+    public function prodOutProvider(){
+
+        $productOutProvider = DB::table('providers as pr')
+            ->select('pr.name as provider','p.name',DB::raw('count(m.id) as cant'))
+            ->join('auxproducts as p','pr.id','=','p.provider_id')
+            ->join('auxmovements as m','p.id','=','m.product_id')
+            ->groupby('pr.name','p.name')
+            ->orderby('cant','desc')->get();
+
+        return response()->json(['products'=>$productOutProvider],200);
+
+    }
 
 }

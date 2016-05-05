@@ -196,15 +196,15 @@ class AuxMovementController extends Controller
         }
     }
 
-    public function movementPending(Request $request){
+    public function movementPending(){
         $product = DB::table('auxproducts AS p')
-            ->select(DB::raw('count(*) as cant'),'p.name','p.id')
+            ->select('p.name','p.status','p.id as product_id','p.name','m.id as movement_id',DB::raw('max(m.date) as date'))
             ->join('auxmovements AS m','m.product_id','=','p.id')
-            ->where('name','LIKE','%'.$request->input('name').'%')
-            ->where('color_id','=',$request->input('color_id'))
-            ->where('size_id','=',$request->input('size_id'))
-            ->groupby('p.name')
-            ->orderby('cant','asc')->get();
+            ->where('p.status','=','0')
+            ->groupby('p.id')->get();
+        return \Response::json(['product' => $product], 200);
     }
+
+    
 
 }

@@ -56,7 +56,6 @@ class CreateProductsauxTable extends Migration
         Schema::create('auxmovements', function(Blueprint $table){
             $table->increments('id');
             $table->integer('product_id')->unsigned()->increments();
-            //$table->date('date');
             $table->date('date_shipment');
             $table->string('situation',12)->nullable();
             $table->string('status');

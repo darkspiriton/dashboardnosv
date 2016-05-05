@@ -335,4 +335,15 @@ class AuxProductController extends Controller
 
     }
 
+    public function alarm(){
+
+        //sacar fecha del ultimo movimiento de cada producto
+        //luego comparar la fecha de creacion del producto y los dias de tolerancia con la cantidad minima de venta
+
+        //Si la cantidad de ventas es menos que el de alarma senotificara
+
+        
+
+        return response()->json([''],200);
+    }
 }

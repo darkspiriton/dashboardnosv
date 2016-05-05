@@ -18,19 +18,32 @@ class AuxMovementController extends Controller
      */
     public function index()
     {
-
         //Se va a pasar datos del los producto, attributos y su cantidad
         try {
-
-            $products = DB::table('auxproducts AS p')
-                ->select('p.name','c.name AS color','s.name AS size','p.id','p.cod')
-                ->join('colors AS c','c.id','=','p.color_id')
-                ->join('sizes AS s','s.id','=','p.size_id')
-                ->leftjoin('auxmovements AS m','m.product_id','=','p.id')
+            $cant = DB::table('auxproducts as p')
+                ->join('sizes as s','p.size_id','=','s.id')
+                ->join('colors as c','p.color_id','=','c.id')
                 ->where('p.status','=',1)
-                ->groupby('p.name')
+                ->groupby('p.name','s.name','c.name')
                 ->orderby('p.id','asc')->get();
 
+            $products = DB::table('auxproducts AS p')
+                ->select('p.name','c.name AS color','s.name AS size','p.id','p.cod',DB::raw('count(p.cod) as cant'))
+                ->join('colors AS c','c.id','=','p.color_id')
+                ->join('sizes AS s','s.id','=','p.size_id')
+                //->leftjoin('auxmovements AS m','m.product_id','=','p.id')
+                ->where('p.status','=',1)
+                ->groupby('p.name','s.name','c.name')
+                ->orderby('p.id','asc')
+                //->unionAll($cant)
+                ->get();
+
+//            select count(p.name) from auxproducts p
+//            join sizes s on p.size_id=s.id
+//            join colors c on p.color_id=c.id
+//            where p.status=1
+//            group by p.name,s.name,c.name
+//            order by p.id asc;
 
             if($products != null){
                 return response()->json(['products' => $products],200);

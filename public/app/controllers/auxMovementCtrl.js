@@ -7,7 +7,7 @@ angular.module('App')
                 controller : 'auxMovementCtrl'
             });
     })
-    .controller('auxMovementCtrl', function($scope, $compile, $state, $log, util, petition, toformData, toastr){
+    .controller('auxMovementCtrl', function($scope, $compile, $state, $log, $filter, util, petition, toformData, toastr){
 
         util.liPage('products');
 
@@ -17,7 +17,6 @@ angular.module('App')
                 {"sTitle": "Nombre", "bSortable" : true},
                 {"sTitle": "Color", "bSortable" : true},
                 {"sTitle": "Size", "bSortable" : true},
-                {"sTitle": "Camt", "bSortable" : true},
                 {"sTitle": "Acción" , "bSearchable": false , "sWidth": "80px"}
             ],
             actions	:  	[
@@ -26,7 +25,7 @@ angular.module('App')
                 ]
                 ]
             ],
-            data  	: 	['cod','name','color','size','cant','actions'],
+            data  	: 	['cod','name','color','size','actions'],
             configStatus : 'status'
         };
 
@@ -59,20 +58,32 @@ angular.module('App')
         };
 
         $scope.submit = function () {
-            alertConfig.title = '¿Todo es correcto?'
-            swal(alertConfig ,
-                function() {
-                    petition.post('api/auxmovement/out',{products:  $scope.dataProducts} ).then(function(data){
-                        toastr.success(data.message);
-                        $scope.formSubmit=false;
-                        $scope.list();
-                        //util.ocultaformulario();
-                    }, function(error){
-                        toastr.error('Uyuyuy dice: ' + error.data.message);
-                        $scope.formSubmit=false;
-                    })
-                });
+            valid_product_date($scope.products, function() {
+                alertConfig.title = '¿Todo es correcto?';
+                swal(alertConfig,
+                    function () {
+                        petition.post('api/auxmovement/out', {products: $scope.dataProducts}).then(function (data) {
+                            toastr.success(data.message);
+                            $scope.formSubmit = false;
+                            $scope.list();
+                            util.ocultaformulario();
+                        }, function (error) {
+                            toastr.error('Uyuyuy dice: ' + error.data.message);
+                            $scope.formSubmit = false;
+                        })
+                    });
+            });
         };
+
+        function valid_product_date(prd, callback){
+            for(i in prd){
+                if (prd[i].date == undefined){
+                    toastr.error('Uyuyuy dice: Falta ingresar fecha de salida');
+                    return;
+                }
+            }
+            return callback();
+        }
 
         $scope.addProduct = function(ind){
             var count = 0;
@@ -99,9 +110,20 @@ angular.module('App')
             util.ocultaformulario();
         };
 
+        $scope.cancel2 = function () {
+            $log.log($scope.products);
+        };
+
         $scope.new = function(){
             resetProduct();
             util.muestraformulario();
+        };
+
+        $scope.getDate = function(i){
+            var local = new Date();
+            //$scope.dataProducts[i].date = local;
+            //$scope.products[i].date= local;
+            return local;
         };
 
         function resetProduct(){

@@ -9,7 +9,7 @@ angular.module('App')
     })
     .controller('auxMovementCtrl', function($scope, $compile, $state, $log, $filter, util, petition, toformData, toastr){
 
-        util.liPage('products');
+        util.liPage('movimientos');
 
         $scope.tableConfig 	= 	{
             columns :	[

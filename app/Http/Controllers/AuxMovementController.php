@@ -54,10 +54,8 @@ class AuxMovementController extends Controller
     {
         // Creamos las reglas de validación
         $rules = [
-            'product_id'    => 'required',
-            'date_shipment' => 'required',
-            'situation'     => 'required',
-            'status'        => 'required'
+            'id'    => 'required',
+            'situation' =>  'required'
         ];
 
         //Se va a pasar datos del movimiento
@@ -69,24 +67,37 @@ class AuxMovementController extends Controller
                 return response()->json(['message' => 'No posee todo los campos necesario para crear un movimiento'],401);
             }
 
-            $product=Product::find($request->input('product_id'));
-            $move=$product->movements->first();
+            $product = Product::find($request->input('id'));
+
+            if ($product == null){
+                return response()->json(['message' => 'El producto no existe'],401);
+            }
+
+            $move = $product->movements->first();
+            $situations = [ 1 => 'No le gusto',
+                            2 => 'La foto no es igual al producto',
+                            3 => 'Producto dañado',
+                            4 => 'No se encontro cliente'
+                        ];
 
             if($move->status != 'vendido'){
                 $movement = new Movement();
-                $movement->product_id=$request->input('product_id');
-                $movement->date_shipment=$request->input('date_shipment');
-                $movement->status=$request->input('status');
-                if($request->input('situation') == 'retorno'){
-                    $movement->situation=$request->input('situation');
-                }
-                $movement->save();
+                $movement->situation = $situations[$request->input('situation')];
+                $movement->date_shipment = $move->date_shipment;
+                $movement->status = 'Retornado';
+
+                $product->movements()->save($movement);
+
+                $product->status = 1;
+                $product->save();
+            } else {
+                return response()->json(['message' => 'Este producto tiene un estado de: VENDIDO'],401);
             }
-            return response()->json(['message' => 'El producto se agrego correctamente'],200);
+            return response()->json(['message' => 'La venta se agrego correctamente'],200);
 
         } catch (Exception $e) {
             // Si algo sale mal devolvemos un error.
-            return \Response::json(['message' => 'Ocurrio un error al agregar producto'], 500);
+            return \Response::json(['message' => 'Ocurrio un error al agregar una venta'], 500);
         }
     }
 
@@ -114,7 +125,6 @@ class AuxMovementController extends Controller
                 if($prd->status == 1){
                     $movement = new Movement();
                     $movement->date_shipment = $product['date'];
-                    $movement->situation = '';
                     $movement->status = 'salida';
                     $prd->movements()->save($movement);
                     $prd->status = 0;
@@ -160,10 +170,7 @@ class AuxMovementController extends Controller
     public function sale(Request $request){
         // Creamos las reglas de validación
         $rules = [
-            'product_id'    => 'required',
-            'date_shipment' => 'required',
-            'situation'     => 'required',
-            'status'        => 'required'
+            'id'    => 'required',
         ];
 
         //Se va a pasar datos del movimiento
@@ -175,18 +182,25 @@ class AuxMovementController extends Controller
                 return response()->json(['message' => 'No posee todo los campos necesario para crear un movimiento'],401);
             }
 
-            $product=Product::find($request->input('product_id'));
-            $move=$product->movements->first();
+            $product = Product::find($request->input('id'));
+
+            if ($product == null){
+                return response()->json(['message' => 'El producto no existe'],401);
+            }
+
+            $move = $product->movements->first();
 
             if($move->status != 'vendido'){
                 $movement = new Movement();
-                $movement->product_id=$request->input('product_id');
-                $movement->date_shipment=$request->input('date_shipment');
-                $movement->status=$request->input('status');
-                $movement->save();
-                
-                $product->status = 0;
+                $movement->date_shipment = $move->date_shipment;
+                $movement->status = 'Vendido';
+
+                $product->movements()->save($movement);
+
+                $product->status = 2;
                 $product->save();
+            } else {
+                return response()->json(['message' => 'Este producto tiene un estado de: VENDIDO'],401);
             }
             return response()->json(['message' => 'La venta se agrego correctamente'],200);
 
@@ -197,12 +211,14 @@ class AuxMovementController extends Controller
     }
 
     public function movementPending(){
-        $product = DB::table('auxproducts AS p')
-            ->select('p.name','p.status','p.id as product_id','p.name','m.id as movement_id',DB::raw('max(m.date) as date'))
+        $products = DB::table('auxproducts AS p')
+            ->select('p.name', 'm.date_shipment','p.status','p.id as product_id','p.name','s.name as size','c.name as color','m.id as movement_id',DB::raw('max(m.created_at) as date'))
             ->join('auxmovements AS m','m.product_id','=','p.id')
-            ->where('p.status','=','0')
+            ->join('colors AS c','c.id','=','p.color_id')
+            ->join('sizes AS s','s.id','=','p.size_id')
+            ->where('p.status','=',0)
             ->groupby('p.id')->get();
-        return \Response::json(['product' => $product], 200);
+        return \Response::json(['products' => $products], 200);
     }
 
     

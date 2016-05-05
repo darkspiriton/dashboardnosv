@@ -1,0 +1,64 @@
+<div class="card" >
+    <div class="card-header bgm-blue">
+        <h2>Gestion de movimientos de productos</h2>
+        <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="list()"
+                data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
+                title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
+    </div>
+
+    <div class="card-body card-padding table-responsive">
+        <div class="col-sm-12">
+            <table id="table" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
+        </div><br>
+        <div class="card-footer">
+            <input  class="btn bgm-green waves-effect" type='submit' value='Nuevo registro' ng-click="new();">
+        </div>
+    </div><br>
+</div>
+
+<div class="card" id="formulariohide">
+    <div class="card-header bgm-blue">
+        <h2>Crear movimiento de productos</h2>
+    </div>
+
+    <div class="card-body card-padding" >
+        <div class="card-header">
+            <h2>Productos</h2>
+        </div>
+
+        <div class="row">
+            <div class="attr-group col-xs-12">
+                <table class="table table-bordered w-100 table-attr text-center">
+                    <thead>
+                    <tr>
+                        <th>Codigo</th>
+                        <th>Nombre</th>
+                        <th>Talla</th>
+                        <th>Color</th>
+                        <th>Accion</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="product in products">
+                        <td>{{ product.cod }}</td>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.size }}</td>
+                        <td>{{ product.color }}</td>
+                        <td><button ng-click="removeProduct($index)" class="btn btn-danger btn-sm waves-effect">Eliminar</button></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <form class="form-horizontal">
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button ng-disabled="products.length == 0" ng-disabled="formSubmit"  ng-click="submit()" type="button" class="btn btn-primary btn-sm waves-effect">Guardar</button>
+                    <a ng-click="cancel()" class="btn btn-danger btn-sm waves-effect">Cancelar</a>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>

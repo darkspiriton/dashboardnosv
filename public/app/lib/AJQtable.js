@@ -18,7 +18,7 @@
 			var element, linker;
 			linker = $compile(nRow);
 			element = linker($scope);
-			return nRow = element;
+			return element;
 		};
 
 		function searchObject(obj, prop) {
@@ -93,12 +93,12 @@
 				});
 		} else {
 			$.each($scope.tableData, function(i , obj){
-				var temp = []
+				var temp = [];
 				$.each( data , function(x, val){
 					if ( val.constructor === Array)
-						temp[x] = (obj[val[0]]).substr(0, val[1]);
+						temp[x] = (searchObject(obj,val[0])).substr(0, val[1]) + ' ...';
 					else
-						temp[x] = obj[val];
+						temp[x] = searchObject(obj,val);
 				});
 				oTable.fnAddData(temp);
 			});

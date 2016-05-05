@@ -137,6 +137,7 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
 
     Route::resource('auxmovement','AuxMovementController',
         ['only'=>['index','store','update','show']]);
+    Route::post('auxmovement/out', 'AuxMovementController@product_out');
 
     Route::group(['prefix'=>'auxmovement/'],function(){
         Route::post('/set/sale','AuxMovementController@sale');
@@ -157,7 +158,9 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
         Route::get('/get/prodOutProvider','AuxProductController@prodOutProvider');
     });
 
-
+    Route::get('providers', 'AuxProductController@getProviders');
+    Route::get('sizes', 'AuxProductController@getSizes');
+    Route::get('colors', 'AuxProductController@getColors');
 
 });
 

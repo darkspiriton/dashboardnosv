@@ -40,10 +40,10 @@ class CreateProductsauxTable extends Migration
         Schema::create('auxproducts', function(Blueprint $table){
             $table->increments('id');
             $table->integer('cod')->unique();
-            $table->integer('provider_id')->unsigned()->increments();
-            $table->integer('color_id')->unsigned()->increments();
-            $table->integer('size_id')->unsigned()->increments();
-            $table->integer('alarm_id')->unsigned()->increments();
+            $table->integer('provider_id')->unsigned();
+            $table->integer('color_id')->unsigned();
+            $table->integer('size_id')->unsigned();
+            $table->integer('alarm_id')->unsigned();
             $table->string('name');
             $table->boolean('status');
             $table->timestamps();

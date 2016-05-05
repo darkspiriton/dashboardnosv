@@ -61,7 +61,6 @@ class AuxProductsTableSeeder extends Seeder
             for($j=0;$j<5;$j++){
                 DB::table('auxmovements')->insertGetId(array(
                     'product_id' => $idProduct,
-                    'date' => $faker->dateTime($max = 'now', $timezone = date_default_timezone_get()),
                     'date_shipment' => $faker->dateTime($max = 'now', $timezone = date_default_timezone_get()),
                     'situation' => $faker->word,
                     'status' => $faker->word,

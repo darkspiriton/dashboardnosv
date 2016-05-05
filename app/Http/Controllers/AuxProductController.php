@@ -5,6 +5,7 @@ namespace Dashboard\Http\Controllers;
 use Dashboard\Events\ProductWasCreated;
 use Dashboard\Models\Experimental\Color;
 use Dashboard\Models\Experimental\Provider;
+use Dashboard\Models\Experimental\Size;
 use Illuminate\Support\Facades\Event;
 use Dashboard\Models\Experimental\Product;
 use Illuminate\Http\Request;
@@ -28,7 +29,7 @@ class AuxProductController extends Controller
             $product->color;
             $product->move = $product->movements->first();
         }
-        return response()->json(['products',$products],200);
+        return response()->json(['products' => $products],200);
     }
 
     /**
@@ -161,19 +162,18 @@ class AuxProductController extends Controller
                 return response()->json(['message' => 'No posee todo los campos necesario para crear un nuevo proveedor'],401);
             }
 
-            $provider = DB::table('providers')
-                ->where('name','=',$request->input('name'))
-                ->get();
+            $provider = Provider::where('name','=',$request->input('name'))->exists();
 
-            if($provider == null){
+            if(!$provider){
 
                 $proveedor = new Provider();
                 $proveedor->name = $request->input('name');
+                $proveedor->save();
                 return response()->json(['message' => 'El nuevo proveedor se agrego correctamente'],200);
 
             } else {
 
-                return response()->json(['message' => 'El nombre del proveedor ya existe'],200);
+                return response()->json(['message' => 'El nombre del proveedor ya existe'],401);
             }
 
         } catch (Exception $e) {
@@ -196,19 +196,18 @@ class AuxProductController extends Controller
                 return response()->json(['message' => 'No posee todo los campos necesario para crear un nuevo color'],401);
             }
 
-            $color = DB::table('colors')
-                ->where('name','=',$request->input('name'))
-                ->get();
+            $color = Color::where('name','=',$request->input('name'))->exists();
 
-            if($color == null){
+            if(!$color){
 
                 $c = new Color();
                 $c->name = $request->input('name');
+                $c->save();
                 return response()->json(['message' => 'El nuevo color se agrego correctamente'],200);
 
             } else {
 
-                return response()->json(['message' => 'El nombre del color ya existe'],200);
+                return response()->json(['message' => 'El nombre del color ya existe'],401);
             }
 
         } catch (Exception $e) {
@@ -269,6 +268,7 @@ class AuxProductController extends Controller
         
     }
 
+
     public function stockIni(){
 
         $stock = DB::table('auxproducts as p')
@@ -301,16 +301,36 @@ class AuxProductController extends Controller
 
     }
 
-    public function prodOutProvider(){
+    public function prodOutProvider()
+    {
 
         $productOutProvider = DB::table('providers as pr')
-            ->select('pr.name as provider','p.name',DB::raw('count(m.id) as cant'))
-            ->join('auxproducts as p','pr.id','=','p.provider_id')
-            ->join('auxmovements as m','p.id','=','m.product_id')
-            ->groupby('pr.name','p.name')
-            ->orderby('cant','desc')->get();
+            ->select('pr.name as provider', 'p.name', DB::raw('count(m.id) as cant'))
+            ->join('auxproducts as p', 'pr.id', '=', 'p.provider_id')
+            ->join('auxmovements as m', 'p.id', '=', 'm.product_id')
+            ->groupby('pr.name', 'p.name')
+            ->orderby('cant', 'desc')->get();
 
-        return response()->json(['products'=>$productOutProvider],200);
+        return response()->json(['products' => $productOutProvider], 200);
+
+    }   
+    
+    public function getProviders(){
+        $providers = Provider::all();
+
+        return response()->json(['providers' => $providers ],200);
+    }
+
+    public function getSizes(){
+        $sizes = Size::all();
+
+        return response()->json(['sizes' => $sizes],200);
+    }
+
+    public function getColors(){
+        $colors = Color::all();
+
+        return response()->json(['colors' => $colors],200);
 
     }
 

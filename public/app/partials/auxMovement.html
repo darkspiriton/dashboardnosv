@@ -12,7 +12,6 @@
         </div><br>
         <div class="card-footer">
             <input  class="btn bgm-green waves-effect" type='submit' value='Nuevo registro' ng-click="new();">
-            -- Optimizar listado
         </div>
     </div><br>
 </div>
@@ -47,7 +46,7 @@
                         <td>{{ product.size }}</td>
                         <td>{{ product.color }}</td>
                         <td style="width: 160px">
-                            <input class="form-control input-sm" type="date" ng-model="products[$index].date" required>
+                            <input class="form-control input-sm" type="date" ng-model="dataProducts[$index].date" required>
                         </td>
                         <td style="width: 80px"><button ng-click="removeProduct($index)" class="btn btn-danger btn-sm waves-effect">Eliminar</button></td>
                     </tr>

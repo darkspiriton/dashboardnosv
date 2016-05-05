@@ -106,7 +106,6 @@ class AuxMovementController extends Controller
             }
 
             $products = $request->input('products');
-//            return response()->json($products, 200);
 
             $response = array();
 
@@ -114,11 +113,9 @@ class AuxMovementController extends Controller
                 $prd = Product::find($product['id']);
                 if($prd->status == 1){
                     $movement = new Movement();
-//                    $movement->product_id = $prd['id'];
-                    $movement->date_shipment = '2000-03-12';
+                    $movement->date_shipment = $product['date'];
                     $movement->situation = '';
                     $movement->status = 'salida';
-//                    $movement->save();
                     $prd->movements()->save($movement);
                     $prd->status = 0;
                     $prd->save();

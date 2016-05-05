@@ -58,7 +58,7 @@ angular.module('App')
         };
 
         $scope.submit = function () {
-            valid_product_date($scope.products, function() {
+            valid_product_date($scope.dataProducts, function() {
                 alertConfig.title = '¿Todo es correcto?';
                 swal(alertConfig,
                     function () {
@@ -119,12 +119,12 @@ angular.module('App')
             util.muestraformulario();
         };
 
-        $scope.getDate = function(i){
-            var local = new Date();
-            //$scope.dataProducts[i].date = local;
-            //$scope.products[i].date= local;
-            return local;
-        };
+        //$scope.getDate = function(i){
+        //    var local = new Date();
+        //    //$scope.dataProducts[i].date = local;
+        //    //$scope.products[i].date= local;
+        //    return local;
+        //};
 
         function resetProduct(){
             $scope.dataProducts = angular.copy($scope.productsClear);

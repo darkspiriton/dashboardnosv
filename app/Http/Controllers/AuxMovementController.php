@@ -205,7 +205,7 @@ class AuxMovementController extends Controller
             ->join('auxmovements AS m','m.product_id','=','p.id')
             ->where('p.status','=','0')
             ->groupby('p.id')->get();
-        return \Response::json(['product' => $product], 500);
+        return \Response::json(['product' => $product], 200);
     }
 
     

@@ -45,6 +45,7 @@ angular.module('App')
 
 
         $scope.list = function() {
+            $scope.updateList = true;
             petition.get('api/auxmovement')
                 .then(function(data){
                     $scope.tableData = data.products;

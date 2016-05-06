@@ -142,6 +142,7 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
     Route::group(['prefix'=>'auxmovement/'],function(){
         Route::post('/set/sale','AuxMovementController@sale');
         Route::get('/get/movement','AuxMovementController@movementPending');
+        Route::get('/get/movement/day','AuxMovementController@move_day');
     });
 
     Route::group(['prefix'=>'auxproduct/'],function(){

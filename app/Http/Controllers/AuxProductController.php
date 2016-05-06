@@ -256,20 +256,21 @@ class AuxProductController extends Controller
             ->join('auxproducts as p','pr.id','=','p.provider_id')
             ->groupby('pr.name')->get();
         
-        return response()->json([''=>$cant],200);
+        return response()->json(['products'=>$cant],200);
     }
 
     public function stockProd(){
 
         $stock = DB::table('auxproducts as p')
-                ->select('p.name',DB::raw('count(p.name) as cantP'))
+                ->select('p.name','c.name as color','s.name as size',DB::raw('count(p.name) as cantP',''))
+                ->join('colors as c','c.id','=','p.color_id')
+                ->join('sizes as s','s.id','=','p.size_id')
                 ->where('p.status','=',1)
-                ->groupby('p.name')->get();
+                ->groupby('p.name','c.name','s.name')->get();
 
         return response()->json(['stock'=>$stock],200);
         
     }
-
 
     public function stockIni(){
 
@@ -286,9 +287,9 @@ class AuxProductController extends Controller
                 ->select('p.name','s.name as size',DB::raw('count(p.size_id) as cant'))
                 ->join('auxproducts as p','s.id','=','p.size_id')
                 ->where('p.status','=','1')
-                ->groupby('p.name')->get();
+                ->groupby('p.name','s.name')->get();
 
-        return response()->json(['product'=>$productSize],200);
+        return response()->json(['products'=>$productSize],200);
 
     }
 
@@ -298,7 +299,7 @@ class AuxProductController extends Controller
             ->select('p.name','c.name as color',DB::raw('count(p.color_id) as cant'))
             ->join('auxproducts as p','c.id','=','p.color_id')
             ->where('p.status','=','1')
-            ->groupby('p.name')->get();
+            ->groupby('p.name','c.name')->get();
         return response()->json(['products'=>$productColor],200);
 
     }

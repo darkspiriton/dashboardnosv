@@ -91,7 +91,7 @@ angular.module('App')
         };
 
         $scope.prdReturn = function(i){
-            $scope.product.id = i;
+            $scope.product.id = $scope.tableData[i].id;
             $scope.product.situation = null;
             util.modal();
         };

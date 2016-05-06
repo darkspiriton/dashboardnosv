@@ -111,10 +111,6 @@ angular.module('App')
             util.ocultaformulario();
         };
 
-        $scope.cancel2 = function () {
-            $log.log($scope.products);
-        };
-
         $scope.new = function(){
             resetProduct();
             util.muestraformulario();

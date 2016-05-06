@@ -1,1 +1,46 @@
+    <div class="block-header">
+        <h2> movimientos <small>Indecadores de movimiento del dia de hoy.</small></h2>
+    </div>
+
+    <div class="mini-charts">
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="mini-charts-item bgm-cyan">
+                    <div class="clearfix">
+                        <div class="chart stats-bar" style="width: 120px;"></div>
+                        <div class="count">
+                            <small>Prendas fuera</small>
+                            <h2 ng-bind="infoData.sal"></h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-3">
+                <div class="mini-charts-item bgm-lightgreen">
+                    <div class="clearfix">
+                        <div class="chart stats-bar-2" style="width: 120px;"></div>
+                        <div class="count">
+                            <small>Prendas vendidad</small>
+                            <h2 ng-bind="infoData.ven"></h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-3">
+                <div class="mini-charts-item bgm-bluegray">
+                    <div class="clearfix">
+                        <div class="chart stats-line-2" style="width: 120px;"></div>
+                        <div class="count">
+                            <small>Total stock Almacen</small>
+                            <h2 ng-bind="infoData.stock"></h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
 <canvas id="myCanvas" class="homeCanvas"></canvas>

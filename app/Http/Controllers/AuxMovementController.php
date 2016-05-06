@@ -221,6 +221,12 @@ class AuxMovementController extends Controller
         return \Response::json(['products' => $products], 200);
     }
 
-    
+    public function move_day(){
+        $salida = Product::where('status',0)->count();
+        $vendido = Product::where('status',3)->count();
+        $stock = Product::where('status',1)->count();
+
+        return response()->json(['data' => [ 'sal' => $salida, 'ven' => $vendido, 'stock' => $stock]],200);
+    }
 
 }

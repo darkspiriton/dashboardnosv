@@ -1,8 +1,8 @@
 angular.module('App')
     .config(function($stateProvider) {
         $stateProvider
-            .state('Stock', {
-                url: '/Stock-general-de-productos',
+            .state('Indicator1', {
+                url: '/stock-general-de-productos',
                 template: '<div class="card" >'+
                 '    <div class="card-header bgm-blue">'+
                 '        <h2>Stock general de productos</h2>'+
@@ -15,13 +15,22 @@ angular.module('App')
                 '            <table id="table" class="table table-bordered table-striped w-100" style="text-align:center;"></table>'+
                 '        </div><br>'+
                 '    </div><br>'+
+                '</div>'+
+                '<div class="card">'+
+                '    <div class="card-header">'+
+                '        <h2>Vista Grafica</h2>'+
+                '    </div>'+
+                '    <div class="card-body card-padding">'+
+                '        <div id="pie-chart" class="flot-chart-pie"></div>'+
+                '        <div class="flc-pie hidden-xs"></div>'+
+                '    </div>'+
                 '</div>',
-                controller : 'auxStockCtrl'
+                controller : 'auxIndicator1Ctrl'
             });
     })
-    .controller('auxStockCtrl', function($scope, $compile, $state, $log, util, petition, toformData, toastr){
+    .controller('auxIndicator1Ctrl', function($scope, $compile, $log, util, petition, toastr, chart){
 
-        util.liPage('stock');
+        util.liPage('indicator1');
 
         $scope.tableConfig 	= 	{
             columns :	[
@@ -42,6 +51,7 @@ angular.module('App')
                     $scope.tableData = data.stock;
                     $('#table').AJQtable('view', $scope, $compile);
                     $scope.updateList = false;
+                    chart.draw($scope.tableData, {data: 'cantP', label: 'name'})
                 }, function(error){
                     console.log(error);
                     toastr.error('Ups ocurrio un problema: ' + error.data.message);

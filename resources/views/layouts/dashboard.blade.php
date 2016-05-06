@@ -110,6 +110,8 @@
 <script src="vendors/bower_components/flot/jquery.flot.js"></script>
 <script src="vendors/bower_components/flot/jquery.flot.resize.js"></script>
 <script src="vendors/bower_components/flot.curvedlines/curvedLines.js"></script>
+<script src="vendors/bower_components/flot/jquery.flot.pie.js"></script>
+<script src="vendors/bower_components/flot.tooltip/js/jquery.flot.tooltip.min.js"></script>
 <script src="vendors/sparklines/jquery.sparkline.min.js"></script>
 <script src="vendors/bower_components/jquery.easy-pie-chart/dist/jquery.easypiechart.min.js"></script>
 <script src="vendors/bower_components/moment/min/moment.min.js"></script>
@@ -123,10 +125,7 @@
 <script src="vendors/datatables/jquery.dataTables.min.js" type="text/javascript"></script>
 <script src="vendors/datatables/dataTables.bootstrap.min.js" type="text/javascript"></script>
 
-<script src="js/flot-charts/curved-line-chart.js"></script>
-<script src="js/flot-charts/line-chart.js"></script>
-<script src="js/charts.js"></script>
-<script src="js/charts.js"></script>
+
 <script src="js/functions.js"></script>
 
 <!-- Others Libraries -->

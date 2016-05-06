@@ -2,6 +2,7 @@
 
 namespace Dashboard\Http\Controllers;
 
+use Carbon\Carbon;
 use Dashboard\Events\ProductWasCreated;
 use Dashboard\Models\Experimental\Color;
 use Dashboard\Models\Experimental\Provider;
@@ -304,7 +305,6 @@ class AuxProductController extends Controller
 
     public function prodOutProvider()
     {
-
         $productOutProvider = DB::table('providers as pr')
             ->select('pr.name as provider', 'p.name', DB::raw('count(m.id) as cant'))
             ->join('auxproducts as p', 'pr.id', '=', 'p.provider_id')
@@ -313,7 +313,6 @@ class AuxProductController extends Controller
             ->orderby('cant', 'desc')->get();
 
         return response()->json(['products' => $productOutProvider], 200);
-
     }   
     
     public function getProviders(){
@@ -335,4 +334,33 @@ class AuxProductController extends Controller
 
     }
 
+    public function alarm(){
+        $products = DB::table('alarms as a')
+                ->select('p.name','c.name as color','s.name as talla','p.created_at','a.day','a.count',DB::raw('count(p.id) as cant'))
+                ->join('auxproducts as p','a.id','=','p.alarm_id')
+                ->join('auxmovements as m','p.id','=','m.product_id')
+                ->join('colors as c','c.id','=','p.color_id')
+                ->join('sizes as s','s.id','=','p.size_id')
+                ->where('m.status','=','vendido')
+                ->groupby('p.name')->get();
+        $j=0;
+        foreach ($products as $product){
+            $dateNow=Carbon::now();
+            $date=Carbon::createFromFormat('Y-m-d H:i:s', $product->created_at);
+
+            $diff=(int)$dateNow->diffInDays($date);
+
+            if($diff > (int)$product->day){
+                if((int)$product->cant < (int)$product->count){
+                    $alarms[$j]=$product->name;
+                     $j++;
+                }
+            }
+        }
+        if(!empty($data)){
+            return response()->json([ '$alarms' => $alarms ],200);
+        }else{
+            return response()->json([ 'message' => 'No hay alarmas' ],401);
+        }
+    }
 }

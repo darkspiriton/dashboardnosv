@@ -52,7 +52,7 @@ class UsersTableSeeder extends Seeder
                 'photo'     =>  '1.jpg',
                 'role_id'   =>  1,
                 'status'    =>  1,
-                'password'  =>  bcrypt('123456'),
+                'password'  =>  bcrypt('god123'),
             ],
             [
                 'first_name'=>  'Vendedor',
@@ -65,7 +65,7 @@ class UsersTableSeeder extends Seeder
                 'photo'     =>  '1.jpg',
                 'role_id'   =>  3,
                 'status'    =>  1,
-                'password'  =>  bcrypt('123456'),
+                'password'  =>  bcrypt('ventas123'),
             ],
             [
                 'first_name'=>  'Administracion',
@@ -78,7 +78,7 @@ class UsersTableSeeder extends Seeder
                 'photo'     =>  '1.jpg',
                 'role_id'   =>  2,
                 'status'    =>  1,
-                'password'  =>  bcrypt('123456'),
+                'password'  =>  bcrypt('administracion123'),
             ],
             [
                 'first_name'=>  'Coordinador',
@@ -91,17 +91,17 @@ class UsersTableSeeder extends Seeder
                 'photo'     =>  '1.jpg',
                 'role_id'   =>  4,
                 'status'    =>  1,
-                'password'  =>  bcrypt('123456'),
+                'password'  =>  bcrypt('coordinador123'),
             ],
         ]);
 
-        factory(Dashboard\User::class, 10)->create()->each(function($user){
-            $user->customers()->saveMany(factory(\Dashboard\Models\Customer\Customer::class, 3)->make())->each(function($customer){
-                $customer->phones()->saveMany(factory(\Dashboard\Models\Customer\Phone::class, 2)->make());
-                $customer->socials()->save(factory(\Dashboard\Models\Customer\Social::class)->make());
-                $customer->addresses()->saveMany(factory(\Dashboard\Models\Customer\Address::class, 2)->make());
-            });
-        });
+//        factory(Dashboard\User::class, 10)->create()->each(function($user){
+//            $user->customers()->saveMany(factory(\Dashboard\Models\Customer\Customer::class, 3)->make())->each(function($customer){
+//                $customer->phones()->saveMany(factory(\Dashboard\Models\Customer\Phone::class, 2)->make());
+//                $customer->socials()->save(factory(\Dashboard\Models\Customer\Social::class)->make());
+//                $customer->addresses()->saveMany(factory(\Dashboard\Models\Customer\Address::class, 2)->make());
+//            });
+//        });
 
 
 

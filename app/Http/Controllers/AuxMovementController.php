@@ -93,7 +93,7 @@ class AuxMovementController extends Controller
             } else {
                 return response()->json(['message' => 'Este producto tiene un estado de: VENDIDO'],401);
             }
-            return response()->json(['message' => 'La venta se agrego correctamente'],200);
+            return response()->json(['message' => 'El retorno se agrego correctamente'],200);
 
         } catch (Exception $e) {
             // Si algo sale mal devolvemos un error.
@@ -212,7 +212,7 @@ class AuxMovementController extends Controller
 
     public function movementPending(){
         $products = DB::table('auxproducts AS p')
-            ->select('p.name', 'm.date_shipment','p.status','p.id as product_id','p.name','s.name as size','c.name as color','m.id as movement_id',DB::raw('max(m.created_at) as date'))
+            ->select('p.cod', 'm.date_shipment','p.status','p.id as product_id','p.name','s.name as size','c.name as color','m.id as movement_id',DB::raw('max(m.created_at) as date'))
             ->join('auxmovements AS m','m.product_id','=','p.id')
             ->join('colors AS c','c.id','=','p.color_id')
             ->join('sizes AS s','s.id','=','p.size_id')

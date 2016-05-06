@@ -3,6 +3,9 @@
 @section('dashMenu')
     <ul class="main-menu">
         <li class="active"><a href="#/"><i class="md md-home"></i> Inicio</a></li>
+        <li id="stock">
+            <a href="#" ui-sref="Stock"><i class="md md-shop-two"></i>Stock de Productos</a>
+        </li>
         <li id="movimientos">
             <a href="#" ui-sref="Movimientos"><i class="md md-shop-two"></i>Generar Salida</a>
         </li>
@@ -16,4 +19,5 @@
     <script src="app/controllers/homeCtrl.js"></script>
     <script src="app/controllers/auxMovementCtrl.js"></script>
     <script src="app/controllers/auxMovement2Ctrl.js"></script>
+    <script src="app/controllers/auxStockCtrl.js"></script>
 @stop

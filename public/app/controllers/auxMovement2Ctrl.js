@@ -7,13 +7,14 @@ angular.module('App')
                 controller : 'auxMovement2Ctrl'
             });
     })
-    .controller('auxMovement2Ctrl', function($scope, $compile, $state, $log, $filter, util, petition, toformData, toastr){
+    .controller('auxMovement2Ctrl', function($scope, $compile, $state, $log, util, petition, toformData, toastr){
 
         util.liPage('movimientos2');
 
         $scope.tableConfig 	= 	{
             columns :	[
-                {"sTitle": "Fecha de salida", "bSortable" : true},
+                {"sTitle": "Fecha de salida", "bSortable" : true, "sWidth": "90px"},
+                {"sTitle": "Codigo", "bSortable" : true},
                 {"sTitle": "Producto", "bSortable" : true},
                 {"sTitle": "Talla", "bSortable" : true},
                 {"sTitle": "Color", "bSortable" : true},
@@ -32,7 +33,7 @@ angular.module('App')
                 ]
                 ]
             ],
-            data  	: 	['date_shipment','name','size','color','status','actions'],
+            data  	: 	['date_shipment','cod','name','size','color','status','actions'],
             configStatus : 'status'
         };
 
@@ -61,6 +62,7 @@ angular.module('App')
         ];
 
         $scope.list = function() {
+            $scope.updateList = true;
             petition.get('api/auxmovement/get/movement')
                 .then(function(data){
                     $scope.tableData = data.products;

@@ -261,7 +261,9 @@ class AuxProductController extends Controller
     public function stockProd(){
 
         $stock = DB::table('auxproducts as p')
-                ->select('p.name',DB::raw('count(p.name) as cantP'))
+                ->select('p.name','c.name as color','s.name as size',DB::raw('count(p.name) as cantP',''))
+                ->join('colors as c','c.id','=','p.color_id')
+                ->join('sizes as s','s.id','=','p.size_id')
                 ->where('p.status','=',1)
                 ->groupby('p.name')->get();
 

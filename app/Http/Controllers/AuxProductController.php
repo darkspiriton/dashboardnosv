@@ -254,6 +254,7 @@ class AuxProductController extends Controller
         $cant = DB::table('providers as pr')
             ->select('pr.name',DB::raw('count(p.id) as cant'))
             ->join('auxproducts as p','pr.id','=','p.provider_id')
+            ->where('p.status',1)
             ->groupby('pr.name')->get();
         
         return response()->json(['products'=>$cant],200);

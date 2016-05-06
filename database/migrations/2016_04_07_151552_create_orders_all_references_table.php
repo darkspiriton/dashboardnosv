@@ -15,9 +15,9 @@ class CreateOrdersAllReferencesTable extends Migration
         // Orders
         Schema::create('orders', function(Blueprint $table){
             $table->increments('id');
-            $table->integer('customer_id')->unsigned()->increments();
-            $table->integer('user_id')->unsigned()->increments();
-            $table->integer('status_id')->unsigned()->increments();
+            $table->integer('customer_id')->unsigned();
+            $table->integer('user_id')->unsigned();
+            $table->integer('status_id')->unsigned();
             $table->integer('interest_id')->nullable();
             $table->timestamps();
         });
@@ -25,9 +25,8 @@ class CreateOrdersAllReferencesTable extends Migration
         // Orders Detail
         Schema::create('order_details', function(Blueprint $table){
             $table->increments('id');
-            $table->integer('order_id')->unsigned()->increments();
-            $table->integer('product_id')->unsigned()->increments();
-            $table->integer('quantity');
+            $table->integer('order_id')->unsigned();
+            $table->integer('kardex_id')->unsigned();
             $table->float('price');
         });
 
@@ -40,8 +39,8 @@ class CreateOrdersAllReferencesTable extends Migration
         // calls
         Schema::create('calls', function(Blueprint $table){
             $table->increments('id');
-            $table->integer('order_id')->unsigned()->increments();
-            $table->integer('status_id')->unsigned()->increments();
+            $table->integer('order_id')->unsigned();
+            $table->integer('status_id')->unsigned();
             $table->string('observation');
             $table->timestamp('date');
         });
@@ -58,21 +57,21 @@ class CreateOrdersAllReferencesTable extends Migration
          *
          */
 
-        Schema::table('orders', function(Blueprint $table) {
-            $table->foreign('customer_id')->references('id')->on('customers');
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('status_id')->references('id')->on('status_order');
-        });
-
-        Schema::table('calls', function(Blueprint $table) {
-            $table->foreign('order_id')->references('id')->on('orders');
-            $table->foreign('status_id')->references('id')->on('status_call');
-        });
-
-        Schema::table('order_details', function(Blueprint $table) {
-            $table->foreign('order_id')->references('id')->on('orders');
-            $table->foreign('product_id')->references('id')->on('products');
-        });
+//        Schema::table('orders', function(Blueprint $table) {
+//            $table->foreign('customer_id')->references('id')->on('customers');
+//            $table->foreign('user_id')->references('id')->on('users');
+//            $table->foreign('status_id')->references('id')->on('status_order');
+//        });
+//
+//        Schema::table('calls', function(Blueprint $table) {
+//            $table->foreign('order_id')->references('id')->on('orders');
+//            $table->foreign('status_id')->references('id')->on('status_call');
+//        });
+//
+//        Schema::table('order_details', function(Blueprint $table) {
+//            $table->foreign('order_id')->references('id')->on('orders');
+//            $table->foreign('kardex_id')->references('id')->on('kardexs');
+//        });
     }
 
     /**

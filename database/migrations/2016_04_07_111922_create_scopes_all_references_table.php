@@ -18,6 +18,7 @@ class CreateScopesAllReferencesTable extends Migration
             $table->integer('user_id')->unsigned()->increments();
             $table->integer('channel_id')->unsigned()->increments();
             $table->integer('type_id')->unsigned()->increments();
+            $table->string('name');
             $table->string('observation');
             $table->timestamp('date');
         });
@@ -40,7 +41,6 @@ class CreateScopesAllReferencesTable extends Migration
             Relationships
          *
          */
-
         Schema::table('scopes', function(Blueprint $table){
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('channel_id')->references('id')->on('channels');

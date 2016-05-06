@@ -16,7 +16,9 @@ class CreateCustomerAllReferencesTable extends Migration
         Schema::create('customers', function(Blueprint $table){
             $table->increments('id');
             $table->string('name');
-            $table->integer('age');
+            $table->date('age');
+            $table->string('phone',12);
+            $table->boolean('status');
             $table->integer('user_id')->unsigned()->increments();
             $table->timestamps();
         });
@@ -56,7 +58,7 @@ class CreateCustomerAllReferencesTable extends Migration
 
         // Socials
         Schema::create('socials', function(Blueprint $table){
-            $table->increments('social_id');
+            $table->increments('id');
             $table->integer('customer_id')->unsigned();
             $table->integer('channel_id')->unsigned();
             $table->string('channel_url');
@@ -75,13 +77,12 @@ class CreateCustomerAllReferencesTable extends Migration
             Relationships
          *
          */
-
         Schema::table('customers', function(Blueprint $table){
             $table->foreign('user_id')->references('id')->on('users');
         });
 
         Schema::table('addresses',function(Blueprint $table){
-//            $table->foreign('ubigeo_id')->references('UBIDST')->on('ubigeos');
+             $table->foreign('ubigeo_id')->references('UBIDST')->on('ubigeos');
             $table->foreign('customer_id')->references('id')->on('customers');
         });
 

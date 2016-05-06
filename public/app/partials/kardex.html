@@ -1,0 +1,55 @@
+<div class="card" >
+    <div class="card-header bgm-blue">
+        <h2>Vista de Kardex de producto {{ productName }}</h2>
+        <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="list()"
+                data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
+                title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
+    </div>
+
+    <div class="card-body card-padding table-responsive">
+        <div class="col-sm-12">
+            <table id="table" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
+        </div><br>
+    </div><br>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="Modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bgm-teal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title c-white">Detalle de usuario</h3>
+            </div>
+            <div class="modal-body card-padding">
+                <form class="form-horizontal" autocomplete="off" submit="return false;">
+                    <div class="form-group m-b-0">
+                        <div class="row">
+                            <div class="attr-group col-xs-12 m-b-0">
+                                <table class="table table-bordered w-100 table-attr text-center">
+                                    <thead>
+                                    <tr>
+                                        <th>Atributo</th>
+                                        <th>Valor</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="attribute in kardexAttributes">
+                                        <td>{{ attribute.name }}</td>
+                                        <td>{{ attribute.valor }}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

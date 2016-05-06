@@ -15,26 +15,7 @@ class PruebaTest extends TestCase
      *
      * @return void
      */
-    public function testRegister()
-    {
-        $this->visit('/register')
-            ->type('Test','name')
-            ->type('test@gmail.com','email')
-            ->type('secret','password')
-            ->type('secret','password_confirmation')
-            ->press('Register')
-            ->seePageIs('/home');
-    }
-
-    public function testLogin(){
-        $this->visit('/login')
-            ->type('test@gmail.com','email')
-            ->type('secret','password')
-            ->check('remember')
-            ->press('Login')
-            ->see('Test');
-    }
-
+  
     public function testConection(){
         try{
             DB::connection('mysql')->getDatabaseName();

@@ -20,7 +20,6 @@ class CreateShipmentTable extends Migration
         Schema::create('types_shipments', function(Blueprint $table){
             $table->increments('id');
             $table->string('name');
-
         });
 
         Schema::create('routes_sheets',function(Blueprint $table){
@@ -34,14 +33,14 @@ class CreateShipmentTable extends Migration
             $table->increments('id');
             $table->integer('order_id')->unsigned();
             $table->integer('address_id')->unsigned();
-            $table->integer('shipment_status_id')->unsigned();
+            $table->integer('status_id')->unsigned();
             $table->integer('type_ship_id')->unsigned();
             $table->timestamp('date');
             $table->float('cost');
             $table->timestamps();
             $table->foreign('order_id')->references('id')->on('orders');
             $table->foreign('address_id')->references('id')->on('addresses');
-            $table->foreign('shipment_status_id')->references('id')->on('shipments_status');
+            $table->foreign('status_id')->references('id')->on('shipments_status');
             $table->foreign('type_ship_id')->references('id')->on('types_shipments');
         });
 
@@ -52,7 +51,6 @@ class CreateShipmentTable extends Migration
             $table->string('observations');
             $table->foreign('route_sheet_id')->references('id')->on('routes_sheets');
             $table->foreign('shipment_id')->references('id')->on('shipments');
-
         });
 
 

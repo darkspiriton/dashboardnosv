@@ -6,6 +6,7 @@
 
 		// Datos de configuracion
 		var config = {};
+		var table;
 		cols 	= $scope.tableConfig.columns || [];
 		actions 	= $scope.tableConfig.actions || [];
 		data 	= $scope.tableConfig.data || [];
@@ -17,7 +18,21 @@
 			var element, linker;
 			linker = $compile(nRow);
 			element = linker($scope);
-			return nRow = element;
+			return element;
+		};
+
+		function searchObject(obj, prop) {
+
+			if(typeof obj === 'undefined') {
+				return false;
+			}
+
+			var _index = prop.indexOf('.')
+			if(_index > -1) {
+				return searchObject(obj[prop.substring(0, _index)], prop.substr(_index + 1));
+			}
+
+			return obj[prop];
 		}
 
 		for (i in actions) {
@@ -26,7 +41,7 @@
 				acc['actions'] = function(ind){
 					var btns = ''
 					for (x in acc.dataA){
-						btns = btns + '<button class="btn btn-xs '+ acc.dataA[x][2] +'" ng-click="'+ acc.dataA[x][1] +'(' + ind + ')" style="width: 82px;">'+ acc.dataA[x][0] +'</button>';
+						btns = btns + '<button class="btn btn-xs '+ acc.dataA[x][2] +'" ng-click="'+ acc.dataA[x][1] +'(' + ind + "," +"$event" + ')" style="width: 82px;">'+ acc.dataA[x][0] +'</button>';
 					}
 					return btns;
 				}
@@ -45,14 +60,14 @@
 		// Opciones de la tabla
 		options = {
 			fnCreatedRow: rowCompiler, 		// Al crear tabla conpilarla en angular
-			aoColumns: cols					// Columnas de tabla
+			aoColumns: cols                 // Columnas de tabla
 		};
 
 		// Inicializar la tabla
 		if ( ! $.fn.DataTable.isDataTable( this[0] ) ) 
-		  	var oTable = $(this[0]).dataTable(options);
+		  	oTable = $(this[0]).dataTable(options);
 		else
-			var oTable = $( this[0] ).dataTable();
+			oTable = $( this[0] ).dataTable();
 
 		// Limpiar registros
 		oTable.fnClearTable();
@@ -60,29 +75,30 @@
 		// Llenar de registros la tabla
 		if (actions.length > 0){
 				$.each($scope.tableData, function(i , obj){
-					var temp = []
+					var temp = [];
 					var est = obj[config.configStatus];
 					$.each( data , function(x, val){
-						if (val == 'actions')
+						if (val == 'actions'){
 							temp[x] = acc.actions(i);
-						else if (val == 'status')
+						} else if (val == 'status') {
 							temp[x] = acc.status(i, est);
-						else 
+						} else {
 							if ( val.constructor === Array)
-								temp[x] = (obj[val[0]]).substr(0, val[1]) + ' ...';
+								temp[x] = (searchObject(obj,val[0])).substr(0, val[1]) + ' ...';
 							else
-								temp[x] = obj[val];
+								temp[x] = searchObject(obj,val);
+						}
 					});
 					oTable.fnAddData(temp);
 				});
 		} else {
 			$.each($scope.tableData, function(i , obj){
-				var temp = []
+				var temp = [];
 				$.each( data , function(x, val){
 					if ( val.constructor === Array)
-						temp[x] = (obj[val[0]]).substr(0, val[1]);
+						temp[x] = (searchObject(obj,val[0])).substr(0, val[1]) + ' ...';
 					else
-						temp[x] = obj[val];
+						temp[x] = searchObject(obj,val);
 				});
 				oTable.fnAddData(temp);
 			});
@@ -93,10 +109,22 @@
 		$(this[0]).dataTable().fnFilter(busqueda);
 	}
 
+	function removeRow ( dom, callback ){
+		var oTable = $(this[0]).dataTable();
+		var element = $(dom).closest('tr');
+		var row = $(element).get(0);
+		var pos = oTable.fnGetPosition(row);
+		element.fadeOut(750,function(){
+			oTable.fnDeleteRow(pos);
+		});
+		callback();
+	};
+
     var methods = {
-        init : function(options) { console.log('indique accion') },
+        init : function() { console.log('indique accion') },
         view : view,
-        search : search
+        search : search,
+		removeRow : removeRow
     };
 
     $.fn.AJQtable = function(methodOrOptions) {

@@ -16,6 +16,9 @@
                 <li><a href="widgets.html"> Reporte de segumiento</a></li>
             </ul>
         </li>
+        <li id="products">
+            <a href="#" ui-sref="Productos"><i class="md md-shop-two"></i> Administrar Productos</a>
+        </li>
         <li id="users">
             <a href="#" ui-sref="Usuarios"><i class="md md-security"></i> Administrar usuarios</a>
         </li>
@@ -29,4 +32,6 @@
     <script src="app/controllers/homeCtrl.js"></script>
     <script src="app/controllers/usersCtrl.js"></script>
     <script src="app/controllers/commentsCtrl.js"></script>
+    <script src="app/controllers/productsCtrl.js"></script>
+    <script src="app/controllers/kardex.js"></script>
 @stop

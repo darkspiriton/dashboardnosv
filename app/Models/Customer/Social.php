@@ -10,6 +10,10 @@ class Social extends Model
 
     public $timestamps = false;
 
+    protected $hidden = [
+        'created_at','updated_at'
+    ];
+
     public function customer(){
         return $this->belongsTo(Customer::class);
     }

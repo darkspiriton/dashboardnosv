@@ -1,22 +1,29 @@
 angular.module('App')
-    .controller('commentsCtrl', function($scope, $compile, util, toastr){
+    .config(function($stateProvider) {
+        $stateProvider
+            .state('Comentarios', {
+                url: '/Adminitracion-de-comentarios',
+                templateUrl: 'app/partials/comments.html',
+                controller : 'commentsCtrl'
+            });
+    })
+    .controller('commentsCtrl', function($scope, $compile, $log, util, toastr, petition){
 
         util.liPage('comments');
 
         $scope.tableConfig 	= 	{
                                     columns :	[
+                                                    {"sTitle": "Fecha", "sWidth": "160px", "aaSorting": 'desc'},
                                                     {"sTitle": "Nombre", "bSortable" : false},
                                                     {"sTitle": "Correo", "bSortable" : false},
-                                                    {"sTitle": "Comentario", "bSortable" : false},
-                                                    {"sTitle": "Estrellas", "sWidth": "50px"},
-                                                    {"sTitle": "Fecha"},
+                                                    {"sTitle": "Estrellas", "sWidth": "1px"},
                                                     {"sTitle": "Estado" ,"bSearchable": false , "bSortable" : false , "sWidth": "80px"},
-                                                    {"sTitle": "Accion" , "bSearchable": false , "bSortable" : false , "sWidth": "80px"}
+                                                    {"sTitle": "Accion" , "bSearchable": false , "bSortable" : false , "sWidth": "180px"}
                                                 ],
                                     actions	:  	[
                                                     ['status',   {
                                                                     0 : { txt : 'Inactivo' , cls : 'btn-danger' },
-                                                                    1 : { txt : 'Acitvo' ,  cls : 'btn-success', dis : false} ,
+                                                                    1 : { txt : 'Activo' ,  cls : 'btn-success', dis : false} ,
                                                                 }
                                                     ],
                                                     ['actions', [
@@ -25,85 +32,107 @@ angular.module('App')
                                                                 ]
                                                     ]
                                                 ],
-                                    data  	: 	['name','email',['comment', 25],'stars','created_at','status','actions'],
+                                    data  	: 	['created_at','name','email','stars','status','actions'],
                                     configStatus : 'status'
                                 };
 
+        var alertConfig = {
+                            title: "¿Esta seguro?",
+                            text: "",
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#DD6B55",
+                            confirmButtonText: "SI",
+                            cancelButtonColor: "#212121",
+                            cancelButtonText: "CANCELAR",
+                            closeOnConfirm: true
+                        };
+
         var data =  {
-                        'api-key':'$2y$10$X1UOd6hknkG7j2RG1o8LBet17DxB5A8dPXs5clDE3KtpnQ5gtn6Oe'
-                    };
+            'api-key':'$2y$10$X1UOd6hknkG7j2RG1o8LBet17DxB5A8dPXs5clDE3KtpnQ5gtn6Oe'
+        };
 
-        $.getJSON( "http://api.nosvenden.com/api/admin/comment", data )
-            .done(function( data ) {
+        $scope.list = function(){
+            $scope.updateList = true;
+            var config = {
+                            method: 'GET',
+                            url: 'http://api.nosvenden.com/api/admin/comment',
+                            params: data,
+                        };
+            petition.custom(config).then(function(data){
                 $scope.tableData = data.comments;
-                $('#tab_users').AJQtable('view', $scope, $compile);
-            })
-            .fail(function() {
+                $('#table').AJQtable('view', $scope, $compile);
+                $scope.updateList = false;
+            },function(error){
+                $log.log(error);
                 toastr.error('Ups ocurrio un problema al cargar los registros.');
+                $scope.updateList = false;
             });
+        };
 
-        $scope.status = function( ind ) {
-            swal({
-                    title: "¿Desea cambiar el estado de este comentario?",
-                    text: "",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "SI",
-                    cancelButtonText: "CANCELAR",
-                    closeOnConfirm: true
-                },
+        $scope.status = function( ind, dom ) {
+            alertConfig.title = "¿Desea cambiar el estado de este comentario?";
+            var id = $scope.tableData[ind].id;
+            swal(alertConfig ,
                 function() {
-                    $.ajax({
-                        url: 'http://api.nosvenden.com/api/comment/' + $scope.tableData[ind].id,
-                        type: 'PUT',
-                        data: data,
-                        dataType: 'json'
-                    }).done(function (data) {
-                        toastr.success('Se activo el comentario');
-                    }).error(function (err) {
+                    var config = {
+                        method: 'PUT',
+                        url: 'http://api.nosvenden.com/api/comment/'+ id,
+                        params: data,
+                    };
+                    petition.custom(config).then(function(data){
+                        toastr.success(data.message);
+                        changeButton(ind , dom.target);
+                    },function(error){
+                        $log.log(error);
                         toastr.error('Ups algo paso con el servidor');
                     });
                 });
         };
 
-        $scope.remove = function( ind ) {
-            swal({
-                    title: "¿Desea eliminar este comentario?",
-                    text: "",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "SI",
-                    cancelButtonText: "CANCELAR",
-                    closeOnConfirm: true
-                },
+        $scope.remove = function( ind, dom ) {
+            alertConfig.title = "¿Desea eliminar este comentario?";
+            swal(alertConfig ,
                 function() {
-                    $.ajax({
-                        url: 'http://api.nosvenden.com/api/comment/' + $scope.tableData[ind].id,
-                        type: 'DELETE',
-                        data: data,
-                        dataType: 'json'
-                    }).done(function (data) {
-                        toastr.success('Se elimino correctamente');
-                    }).error(function (err) {
+                    var config = {
+                        method: 'DELETE',
+                        url: 'http://api.nosvenden.com/api/comment/'+ $scope.tableData[ind].id,
+                        params: data,
+                    };
+                    petition.custom(config).then(function(data){
+                        $('#table').AJQtable('removeRow', dom.target , function(){
+                            toastr.success(data.message);
+                        });
+
+                    },function(error){
+                        $log.log(error);
                         toastr.error('Ups algo paso con el servidor');
                     });
                 });
         };
 
-        $scope.cambiaBoton = function (ind, dom){
-            $scope.tableData[ind].est = ($scope.tableData[ind].est == 0)? 1 : 0;
-            if ( $scope.tableData[ind].est == 1){
+        $scope.view = function( ind ){
+            $scope.comment.name = $scope.tableData[ind].name;
+            $scope.comment.message = $scope.tableData[ind].comment;
+            util.modal();
+        };
+
+        changeButton = function (ind, dom){
+            $scope.tableData[ind].status = ($scope.tableData[ind].status == 0)? 1 : 0;
+            if ( $scope.tableData[ind].status == 1){
                 $(dom).removeClass('btn-danger');
                 $(dom).addClass('btn-success');
                 $(dom).html('Activo');
+                $(dom).attr({ 'disabled': 'disabled'});
             }else{
                 $(dom).removeClass('btn-success');
                 $(dom).addClass('btn-danger');
                 $(dom).html('Inactivo');
             }
-        }
+        };
 
-
+        angular.element(document).ready(function(){
+            $scope.comment = {};
+            $scope.list();
+        });
     });

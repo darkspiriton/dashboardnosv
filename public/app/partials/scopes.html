@@ -1,0 +1,204 @@
+<div class="card" >
+    <div class="card-header bgm-blue">
+        <h2>Gestion de registros de alcanse</h2>
+        <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="list()"
+                data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
+                title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
+    </div>
+
+    <div class="card-body card-padding table-responsive">
+        <div class="col-sm-12">
+            <table id="table" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
+        </div><br>
+        <div class="card-footer">
+            <input  class="btn bgm-green waves-effect" type='submit' value='Nuevo registro' ng-click="new();">
+        </div>
+    </div><br>
+</div>
+
+<div class="card" id="formulariohide">
+    <div class="card-header bgm-blue">
+        <h2>Crear registro de alcanse</h2>
+    </div>
+
+    <div class="card-body card-padding" >
+        <div class="card-header">
+            <h2>Datos de alcanse</h2>
+        </div>
+
+        <form name="form" id="form" class="form-horizontal" autocomplete="off">
+            <input type="hidden" ng-model="scope.id">
+            <div class="form-group">
+                <label class="col-xs-2 col-sm-2 control-label">Canal de atencion</label>
+                <div class="col-xs-10 col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-list"></i></span>
+                        <div class="fg-line select">
+                            <select class="form-control" ng-options="social.id as social.name for social in socials" ng-model="scope.channel_id" required>
+                                <option value="" disabled="disabled" select="true">Seleccione</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <label class="col-xs-2 col-sm-2 control-label">Tipo de alcanse</label>
+                <div class="col-xs-10 col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-list"></i></span>
+                        <div class="fg-line select">
+                            <select class="form-control" ng-options="type.id as type.name for type in types" ng-model="scope.type_id" required>
+                                <option value="" disabled="disabled" select="true">Seleccione</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-xs-2 col-sm-2 control-label">Nombre de cliente</label>
+                <div class="col-xs-10 col-sm-10">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-account-circle"></i></span>
+                        <input type="text" class="form-control input-sm" ng-model="scope.name" required>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-xs-2 col-sm-2 control-label">Observacion</label>
+                <div class="col-xs-10 col-sm-10">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-receipt"></i></span>
+                        <input type="text" class="form-control input-sm" ng-model="scope.observation" required>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+
+        <div class="card-header">
+            <h2>Productos de interes</h2>
+        </div>
+        <div class="attr-buttons">
+            <div class="row">
+                <label class="col-xs-12 col-sm-2 control-label text-right">Busqueda de productos</label>
+                <div class="col-xs-12 col-sm-3">
+                    <div class="fg-line select">
+                        <select class="form-control" ng-change="listProduct(product.type)" ng-options="index as productType.name for (index, productType) in productTypes" ng-model="product.type" required>
+                            <option value="" disabled="disabled" select="true">Seleccione categoria</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-3">
+                    <div class="fg-line select">
+                        <select class="form-control" ng-options="index as product.name for (index, product) in products" ng-model="product.index" required>
+                            <option value="" disabled="disabled" select="true">Seleccione producto</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-2">
+                    <button ng-click="addPrd(product)" type="button" class="btn btn-success btn-sm waves-effect">Agregar</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row groups-attr">
+            <div class="row">
+                <div class="attr-group col-xs-12">
+                    <table class="table table-bordered w-100 table-attr text-center">
+                        <thead>
+                        <tr>
+                            <th>Atributo</th>
+                            <th>Valor</th>
+                            <th>Accion</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="product in viewProducts">
+                            <td>{{ product.type_name }}</td>
+                            <td>{{ product.name }}</td>
+                            <td style="width: 80px;">
+                                <button class="btn btn-xs btn-danger" ng-click="removePrd($index)" style="width: 82px;">Quitar</button>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <form class="form-horizontal">
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button ng-disabled="!form.$valid" ng-disabled="formSubmit"  ng-click="submit()" type="button" class="btn btn-primary btn-sm waves-effect">Guardar</button>
+                    <a ng-click="cancel()" class="btn btn-danger btn-sm waves-effect">Cancelar</a>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="Modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bgm-teal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title c-white">Registro de alcanse de: {{ scopeDetail.name }}</h3>
+            </div>
+            <div class="modal-body card-padding">
+                <form class="form-horizontal" autocomplete="off" submit="return false;">
+                    <div class="form-group form-pad-top">
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Canal: </label>
+                        <label class="col-xs-6 col-sm-2 control-label" style="text-align: left" ng-bind="scopeDetail.channel.name"></label>
+
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-0 col-sm-2 control-label">Tipo: </label>
+                        <label class="col-xs-6 col-sm-4 control-label" style="text-align: left" ng-bind="scopeDetail.type.name"></label>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Cliente: </label>
+                        <label class="col-xs-12 col-sm-8 control-label" style="text-align: left" ng-bind="scopeDetail.name"></label>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Cbervación: </label>
+                        <label class="col-xs-12 col-sm-8 control-label" style="text-align: left" ng-bind="scopeDetail.observation"></label>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Fecha: </label>
+                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="scopeDetail.date"></label>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-12 col-xs-offset-1 col-sm-offset-1 col-sm-5 control-label">Productos interesados</label>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="attr-group col-xs-12">
+                                <table class="table table-bordered w-100 table-attr text-center">
+                                    <thead>
+                                    <tr>
+                                        <th>Tipo</th>
+                                        <th>Producto</th>
+                                        <th>Precio</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr ng-repeat="detail in scopeDetail.details">
+                                        <td>{{ detail.product.type_product.name }}</td>
+                                        <td>{{ detail.product.name }}</td>
+                                        <td>{{ detail.product.price }}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

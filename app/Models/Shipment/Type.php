@@ -1,6 +1,6 @@
 <?php
 
-namespace Dashboard\Dashboard\Models\Shipment;
+namespace Dashboard\Models\Shipment;
 
 use Illuminate\Database\Eloquent\Model;
 

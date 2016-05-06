@@ -4,32 +4,15 @@ namespace Dashboard\Models\Product;
 
 use Illuminate\Database\Eloquent\Model;
 
-
-class Type extends Model
+class TypeProduct extends Model
 {
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-    ];
+    protected $table='types_products';
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
     protected $hidden = [
-        'password',
+        'created_at','updated_at'
     ];
 
-    protected $table='types_attributes';
-
-    public function attributes(){
-        return $this->hasMany(Attribute::class);
+    public function products(){
+        return $this->hasMany(Product::class);
     }
-
-
-
 }

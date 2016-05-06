@@ -15,12 +15,12 @@ class CreateInterestsAllReferencesTable extends Migration
         // Interests
         Schema::create('interests', function(Blueprint $table){
             $table->increments('id');
-            $table->integer('status_id')->unsigned()->increments();
-            $table->integer('channel_id')->unsigned()->increments();
-            $table->integer('customer_id')->unsigned()->increments();
             $table->integer('user_id')->unsigned()->increments();
+            $table->integer('customer_id')->unsigned()->increments();
+            $table->integer('channel_id')->unsigned()->increments();
             $table->string('observation');
-            $table->timestamp('date');
+            $table->integer('status_id')->unsigned()->increments();
+            $table->timestamps();
         });
 
         // Interest Details
@@ -41,7 +41,6 @@ class CreateInterestsAllReferencesTable extends Migration
             Relationships
          *
          */
-
         Schema::table('interests', function(Blueprint $table){
             $table->foreign('status_id')->references('id')->on('status_interests');
             $table->foreign('channel_id')->references('id')->on('channels');

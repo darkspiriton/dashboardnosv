@@ -157,6 +157,9 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
         Route::get('/get/prodSize','AuxProductController@prodSize');
         Route::get('/get/prodColor','AuxProductController@prodColor');
         Route::get('/get/prodOutProvider','AuxProductController@prodOutProvider');
+
+        Route::get('/get/alarm','AuxProductController@alarm');
+        
     });
 
     Route::get('providers', 'AuxProductController@getProviders');

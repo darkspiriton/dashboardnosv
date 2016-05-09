@@ -93,7 +93,7 @@ class AuthTokenController extends Controller
         if ($user->role->abrev == 'GOD' ){
             return view('auxGod');
         } else if ($user->role->abrev == 'ADM') {
-            return view('administrator');
+            return view('auxAdministrator');
         } else if ($user->role->abrev == 'VEN') {
             return view('vendedor');
         } else if ($user->role->abrev == 'JVE') {

@@ -7,6 +7,7 @@ use Dashboard\Events\ProductWasCreated;
 use Dashboard\Models\Experimental\Color;
 use Dashboard\Models\Experimental\Provider;
 use Dashboard\Models\Experimental\Size;
+use Dashboard\Models\Experimental\Type;
 use Illuminate\Support\Facades\Event;
 use Dashboard\Models\Experimental\Product;
 use Illuminate\Http\Request;
@@ -30,6 +31,7 @@ class AuxProductController extends Controller
             $product->color;
             $product->provider;
             $product->move = $product->movements->first();
+            $product->types;
         }
         return response()->json(['products' => $products],200);
     }
@@ -77,6 +79,8 @@ class AuxProductController extends Controller
                 $data['cant'] = $request->input('cant');
                 $data['cod'] = $request->input('cod');
 
+                $types = $request->input('types');
+
                 // Si el validador pasa, almacenamos la alarma
                 $alarm = new Alarm();
                 $alarm->day = $data['day'];
@@ -95,6 +99,11 @@ class AuxProductController extends Controller
                     $product->name= $data['name'];
                     $product->status= 1;
                     $product->save();
+
+                    foreach($types as $type){
+                        $tipo = Type::find($type['id']);
+                        $product->types()->attach($tipo);
+                    }
                 }
 
                 //Event::fire(new ProductWasCreated($data));
@@ -167,6 +176,8 @@ class AuxProductController extends Controller
             $provider = Provider::where('name','=',$request->input('name'))->exists();
 
             if(!$provider){
+
+                $types = json_decode($request->input('types'), true);
 
                 $proveedor = new Provider();
                 $proveedor->name = $request->input('name');

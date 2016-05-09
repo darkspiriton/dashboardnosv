@@ -19,6 +19,12 @@ class CreateProductsauxTable extends Migration
             $table->timestamps();
         });
 
+        Schema::create('types', function(Blueprint $table){
+            $table->increments('id');
+            $table->string('name');            
+            $table->timestamps();
+        });
+
         Schema::create('sizes', function(Blueprint $table){
             $table->increments('id');
             $table->string('name');
@@ -62,6 +68,13 @@ class CreateProductsauxTable extends Migration
             $table->timestamps();
             $table->foreign('product_id')->references('id')->on('auxproducts');
         });
+
+        Schema::create('types_auxproducts', function(Blueprint $table){
+            $table->integer('type_id')->unsigned()->increments();
+            $table->integer('product_id')->unsigned()->increments();
+            $table->foreign('type_id')->references('id')->on('types');
+            $table->foreign('product_id')->references('id')->on('auxproducts');
+        });
     }
 
     /**
@@ -71,9 +84,10 @@ class CreateProductsauxTable extends Migration
      */
     public function down()
     {
-       
         Schema::dropIfExists('auxmovements');
         Schema::dropIfExists('auxproducts');
+        Schema::dropIfExists('types_products');
+        Schema::dropIfExists('types');
         Schema::dropIfExists('alarms');
         Schema::dropIfExists('sizes');
         Schema::dropIfExists('colors');

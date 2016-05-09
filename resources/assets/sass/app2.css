@@ -1473,3 +1473,11 @@ div.fc-row {
 .search-list .dropdown-menu{
   display: block;
 }
+
+.product-types-label label{
+  padding: 0 10px;
+}
+.product-types-label i{
+  padding: 0 5px;
+  cursor: pointer;
+}

@@ -71,6 +71,7 @@ class UserController extends Controller
                 //$user->user= $request->input('user');
                 $user->password= bcrypt($request->input('password'));
                 $user->save();
+                
                 return response()->json(['message' => 'Se usuario se agrego correctamente'],200);
             }
 

@@ -44,17 +44,23 @@ angular.module('App')
             size_id : null,
             color_id: null,
             day: null,
-            count: null
+            count: null,
+            types: []
         };
 
         var newProvider =  {
             id: 0,
-            name: '•-- Nuevo Proveedor --•'
+            name: '>>---> (Nuevo Proveedor) <---<<'
         };
 
         var newColor =  {
             id: 0,
-            name: '•-- Nuevo Color --•'
+            name: '>>---> (Nuevo Color) <---<<'
+        };
+
+        var newType =  {
+            id: 0,
+            name: '>>---> (Nuevo Tipo) <---<<'
         };
 
         $scope.list = function() {
@@ -103,6 +109,17 @@ angular.module('App')
                 });
         };
 
+        $scope.listTypes = function() {
+            petition.get('api/auxproduct/get/type')
+                .then(function(data){
+                    $scope.types = data.types;
+                    $scope.types.push(newType);
+                }, function(error){
+                    console.log(error);
+                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                });
+        };
+
         $scope.view = function( ind ){
             var id = $scope.tableData[ind].id;
             petition.get('api/product/group_attributes/' + id )
@@ -119,6 +136,7 @@ angular.module('App')
             alertConfig.title = '¿Todo es correcto?'
             swal(alertConfig ,
                 function() {
+                    $scope.formSubmit=true;
                     petition.post('api/auxproduct', $scope.product).then(function(data){
                         toastr.success(data.message);
                         $scope.formSubmit=false;
@@ -165,6 +183,34 @@ angular.module('App')
             util.modal('feature');
         };
 
+        $scope.addType = function( i ){
+            if ( $scope.types[i].id == 0) {
+                $scope.typeSelect = null;
+                $scope.newFeature.tittle = 'Nuevo Tipo de Producto';
+                $scope.newFeature.label = 'Ingrese el tipo';
+                $scope.newFeature.url = 'api/auxproduct/get/type';
+                $scope.newFeature.name = null;
+                util.modal('feature');
+            }else{
+                var count = 0;
+                for(ind in  $scope.product.types){
+                    if(angular.equals($scope.types[i],$scope.product.types[ind])){
+                        count++;
+                    }
+                }
+
+                if (count == 0){
+                    $scope.product.types.push(angular.copy($scope.types[i]));
+                }
+                $scope.typeSelect = null;
+            }
+
+        };
+
+        $scope.removeType = function(i){
+            $scope.product.types.splice(i,1);
+        };
+
         $scope.addFeature = function () {
             petition.post($scope.newFeature.url,
                 {name: $scope.newFeature.name})
@@ -173,6 +219,7 @@ angular.module('App')
                     util.modalClose('feature');
                     $scope.listProviders();
                     $scope.listColors();
+                    $scope.listTypes();
                 }, function(error){
                     console.log(error);
                     toastr.error('Uyuyuy dice: ' + error.data.message);
@@ -188,5 +235,6 @@ angular.module('App')
             $scope.listProviders();
             $scope.listSizes();
             $scope.listColors();
+            $scope.listTypes();
         });
     });

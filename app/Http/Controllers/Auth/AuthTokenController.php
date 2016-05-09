@@ -88,16 +88,21 @@ class AuthTokenController extends Controller
     }
 
     public function dashboard(Request $request){
+        
         $token = $request->input('Authorization');
         $user = User::where('token','=', $token)->first();
-        if ($user->role->abrev == 'GOD' ){
-            return view('auxGod');
-        } else if ($user->role->abrev == 'ADM') {
-            return view('auxAdministrator');
-        } else if ($user->role->abrev == 'VEN') {
-            return view('vendedor');
-        } else if ($user->role->abrev == 'JVE') {
-            return view('auxCoordinador');
+        if($user!= null) {
+            if ($user->role->abrev == 'GOD') {
+                return view('auxGod');
+            } else if ($user->role->abrev == 'ADM') {
+                return view('auxAdministrator');
+            } else if ($user->role->abrev == 'VEN') {
+                return view('vendedor');
+            } else if ($user->role->abrev == 'JVE') {
+                return view('auxCoordinador');
+            }
+        }else{
+            return view('logout');
         }
     }
 }

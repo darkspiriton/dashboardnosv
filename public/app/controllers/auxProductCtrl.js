@@ -58,6 +58,7 @@ angular.module('App')
         };
 
         $scope.list = function() {
+            $scope.updateList = true;
             petition.get('api/auxproduct')
                 .then(function(data){
                     $scope.tableData = data.products;

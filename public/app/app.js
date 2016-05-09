@@ -24,6 +24,72 @@ angular.module('App', ['ngResource','ngMessages','ngSanitize','ngAnimate','toast
             }
         }
     })
+    .factory('color', function(){
+        var colors = ['#F44336','#03A9F4','#8BC34A','#009688','#E91E63','#FF9800','#00BCD4','#FFEB3B','#9C27B0','#673AB7','#3F51B5','#4CAF50'];
+        get = function(i){
+            i || (i = 0);
+            i = (i > 11)?i-12:i;
+            return colors[i];
+        };
+
+        return {
+            get : get
+        };
+    })
+    .factory('chart', ['color', function(color){
+        dataChart = function( data , config, callback){
+            var dataChart = [];
+            for(i in data){
+                var temp = {};
+                for(y in config){
+                    temp[y] = data[i][config[y]];
+                }
+                temp.color = color.get(i);
+                dataChart.push(temp);
+            }
+            callback(dataChart);
+        };
+        chart = function( data, config ){
+            dataChart( data , config, function(pieData){
+                $.plot('#pie-chart', pieData, {
+                    series: {
+                        pie: {
+                            innerRadius: 0.5,
+                            show: true,
+                            stroke: {
+                                width: 4
+                            }
+                        }
+                    },
+                    legend: {
+                        container: '.flc-pie',
+                        backgroundOpacity: 0.7,
+                        noColumns: 0,
+                        backgroundColor: "white",
+                        lineWidth: 0
+                    },
+                    grid: {
+                        hoverable: true,
+                        clickable: true
+                    },
+                    tooltip: true,
+                    tooltipOpts: {
+                        content: "%p.0%, %s", // show percentages, rounding to 2 decimal places
+                        shifts: {
+                            x: 20,
+                            y: -10
+                        },
+                        defaultTheme: false,
+                        cssClass: 'flot-tooltip'
+                    }
+                });
+            });
+        };
+
+        return {
+            draw : chart
+        };
+    }])
     .factory('toformData',  function(){
         dataFile = function( data ){
             if ( undefined === data ) return data;

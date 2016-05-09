@@ -1,5 +1,21 @@
 angular.module('App')
-    .controller('homeCtrl', function() {
+    .controller('homeCtrl', function($scope, petition, toastr) {
+
+        $scope.list = function() {
+            $scope.updateList = true;
+            petition.get('api/auxmovement/get/movement/day')
+                .then(function(data){
+                    $scope.infoData = data.data;
+                    $scope.updateList = false;
+                }, function(error){
+                    console.log(error);
+                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                    $scope.updateList = false;
+                });
+        };
+
+        $scope.list();
+
         function Vector(x, y, z) {
             this.x = x;
             this.y = y;

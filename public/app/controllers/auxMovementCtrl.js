@@ -45,6 +45,7 @@ angular.module('App')
 
 
         $scope.list = function() {
+            $scope.updateList = true;
             petition.get('api/auxmovement')
                 .then(function(data){
                     $scope.tableData = data.products;
@@ -108,10 +109,6 @@ angular.module('App')
         $scope.cancel = function () {
             resetProduct();
             util.ocultaformulario();
-        };
-
-        $scope.cancel2 = function () {
-            $log.log($scope.products);
         };
 
         $scope.new = function(){

@@ -22,6 +22,14 @@ class AuxProductsTableSeeder extends Seeder
             DB::table('sizes')->insert(['name' => 'XL']);
         });
 
+        DB::transaction(function () {
+            DB::table('types')->insert(['name' => 'Tipo1']);
+            DB::table('types')->insert(['name' => 'Tipo2']);
+            DB::table('types')->insert(['name' => 'Tipo3']);
+            DB::table('types')->insert(['name' => 'Tipo4']);
+            DB::table('types')->insert(['name' => 'Tipo5']);
+        });
+
         for ($i=0;$i<10;$i++){
             DB::table('colors')->insert([
                 'name' => $faker->colorName,

@@ -27,4 +27,8 @@ class Product extends Model
     public function movements(){
         return $this->hasMany(Movement::class)->select('status','date_shipment')->orderby('created_at','desc');
     }
+
+    public function types(){
+        return $this->belongsToMany(Type::class);
+    }
 }

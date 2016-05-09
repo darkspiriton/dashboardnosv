@@ -135,6 +135,9 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
     Route::resource('auxproduct','AuxProductController',
         ['only'=>['index','store','update','show']]);
 
+    Route::resource('auxproduct/get/type','TypeAuxProductController',
+        ['only'=>['index','store','update','show']]);
+
     Route::resource('auxmovement','AuxMovementController',
         ['only'=>['index','store','update','show']]);
     Route::post('auxmovement/out', 'AuxMovementController@product_out');
@@ -142,7 +145,8 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
     Route::group(['prefix'=>'auxmovement/'],function(){
         Route::post('/set/sale','AuxMovementController@sale');
         Route::get('/get/movement','AuxMovementController@movementPending');
-        Route::get('/get/movementDate','AuxMovementController@movements');
+        Route::get('/get/movementDay','AuxMovementController@movementDay');
+        Route::get('/get/movementDays','AuxMovementController@movementDays');
         Route::get('/get/movement/day','AuxMovementController@move_day');
     });
 

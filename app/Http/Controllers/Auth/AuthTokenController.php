@@ -105,4 +105,8 @@ class AuthTokenController extends Controller
             return view('logout');
         }
     }
+
+    public function getDashboard(Request $request){
+        return view('logout');
+    }
 }

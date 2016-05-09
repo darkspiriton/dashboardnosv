@@ -35,6 +35,8 @@ Route::group(['prefix'=>'dashboard','middleware'=>['auth']],function(){
     Route::post('/','Auth\AuthTokenController@dashboard');
 });
 
+Route::get('/dashboard','Auth\AuthTokenController@getDashboard');
+
 //API REST
 Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
     //Rutas para API REST Usuarios del Sistema

@@ -17,6 +17,12 @@
                 <li id="indicator6"><a  ui-sref="Indicator6"> Lista de Proveedores </a></li>
             </ul>
         </li>
+        <li id="users">
+            <a href="#" ui-sref="Usuarios"><i class="md md-security"></i> Administrar usuarios</a>
+        </li>
+        <li id="comments">
+            <a href="#" ui-sref="Comentarios"><i class="md md-messenger"></i> Administrar comentarios</a>
+        </li>
     </ul>
 @stop
 
@@ -29,4 +35,6 @@
     <script src="app/controllers/auxIndicator4Ctrl.js"></script>
     <script src="app/controllers/auxIndicator5Ctrl.js"></script>
     <script src="app/controllers/auxIndicator6Ctrl.js"></script>
+    <script src="app/controllers/usersCtrl.js"></script>
+    <script src="app/controllers/commentsCtrl.js"></script>
 @stop

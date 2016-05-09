@@ -3,37 +3,35 @@
 @section('dashMenu')
     <ul class="main-menu">
         <li class="active"><a href="#/"><i class="md md-home"></i> Inicio</a></li>
-        <li class="sub-menu">
-            <a href="#"><i class="md md-format-underline"></i> Indicadores</a>
-            <ul>
-                <li><a href="widget-templates.html"> Indicadores de ventas</a></li>
-            </ul>
+        <li id="products">
+            <a href="#" ui-sref="Productos"><i class="md md-shop-two"></i> Administrar Productos</a>
         </li>
         <li class="sub-menu">
-            <a href="#"><i class="md md-now-widgets"></i> Kardex</a>
+            <a href="#"><i class="md md-now-widgets"></i> Inidcadores </a>
             <ul>
-                <li><a href="widget-templates.html"> Agregar nuevo producto</a></li>
-                <li><a href="widgets.html"> Agregar stock de productos </a></li>
-                <li><a href="widgets.html"> Editar productos </a></li>
+                <li id="indicator1"><a  ui-sref="Indicator1"> Stock General  </a></li>
+                <li id="indicator2"><a  ui-sref="Indicator2"> Stock Por Talla  </a></li>
+                <li id="indicator3"><a  ui-sref="Indicator3"> Stock Por color </a></li>
+                <li id="indicator4"><a  ui-sref="Indicator4"> Stock por proveedor </a></li>
+                <li id="indicator5"><a  ui-sref="Indicator5"> Stock de Productos por provedor </a></li>
+                <li id="indicator6"><a  ui-sref="Indicator6"> Lista de Proveedores </a></li>
             </ul>
         </li>
-        <li class="sub-menu">
-            <a href="#"><i class="md md-now-widgets"></i> Reportes</a>
-            <ul>
-                <li><a href="widget-templates.html"> Reporte de ventas</a></li>
-                <li><a href="widgets.html"> Reporte de segumiento</a></li>
-            </ul>
-        </li>
-        <li class="sub-menu">
-            <a href="#"><i class="md md-now-widgets"></i> Usuarios</a>
-            <ul>
-                <li><a href="widget-templates.html"> Crear Usuarios</a></li>
-                <li><a href="widgets.html"> Editar Usuarios</a></li>
-            </ul>
+        <li id="comments">
+            <a href="#" ui-sref="Comentarios"><i class="md md-messenger"></i> Administrar comentarios</a>
         </li>
     </ul>
 @stop
 
 @section('dashCtrls')
     <script src="app/controllers/homeCtrl.js"></script>
+    <script src="app/controllers/auxProductCtrl.js"></script>
+    <script src="app/controllers/auxIndicator1Ctrl.js"></script>
+    <script src="app/controllers/auxIndicator2Ctrl.js"></script>
+    <script src="app/controllers/auxIndicator3Ctrl.js"></script>
+    <script src="app/controllers/auxIndicator4Ctrl.js"></script>
+    <script src="app/controllers/auxIndicator5Ctrl.js"></script>
+    <script src="app/controllers/auxIndicator6Ctrl.js"></script>
+    <script src="app/controllers/usersCtrl.js"></script>
+    <script src="app/controllers/commentsCtrl.js"></script>
 @stop

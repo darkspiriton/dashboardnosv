@@ -78,7 +78,7 @@ class AuxProductController extends Controller
                 $data['cant'] = $request->input('cant');
                 $data['cod'] = $request->input('cod');
 
-                $types = json_decode($request->input('types'), true);
+                $types = $request->input('types');
 
                 // Si el validador pasa, almacenamos la alarma
                 $alarm = new Alarm();
@@ -100,9 +100,8 @@ class AuxProductController extends Controller
                     $product->save();
 
                     foreach($types as $type){
-                        $tipo = Type::find($type);
-                        $tipo->products()->attach($product->id);
-                        $tipo->save();
+                        $tipo = Type::find($type['id']);
+                        $product->types()->attach($tipo);
                     }
                 }
 

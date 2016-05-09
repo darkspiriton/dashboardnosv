@@ -26,7 +26,7 @@
             <h2>Datos de Producto</h2>
         </div>
 
-        <form name="formuser" id="form" class="form-horizontal" autocomplete="off">
+        <form name="formproduct" id="form" class="form-horizontal" autocomplete="off">
             <div class="form-group">
                 <label class="col-xs-2 col-sm-2 control-label">Nombre</label>
                 <div class="col-xs-10 col-sm-4">
@@ -79,12 +79,26 @@
             </div>
 
             <div class="form-group">
+                <label class="col-xs-2 col-sm-2 control-label">Tipo</label>
+                <div class="col-xs-10 col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-list"></i></span>
+                        <div class="fg-line select">
+                            <select class="form-control" ng-change="addType(typeSelect)" ng-options="$index as type.name for ($index, type) in types" ng-model="typeSelect">
+                                <option value="" disabled="disabled" select="true">Seleccione</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label class="col-xs-2 col-sm-2 control-label">Codigo</label>
                 <div class="col-xs-10 col-sm-4">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-picture-in-picture"></i></span>
                         <div class="fg-line">
-                            <input ng-model="product.cod" type="text" class="form-control" required>
+                            <input ng-model="product.cod" type="number" class="form-control" required>
                         </div>
                     </div>
                 </div>
@@ -94,7 +108,7 @@
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-picture-in-picture"></i></span>
                         <div class="fg-line">
-                            <input ng-model="product.cant" type="text" class="form-control" required>
+                            <input ng-model="product.cant" type="number" class="form-control" required>
                         </div>
                     </div>
                 </div>
@@ -110,7 +124,7 @@
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-picture-in-picture"></i></span>
                         <div class="fg-line">
-                            <input ng-model="product.day" type="text" class="form-control" required>
+                            <input ng-model="product.day" type="number" class="form-control" required>
                         </div>
                     </div>
                 </div>
@@ -120,9 +134,19 @@
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-picture-in-picture"></i></span>
                         <div class="fg-line">
-                            <input ng-model="product.count" type="text" class="form-control" required>
+                            <input ng-model="product.count" type="number" class="form-control" required>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <div class="card-header">
+                <h2>Tipos categorias</h2>
+            </div>
+
+            <div class="row">
+                <div class="attr-group col-xs-10 col-xs-offset-2 product-types-label">
+                  <label ng-repeat="type in product.types">{{type.name}}<i ng-click="removeType($index)" class="md md-delete"></i></label>
                 </div>
             </div>
         </form>
@@ -130,7 +154,7 @@
         <form class="form-horizontal">
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <button ng-disabled="!formuser.$valid" ng-disabled="formSubmit"  ng-click="submit()" type="button" class="btn btn-primary btn-sm waves-effect">Guardar</button>
+                    <button ng-disabled="!formproduct.$valid || formSubmit" ng-click="submit()" type="button" class="btn btn-primary btn-sm waves-effect">Guardar</button>
                     <a ng-click="cancel()" class="btn btn-danger btn-sm waves-effect">Cancelar</a>
                 </div>
             </div>

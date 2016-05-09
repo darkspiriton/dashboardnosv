@@ -31,6 +31,7 @@ class AuxProductController extends Controller
             $product->color;
             $product->provider;
             $product->move = $product->movements->first();
+            $product->types;
         }
         return response()->json(['products' => $products],200);
     }

@@ -6,6 +6,7 @@ use Dashboard\Models\Experimental\Movement;
 use Dashboard\Models\Experimental\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 use Dashboard\Http\Requests;
 
@@ -234,6 +235,38 @@ class AuxMovementController extends Controller
         return \Response::json(['products' => $products], 200);
     }
 
+
+    public function movements(Request $request){
+        
+//        select p.cod codigo,p.name product, c.name color, s.name talla, max(m.date_shipment) fecha from auxproducts p
+//        join auxmovements m on p.id=m.product_id
+//        join colors c on c.id=p.color_id
+//        join sizes s on s.id=p.size_id
+//        where p.status='1' and m.status='aut' and DATE(m.date_shipment) > '1984-12-20' and DATE(m.date_shipment) < '1984-12-22'
+//        group by p.name, c.name, s.name;
+        
+        $date1=Carbon::createFromFormat('Y-m-d', $request->input('date1'));
+        $date2=$date1->addDays(1);
+
+        //dd($date2);
+        
+        $movements=DB::table('auxproducts as p')
+                ->select('p.cod as codigo','p.name as product','c.name as color','s.name as talla',DB::raw('max(m.date_shipment) as fecha'))
+                ->join('auxmovements as m','p.id','=','m.product_id')
+                ->join('colors as c','c.id','=','p.color_id')
+                ->join('sizes as s','s.id','=','p.size_id')
+                ->where('p.status','=','1')
+                ->where('m.status','=','aut')
+                ->where(DB::raw('DATE(m.date_shipment)'),'>=',$date1->toDateString())
+                ->where(DB::raw('DATE(m.date_shipment)'),'<',$date2->toDateString())
+                ->groupby('p.name','c.name','s.name')
+                ->get();
+        
+        return response()->json(['movements' => $movements],200);
+    }
+
+    
+
     public function move_day(){
         $salida = Product::where('status',0)->count();
         $vendido = Product::where('status',3)->count();
@@ -241,5 +274,6 @@ class AuxMovementController extends Controller
 
         return response()->json(['data' => [ 'sal' => $salida, 'ven' => $vendido, 'stock' => $stock]],200);
     }
+
 
 }

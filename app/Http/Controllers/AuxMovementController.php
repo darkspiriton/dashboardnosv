@@ -250,7 +250,7 @@ class AuxMovementController extends Controller
             $date1 = Carbon::createFromFormat('Y-m-d', $request->input('date1'));
             $date2 = Carbon::createFromFormat('Y-m-d', $request->input('date2'));
         } catch(\InvalidArgumentException $e) {
-            return response()->json(['message' => 'Fechas o formato no valido, formato aceptado: Y-m-d'],401);
+            return response()->json(['message' => 'Fechas no validas, formato aceptado: Y-m-d'],401);
         }
 
         $report = array();

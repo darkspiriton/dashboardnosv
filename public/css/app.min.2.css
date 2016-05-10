@@ -1185,4 +1185,11 @@ div.fc-row {
   padding: 0 5px;
   cursor: pointer; }
 
+.report-date input {
+  height: 30px !important; }
+
+.report-date h2 {
+  line-height: 30px !important;
+  font-size: 14px !important; }
+
 /*# sourceMappingURL=app.min.2.css.map */

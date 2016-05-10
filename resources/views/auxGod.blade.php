@@ -28,6 +28,7 @@
 @stop
 
 @section('dashCtrls')
+    <script src="app/lib/filesave.js"></script>
     <script src="app/controllers/homeCtrl.js"></script>
     <script src="app/controllers/auxProductCtrl.js"></script>
     <script src="app/controllers/auxIndicator1Ctrl.js"></script>

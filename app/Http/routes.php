@@ -149,6 +149,7 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
         Route::get('/get/movement','AuxMovementController@movementPending');
         Route::get('/get/movementDay','AuxMovementController@movementDay');
         Route::get('/get/movementDays','AuxMovementController@movementDays');
+        Route::post('/get/movementDays/download','AuxMovementController@movementDaysDownload');
         Route::get('/get/movement/day','AuxMovementController@move_day');
     });
 

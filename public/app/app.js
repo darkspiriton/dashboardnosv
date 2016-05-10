@@ -135,9 +135,10 @@ angular.module('App', ['ngResource','ngMessages','ngSanitize','ngAnimate','toast
 
                 return promise;
             },
-            post: function ( URL , data) {
+            post: function ( URL , data, config) {
                 data || (data = {});
-                promise = $http.post( baseUrl(URL), data ).then(function(response){
+                config || (config = {});
+                promise = $http.post( baseUrl(URL), data, config ).then(function(response){
                     return response.data;
                 });
 

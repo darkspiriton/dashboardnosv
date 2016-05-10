@@ -252,15 +252,37 @@ class AuxMovementController extends Controller
         } catch(\InvalidArgumentException $e) {
             return response()->json(['message' => 'Fechas no validas, formato aceptado: Y-m-d'],401);
         }
-
+//        return response()->json($request->all());
         $report = array();
-        $report['movements'] = $this->entrefechas($date1,$date2);
+        $report['movements'] = $this->entrefechas($date1,$date2,$request->input('status'),$request->input('provider'));
         $report['message'] = 'Reporte de movimeintos de productos entre las fechas: '.$date1->toDateString().' y '.$date2->toDateString();
         $report['date'] = date('Y-m-d');
         return response()->json($report,200);
     }
 
-    private function entrefechas($date1,$date2){
+    public function movementDaysDownload(Request $request){
+
+        try {
+            $date1 = Carbon::createFromFormat('Y-m-d', $request->input('date1'));
+            $date2 = Carbon::createFromFormat('Y-m-d', $request->input('date2'));
+        } catch(\InvalidArgumentException $e) {
+            return response()->json(['message' => 'Fechas no validas, formato aceptado: Y-m-d'],401);
+        }
+
+        $data = $this->entrefechas($date1,$date2,$request->input('status'),$request->input('provider'));
+        $date = date('Y-m-d');
+        $tittle = 'Reporte de movimeintos de productos entre las fechas: '.$date1->toDateString().' y '.$date2->toDateString();
+        $columns = array('fecha','codigo','product','color','talla','status');
+
+        $view =  \View::make('pdf.templatePDF', compact('data','columns','tittle','date'))->render();
+
+        $pdf = \PDF::loadHTML($view);
+        $pdf->setOrientation('landscape');
+
+        return $pdf->download();
+    }
+
+    private function entrefechas($date1,$date2, $status = 'Vendido', $provider = ''){
 
 //        select p.cod codigo,p.name product, c.name color, s.name talla, max(m.date_shipment) fecha from auxproducts p
 //        join auxmovements m on p.id=m.product_id
@@ -274,7 +296,8 @@ class AuxMovementController extends Controller
             ->join('auxmovements as m','p.id','=','m.product_id')
             ->join('colors as c','c.id','=','p.color_id')
             ->join('sizes as s','s.id','=','p.size_id')
-//            ->where('p.status','=','1')
+            ->where('m.status','like','%'.$status.'%')
+            ->where('p.provider_id','like','%'.$provider.'%')
 //            ->where('m.status','=','salida')
             ->where(DB::raw('DATE(m.date_shipment)'),'>=',$date1->toDateString())
             ->where(DB::raw('DATE(m.date_shipment)'),'<',$date2->toDateString())

@@ -13,11 +13,19 @@ angular.module('App')
                 '    <div class="card-header bgm-blue">'+
                 '       <div ng-form="dates" class="row report-date">'+
                     '       <h2 class="col-xs-12 col-sm-1">Fecha Inicio</h2>'+
-                    '       <input type="date" class="btn btn-default col-sm-2" ng-model="date.date1" required>'+
+                    '       <input type="date" class="btn btn-default col-sm-2" ng-model="data.date1" required>'+
                     '       <h2 class="col-xs-12 col-sm-1">Fecha Final</h2>'+
-                    '       <input type="date" class="btn btn-default col-sm-2" ng-model="date.date2" required>'+
-                    '       <input type="button" ng-disabled="!dates.$valid" ng-click="filter()" class="btn bgm-indigo m-l-30" value="buscar">'+
-                '       <input type="button" ng-if="reportDownload" ng-click="download()" class="btn bgm-purple m-l-30" value="DESCARGAR PDF">'+
+                    '       <input type="date" class="btn btn-default col-sm-2" ng-model="data.date2" required>'+
+                '    <select class="col-sm-2 m-l-30" ng-model="data.status">'+
+                '       <option value="Vendido">Vendido</option>'+
+                '       <option value="Retornado">Retornado</option>'+
+                '       <option value="salida">Salida</option>'+
+                '    </select>'+
+                '    <select class="col-sm-2 m-l-30" ng-options="provider.id as provider.name for provider in providers" ng-model="data.provider">'+
+                '       <option value="" disabled="disabled" selected="selected">Seleccione Proveedor</option>'+
+                '    </select>'+
+                    '       <input type="button" ng-disabled="!dates.$valid" ng-click="filter()" class="btn bgm-indigo m-l-30 m-t-20 col-sm-2" value="buscar">'+
+                '           <input type="button" ng-if="reportDownload" ng-click="download()" class="btn bgm-purple m-l-30 m-t-20 col-sm-2" value="DESCARGAR PDF">'+
                 '       </div>'+
                 '    </div>'+
                 '    <div class="card-body card-padding table-responsive">'+
@@ -45,6 +53,12 @@ angular.module('App')
             data  	: 	['fecha', 'codigo','product','color','talla','status']
         };
 
+        $scope.data = {
+            date1 : null,
+            date2: null,
+            status: 'Vendido'
+        };
+
         $scope.list = function() {
             $scope.updateList = true;
             $scope.reportDownload = false;
@@ -60,11 +74,21 @@ angular.module('App')
                 });
         };
 
+        $scope.listProviders = function() {
+            petition.get('api/providers')
+                .then(function(data){
+                    $scope.providers = data.providers;
+                }, function(error){
+                    console.log(error);
+                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                });
+        };
+
         $scope.filter = function(){
             $scope.updateList = true;
-            $scope.dateSave = {};
-            $scope.dateSave.date1 = $filter('date')($scope.date.date1, 'yyyy-MM-dd')
-            $scope.dateSave.date2 = $filter('date')($scope.date.date2, 'yyyy-MM-dd')
+            $scope.dateSave = $scope.data;
+            $scope.dateSave.date1 = $filter('date')($scope.data.date1, 'yyyy-MM-dd')
+            $scope.dateSave.date2 = $filter('date')($scope.data.date2, 'yyyy-MM-dd')
             petition.get('api/auxmovement/get/movementDays', { params : $scope.dateSave })
                 .then(function(data){
                     $scope.reportDownload = true;
@@ -79,11 +103,20 @@ angular.module('App')
         };
 
         $scope.download = function(){
-
+            petition.post('api/auxmovement/get/movementDays/download', $scope.dateSave, {responseType:'arraybuffer'})
+                .then(function(data){
+                    var date = new Date().getTime();
+                    var name = date + '-reporte-de-movimiento-'+ $scope.dateSave.date1+'-al-'+$scope.dateSave.date2+'.pdf';
+                    var file = new Blob([data],{ type : 'application/pdf'});
+                    saveAs(file, name);
+                }, function(error){
+                    console.info(error);
+                });
         };
 
         angular.element(document).ready(function(){
             $scope.product = angular.copy($scope.productClear);
             $scope.list();
+            $scope.listProviders();
         });
     });

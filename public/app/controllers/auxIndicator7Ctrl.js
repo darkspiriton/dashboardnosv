@@ -33,11 +33,20 @@ angular.module('App')
                 '            <table id="table" class="table table-bordered table-striped w-100" style="text-align:center;"></table>'+
                 '        </div><br>'+
                 '    </div><br>'+
+                '</div>'+
+                '<div class="card">'+
+                    '    <div class="card-header">'+
+                '        <h2>Vista Grafica</h2>'+
+                '    </div>'+
+                '    <div class="card-body card-padding">'+
+                '        <div id="chart" class="flot-chart-pie"></div>'+
+                '        <div class="flc-bar hidden-xs"></div>'+
+                '    </div>'+
                 '</div>',
                 controller : 'auxIndicator7Ctrl'
             });
     })
-    .controller('auxIndicator7Ctrl', function($scope, $compile, $log, util, petition, toastr, $filter){
+    .controller('auxIndicator7Ctrl', function($scope, $compile, $log, util, petition, toastr, $filter, chart){
 
         util.liPage('indicator7');
 
@@ -66,6 +75,7 @@ angular.module('App')
                 .then(function(data){
                     $scope.tableData = data.movements;
                     $('#table').AJQtable('view', $scope, $compile);
+                    chart.drawColummn($scope.tableData, $scope.dataSa)
                     $scope.updateList = false;
                 }, function(error){
                     console.log(error);

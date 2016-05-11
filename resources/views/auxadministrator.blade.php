@@ -6,6 +6,9 @@
         <li id="products">
             <a href="#" ui-sref="Productos"><i class="md md-shop-two"></i> Administrar Productos</a>
         </li>
+        <li id="stock">
+            <a href="#" ui-sref="Stock"><i class="md md-shop-two"></i>Stock de Productos</a>
+        </li>
         <li class="sub-menu">
             <a href="#"><i class="md md-now-widgets"></i> Inidcadores </a>
             <ul>
@@ -34,4 +37,5 @@
     <script src="app/controllers/auxIndicator6Ctrl.js"></script>
     <script src="app/controllers/usersCtrl.js"></script>
     <script src="app/controllers/commentsCtrl.js"></script>
+    <script src="app/controllers/auxStockCtrl.js"></script>
 @stop

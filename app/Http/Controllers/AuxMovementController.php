@@ -255,8 +255,7 @@ class AuxMovementController extends Controller
 //        return response()->json($request->all());
         $report = array();
         $report['movements'] = $this->entrefechas($date1,$date2,$request->input('status'),$request->input('provider'));
-        $report['message'] = 'Reporte de movimeintos de productos entre las fechas: '.$date1->toDateString().' y '.$date2->toDateString();
-        $report['date'] = date('Y-m-d');
+
         return response()->json($report,200);
     }
 
@@ -314,6 +313,46 @@ class AuxMovementController extends Controller
         $stock = Product::where('status',1)->count();
 
         return response()->json(['data' => [ 'sal' => $salida, 'ven' => $vendido, 'stock' => $stock]],200);
+    }
+
+    public function cant_dates($date1,$date2, $status = 'Vendido', $provider = ''){
+
+        $movements=DB::table('auxproducts as p')
+            ->select('m.date_shipment as fecha','p.cod as codigo','p.name as product','c.name as color','s.name as talla','m.status')
+            ->join('auxmovements as m','p.id','=','m.product_id')
+            ->join('colors as c','c.id','=','p.color_id')
+            ->join('sizes as s','s.id','=','p.size_id')
+            ->where('m.status','like','%'.$status.'%')
+            ->where('p.provider_id','like','%'.$provider.'%')
+//            ->where('m.status','=','salida')
+            ->where(DB::raw('DATE(m.date_shipment)'),'>=',$date1->toDateString())
+            ->where(DB::raw('DATE(m.date_shipment)'),'<',$date2->toDateString())
+//            ->groupby('p.name','c.name','s.name')
+            ->orderby('p.name','c.name','s.name')
+            ->get();
+    }
+
+    private function movement_month($month,$year,$product,$size,$color,$status,$provider){
+
+        $date1=Carbon::create($year,$month,1);
+        $date2=Carbon::create($year,$month,$date1->daysInMonth);
+
+        $movements=DB::table('auxproducts as p')
+            ->select('m.date_shipment as fecha','p.cod as codigo')
+            ->join('auxmovements as m','p.id','=','m.product_id')
+            ->join('colors as c','c.id','=','p.color_id')
+            ->join('sizes as s','s.id','=','p.size_id')
+            ->where('m.status','like','%'.$status.'%')
+            ->where('p.provider_id','like','%'.$provider.'%')
+            ->where('p.provider_id','like','%'.$product.'%')
+            ->where('p.provider_id','like','%'.$size.'%')
+            ->where('p.provider_id','like','%'.$color.'%')
+            ->where(DB::raw('DATE(m.date_shipment)'),'>=',$date1->toDateString())
+            ->where(DB::raw('DATE(m.date_shipment)'),'<',$date2->toDateString())
+            ->orderby('m.date_shipment')
+            ->get();
+
+        return $movements;
     }
 
 

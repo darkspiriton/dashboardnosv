@@ -152,7 +152,7 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
         Route::post('/get/movementDays/download','AuxMovementController@movementDaysDownload');
         Route::get('/get/movement/day','AuxMovementController@move_day');
         
-        Route::get('/get/movement/month','AuxMovementController@movement_month');
+        //Route::get('/get/movement/month','AuxMovementController@movement_month');
        
     });
 

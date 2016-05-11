@@ -7,7 +7,7 @@
             <a href="#" ui-sref="Productos"><i class="md md-shop-two"></i> Administrar Productos</a>
         </li>
         <li id="stock">
-            <a href="#" ui-sref="Stock"><i class="md md-shop-two"></i>Stock de Productos</a>
+            <a ui-sref="Stock"><i class="md md-shop-two"></i>Stock de Productos</a>
         </li>
         <li class="sub-menu">
             <a href="#"><i class="md md-now-widgets"></i> Inidcadores </a>
@@ -32,6 +32,7 @@
 
 @section('dashCtrls')
     <script src="app/lib/filesave.js"></script>
+    <script src="app/controllers/auxStockCtrl.js"></script>
     <script src="app/controllers/homeCtrl.js"></script>
     <script src="app/controllers/auxProductCtrl.js"></script>
     <script src="app/controllers/auxIndicator1Ctrl.js"></script>
@@ -43,4 +44,5 @@
     <script src="app/controllers/auxIndicator7Ctrl.js"></script>
     <script src="app/controllers/usersCtrl.js"></script>
     <script src="app/controllers/commentsCtrl.js"></script>
+
 @stop

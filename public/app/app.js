@@ -49,15 +49,27 @@ angular.module('App', ['ngResource','ngMessages','ngSanitize','ngAnimate','toast
             }
             callback(dataChart);
         };
-        dataColumn = function( data , config, callback){
+        dataColumn = function( data ,name , callback){
+            if (data.length == 0) return console.log('No hay datos que mostrar', data);
+            var date = {};
+            date.fin =  new Date(data[data.length - 1].fecha + ' 12:00:00').getDate();
+            var data1 = [];
+            for (var i = 1;i <= date.fin;i++){
+                data1.push([i,0])
+            }
 
-
-            var data1 = [[1,6], [2,4], [3,0], [4,1], [5,2], [6,3], [7,1], [8,1], [9,0], [10,1], [11,0], [12,2], [13,4], [14,5], [15,3], [16,1], [17,2], [18,0], [19,4], [20,5], [21,6], [22,10], [23,10], [24,4], [25,5], [26,6], [27,1], [28,2], [29,1], [30,2], [31,0]];
+            for (var y = 0;y < data.length;y++){
+                for (var x = 0;x < data1.length;x++){
+                    if ( data1[x][0] == new Date(data[y].fecha  + ' 12:00:00').getDate()){
+                        data1[x][1] = Math.floor((Math.random() * 10) + 1);
+                    }
+                }
+            }
 
             var barData = new Array();
             barData.push({
                 data : data1,
-                label: 'Tokyo',
+                label: name,
                 bars : {
                     show : true,
                     barWidth : 0.08,
@@ -106,8 +118,8 @@ angular.module('App', ['ngResource','ngMessages','ngSanitize','ngAnimate','toast
             });
         };
 
-        column = function( data, config ){
-            dataColumn( data , config, function(Data){
+        column = function( data,name ){
+            dataColumn( data ,name , function(Data){
                 $.plot($("#chart"), Data, {
                     grid : {
                         borderWidth: 1,
@@ -137,15 +149,6 @@ angular.module('App', ['ngResource','ngMessages','ngSanitize','ngAnimate','toast
                             color: "#9f9f9f"
                         },
                         shadowSize: 0,
-                    },
-                    tooltipOpts: {
-                        content: "%p.0%, %s", // show percentages, rounding to 2 decimal places
-                        shifts: {
-                            x: 20,
-                            y: -10
-                        },
-                        defaultTheme: false,
-                        cssClass: 'flot-tooltip'
                     },
                     legend:{
                         container: '.flc-bar',

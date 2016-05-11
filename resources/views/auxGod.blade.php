@@ -43,4 +43,5 @@
     <script src="app/controllers/auxIndicator7Ctrl.js"></script>
     <script src="app/controllers/usersCtrl.js"></script>
     <script src="app/controllers/commentsCtrl.js"></script>
+    <script src="app/controllers/auxStockCtrl.js"></script>
 @stop

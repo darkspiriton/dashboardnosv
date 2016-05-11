@@ -38,4 +38,22 @@ angular.module('loginApp')
                     toastr.error(error.data.message);
                 });
         };
+
+        $scope.Myonkeyup = function (e) {
+            if(e.keyCode == 13 || e.charCode == 13)
+                $scope.login();
+        };
+
+        // angular.element(document).ready(function () {
+        //     angular.element('#pass').on('keyup', function () {
+        //         console.log(e.keyCode);
+        //         if(e.keyCode == 13 || e.charCode == 13)
+        //             $('#login').submit();
+        //     });
+        //     // $('#pass').keyup(function (e) {
+        //     //
+        //     // });
+        // });
+
+
     });

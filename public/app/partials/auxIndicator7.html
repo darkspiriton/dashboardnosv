@@ -17,21 +17,21 @@
                    <option value="Retornado">Retornado</option>
                    <option value="salida">Salida</option>
                 </select>
-               <h2 class="col-xs-12 col-sm-1 text-right">Proveedorl</h2>
-                <select class="col-sm-2" ng-options="provider.id as provider.name for provider in providers" ng-model="data.provider">
+               <h2 class="col-xs-12 col-sm-1 text-right">Proveedor</h2>
+                <select class="col-sm-2" ng-change="noProduct()" ng-options="provider.id as provider.name for provider in providers" ng-model="data.provider">
                    <option value="" disabled="disabled" selected="selected">Seleccione</option>
                 </select>
                <h2 class="col-xs-12 col-sm-1 m-t-20 text-right">Producto</h2>
                 <select class="col-sm-2 m-t-20" ng-change="listProducts('s')" ng-options="product.name as product.name for product in products" ng-model="data.name">
-                   <option value="" disabled="disabled" selected="selected">Seleccione</option>
+                   <option value=""  selected="selected">Seleccione</option>
                 </select>
                <h2 class="col-xs-12 col-sm-1 m-t-20 text-right">Talla</h2>
                 <select class="col-sm-2 m-t-20" ng-change="listProducts('c')" ng-options="size.id as size.name for size in sizes" ng-model="data.size">
-                   <option value="" disabled="disabled" selected="selected">Seleccione</option>
+                   <option value=""  selected="selected">Seleccione</option>
                 </select>
                <h2 class="col-xs-12 col-sm-1 m-t-20 text-right">Color</h2>
                 <select class="col-sm-2 m-t-20" ng-options="color.id as color.name for color in colors" ng-model="data.color">
-                   <option value="" disabled="disabled" selected="selected">Seleccione</option>
+                   <option value="" selected="selected">Seleccione</option>
                 </select>
                 <input type="button" ng-disabled="!dates.$valid" ng-click="filter()" class="btn bgm-indigo m-l-20 m-t-20 col-sm-1" value="buscar">
                 <input type="button" ng-if="reportDownload" ng-click="download()" class="btn bgm-purple m-l-20 m-t-20 col-sm-1" value="DESCARGAR PDF">
@@ -43,12 +43,27 @@
                     </div><br>
             </div><br>
     </div>
-    <div class="card">
-        <div class="card-header">
-                <h2>Vista Grafica</h2>
+
+    <!--<div ng-show="drawShow" class="card">-->
+        <!--<div class="card-header">-->
+                <!--<h2>Vista Grafica</h2>-->
+            <!--</div>-->
+        <!--<div class="card-body card-padding">-->
+                <!--<div id="chart" class="flot-chart-pie"></div>-->
+                <!--<div class="flc-bar hidden-xs"></div>-->
+            <!--</div>-->
+    <!--</div>-->
+<div class="row">
+    <div class="col-md-12">
+        <div ng-show="drawShow" class="card">
+            <div class="card-header">
+                <h2>Vista grafica</h2>
             </div>
-        <div class="card-body card-padding">
-                <div id="chart" class="flot-chart-pie"></div>
-                <div class="flc-bar hidden-xs"></div>
+
+            <div class="card-body card-padding-sm">
+                <div id="bar-chart" class="flot-chart"></div>
+                <div class="flc-bar"></div>
             </div>
+        </div>
     </div>
+</div>

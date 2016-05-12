@@ -37,6 +37,7 @@ angular.module('App')
                     $scope.tableData = data.movements;
                     $('#table').AJQtable('view', $scope, $compile);
                     $scope.updateList = false;
+                    $scope.drawShow=false;
                 }, function(error){
                     console.log(error);
                     toastr.error('Ups ocurrio un problema: ' + error.data.message);
@@ -53,6 +54,7 @@ angular.module('App')
             $scope.reportDownload = false;
             petition.get('api/auxproduct/get/report', { params: $scope.data })
                 .then(function(data){
+                    $scope.data.provider = null;
                     if (select == 'p'){
                         $scope.products = data;
                         $scope.sizes = [];
@@ -92,7 +94,12 @@ angular.module('App')
                     $scope.tableData = data.movements;
                     $('#table').AJQtable('view', $scope, $compile);
                     $scope.updateList = false;
-                    chart.drawColummn($scope.tableData, providerName($scope.data.provider, $scope.providers));
+                    if ( data.movements.length > 0){
+                        chart.drawColummn(data.draw,data.days);
+                        $scope.drawShow=true;
+                    } else {
+                        $scope.drawShow=false;
+                    }
                 }, function(error){
                     console.log(error);
                     toastr.error('Ups ocurrio un problema: ' + error.data.message);
@@ -110,6 +117,15 @@ angular.module('App')
                 }, function(error){
                     console.info(error);
                 });
+        };
+
+        $scope.noProduct = function(){
+            $scope.data.name = null;
+            $scope.data.size = null;
+            $scope.data.color = null;
+
+            $scope.sizes = [];
+            $scope.colors = [];
         };
 
         function providerName(p, providers){

@@ -357,6 +357,7 @@ class AuxProductController extends Controller
                 ->where('m.status','=','vendido')
                 ->groupby('p.name')->get();
         $j=0;
+        $alarms = array();
         foreach ($products as $product){
             $dateNow=Carbon::now();
             $date=Carbon::createFromFormat('Y-m-d H:i:s', $product->created_at);
@@ -365,15 +366,15 @@ class AuxProductController extends Controller
 
             if($diff > (int)$product->day){
                 if((int)$product->cant < (int)$product->count){
-                    $alarms[$j]=$product->name;
+                    $alarms[$j] = array('name' => $product->name);
                      $j++;
                 }
             }
         }
         if(!empty($data)){
-            return response()->json([ '$alarms' => $alarms ],200);
+            return response()->json([ 'alarms' => $alarms ],200);
         }else{
-            return response()->json([ 'message' => 'No hay alarmas' ],401);
+            return response()->json([ 'message' => 'Por el momento no hay alarmas' ],401);
         }
     }
 

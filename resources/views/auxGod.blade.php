@@ -3,6 +3,9 @@
 @section('dashMenu')
     <ul class="main-menu">
         <li class="active"><a href="#/"><i class="md md-home"></i> Inicio</a></li>
+        <li id="alarma">
+            <a ui-sref="Alarma"><i class="md md-shop-two"></i> Alarma de productos </a>
+        </li>
         <li id="products">
             <a href="#" ui-sref="Productos"><i class="md md-shop-two"></i> Administrar Productos</a>
         </li>
@@ -34,6 +37,7 @@
     <script src="app/lib/filesave.js"></script>
     <script src="app/controllers/auxStockCtrl.js"></script>
     <script src="app/controllers/homeCtrl.js"></script>
+    <script src="app/controllers/auxAlarmCtrl.js"></script>
     <script src="app/controllers/auxProductCtrl.js"></script>
     <script src="app/controllers/auxIndicator1Ctrl.js"></script>
     <script src="app/controllers/auxIndicator2Ctrl.js"></script>
@@ -44,5 +48,4 @@
     <script src="app/controllers/auxIndicator7Ctrl.js"></script>
     <script src="app/controllers/usersCtrl.js"></script>
     <script src="app/controllers/commentsCtrl.js"></script>
-
 @stop

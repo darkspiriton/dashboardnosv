@@ -14,7 +14,7 @@
     <div class="input-group m-b-20">
         <span class="input-group-addon"><i class="md md-lock"></i></span>
         <div class="fg-line">
-            <input type="password" class="form-control" ng-model="user.password" placeholder="Contraseña">
+            <input ng-keyup="Myonkeyup($event)" type="password" class="form-control" ng-model="user.password" placeholder="Contraseña">
         </div>
     </div>
 

@@ -170,12 +170,31 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
         Route::get('/get/prodOutProvider','AuxProductController@prodOutProvider');
 
         Route::get('/get/alarm','AuxProductController@alarm');
-        
+
     });
 
     Route::get('providers', 'AuxProductController@getProviders');
     Route::get('sizes', 'AuxProductController@getSizes');
     Route::get('colors', 'AuxProductController@getColors');
+
+
+    //SISTEMAS PLANILLAS
+    Route::resource('employe','EmployeController',
+        ['only'=>['index','store','update','show']]);
+
+    Route::resource('assist','AssistController',
+        ['only'=>['index','store','update','show']]);
+
+    Route::resource('lunch','LunchController',
+        ['only'=>['index','store','update','show']]);
+
+    Route::resource('salary','SalaryController',
+        ['only'=>['index','store','update','show']]);
+
+    Route::group(['prefix'=>'employe/'],function(){
+        Route::get('/get/area','EmployeController@area');
+        Route::get('/get/day','EmployeController@day');
+    });
 
 });
 

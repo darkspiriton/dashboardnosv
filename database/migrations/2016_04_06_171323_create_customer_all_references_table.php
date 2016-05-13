@@ -104,12 +104,12 @@ class CreateCustomerAllReferencesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('addresses');
-        Schema::dropIfExists('ubigeos');
-        Schema::dropIfExists('phones');
-        Schema::dropIfExists('operators');
-        Schema::dropIfExists('socials');
-        Schema::dropIfExists('channels');
-        Schema::dropIfExists('customers');
+        Schema::dropIfExists('');
+        Schema::dropIfExists('');
+        Schema::dropIfExists('');
+        Schema::dropIfExists('');
+        Schema::dropIfExists('');
+        Schema::dropIfExists('');
+        Schema::dropIfExists('');
     }
 }

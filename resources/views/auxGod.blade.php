@@ -15,13 +15,13 @@
         <li class="sub-menu">
             <a href="#"><i class="md md-now-widgets"></i> Inidcadores </a>
             <ul>
-                <li id="indicator1"><a  ui-sref="Indicator1"> Stock General  </a></li>
-                <li id="indicator2"><a  ui-sref="Indicator2"> Stock Por Talla  </a></li>
-                <li id="indicator3"><a  ui-sref="Indicator3"> Stock Por color </a></li>
-                <li id="indicator4"><a  ui-sref="Indicator4"> Stock por proveedor </a></li>
-                <li id="indicator5"><a  ui-sref="Indicator5"> Stock de Productos por provedor </a></li>
-                <li id="indicator6"><a  ui-sref="Indicator6"> Lista de Proveedores </a></li>
-                <li id="Indicator7"><a  ui-sref="Indicator7"> Reporte de mocimiento entre fechas </a></li>
+                <li id="indicator1"><a ui-sref="Indicator1"> Stock General  </a></li>
+                <li id="indicator2"><a ui-sref="Indicator2"> Stock Por Talla  </a></li>
+                <li id="indicator3"><a ui-sref="Indicator3"> Stock Por color </a></li>
+                <li id="indicator4"><a ui-sref="Indicator4"> Stock por proveedor </a></li>
+                <li id="indicator5"><a ui-sref="Indicator5"> Stock de Productos por provedor </a></li>
+                <li id="indicator6"><a ui-sref="Indicator6"> Lista de Proveedores </a></li>
+                <li id="Indicator7"><a ui-sref="Indicator7"> Reporte de mocimiento entre fechas </a></li>
             </ul>
         </li>
         <li id="users">
@@ -35,6 +35,9 @@
                 </li>
                 <li id="payrollEntry">
                     <a ui-sref="PayrollEntry"><i class="md md-security"></i> Registro de entradas </a>
+                </li>
+                <li id="reportePlanilla">
+                    <a ui-sref="ReportePlanilla"><i class="md md-security"></i> Reporte de planilla entre fechas </a>
                 </li>
             </ul>
         </li>
@@ -61,4 +64,5 @@
     <script src="app/controllers/commentsCtrl.js"></script>
     <script src="app/controllers/employeesCtrl.js"></script>
     <script src="app/controllers/payrollEntryCtrl.js"></script>
+    <script src="app/controllers/indicatorPayRoleCtrl.js"></script>
 @stop

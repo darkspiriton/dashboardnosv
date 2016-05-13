@@ -27,6 +27,9 @@
         <li id="users">
             <a href="#" ui-sref="Usuarios"><i class="md md-security"></i> Administrar usuarios</a>
         </li>
+        <li id="employees">
+            <a ui-sref="Employees"><i class="md md-security"></i> Administrar empleados</a>
+        </li>
         <li id="comments">
             <a href="#" ui-sref="Comentarios"><i class="md md-messenger"></i> Administrar comentarios</a>
         </li>
@@ -48,4 +51,5 @@
     <script src="app/controllers/auxIndicator7Ctrl.js"></script>
     <script src="app/controllers/usersCtrl.js"></script>
     <script src="app/controllers/commentsCtrl.js"></script>
+    <script src="app/controllers/employeesCtrl.js"></script>
 @stop

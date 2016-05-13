@@ -1,6 +1,6 @@
 <div class="card" >
     <div class="card-header bgm-blue">
-        <h2>Gestion de usuarios de sistema</h2>
+        <h2>Gestion de empleados</h2>
         <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="list()"
                 data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
                 title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
@@ -105,7 +105,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="clearfix"></div>
+                <div class="clearfix visible-xs-block"></div>
                 <label class="col-xs-2 col-sm-2 control-label">Días laborables</label>
                 <div class="col-xs-10 col-sm-4" style="margin-top: 15px;line-height: 5px;">
                     <label class="checkbox checkbox-inline m-r-20 m-l-10">
@@ -222,37 +222,41 @@
             <div class="modal-header bgm-teal">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h3 class="modal-title c-white">Detalle de usuario</h3>
+                <h3 class="modal-title c-white">Detalle de empleado</h3>
             </div>
             <div class="modal-body card-padding">
                 <form class="form-horizontal" autocomplete="off" submit="return false;">
                     <div class="form-group form-pad-top">
-                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Nombres: </label>
-                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="userDetail.first_name"></label>
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label f-700">Nombres: </label>
+                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="employeeDetail.name"></label>
 
-                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-0 col-sm-2 control-label">Apellidos: </label>
-                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="userDetail.last_name"></label>
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-0 col-sm-2 control-label f-700">Sexo: </label>
+                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="employeeDetail.sex"></label>
                     </div>
                     <div class="form-group">
-                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Direccion: </label>
-                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="userDetail.address"></label>
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label f-700">Area: </label>
+                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="employeeDetail.area"></label>
 
-                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-0 col-sm-2 control-label">Email: </label>
-                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="userDetail.email"></label>
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-0 col-sm-2 control-label f-700">Días Laborables: </label>
+                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="employeeDetail.days"></label>
                     </div>
                     <div class="form-group">
-                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Telefonos: </label>
-                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="userDetail.phone"></label>
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label f-700">Hora Inicio: </label>
+                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="employeeDetail.ini"></label>
 
-                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-0 col-sm-2 control-label">Sexo: </label>
-                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="userDetail.sex"></label>
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-0 col-sm-2 control-label f-700">Hora Fin: </label>
+                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="employeeDetail.fin"></label>
                     </div>
                     <div class="form-group">
-                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Nombre de usuario: </label>
-                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="userDetail.user"></label>
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label f-700">Costo x min: </label>
+                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="employeeDetail.cost_min"></label>
 
-                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-0 col-sm-2 control-label">Estado: </label>
-                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="getStatus(userDetail.status)"></label>
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-0 col-sm-2 control-label f-700">Costo x Hora: </label>
+                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="employeeDetail.cost_hour"></label>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label f-700">Sueldo: </label>
+                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="employeeDetail.salary"></label>
                     </div>
                 </form>
             </div>

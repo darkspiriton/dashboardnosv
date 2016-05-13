@@ -68,6 +68,18 @@ angular.module('App')
             domingo: false
         };
 
+        var employee = {
+            name: 'luis vasquez arones',
+            sex: 'Masculino',
+            area: 'Sistemas',
+            days: 'Lu Ma Mi Ju Vi',
+            ini: '09:00:00',
+            fin: '19:00:00',
+            cost_min: 'S/ 0.115',
+            cost_hour: 'S/ 6.9',
+            salary: 5000
+        };
+
         $scope.list = function() {
             petition.get('api/user')
                 .then(function(data){
@@ -85,7 +97,7 @@ angular.module('App')
             var id = $scope.tableData[ind].id;
             petition.get('api/user/' + id)
                 .then(function(data){
-                    $scope.userDetail = data.user;
+                    $scope.employeeDetail = employee;
                     util.modal();
                 }, function(error){
                     toastr.error('Ups ocurrio un problema: ' + error.data.message);

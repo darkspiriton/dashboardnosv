@@ -357,6 +357,7 @@ class AuxProductController extends Controller
                 ->where('m.status','=','vendido')
                 ->groupby('p.name')->get();
         $j=0;
+        $alarms = array();
         foreach ($products as $product){
             $dateNow=Carbon::now();
             $date=Carbon::createFromFormat('Y-m-d H:i:s', $product->created_at);
@@ -365,15 +366,40 @@ class AuxProductController extends Controller
 
             if($diff > (int)$product->day){
                 if((int)$product->cant < (int)$product->count){
-                    $alarms[$j]=$product->name;
+                    $alarms[$j] = array('name' => $product->name);
                      $j++;
                 }
             }
         }
         if(!empty($data)){
-            return response()->json([ '$alarms' => $alarms ],200);
+            return response()->json([ 'alarms' => $alarms ],200);
         }else{
-            return response()->json([ 'message' => 'No hay alarmas' ],401);
+            return response()->json([ 'message' => 'Por el momento no hay alarmas' ],401);
+        }
+    }
+
+    public function listProduct(Request $request){
+        try{
+            if(!\Validator::make($request->all(), ['name'  => 'required', 'size' => 'required'])->fails()){
+                return response()->json(\DB::table('auxproducts as p')
+                    ->select('c.id', 'c.name')
+                    ->join('colors as c','c.id','=','p.size_id')
+                    ->where('p.name','=',$request->input('name'))
+                    ->where('p.size_id','=',$request->input('size'))
+                    ->groupBy('c.name')
+                    ->get(),200);
+            } else if (!\Validator::make($request->all(), ['name'  => 'required'])->fails()) {
+                return response()->json(\DB::table('auxproducts as p')
+                    ->select('s.id', 's.name')
+                    ->join('sizes as s','s.id','=','p.size_id')
+                    ->where('p.name','=',$request->input('name'))
+                    ->groupBy('s.name')
+                    ->get(),200);
+            } else {
+                return response()->json(\DB::table('auxproducts')->select('id','name')->groupBy('name')->get(),200);
+            }
+        } catch (\Exception $e) {
+            return \Response::json(['message' => 'Ocurrio un problema =('], 500);
         }
     }
 }

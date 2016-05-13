@@ -3,46 +3,7 @@ angular.module('App')
         $stateProvider
             .state('Indicator7', {
                 url: '/Reporte-de-productos-entre-fechas',
-                template: '<div class="card" >'+
-                '    <div class="card-header bgm-blue">'+
-                '        <h2>Reporte de movimientos entre fechas</h2>'+
-                '        <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="list()"'+
-                '                data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"'+
-                '                title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>'+
-                '    </div>'+
-                '    <div class="card-header bgm-blue">'+
-                '       <div ng-form="dates" class="row report-date">'+
-                    '       <h2 class="col-xs-12 col-sm-1">Fecha Inicio</h2>'+
-                    '       <input type="date" class="btn btn-default col-sm-2" ng-model="data.date1" required>'+
-                    '       <h2 class="col-xs-12 col-sm-1">Fecha Final</h2>'+
-                    '       <input type="date" class="btn btn-default col-sm-2" ng-model="data.date2" required>'+
-                '    <select class="col-sm-2 m-l-30" ng-model="data.status">'+
-                '       <option value="Vendido">Vendido</option>'+
-                '       <option value="Retornado">Retornado</option>'+
-                '       <option value="salida">Salida</option>'+
-                '    </select>'+
-                '    <select class="col-sm-2 m-l-30" ng-options="provider.id as provider.name for provider in providers" ng-model="data.provider">'+
-                '       <option value="" disabled="disabled" selected="selected">Seleccione Proveedor</option>'+
-                '    </select>'+
-                    '       <input type="button" ng-disabled="!dates.$valid" ng-click="filter()" class="btn bgm-indigo m-l-30 m-t-20 col-sm-2" value="buscar">'+
-                '           <input type="button" ng-if="reportDownload" ng-click="download()" class="btn bgm-purple m-l-30 m-t-20 col-sm-2" value="DESCARGAR PDF">'+
-                '       </div>'+
-                '    </div>'+
-                '    <div class="card-body card-padding table-responsive">'+
-                '        <div class="col-sm-12">'+
-                '            <table id="table" class="table table-bordered table-striped w-100" style="text-align:center;"></table>'+
-                '        </div><br>'+
-                '    </div><br>'+
-                '</div>'+
-                '<div class="card">'+
-                    '    <div class="card-header">'+
-                '        <h2>Vista Grafica</h2>'+
-                '    </div>'+
-                '    <div class="card-body card-padding">'+
-                '        <div id="chart" class="flot-chart-pie"></div>'+
-                '        <div class="flc-bar hidden-xs"></div>'+
-                '    </div>'+
-                '</div>',
+                templateUrl: 'app/partials/auxIndicator7.html',
                 controller : 'auxIndicator7Ctrl'
             });
     })
@@ -75,7 +36,35 @@ angular.module('App')
                 .then(function(data){
                     $scope.tableData = data.movements;
                     $('#table').AJQtable('view', $scope, $compile);
-                    chart.drawColummn($scope.tableData, $scope.dataSa)
+                    $scope.updateList = false;
+                    $scope.drawShow=false;
+                }, function(error){
+                    console.log(error);
+                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                    $scope.updateList = false;
+                });
+        };
+
+        $scope.listProducts = function( select ) {
+            if (select == 's'){
+                $scope.data.size = null;
+                $scope.data.color = null;
+            }
+            $scope.updateList = true;
+            $scope.reportDownload = false;
+            petition.get('api/auxproduct/get/report', { params: $scope.data })
+                .then(function(data){
+                    $scope.data.provider = null;
+                    if (select == 'p'){
+                        $scope.products = data;
+                        $scope.sizes = [];
+                        $scope.colors = [];
+                    } else if (select == 's'){
+                        $scope.sizes = data;
+                        $scope.colors = [];
+                    } else if (select == 'c'){
+                        $scope.colors = data;
+                    }
                     $scope.updateList = false;
                 }, function(error){
                     console.log(error);
@@ -96,7 +85,7 @@ angular.module('App')
 
         $scope.filter = function(){
             $scope.updateList = true;
-            $scope.dateSave = $scope.data;
+            $scope.dateSave = angular.copy($scope.data);
             $scope.dateSave.date1 = $filter('date')($scope.data.date1, 'yyyy-MM-dd')
             $scope.dateSave.date2 = $filter('date')($scope.data.date2, 'yyyy-MM-dd')
             petition.get('api/auxmovement/get/movementDays', { params : $scope.dateSave })
@@ -105,6 +94,12 @@ angular.module('App')
                     $scope.tableData = data.movements;
                     $('#table').AJQtable('view', $scope, $compile);
                     $scope.updateList = false;
+                    if ( data.movements.length > 0){
+                        chart.drawColummn(data.draw,data.days);
+                        $scope.drawShow=true;
+                    } else {
+                        $scope.drawShow=false;
+                    }
                 }, function(error){
                     console.log(error);
                     toastr.error('Ups ocurrio un problema: ' + error.data.message);
@@ -124,9 +119,27 @@ angular.module('App')
                 });
         };
 
+        $scope.noProduct = function(){
+            $scope.data.name = null;
+            $scope.data.size = null;
+            $scope.data.color = null;
+
+            $scope.sizes = [];
+            $scope.colors = [];
+        };
+
+        function providerName(p, providers){
+            for(i in providers){
+                if (p == providers[i].id){
+                    return providers[i].name;
+                }
+            }
+        }
+
         angular.element(document).ready(function(){
             $scope.product = angular.copy($scope.productClear);
             $scope.list();
             $scope.listProviders();
+            $scope.listProducts('p');
         });
     });

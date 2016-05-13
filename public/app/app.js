@@ -44,13 +44,11 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
                 for (y in config) {
                     temp[y] = data[i][config[y]];
                 }
-                temp.color = color.get(i);
                 dataChart.push(temp);
             }
             callback(dataChart);
         };
         dataColumn = function (data, days, callback) {
-            //if (data.length == 0) return console.log('No hay datos que mostrar', data);
             var barData = new Array();
             for (var y = 0; y < data.length; y++) {
                 var temp = [];
@@ -69,10 +67,9 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
                     label: data[y].name,
                     bars: {
                         show: true,
-                        barWidth: 0.08,
+                        barWidth: 0.1,
                         order: y+1,
-                        lineWidth: 0,
-                        fillColor: color.get(y)
+                        lineWidth: 0
                     }
                 });
             }
@@ -155,7 +152,13 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
                             noColumns: 0,
                             backgroundColor: "white",
                             lineWidth: 0
-                        }
+                        },
+                        'bars': {
+                            show: true,
+                            fill: 0.7,
+                            lineWidth: 1
+                        },
+                        colors: ['#F44336', '#03A9F4', '#8BC34A', '#009688', '#E91E63', '#FF9800', '#00BCD4', '#FFEB3B', '#9C27B0', '#673AB7', '#3F51B5', '#4CAF50']
                     });
                 }
                 /* Tooltips for Flot Charts */

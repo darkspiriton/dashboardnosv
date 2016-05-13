@@ -78,9 +78,19 @@
                 <label class="col-xs-2 col-sm-2 control-label">Conciliado</label>
                 <div class="col-xs-10 col-sm-4">
                     <div class="input-group">
-                        <span class="input-group-addon"><i class="md  md-check-box"></i></span>
+                        <span class="input-group-addon"><i class="md md-check-box-outline-blank"></i></span>
                         <label class="checkbox checkbox-inline m-l-20 m-t-10">
                             <input ng-model="entry.reconsile" ng-true-value="1" ng-false-value="0" type="checkbox">
+                            <i class="input-helper"></i>
+                        </label>
+                    </div>
+                </div>
+                <label class="col-xs-2 col-sm-2 control-label">Tardanza Jutificada</label>
+                <div class="col-xs-10 col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-check-box-outline-blank"></i></span>
+                        <label class="checkbox checkbox-inline m-l-20 m-t-10">
+                            <input ng-model="entry.justified" ng-true-value="1" ng-false-value="0" type="checkbox">
                             <i class="input-helper"></i>
                         </label>
                     </div>

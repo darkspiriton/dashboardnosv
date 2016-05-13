@@ -44,6 +44,7 @@ angular.module('App')
             id: null,
             employee: null,
             reconsile: 0,
+            justified: 0,
             date: null,
             ini: null,
             fin: null

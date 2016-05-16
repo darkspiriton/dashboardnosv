@@ -8,6 +8,8 @@ class Employe extends Model
 {
     protected $table="employees";
 
+    protected $hidden = ['created_at','updated_at'];
+
 
     public function days(){
         return $this->belongsToMany(Day::class,'days_employees','employe_id');

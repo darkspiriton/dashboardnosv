@@ -16,19 +16,14 @@ class EmployeController extends Controller
      */
     public function index()
     {
-        $employees = Employe::all();
+        $employees = Employe::with('days','area')->get();
+
+        foreach ($employees as $employe){
+            $employe->days;
+            $employe->area;
+        }
 
         return response()->json(['employees'=>$employees],200);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-
     }
 
     /**

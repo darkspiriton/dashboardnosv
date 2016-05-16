@@ -1,0 +1,268 @@
+<div class="card" >
+    <div class="card-header bgm-blue">
+        <h2>Gestion de empleados</h2>
+        <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="list()"
+                data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
+                title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
+    </div>
+
+    <div class="card-body card-padding table-responsive">
+        <div class="col-sm-12">
+            <table id="table" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
+        </div><br>
+        <div class="card-footer">
+            <input  class="btn bgm-green waves-effect" type='submit' value='Nuevo registro' ng-click="new();">
+        </div>
+    </div><br>
+</div>
+
+<div class="card" id="formulariohide">
+    <div class="card-header bgm-blue">
+        <h2>Crear Empleado</h2>
+    </div>
+
+    <form name="formuser" id="form" class="form-horizontal" autocomplete="off">
+
+        <div class="card-body card-padding" >
+            <div class="card-header">
+                <h2>Datos de Empleado</h2>
+            </div>
+
+            <div class="form-group">
+                <label class="col-xs-2 col-sm-2 control-label">Nombres</label>
+                <div class="col-xs-10 col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-person"></i></span>
+                        <div class="fg-line">
+                            <input ng-model="empleado.id" type="hidden">
+                            <input ng-model="empleado.name" type="text" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+
+                <label class="col-xs-2 col-sm-2 control-label">Género</label>
+                <div class="col-xs-10 col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-list"></i></span>
+                        <div class="fg-line select">
+                            <select class="form-control" ng-model="empleado.sex" required>
+                                <option value="" disabled="disabled" select="true">Seleccione</option>
+                                <option value="H">Hombre</option>
+                                <option value="M">Mujer</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-xs-2 col-sm-2 control-label">Area</label>
+                <div class="col-xs-10 col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-list"></i></span>
+                        <div class="fg-line select">
+                            <select class="form-control" ng-options="area.id as area.name for area in areas" ng-model="empleado.area" required>
+                                <option value="" disabled="disabled" selected="true">Seleccione</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <label class="col-xs-2 col-sm-2 control-label">Tiempo de almuerzo</label>
+                <div class="col-xs-10 col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-access-time"></i></span>
+                        <div class="fg-line">
+                            <input ng-model="empleado.break" type="number" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-xs-2 col-sm-2 control-label">Sueldo</label>
+                <div class="col-xs-10 col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-attach-money"></i></span>
+                        <div class="fg-line">
+                            <input ng-model="empleado.salary" type="number" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-xs-2 col-sm-2 control-label">Tipo de horario</label>
+                <div class="col-xs-10 col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-list"></i></span>
+                        <div class="fg-line select">
+                            <select class="form-control" ng-change="typeHorary(typeH)" ng-model="typeH">
+                                <option value="" disabled="disabled" selected="selected">Seleccione</option>
+                                <option value="1">Regular</option>
+                                <option value="2">Irregular</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix visible-xs-block"></div>
+                <label class="col-xs-2 col-sm-2 control-label">Días laborables</label>
+                <div class="col-xs-10 col-sm-4" style="margin-top: 15px;line-height: 5px;">
+                    <label class="checkbox checkbox-inline m-r-20 m-l-10">
+                        <input type="checkbox" ng-model="days.lunes">
+                        <i class="input-helper"></i>
+                        L
+                    </label>
+                    <label class="checkbox checkbox-inline m-r-20">
+                        <input type="checkbox" ng-model="days.martes">
+                        <i class="input-helper"></i>
+                        M
+                    </label>
+                    <label class="checkbox checkbox-inline m-r-20">
+                        <input type="checkbox" ng-model="days.miercoles">
+                        <i class="input-helper"></i>
+                        M
+                    </label>
+                    <label class="checkbox checkbox-inline m-r-20">
+                        <input type="checkbox" ng-model="days.jueves">
+                        <i class="input-helper"></i>
+                        J
+                    </label>
+                    <label class="checkbox checkbox-inline m-r-20">
+                        <input type="checkbox" ng-model="days.viernes">
+                        <i class="input-helper"></i>
+                        V
+                    </label>
+                    <label class="checkbox checkbox-inline m-r-20">
+                        <input type="checkbox" ng-model="days.sabado">
+                        <i class="input-helper"></i>
+                        S
+                    </label>
+                    <label class="checkbox checkbox-inline m-r-20">
+                        <input type="checkbox" ng-model="days.domingo">
+                        <i class="input-helper"></i>
+                        D
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group" ng-show="viewRegular">
+                <label class="col-xs-5 col-sm-2 control-label">Ingreso</label>
+                <div class="col-xs-7 col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-access-time"></i></span>
+                        <div class="fg-line">
+                            <input ng-model="timeIni" ng-change="globalDay()" type="time" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+
+                <label class="col-xs-5 col-sm-2 control-label">Salida</label>
+                <div class="col-xs-7 col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-access-time"></i></span>
+                        <div class="fg-line">
+                            <input ng-model="timeFin" ng-change="globalDay()" type="time" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div ng-show="viewIrregular">
+                <div class="card-header">
+                    <h2>Horario de trabajo</h2>
+                </div>
+
+                <div class="row groups-attr">
+                    <form class="form-horizontal" autocomplete="off">
+                        <div class="card-body card-padding p-t-0 p-b-0" ng-repeat="day in empleado.days">
+                            <div class="form-group">
+                                <label class="col-xs-12 col-sm-1 control-label">{{day.name}}</label>
+
+                                <label class="col-xs-5 col-sm-1 col-sm-offset-1 control-label">Ingreso</label>
+                                <div class="col-xs-7 col-sm-3">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="md md-access-time"></i></span>
+                                        <div class="fg-line">
+                                            <input ng-model="empleado.days[$index].timeIni" type="time" class="form-control" required>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <label class="col-xs-5 col-sm-1 control-label">Salida</label>
+                                <div class="col-xs-7 col-sm-3">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="md md-access-time"></i></span>
+                                        <div class="fg-line">
+                                            <input ng-model="empleado.days[$index].timeFin" type="time" class="form-control" required>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button ng-disabled="!formuser.$valid || formSubmit" ng-click="submit()" type="button" class="btn btn-primary btn-sm waves-effect">Guardar</button>
+                    <a ng-click="cancel()" class="btn btn-danger btn-sm waves-effect">Cancelar</a>
+                    <a ng-click="cancel2()" class="btn btn-danger btn-sm waves-effect">Scope</a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="Modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bgm-teal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title c-white">Detalle de empleado</h3>
+            </div>
+            <div class="modal-body card-padding">
+                <form class="form-horizontal" autocomplete="off" submit="return false;">
+                    <div class="form-group form-pad-top">
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label f-700">Nombres: </label>
+                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="employeeDetail.name"></label>
+
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-0 col-sm-2 control-label f-700">Sexo: </label>
+                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="employeeDetail.sex"></label>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label f-700">Area: </label>
+                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="employeeDetail.area"></label>
+
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-0 col-sm-2 control-label f-700">Días Laborables: </label>
+                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="employeeDetail.days"></label>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label f-700">Hora Inicio: </label>
+                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="employeeDetail.ini"></label>
+
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-0 col-sm-2 control-label f-700">Hora Fin: </label>
+                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="employeeDetail.fin"></label>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label f-700">Costo x min: </label>
+                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="employeeDetail.cost_min"></label>
+
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-0 col-sm-2 control-label f-700">Costo x Hora: </label>
+                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="employeeDetail.cost_hour"></label>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label f-700">Sueldo: </label>
+                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="employeeDetail.salary"></label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

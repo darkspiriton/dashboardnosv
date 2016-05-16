@@ -21,7 +21,7 @@
                 <li id="indicator4"><a ui-sref="Indicator4"> Stock por proveedor </a></li>
                 <li id="indicator5"><a ui-sref="Indicator5"> Stock de Productos por provedor </a></li>
                 <li id="indicator6"><a ui-sref="Indicator6"> Lista de Proveedores </a></li>
-                <li id="Indicator7"><a ui-sref="Indicator7"> Reporte de mocimiento entre fechas </a></li>
+                <li id="Indicator7"><a ui-sref="Indicator7"> Reporte de movimiento entre fechas </a></li>
             </ul>
         </li>
         <li id="users">

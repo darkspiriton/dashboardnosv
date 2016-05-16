@@ -4,7 +4,7 @@ namespace Dashboard\Models\Planilla;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Employe extends Model
+class Employee extends Model
 {
     protected $table="employees";
 

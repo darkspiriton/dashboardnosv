@@ -2,12 +2,12 @@
 
 namespace Dashboard\Http\Controllers;
 
-use Dashboard\Models\Planilla\Employe;
+use Dashboard\Models\Planilla\Employee;
 use Illuminate\Http\Request;
 
 use Dashboard\Http\Requests;
 
-class EmployeController extends Controller
+class EmployeeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +16,7 @@ class EmployeController extends Controller
      */
     public function index()
     {
-        $employees = Employe::with('days','area')->get();
+        $employees = Employee::with('days','area')->get();
 
         foreach ($employees as $employe){
             $employe->days;
@@ -52,7 +52,7 @@ class EmployeController extends Controller
                 return response()->json(['message' => 'No posee todo los campos necesario para crear un producto'],401);
             }
 
-            $employe= new Employe();
+            $employe= new Employee();
             $employe->area_id=$request->input('area_id');
             $employe->name=$request->input('name');
             $employe->sex=$request->input('sex');
@@ -70,7 +70,7 @@ class EmployeController extends Controller
 
             return response()->json(['message' => 'El producto se agrego correctamente'],200);
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             // Si algo sale mal devolvemos un error.
             return \Response::json(['message' => 'Ocurrio un error al agregar producto'], 500);
         }
@@ -85,7 +85,7 @@ class EmployeController extends Controller
     public function show($id)
     {
         try{
-            $employe = Employe::find($id);
+            $employe = Employee::find($id);
             if ($employe !== null) {
                 $employe->movements;
                 $employe->provider;
@@ -97,7 +97,7 @@ class EmployeController extends Controller
             }
             return \Response::json(['message' => 'No existe ese producto'], 404);
 
-        }catch (ErrorException $e){
+        }catch (\ErrorException $e){
             return \Response::json(['message' => 'Ocurrio un error'], 500);
         }
     }

@@ -178,7 +178,7 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
 
 
     //SISTEMAS PLANILLAS
-    Route::resource('employe','EmployeController',
+    Route::resource('employee','EmployeeController',
         ['only'=>['index','store','update','show']]);
 
     Route::resource('assist','AssistController',
@@ -190,9 +190,9 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
     Route::resource('salary','SalaryController',
         ['only'=>['index','store','update','show']]);
 
-    Route::group(['prefix'=>'employe/'],function(){
-        Route::get('/get/area','EmployeController@area');
-        Route::get('/get/day','EmployeController@day');
+    Route::group(['prefix'=>'employee/'],function(){
+        Route::get('/get/area','EmployeeController@area');
+        Route::get('/get/day','EmployeeController@day');
     });
 
 });

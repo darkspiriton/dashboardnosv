@@ -31,99 +31,109 @@ class PlanillaTableSeeder extends Seeder
             DB::table('areas')->insert(['name' => 'Ventas']);
         });
 
-        for($i=0;$i<10;$i++)
+        for($i=0;$i<1;$i++)
         {
             $sueldo=$faker->randomFloat( $nbMaxDecimals = 0, $min= 1000, $max=2000);
 
-            $idEmploye = DB::table('employees')->insertGetId(array(
+            $id_Employee = DB::table('employees')->insertGetId(array(
                 'area_id' => $faker->randomFloat( $nbMaxDecimals = 0, $min= 1, $max=4),
                 'name' => $faker->name,
                 'sex' => $faker->randomElement($array = array ('H','M')),
-                'sueldo' => $sueldo,
-                'almuerzo' => 45,
+                'salary' => $sueldo,
+                'break' => 45,
             ));
 
-            for($x=1;$x<=5;$x++){
-
+            for($y=1;$y<=5;$y++){
                 DB::table('days_employees')->insertGetId(array(
-                    'day_id' => $x,
-                    'employe_id' => $idEmploye,
+                    'day_id' => $y,
+                    'employee_id' => $id_Employee,
                     'start_time' => '090000',
                     'end_time'  =>  '190000',
-                    'created_at' => $faker->dateTime($max = 'now', $timezone = date_default_timezone_get()),
                 ));
-
-                $random1 = $faker->randomFloat( $nbMaxDecimals = 0, $min= 1, $max=10);
-                for($j=1;$j<=$random1;$j++){
-
-                    $idLunch = DB::table('lunches')->insertGetId(array(
-                        'employe_id' => $idEmploye,
-                        'start_time' => '123000',
-                        'end_time'  =>  '011500',
-                        'created_at' => $faker->dateTime($max = 'now', $timezone = date_default_timezone_get()),
-                    ));
-
-                    DB::table('discounts_lunches')->insertGetId(array(
-                        'lunches_id' => $idLunch,
-                        'amount' => $faker->randomFloat( $nbMaxDecimals = 0, $min= 1, $max=10),
-                        'created_at' => $faker->dateTime($max = 'now', $timezone = date_default_timezone_get()),
-                    ));
-                }
-
-                $random2 = $faker->randomFloat( $nbMaxDecimals = 0, $min= 1, $max=10);
-                for($z=1;$z<=$random2;$z++){
-
-                    DB::table('bonuses')->insertGetId(array(
-                        'employe_id' => $idEmploye,
-                        'amount' => $faker->randomFloat( $nbMaxDecimals = 0, $min= 1, $max=10),
-                        'created_at' => $faker->dateTime($max = 'now', $timezone = date_default_timezone_get()),
-                    ));
-                }
-
-                $random3 = $faker->randomFloat( $nbMaxDecimals = 0, $min= 1, $max=10);
-                for($h=1;$h<=$random3;$h++){
-
-                    DB::table('salaries')->insertGetId(array(
-                        'employe_id' => $idEmploye,
-                        'amount' => $sueldo,
-                        'extras' => $faker->randomFloat( $nbMaxDecimals = 0, $min= 1, $max=10),
-                        'discounts' => $faker->randomFloat( $nbMaxDecimals = 0, $min= 1, $max=10),
-                        'bonuses' => $faker->randomFloat( $nbMaxDecimals = 0, $min= 1, $max=10),
-                        'created_at' => $faker->dateTime($max = 'now', $timezone = date_default_timezone_get()),
-                    ));
-                }
-
-                $random4 = $faker->randomFloat( $nbMaxDecimals = 0, $min= 1, $max=5);
-                for($o=0;$o<=$random4;$o++){
-                    $idAssist = DB::table('assists')->insertGetId(array(
-                        'employe_id' => $idEmploye,
-                        'start_time' => $faker->time($format = 'H:i:s', $max = 'now'),
-                        'end_time' => $faker->time($format = 'H:i:s', $max = 'now'),
-                        'type' => $faker->boolean(40),
-                        'created_at' => $faker->dateTime($max = 'now', $timezone = date_default_timezone_get()),
-                    ));
-
-                    DB::table('extras')->insertGetId(array(
-                        'assist_id' => $idAssist,
-                        'amount' => $faker->randomFloat( $nbMaxDecimals = 0, $min= 1, $max=10),
-                        'cant' => $faker->randomFloat( $nbMaxDecimals = 0, $min= 1, $max=100),
-                        'reconciled' => $faker->randomFloat( $nbMaxDecimals = 0, $min= 1, $max=10),
-                        'created_at' => $faker->dateTime($max = 'now', $timezone = date_default_timezone_get()),
-                    ));
-
-                    DB::table('discounts_assists')->insertGetId(array(
-                        'assist_id' => $idAssist,
-                        'amount' => $faker->randomFloat( $nbMaxDecimals = 0, $min= 1, $max=10),
-                        'cant' => $faker->randomFloat( $nbMaxDecimals = 0, $min= 1, $max=10),
-                        'created_at' => $faker->dateTime($max = 'now', $timezone = date_default_timezone_get()),
-                    ));
-
-                }
             }
 
+            for($x=1;$x<=31;$x++) {
+
+                /*
+                *  LUNCHES
+                */
+                $ini = $faker->randomFloat($nbMaxDecimals = 0, $min = 10, $max = 20);
+                $id_lunches = DB::table('lunches')->insertGetId(array(
+                    'employee_id' => $id_Employee,
+                    'start_time' => '123000',
+                    'end_time' => '01'.$ini.'00',
+                    'date' => '2016-05-' . $x
+                ));
+                if ((integer)$ini > 15)$this->discounts_lunches($id_lunches, $ini);
 
 
+                /*
+                *  ASSISTS
+                */
+                $ini = $faker->randomFloat($nbMaxDecimals = 0, $min = 8, $max = 9);
+                if ($ini == 8){
+                    $ini .= $faker->randomFloat($nbMaxDecimals = 0, $min = 45, $max = 59);
+                } else if ($ini == 9){
+                    $min = $faker->randomFloat( $nbMaxDecimals = 0, $min= 0, $max=15);
+                    if($min < 10)$ini .= '0'.$min; else $ini .= $min;
+                } else {
+                    $ini = '900';
+                }
+                $end = '190000';
+                $conciliate = 0;
+                if ($x == 15 || $x == 30){
+                    $end = '200000';
+                    $conciliate = 1;
+                }
+
+                $id_assist = DB::table('assists')->insertGetId(array(
+                    'employee_id' => $id_Employee,
+                    'start_time' => '0'.$ini.'00',
+                    'end_time' => $end,
+                    'conciliate' =>  $conciliate, //$faker->boolean(),
+                    'justification' => 0, //$faker->boolean(),
+                    'date' => '2016-05-'.$x
+                ));
+                if ($conciliate) $this->extras($id_assist);
+                if ((integer)$ini > 900)$this->discounts_assists($id_assist, $ini);
+
+            }
+
+            DB::table('bonuses')->insertGetId(array(
+                'employee_id' => $id_Employee,
+                'amount' => 200,
+                'description' => 'Meta cumplida Mayo',
+            ));
         }
-        
     }
+
+    private function discounts_assists($id, $ini){
+        $minutes = (integer)$ini - 900;
+        $amount = $minutes * 0.08966587;
+        DB::table('discounts_assists')->insert(array(
+            'assist_id' => $id,
+            'amount' => $amount,
+            'minutes' => $minutes,
+        ));
+    }
+
+    private function discounts_lunches($id, $ini){
+        $minutes = ((integer)$ini - 20) * -1;
+        $amount = $minutes * 0.08966587;
+        DB::table('discounts_lunches')->insertGetId(array(
+            'lunches_id' => $id,
+            'amount' => $amount,
+            'minutes' => $minutes
+        ));
+    }
+
+    private function extras($id){
+        $amount = 60 * 0.08966587;
+        DB::table('extras')->insertGetId(array(
+            'assist_id' => $id,
+            'amount' => $amount,
+            'minutes' => 60,
+        ));
+    }
+
 }

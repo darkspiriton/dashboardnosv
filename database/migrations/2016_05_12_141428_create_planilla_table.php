@@ -58,6 +58,7 @@ class CreatePlanillaTable extends Migration
             $table->increments('id');
             $table->integer('employee_id')->unsigned();
             $table->float('amount');
+            $table->string('description');
             $table->foreign('employee_id')->references('id')->on('employees');
             $table->timestamps();
         });
@@ -91,7 +92,7 @@ class CreatePlanillaTable extends Migration
             $table->increments('id');
             $table->integer('assist_id')->unsigned();
             $table->float('amount');
-            $table->float('minutes');
+            $table->integer('minutes')->unsigned();
             $table->foreign('assist_id')->references('id')->on('assists');
             $table->timestamps();
         });
@@ -100,7 +101,7 @@ class CreatePlanillaTable extends Migration
             $table->increments('id');
             $table->integer('lunches_id')->unsigned();
             $table->float('amount');
-            $table->float('minutes');
+            $table->integer('minutes')->unsigned();
             $table->foreign('lunches_id')->references('id')->on('lunches');
             $table->timestamps();
         });
@@ -109,8 +110,7 @@ class CreatePlanillaTable extends Migration
             $table->increments('id');
             $table->integer('assist_id')->unsigned();
             $table->float('amount');
-            $table->float('minutes');
-            $table->float('reconciled');
+            $table->integer('minutes')->unsigned();
             $table->foreign('assist_id')->references('id')->on('assists');
             $table->timestamps();
         });

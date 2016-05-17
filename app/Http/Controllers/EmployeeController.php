@@ -34,8 +34,8 @@ class EmployeeController extends Controller
             'area_id'   =>  'required|between:1,4',
             'name'      =>  'required',
             'sex'       =>  'required|in:M,F',
-            'salary'    =>  'required|integer',
-            'break'     =>  'required',
+            'sueldo'    =>  'required|integer',
+            'almuerzo'     =>  'required',
             'days'      =>  'required',
             'days.*.start_time' =>  'required|date',
             'days.*.end_time'   =>  'required|date',
@@ -78,13 +78,18 @@ class EmployeeController extends Controller
     public function show($id)
     {
         try{
+            $validator = \Validator::make(['id' => $id ], ['id' => 'integer']);
+            if ($validator->fails()) {
+                return response()->json(['message' => 'Termino de busqueda no aceptado'],401);
+            }
+
             $employee = Employee::with('days','area')
                                 ->select(array('id','name','area_id','sex','almuerzo','sueldo'))
                                 ->where('id','=',$id)
                                 ->get();
 
             if (count($employee) > 0 ) {
-                return response()->json(['employee' => $employee],200);
+                return response()->json(['employee' => $employee[0]],200);
             }
 
             return \Response::json(['message' => 'No existe ese producto'], 404);
@@ -114,7 +119,48 @@ class EmployeeController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $rules = [
+            'area_id'   =>  'required|between:1,4',
+            'name'      =>  'required',
+            'sex'       =>  'required|in:M,F',
+            'sueldo'    =>  'required|integer',
+            'almuerzo'     =>  'required',
+            'days'      =>  'required',
+            'days.*.start_time' =>  'required|date',
+            'days.*.end_time'   =>  'required|date',
+            'days.*.day_id'     =>  'required|between:1,7'
+        ];
+
+        try {
+            $validator = \Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return response()->json(['message' => 'No posee todo los campos necesarios para crear un empleado'],401);
+            }
+
+            $employee = Employee::find($id);
+
+            if($employee->exists()){
+                $employee->area_id = $request->input('area_id');
+                $employee->name = $request->input('name');
+                $employee->sex = $request->input('sex');
+                $employee->sueldo = $request->input('sueldo');
+                $employee->almuerzo = $request->input('almuerzo');
+                $employee->save();
+                $days = Array();
+                foreach($request->input('days') as $key => $day){
+                    $days[$day['day_id']]['start_time'] = Carbon::parse($day['start_time'])->setTimezone('-5')->toTimeString();
+                    $days[$day['day_id']]['end_time'] = Carbon::parse($day['end_time'])->setTimezone('-5')->toTimeString();
+                }
+                $employee->days()->sync($days);
+
+                return response()->json(['message' => 'Se actualizaron los registros correctamente'],200);
+            } else {
+                return response()->json(['message' => 'Usuario no existe'],401);
+            }
+
+        } catch (\Exception $e) {
+            return \Response::json(['message' => 'Ocurrio un error al agregar producto'], 500);
+        }
     }
 
     /**

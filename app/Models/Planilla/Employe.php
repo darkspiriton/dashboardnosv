@@ -12,7 +12,7 @@ class Employee extends Model
 
 
     public function days(){
-        return $this->belongsToMany(Day::class,'days_employees','employe_id')->withPivot('start_time', 'end_time')->withTimestamps();
+        return $this->belongsToMany(Day::class,'days_employees','employee_id')->withPivot('start_time', 'end_time')->withTimestamps();
     }
 
     public function area(){

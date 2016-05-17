@@ -34,8 +34,8 @@ class EmployeeController extends Controller
             'area_id'   =>  'required|between:1,4',
             'name'      =>  'required',
             'sex'       =>  'required|in:M,F',
-            'sueldo'    =>  'required|integer',
-            'almuerzo'     =>  'required',
+            'salary'    =>  'required|integer',
+            'break'     =>  'required',
             'days'      =>  'required',
             'days.*.start_time' =>  'required|date',
             'days.*.end_time'   =>  'required|date',
@@ -52,8 +52,8 @@ class EmployeeController extends Controller
             $employee->area_id = $request->input('area_id');
             $employee->name = $request->input('name');
             $employee->sex = $request->input('sex');
-            $employee->sueldo = $request->input('sueldo');
-            $employee->almuerzo = $request->input('almuerzo');
+            $employee->salary = $request->input('salary');
+            $employee->break = $request->input('break');
             $employee->save();
             $days = Array();
             foreach($request->input('days') as $key => $day){
@@ -84,7 +84,7 @@ class EmployeeController extends Controller
             }
 
             $employee = Employee::with('days','area')
-                                ->select(array('id','name','area_id','sex','almuerzo','sueldo'))
+                                ->select(array('id','name','area_id','sex','break','salary'))
                                 ->where('id','=',$id)
                                 ->get();
 
@@ -123,8 +123,8 @@ class EmployeeController extends Controller
             'area_id'   =>  'required|between:1,4',
             'name'      =>  'required',
             'sex'       =>  'required|in:M,F',
-            'sueldo'    =>  'required|integer',
-            'almuerzo'     =>  'required',
+            'salary'    =>  'required|integer',
+            'break'     =>  'required',
             'days'      =>  'required',
             'days.*.start_time' =>  'required|date',
             'days.*.end_time'   =>  'required|date',
@@ -143,8 +143,8 @@ class EmployeeController extends Controller
                 $employee->area_id = $request->input('area_id');
                 $employee->name = $request->input('name');
                 $employee->sex = $request->input('sex');
-                $employee->sueldo = $request->input('sueldo');
-                $employee->almuerzo = $request->input('almuerzo');
+                $employee->salary = $request->input('salary');
+                $employee->break = $request->input('break');
                 $employee->save();
                 $days = Array();
                 foreach($request->input('days') as $key => $day){

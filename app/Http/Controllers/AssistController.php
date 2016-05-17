@@ -3,7 +3,7 @@
 namespace Dashboard\Http\Controllers;
 
 use Dashboard\Models\Planilla\Assist;
-use Dashboard\Models\Planilla\Employe;
+use Dashboard\Models\Planilla\Employee;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Dashboard\Http\Requests;
@@ -95,7 +95,7 @@ class AssistController extends Controller
                 $ini=$ini->copy()->addDay(1);
             }
 
-            $employe = Employe::with(['days'])
+            $employe = Employee::with(['days'])
                 ->where('id','=',$request->input('employe_id'))
                 ->get();
 
@@ -136,7 +136,7 @@ class AssistController extends Controller
             $minuto=$sueldo/$cantT;
 
             //Busco al usuario para determinar la hora de trabajo de ese dia
-            $employe = Employe::with(['days' => function($query) use($date)
+            $employe = Employee::with(['days' => function($query) use($date)
             {
                 $query->where('day_id','=', $date->dayOfWeek);
 
@@ -222,17 +222,18 @@ class AssistController extends Controller
 
             
 
-//            $assist = new Assist();
-//            $assist->employe_id=$employe->id;
-//            $assist->start_time=$start_day->toTimeString();
-//            $assist->end_time=$end_day->toTimeString();
-////            $assist->type=$request->input('type');
-////            $assist->type=$request->input('justification');
-//            $assist->save();
+            $assist = new Assist();
+            $assist->employe_id=$employe->id;
+            $assist->start_time=$start_day->toTimeString();
+            $assist->end_time=$end_day->toTimeString();
+            $assist->date=$request->input('date');
+            $assist->conciliate=$request->input('type');
+            $assist->justification=$request->input('justification');
+            $assist->save();
 
 
 
-//            dd($assist->created_at);
+
 
 
 
@@ -284,37 +285,27 @@ class AssistController extends Controller
 
 //       dd($inicio->diffInMinutes($fin)-$almuerzo);
         //Si el valor es positivo es que falto para completar descuento por lo tanto se descuenta
-        $resultado=($laboral-($inicio->diffInMinutes($fin)-$almuerzo))*round($minuto,2);
-//        dd($resultado);
-        if($resultado>=0){
+        $asistencia=($laboral-($inicio->diffInMinutes($fin)-$almuerzo))*round($minuto,2);
+
+        if($asistencia>=0){
             //si es justificado no se descuenta
             if($justification==false){
-                dd($resultado*-1);
-            }else{
-                dd(0);
+                dd($asistencia*-1);
+                //registrar descuento
             }
-
-            //descuento
         }else{
             //si es conciliado aumento
             if($type==true){
-                dd($resultado*-1);
-            }else{
-                dd(0);
+                dd($asistencia*-1);
+                //registra aumento
             }
-            //aumento
         }
 
-//       dd(($almuerzo-$inicioAlmuerzo->diffInMinutes($finAlmuerzo))*round($minuto,3));
+       $almuerzo=($almuerzo-$inicioAlmuerzo->diffInMinutes($finAlmuerzo))*round($minuto,3);
 
-        if($resultado>=0){
-            //si es justificado no se descuenta
-
-            //descuento
-        }elseif (true){
-            //si es conciliado aumento
-
-            //aumento
+        if($almuerzo<=0){
+            $almuerzo;
+            //se registra descuento de almuerzo
         }
 
     }

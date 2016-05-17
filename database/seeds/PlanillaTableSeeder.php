@@ -25,10 +25,10 @@ class PlanillaTableSeeder extends Seeder
         });
 
         DB::transaction(function () {
-            DB::table('areas')->insert(['name' => 'Publicidad']);
-            DB::table('areas')->insert(['name' => 'Sistemas']);
-            DB::table('areas')->insert(['name' => 'Ventas']);
             DB::table('areas')->insert(['name' => 'Administración']);
+            DB::table('areas')->insert(['name' => 'Sistemas']);
+            DB::table('areas')->insert(['name' => 'Publicidad']);
+            DB::table('areas')->insert(['name' => 'Ventas']);
         });
 
         for($i=0;$i<10;$i++)

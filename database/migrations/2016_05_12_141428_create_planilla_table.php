@@ -27,8 +27,8 @@ class CreatePlanillaTable extends Migration
             $table->integer('area_id')->unsigned();
             $table->string('name');
             $table->char('sex');
-            $table->float('sueldo');
-            $table->integer('almuerzo');
+            $table->float('salary');
+            $table->integer('break');
             $table->foreign('area_id')->references('id')->on('areas');
             $table->timestamps();
         });
@@ -36,52 +36,54 @@ class CreatePlanillaTable extends Migration
         Schema::create('days_employees', function(Blueprint $table){
             $table->increments('id');
             $table->integer('day_id')->unsigned();
-            $table->integer('employe_id')->unsigned();
+            $table->integer('employee_id')->unsigned();
             $table->time('start_time');
             $table->time('end_time');
             $table->foreign('day_id')->references('id')->on('days');
-            $table->foreign('employe_id')->references('id')->on('employees');
+            $table->foreign('employee_id')->references('id')->on('employees');
             $table->timestamps();
         });
 
         Schema::create('lunches', function(Blueprint $table){
             $table->increments('id');
-            $table->integer('employe_id')->unsigned();
+            $table->integer('employee_id')->unsigned();
             $table->time('start_time');
             $table->time('end_time');
-            $table->foreign('employe_id')->references('id')->on('employees');
+            $table->date('date');
+            $table->foreign('employee_id')->references('id')->on('employees');
             $table->timestamps();
         });
 
         Schema::create('bonuses', function(Blueprint $table){
             $table->increments('id');
-            $table->integer('employe_id')->unsigned();
+            $table->integer('employee_id')->unsigned();
             $table->float('amount');
-            $table->foreign('employe_id')->references('id')->on('employees');
+            $table->foreign('employee_id')->references('id')->on('employees');
             $table->timestamps();
         });
 
         Schema::create('salaries', function(Blueprint $table){
             $table->increments('id');
-            $table->integer('employe_id')->unsigned();
+            $table->integer('employee_id')->unsigned();
             $table->float('amount');
             $table->float('extras');
             $table->float('discounts');
             $table->float('bonuses');
             $table->integer('t_late');
             $table->integer('t_early');
-            $table->foreign('employe_id')->references('id')->on('employees');
+            $table->foreign('employee_id')->references('id')->on('employees');
             $table->timestamps();
         });
 
         Schema::create('assists', function(Blueprint $table){
             $table->increments('id');
-            $table->integer('employe_id')->unsigned();
+            $table->integer('employee_id')->unsigned();
             $table->time('start_time');
             $table->time('end_time');
-            $table->boolean('type');
+            $table->date('date');
+            $table->boolean('conciliate');
             $table->boolean('justification');
-            $table->foreign('employe_id')->references('id')->on('employees');
+            $table->foreign('employee_id')->references('id')->on('employees');
             $table->timestamps();
         });
 
@@ -89,7 +91,7 @@ class CreatePlanillaTable extends Migration
             $table->increments('id');
             $table->integer('assist_id')->unsigned();
             $table->float('amount');
-            $table->float('cant');
+            $table->float('minutes');
             $table->foreign('assist_id')->references('id')->on('assists');
             $table->timestamps();
         });
@@ -98,7 +100,7 @@ class CreatePlanillaTable extends Migration
             $table->increments('id');
             $table->integer('lunches_id')->unsigned();
             $table->float('amount');
-            $table->float('cant');
+            $table->float('minutes');
             $table->foreign('lunches_id')->references('id')->on('lunches');
             $table->timestamps();
         });
@@ -107,7 +109,7 @@ class CreatePlanillaTable extends Migration
             $table->increments('id');
             $table->integer('assist_id')->unsigned();
             $table->float('amount');
-            $table->float('cant');
+            $table->float('minutes');
             $table->float('reconciled');
             $table->foreign('assist_id')->references('id')->on('assists');
             $table->timestamps();

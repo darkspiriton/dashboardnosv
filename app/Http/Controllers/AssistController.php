@@ -61,7 +61,6 @@ class AssistController extends Controller
             dd($date->dayOfWeek);
 
             $employe = Employe::find($request->input('employe_id'));
-            $emplote = 
             
             
 

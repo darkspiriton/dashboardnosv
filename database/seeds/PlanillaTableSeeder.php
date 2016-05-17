@@ -38,7 +38,7 @@ class PlanillaTableSeeder extends Seeder
             $id_Employee = DB::table('employees')->insertGetId(array(
                 'area_id' => $faker->randomFloat( $nbMaxDecimals = 0, $min= 1, $max=4),
                 'name' => $faker->name,
-                'sex' => $faker->randomElement($array = array ('H','M')),
+                'sex' => $faker->randomElement($array = array ('M','F')),
                 'salary' => $sueldo,
                 'break' => 45,
             ));

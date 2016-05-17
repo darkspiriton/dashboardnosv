@@ -80,6 +80,7 @@ class CreatePlanillaTable extends Migration
             $table->time('start_time');
             $table->time('end_time');
             $table->boolean('type');
+            $table->boolean('justification');
             $table->foreign('employe_id')->references('id')->on('employees');
             $table->timestamps();
         });

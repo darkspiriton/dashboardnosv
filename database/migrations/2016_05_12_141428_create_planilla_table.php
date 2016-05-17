@@ -108,7 +108,7 @@ class CreatePlanillaTable extends Migration
             $table->integer('assist_id')->unsigned();
             $table->float('amount');
             $table->float('cant');
-            $table->float('reconciled');
+            $table->boolean('reconciled');
             $table->foreign('assist_id')->references('id')->on('assists');
             $table->timestamps();
         });

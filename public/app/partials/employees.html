@@ -21,7 +21,7 @@
         <h2>Crear Empleado</h2>
     </div>
 
-    <form name="formuser" id="form" class="form-horizontal" autocomplete="off">
+    <form name="formDefault" id="form" class="form-horizontal" autocomplete="off">
 
         <div class="card-body card-padding" >
             <div class="card-header">
@@ -47,8 +47,8 @@
                         <div class="fg-line select">
                             <select class="form-control" ng-model="empleado.sex" required>
                                 <option value="" disabled="disabled" select="true">Seleccione</option>
-                                <option value="H">Hombre</option>
-                                <option value="M">Mujer</option>
+                                <option value="M">Masculino</option>
+                                <option value="F">Femenino</option>
                             </select>
                         </div>
                     </div>
@@ -61,7 +61,7 @@
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-list"></i></span>
                         <div class="fg-line select">
-                            <select class="form-control" ng-options="area.id as area.name for area in areas" ng-model="empleado.area" required>
+                            <select class="form-control" ng-options="area.id as area.name for area in areas" ng-model="empleado.area_id" required>
                                 <option value="" disabled="disabled" selected="true">Seleccione</option>
                             </select>
                         </div>
@@ -73,7 +73,7 @@
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-access-time"></i></span>
                         <div class="fg-line">
-                            <input ng-model="empleado.break" type="number" class="form-control" required>
+                            <input ng-model="empleado.almuerzo" type="number" class="form-control" required>
                         </div>
                     </div>
                 </div>
@@ -85,7 +85,7 @@
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-attach-money"></i></span>
                         <div class="fg-line">
-                            <input ng-model="empleado.salary" type="number" class="form-control" required>
+                            <input ng-model="empleado.sueldo" type="number" class="form-control" required>
                         </div>
                     </div>
                 </div>
@@ -97,7 +97,7 @@
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-list"></i></span>
                         <div class="fg-line select">
-                            <select class="form-control" ng-change="typeHorary(typeH)" ng-model="typeH">
+                            <select class="form-control" ng-model="typeH">
                                 <option value="" disabled="disabled" selected="selected">Seleccione</option>
                                 <option value="1">Regular</option>
                                 <option value="2">Irregular</option>
@@ -152,7 +152,7 @@
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-access-time"></i></span>
                         <div class="fg-line">
-                            <input ng-model="timeIni" ng-change="globalDay()" type="time" class="form-control" required>
+                            <input ng-model="start_time" ng-change="globalDay()" type="time" class="form-control">
                         </div>
                     </div>
                 </div>
@@ -162,7 +162,7 @@
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-access-time"></i></span>
                         <div class="fg-line">
-                            <input ng-model="timeFin" ng-change="globalDay()" type="time" class="form-control" required>
+                            <input ng-model="end_time" ng-change="globalDay()" type="time" class="form-control">
                         </div>
                     </div>
                 </div>
@@ -177,14 +177,14 @@
                     <form class="form-horizontal" autocomplete="off">
                         <div class="card-body card-padding p-t-0 p-b-0" ng-repeat="day in empleado.days">
                             <div class="form-group">
-                                <label class="col-xs-12 col-sm-1 control-label">{{day.name}}</label>
+                                <label class="col-xs-12 col-sm-1 control-label">{{getNameDay(day.day_id)}}</label>
 
                                 <label class="col-xs-5 col-sm-1 col-sm-offset-1 control-label">Ingreso</label>
                                 <div class="col-xs-7 col-sm-3">
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="md md-access-time"></i></span>
                                         <div class="fg-line">
-                                            <input ng-model="empleado.days[$index].timeIni" type="time" class="form-control" required>
+                                            <input ng-model="empleado.days[$index].start_time" type="time" class="form-control" required>
                                         </div>
                                     </div>
                                 </div>
@@ -194,7 +194,7 @@
                                     <div class="input-group">
                                         <span class="input-group-addon"><i class="md md-access-time"></i></span>
                                         <div class="fg-line">
-                                            <input ng-model="empleado.days[$index].timeFin" type="time" class="form-control" required>
+                                            <input ng-model="empleado.days[$index].end_time" type="time" class="form-control" required>
                                         </div>
                                     </div>
                                 </div>
@@ -206,7 +206,7 @@
 
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <button ng-disabled="!formuser.$valid || formSubmit" ng-click="submit()" type="button" class="btn btn-primary btn-sm waves-effect">Guardar</button>
+                    <button ng-disabled="!formDefault.$valid || formSubmit" ng-click="submit()" type="button" class="btn btn-primary btn-sm waves-effect">Guardar</button>
                     <a ng-click="cancel()" class="btn btn-danger btn-sm waves-effect">Cancelar</a>
                     <a ng-click="cancel2()" class="btn btn-danger btn-sm waves-effect">Scope</a>
                 </div>
@@ -235,28 +235,39 @@
                     </div>
                     <div class="form-group">
                         <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label f-700">Area: </label>
-                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="employeeDetail.area"></label>
+                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="employeeDetail.area.name"></label>
 
-                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-0 col-sm-2 control-label f-700">Días Laborables: </label>
-                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="employeeDetail.days"></label>
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-0 col-sm-2 control-label f-700">Tiempo de almuerzo: </label>
+                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="employeeDetail.almuerzo + ' minutos'"></label>
                     </div>
                     <div class="form-group">
-                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label f-700">Hora Inicio: </label>
-                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="employeeDetail.ini"></label>
-
-                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-0 col-sm-2 control-label f-700">Hora Fin: </label>
-                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="employeeDetail.fin"></label>
-                    </div>
-                    <div class="form-group">
-                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label f-700">Costo x min: </label>
-                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="employeeDetail.cost_min"></label>
-
-                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-0 col-sm-2 control-label f-700">Costo x Hora: </label>
-                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="employeeDetail.cost_hour"></label>
+                        <label class="col-xs-12 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label f-700">Dias Laborables: </label>
+                        <div class="form-group m-b-0 col-xs-12 col-sm-9">
+                            <div class="row">
+                                <div class="attr-group m-b-0 col-xs-12">
+                                    <table class="table table-bordered w-100 table-attr text-center">
+                                        <thead>
+                                        <tr>
+                                            <th>Dia</th>
+                                            <th>Hora ingreso</th>
+                                            <th>Hora salida</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="day in employeeDetail.days">
+                                            <td>{{ day.day }}</td>
+                                            <td>{{ day.pivot.start_time }}</td>
+                                            <td>{{ day.pivot.end_time }}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label f-700">Sueldo: </label>
-                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="employeeDetail.salary"></label>
+                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="employeeDetail.sueldo"></label>
                     </div>
                 </form>
             </div>

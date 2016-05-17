@@ -14,8 +14,8 @@ angular.module('App')
         $scope.tableConfig 	= 	{
             columns :	[
                 {"sTitle": "Nombre de empleado", "bSortable" : true},
-                {"sTitle": "sexo", "bSortable" : true},
-                {"sTitle": "Rol" ,"bSearchable": false , "bSortable" : false },
+                {"sTitle": "Area", "bSortable" : true},
+                {"sTitle": "Sexo" ,"bSearchable": false , "bSortable" : false },
                 {"sTitle": "Accion" , "bSearchable": false , "bSortable" : false , "sWidth": "190px"}
             ],
             actions	:  	[
@@ -25,19 +25,12 @@ angular.module('App')
                 ]
                 ]
             ],
-            data  	: 	['name','sexo','area','actions'],
+            data  	: 	['name','area.name','sex','actions'],
             configStatus : 'status'
         };
 
-        //nombre
-        //sexo
-        //area
-        //dias - reg -no reg - HORA     ******
-        //tiempo almuerzo
-        //sueldo
-
         var alertConfig = {
-            title: "¿Esta seguro?",
+            title: "¿Todo correcto?",
             text: "",
             type: "warning",
             showCancelButton: true,
@@ -52,10 +45,10 @@ angular.module('App')
             id: null,
             name: null,
             sex: null,
-            area: null,
+            area_id: null,
             days: [],
-            break: null,
-            salary: null
+            almuerzo: null,
+            sueldo: null
         };
 
         $scope.daysClear = {
@@ -68,22 +61,10 @@ angular.module('App')
             domingo: false
         };
 
-        var employee = {
-            name: 'luis vasquez arones',
-            sex: 'Masculino',
-            area: 'Sistemas',
-            days: 'Lu Ma Mi Ju Vi',
-            ini: '09:00:00',
-            fin: '19:00:00',
-            cost_min: 'S/ 0.115',
-            cost_hour: 'S/ 6.9',
-            salary: 5000
-        };
-
         $scope.list = function() {
-            petition.get('api/user')
+            petition.get('api/employee')
                 .then(function(data){
-                    $scope.tableData = data.users;
+                    $scope.tableData = data.employees;
                     $('#table').AJQtable('view', $scope, $compile);
                     $scope.updateList = false;
                 }, function(error){
@@ -95,65 +76,89 @@ angular.module('App')
 
         $scope.view = function( ind ){
             var id = $scope.tableData[ind].id;
-            petition.get('api/user/' + id)
+            petition.get('api/employee/' + id)
                 .then(function(data){
-                    $scope.employeeDetail = employee;
+                    $scope.employeeDetail = data.employee[0];
+                    console.log($scope.employeeDetail, data.employee);
                     util.modal();
                 }, function(error){
                     toastr.error('Ups ocurrio un problema: ' + error.data.message);
                 });
         };
 
-        //$scope.edit = function( ind ){
-        //    var id = $scope.tableData[ind].id;
-        //    petition.get('api/user/' + id)
-        //        .then(function(data){
-        //            $scope.empleado = data.user;
-        //            $scope.empleado.password = '**********';
-        //            util.muestraformulario();
-        //        }, function(error){
-        //            toastr.error('Ups ocurrio un problema: ' + error.data.message);
-        //        });
-        //};
+        $scope.edit = function( ind ){
+            var id = $scope.tableData[ind].id;
+            petition.get('api/employee/' + id)
+                .then(function(data){
+                    //$scope.empleado = data.employee[0];
+                    date_format(data.employee[0]);
+                    util.muestraformulario();
+                }, function(error){
+                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                });
+        };
 
-        //$scope.submit = function () {
-        //    var method = ( $scope.empleado.id )?'PUT':'POST';
-        //    var url = ( method == 'PUT')? util.baseUrl('api/user/' + $scope.empleado.id): util.baseUrl('api/user');
-        //    if ( $scope.empleado.password == '**********' )
-        //        $scope.empleado.password = null;
-        //    var config = {
-        //        method: method,
-        //        url: url,
-        //        params: $scope.empleado
-        //    };
-        //    $scope.formSubmit=true;
-        //    petition.custom(config).then(function(data){
-        //        toastr.success(data.message);
-        //        $scope.formSubmit=false;
-        //        $scope.list();
-        //        util.ocultaformulario();
-        //    }, function(error){
-        //        toastr.error('Ups ocurrio un problema: ' + error.data.message);
-        //        $scope.formSubmit=false;
-        //    });
-        //};
+        function date_format(employee){
+            var days_pivot = [];
+            for(var i in employee.days){
+                var obj = {};
+                obj.day_id = $scope.empleado.days[i].pivot.day_id;
+                obj.start_time = new Date('1970-01-01 ' + $scope.empleado.days[i].pivot.start_time);
+                obj.end_time = new Date('1970-01-01 ' + $scope.empleado.days[i].pivot.end_time);
+                days_pivot.push(obj);
+                $scope.days[$scope.getNameDay(obj.day_id)] = true;
+            }
+            $scope.empleado.days = angular.copy(days_pivot);
+            console.log($scope.empleado.days);
+            $scope.typeH = "2";
+        }
+
+        $scope.submit = function () {
+            swal(alertConfig,
+                function () {
+                    var method = ( $scope.empleado.id ) ? 'PUT' : 'POST';
+                    var url = ( method == 'PUT') ? util.baseUrl('api/employee/' + $scope.empleado.id) : util.baseUrl('api/employee');
+                    var config = {
+                        method: method,
+                        url: url,
+                        data: $scope.empleado
+                    };
+                    $scope.formSubmit = true;
+                    petition.custom(config).then(function (data) {
+                        toastr.success(data.message);
+                        $scope.formSubmit = false;
+                        $scope.list();
+                        util.ocultaformulario();
+                    }, function (error) {
+                        toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                        $scope.formSubmit = false;
+                    });
+                });
+        };
 
         $scope.cancel = function () {
-            $scope.empleado = angular.copy($scope.empleadoClear);
-            $scope.days = angular.copy($scope.daysClear);
+            resetForm();
             util.ocultaformulario();
         };
+
+        function resetForm(){
+            $scope.typeH = null;
+            $scope.start_time = null;
+            $scope.end_time = null;
+            $scope.empleado = angular.copy($scope.empleadoClear);
+            $scope.days = angular.copy($scope.daysClear);
+        }
 
         $scope.cancel2 = function () {
             console.log($scope.empleado);
         };
 
         $scope.new = function(){
-            $scope.empleado = angular.copy($scope.empleadoClear);
+            resetForm();
             util.muestraformulario();
         };
 
-        $scope.typeHorary = function(i){
+        $scope.$watch('typeH', function(i){
             if (i == '1'){
                 $scope.viewIrregular = false;
                 $scope.viewRegular = true;
@@ -161,13 +166,16 @@ angular.module('App')
             } else if(i == '2'){
                 $scope.viewIrregular = true;
                 $scope.viewRegular = false;
+            } else {
+                $scope.viewIrregular = false;
+                $scope.viewRegular = false;
             }
-        };
+        });
 
         $scope.globalDay = function(){
             for(var i in $scope.empleado.days){
-                $scope.empleado.days[i].timeIni = $scope.timeIni;
-                $scope.empleado.days[i].timeFin = $scope.timeFin;
+                $scope.empleado.days[i].start_time = $scope.start_time;
+                $scope.empleado.days[i].end_time = $scope.end_time;
             }
         };
 
@@ -175,7 +183,7 @@ angular.module('App')
 
         $scope.$watch('days.lunes', function(new_val){
             if(new_val)
-                addOrDelDay('add',1,'lunes');
+                addOrDelDay('add',1);
             else
                 addOrDelDay('del',1);
 
@@ -184,7 +192,7 @@ angular.module('App')
 
         $scope.$watch('days.martes', function(new_val){
             if(new_val)
-                addOrDelDay('add',2,'martes');
+                addOrDelDay('add',2);
             else
                 addOrDelDay('del',2);
 
@@ -193,7 +201,7 @@ angular.module('App')
 
         $scope.$watch('days.miercoles', function(new_val){
             if(new_val)
-                addOrDelDay('add',3,'miercoles');
+                addOrDelDay('add',3);
             else
                 addOrDelDay('del',3);
 
@@ -202,7 +210,7 @@ angular.module('App')
 
         $scope.$watch('days.jueves', function(new_val){
             if(new_val)
-                addOrDelDay('add',4,'jueves');
+                addOrDelDay('add',4);
             else
                 addOrDelDay('del',4);
 
@@ -211,7 +219,7 @@ angular.module('App')
 
         $scope.$watch('days.viernes', function(new_val){
             if(new_val)
-                addOrDelDay('add',5,'viernes');
+                addOrDelDay('add',5);
             else
                 addOrDelDay('del',5);
 
@@ -220,7 +228,7 @@ angular.module('App')
 
         $scope.$watch('days.sabado', function(new_val){
             if(new_val)
-                addOrDelDay('add',6,'sabado');
+                addOrDelDay('add',6);
             else
                 addOrDelDay('del',6);
 
@@ -229,24 +237,31 @@ angular.module('App')
 
         $scope.$watch('days.domingo', function(new_val){
             if(new_val)
-                addOrDelDay('add',7,'domingo');
+                addOrDelDay('add',7);
             else
                 addOrDelDay('del',7);
 
             if($scope.typeH == 1)$scope.globalDay();
         });
 
-        function addOrDelDay(opc, day, name){
+        function addOrDelDay(opc, day){
             for(var i in $scope.empleado.days){
-                if (day == $scope.empleado.days[i].id){
+                if (day == $scope.empleado.days[i].day_id){
                     if(opc == 'del')
                         return $scope.empleado.days.splice(i,1);
+                    else
+                        return;
                 }
             }
             if(opc == 'add'){
-                $scope.empleado.days.splice(day-1,0, {id: day, name:name, timeIni: null, timeFin: null});
+                $scope.empleado.days.splice(day-1,0, {day_id: day, start_time: null, end_time: null});
             }
         }
+
+        $scope.getNameDay = function (i){
+            var days = ['','lunes','martes','miercoles','jueves','viernes','sabado','domingo']
+            return days[i];
+        };
 
         // End days
 

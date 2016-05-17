@@ -198,5 +198,5 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
 });
 
 Route::get('/test', function(\Illuminate\Http\Request $request){
-    return '=)';
+    return dd(\Carbon\Carbon::parse('1970-01-01T23:00:00.000Z')->setTimezone('-5'));
 });

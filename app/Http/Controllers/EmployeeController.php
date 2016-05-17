@@ -2,6 +2,7 @@
 
 namespace Dashboard\Http\Controllers;
 
+use Carbon\Carbon;
 use Dashboard\Models\Planilla\Employee;
 use Illuminate\Http\Request;
 
@@ -16,14 +17,9 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        $employees = Employee::with('days','area')->get();
+        $employees = Employee::with('days','area')->select(array('id','name','area_id','sex'))->get();
 
-        foreach ($employees as $employe){
-            $employe->days;
-            $employe->area;
-        }
-
-        return response()->json(['employees'=>$employees],200);
+        return response()->json(['employees' => $employees],200);
     }
 
     /**
@@ -34,44 +30,41 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        // Creamos las reglas de validación
         $rules = [
-            'area_id'          => 'required',
-            'name'         => 'required',
-            'sex'           => 'required',
-            'sueldo'     => 'required',
-            'almuerzo'        => 'required',
+            'area_id'   =>  'required|between:1,4',
+            'name'      =>  'required',
+            'sex'       =>  'required|in:M,F',
+            'salary'    =>  'required|integer',
+            'break'     =>  'required',
+            'days'      =>  'required',
+            'days.*.start_time' =>  'required|date',
+            'days.*.end_time'   =>  'required|date',
+            'days.*.day_id'     =>  'required|between:1,7'
         ];
 
-
         try {
-            // Ejecutamos el validador y en caso de que falle devolvemos la respuesta
-            // con los errores
             $validator = \Validator::make($request->all(), $rules);
             if ($validator->fails()) {
-                return response()->json(['message' => 'No posee todo los campos necesario para crear un producto'],401);
+                return response()->json(['message' => 'No posee todo los campos necesarios para crear un empleado'],401);
             }
 
-            $employe= new Employee();
-            $employe->area_id=$request->input('area_id');
-            $employe->name=$request->input('name');
-            $employe->sex=$request->input('sex');
-            $employe->sueldo=$request->input('sueldo');
-            $employe->almuerzo=$request->input('almuerzo');
-            $request->save();
-
-            $horarios= $request->input('horarios');
-
-            foreach ($horarios as $horario){
-                $employe->id;
-                $employe->days()->attach($request->input('horarios'));
+            $employee = new Employee();
+            $employee->area_id = $request->input('area_id');
+            $employee->name = $request->input('name');
+            $employee->sex = $request->input('sex');
+            $employee->sueldo = $request->input('sueldo');
+            $employee->almuerzo = $request->input('almuerzo');
+            $employee->save();
+            $days = Array();
+            foreach($request->input('days') as $key => $day){
+                $days[$key]['day_id'] = $day['day_id'];
+                $days[$key]['start_time'] = Carbon::parse($day['start_time'])->setTimezone('-5')->toTimeString();
+                $days[$key]['end_time'] = Carbon::parse($day['end_time'])->setTimezone('-5')->toTimeString();
             }
-            
+            $employee->days()->attach($days);
 
-            return response()->json(['message' => 'El producto se agrego correctamente'],200);
-
+            return response()->json(['message' => 'El empleado se agrego correctamente'],200);
         } catch (\Exception $e) {
-            // Si algo sale mal devolvemos un error.
             return \Response::json(['message' => 'Ocurrio un error al agregar producto'], 500);
         }
     }
@@ -85,16 +78,15 @@ class EmployeeController extends Controller
     public function show($id)
     {
         try{
-            $employe = Employee::find($id);
-            if ($employe !== null) {
-                $employe->movements;
-                $employe->provider;
-                return response()->json([
-//                    'message' => 'Mostrar detalles de producto',
-//                    'product'=> $product,
-                    //'attributes' => $product->attributes,
-                ],200);
+            $employee = Employee::with('days','area')
+                                ->select(array('id','name','area_id','sex','almuerzo','sueldo'))
+                                ->where('id','=',$id)
+                                ->get();
+
+            if (count($employee) > 0 ) {
+                return response()->json(['employee' => $employee],200);
             }
+
             return \Response::json(['message' => 'No existe ese producto'], 404);
 
         }catch (\ErrorException $e){

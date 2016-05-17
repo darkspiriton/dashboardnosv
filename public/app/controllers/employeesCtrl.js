@@ -47,8 +47,8 @@ angular.module('App')
             sex: null,
             area_id: null,
             days: [],
-            almuerzo: null,
-            sueldo: null
+            break: null,
+            salary: null
         };
 
         $scope.daysClear = {
@@ -133,7 +133,7 @@ angular.module('App')
                         toastr.success(data.message);
                         $scope.formSubmit = false;
                         $scope.list();
-                        //util.ocultaformulario();
+                        util.ocultaformulario();
                     }, function (error) {
                         toastr.error('Ups ocurrio un problema: ' + error.data.message);
                         $scope.formSubmit = false;

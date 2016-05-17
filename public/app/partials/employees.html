@@ -73,7 +73,7 @@
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-access-time"></i></span>
                         <div class="fg-line">
-                            <input ng-model="empleado.almuerzo" type="number" class="form-control" required>
+                            <input ng-model="empleado.break" type="number" class="form-control" required>
                         </div>
                     </div>
                 </div>
@@ -85,7 +85,7 @@
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-attach-money"></i></span>
                         <div class="fg-line">
-                            <input ng-model="empleado.sueldo" type="number" class="form-control" required>
+                            <input ng-model="empleado.salary" type="number" class="form-control" required>
                         </div>
                     </div>
                 </div>
@@ -237,7 +237,7 @@
                         <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="employeeDetail.area.name"></label>
 
                         <label class="col-xs-4 col-xs-offset-1 col-sm-offset-0 col-sm-2 control-label f-700">T. almuerzo: </label>
-                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="employeeDetail.almuerzo + ' minutos'"></label>
+                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="employeeDetail.break + ' minutos'"></label>
                     </div>
                     <div class="form-group">
                         <label class="col-xs-12 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label f-700">Dias Laborables: </label>
@@ -266,7 +266,7 @@
                     </div>
                     <div class="form-group">
                         <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label f-700">Sueldo: </label>
-                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="employeeDetail.sueldo"></label>
+                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="employeeDetail.salary"></label>
                     </div>
                 </form>
             </div>

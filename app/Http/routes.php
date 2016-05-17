@@ -198,5 +198,12 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
 });
 
 Route::get('/test', function(\Illuminate\Http\Request $request){
-    return dd(\Carbon\Carbon::parse('1970-01-01T23:00:00.000Z')->setTimezone('-5'));
+//    Carbon\Carbon::createFromDate(2000,5,1,-5);
+//    $data = \DB::table('employees as e')->select(array('a.date','a.start_time','a.end_time','da.minutes','da.amount'))
+//        ->leftJoin('assists as a','a.employee','=','e.id')
+//        ->leftJoin('discounts_assists as da','da.assist_id','=','a.id')
+//        ->leftJoin('lunches as l','l.employee_id','=','a.id')
+//        ->leftJoin('discounts_lunches as dl','dl.lunches_id','=','a.id')
+//        ->get();
+//    return response()->json($data,200);
 });

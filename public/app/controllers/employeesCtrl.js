@@ -78,8 +78,7 @@ angular.module('App')
             var id = $scope.tableData[ind].id;
             petition.get('api/employee/' + id)
                 .then(function(data){
-                    $scope.employeeDetail = data.employee[0];
-                    console.log($scope.employeeDetail, data.employee);
+                    $scope.employeeDetail = data.employee;
                     util.modal();
                 }, function(error){
                     toastr.error('Ups ocurrio un problema: ' + error.data.message);
@@ -90,8 +89,7 @@ angular.module('App')
             var id = $scope.tableData[ind].id;
             petition.get('api/employee/' + id)
                 .then(function(data){
-                    //$scope.empleado = data.employee[0];
-                    date_format(data.employee[0]);
+                    date_format(data.employee);
                     util.muestraformulario();
                 }, function(error){
                     toastr.error('Ups ocurrio un problema: ' + error.data.message);
@@ -100,17 +98,24 @@ angular.module('App')
 
         function date_format(employee){
             var days_pivot = [];
+            resetDays();
             for(var i in employee.days){
                 var obj = {};
-                obj.day_id = $scope.empleado.days[i].pivot.day_id;
-                obj.start_time = new Date('1970-01-01 ' + $scope.empleado.days[i].pivot.start_time);
-                obj.end_time = new Date('1970-01-01 ' + $scope.empleado.days[i].pivot.end_time);
+                obj.day_id = employee.days[i].pivot.day_id;
+                obj.start_time = new Date('1970-01-01 ' + employee.days[i].pivot.start_time);
+                obj.end_time = new Date('1970-01-01 ' + employee.days[i].pivot.end_time);
                 days_pivot.push(obj);
                 $scope.days[$scope.getNameDay(obj.day_id)] = true;
             }
-            $scope.empleado.days = angular.copy(days_pivot);
-            console.log($scope.empleado.days);
+            employee.days = days_pivot;
+            $scope.empleado = employee;
             $scope.typeH = "2";
+        }
+
+        function resetDays(){
+            for(i in $scope.days){
+                $scope.days[i] = false;
+            }
         }
 
         $scope.submit = function () {
@@ -128,7 +133,7 @@ angular.module('App')
                         toastr.success(data.message);
                         $scope.formSubmit = false;
                         $scope.list();
-                        util.ocultaformulario();
+                        //util.ocultaformulario();
                     }, function (error) {
                         toastr.error('Ups ocurrio un problema: ' + error.data.message);
                         $scope.formSubmit = false;
@@ -148,10 +153,6 @@ angular.module('App')
             $scope.empleado = angular.copy($scope.empleadoClear);
             $scope.days = angular.copy($scope.daysClear);
         }
-
-        $scope.cancel2 = function () {
-            console.log($scope.empleado);
-        };
 
         $scope.new = function(){
             resetForm();

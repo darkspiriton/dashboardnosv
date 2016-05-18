@@ -194,7 +194,12 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
         Route::get('/get/area','EmployeeController@area');
         Route::get('/get/day','EmployeeController@day');
     });
+});
 
+Route::group(['prefix' => 'api'], function(){
+    Route::group(['prefix' => 'payroll', 'middleware' => 'auth'], function(){
+        Route::post('employee/assists', 'ReportPayRollController@get_assists_for_month');
+    });
 });
 
 Route::get('/test', function(\Illuminate\Http\Request $request){

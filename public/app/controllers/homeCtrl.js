@@ -1,20 +1,7 @@
 angular.module('App')
-    .controller('homeCtrl', function($scope, petition, toastr) {
+    .controller('homeCtrl', function(util) {
 
-        $scope.list = function() {
-            $scope.updateList = true;
-            petition.get('api/auxmovement/get/movement/day')
-                .then(function(data){
-                    $scope.infoData = data.data;
-                    $scope.updateList = false;
-                }, function(error){
-                    console.log(error);
-                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
-                    $scope.updateList = false;
-                });
-        };
-
-        $scope.list();
+        util.liPage('home');
 
         function Vector(x, y, z) {
             this.x = x;

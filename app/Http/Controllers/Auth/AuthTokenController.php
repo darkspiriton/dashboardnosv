@@ -100,6 +100,8 @@ class AuthTokenController extends Controller
                 return view('vendedor');
             } else if ($user->role->abrev == 'JVE') {
                 return view('auxCoordinador');
+            } else if ($user->role->abrev == 'EMP') {
+                return view('empleado');
             }
         }else{
             return view('logout');

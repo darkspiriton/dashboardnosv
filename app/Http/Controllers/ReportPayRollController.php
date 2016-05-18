@@ -3,6 +3,7 @@
 namespace Dashboard\Http\Controllers;
 
 use Carbon\Carbon;
+use Dashboard\Models\Planilla\Employee;
 use Illuminate\Http\Request;
 use DB;
 use Dashboard\Http\Requests;
@@ -27,6 +28,7 @@ class ReportPayRollController extends Controller
             $start = $date->copy()->firstOfMonth();
             $end = $date->copy()->lastOfMonth();
             $user = $request->input('user')['sub'];
+            $employee = Employee::where('user_id','=',$user)->first();
 
             $registers = DB::table('employees as e')->select(array('a.date',
                 'a.start_time as start', 'l.start_time as break', 'l.end_time as end_break', 'a.end_time as end',
@@ -35,7 +37,7 @@ class ReportPayRollController extends Controller
                 ->leftJoin('discounts_assists as da', 'da.assist_id', '=', 'a.id')
                 ->leftJoin('lunches as l', 'l.date', '=', 'a.date')
                 ->leftJoin('discounts_lunches as dl', 'dl.lunches_id', '=', 'l.id')
-                ->where('e.id', '=', $user)
+                ->where('e.id', '=', $employee->id)
                 ->where('a.date', '>=', $start)
                 ->where('a.date', '<=', $end)
                 ->get();

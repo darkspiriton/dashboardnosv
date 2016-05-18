@@ -20,7 +20,8 @@ class UsersTableSeeder extends Seeder
                 ['abrev' => 'ADM', 'name' => 'Administracion'],
                 ['abrev' => 'VEN', 'name' => 'Vendedor'],
                 ['abrev' => 'JVE', 'name' => 'Jefe de ventas'],
-                ['abrev' => 'MOT', 'name' => 'Motorizado']
+                ['abrev' => 'MOT', 'name' => 'Motorizado'],
+                ['abrev' => 'EMP', 'name' => 'Empleado']
             ]);
 
             DB::table('operators')->insert([

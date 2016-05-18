@@ -39,7 +39,7 @@ class Authenticate {
     public function handle($request, Closure $next, $role = null)
     {
         if ($request->header('Authorization')) {
-            return $this->Authorization($request->header('Authorization'),$request,$next,$role);
+            return $this->Authorization(explode(' ', $request->header('Authorization'))[1],$request,$next,$role);
         } elseif ($request->input('Authorization')) {
             return $this->Authorization($request->input('Authorization'),$request,$next,$role);
         } else {
@@ -49,7 +49,7 @@ class Authenticate {
 
     private function Authorization($authorization,$request,Closure $next,$role){
         try{
-            $token = explode(' ', $authorization)[1];
+            $token = $authorization;
 
             $payload = (array) JWT::decode($token, Config::get('app.jwt_token'), array('HS256'));
 

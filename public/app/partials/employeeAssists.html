@@ -1,0 +1,28 @@
+<div class="card">
+    <div class="card-header bgm-blue">
+        <h2>Asistencia y descuentos por mes</h2>
+        <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="list()"
+                data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
+                title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
+    </div>
+    <div class="card-header bgm-blue">
+        <div class="row report-date">
+            <h2 class="col-xs-12 col-sm-3 text-right">Minutos de tardanza</h2>
+            <h2 class="col-xs-12 col-sm-3" ng-bind="discounts.delay_min + ' minutos'"></h2>
+            <h2 class="col-xs-12 col-sm-3 text-right">Monto por tardanzas</h2>
+            <h2 class="col-xs-12 col-sm-3" ng-bind="'S/ ' + discounts.delay_amount"></h2>
+            <h2 class="col-xs-12 col-sm-3 text-right">Minutos por break</h2>
+            <h2 class="col-xs-12 col-sm-3" ng-bind="discounts.lunch_min  + ' minutos'"></h2>
+            <h2 class="col-xs-12 col-sm-3 text-right">Monto por break</h2>
+            <h2 class="col-xs-12 col-sm-3" ng-bind="'S/ ' + discounts.lunch_amount"></h2>
+            <div class="col-sm-6"></div>
+            <h2 class="col-xs-12 col-sm-3 text-right">Monto Total</h2>
+            <h2 class="col-xs-12 col-sm-3" ng-bind="'S/ ' + (discounts.lunch_amount + discounts.delay_amount | number:2)"></h2>
+        </div>
+    </div>
+    <div class="card-body card-padding table-responsive">
+        <div class="col-sm-12">
+            <table id="table" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
+        </div><br>
+    </div><br>
+</div>

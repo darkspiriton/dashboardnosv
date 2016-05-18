@@ -197,34 +197,11 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
 });
 
 Route::group(['prefix' => 'api'], function(){
-    Route::group(['prefix' => 'payroll', 'middleware' => 'auth'], function(){
-        Route::post('employee/assists', 'ReportPayRollController@get_assists_for_month');
+    Route::group(['prefix' => 'payroll', 'middleware' => 'auth:EMP'], function(){
+        Route::get('employee/assists', 'ReportPayRollController@get_assists_for_month');
     });
 });
 
 Route::get('/test', function(\Illuminate\Http\Request $request){
-    $date = Carbon\Carbon::createFromDate(2016,5,1,-5);
-
-    $start = $date->copy()->firstOfMonth();
-    $end = $date->copy()->lastOfMonth();
-
-    $data = \DB::table('employees as e')->select(array('a.date','a.start_time as start',
-                                                    'l.start_time as break',
-                                                    'l.end_time as end_break',
-                                                    'a.end_time as end',
-                                                    'da.minutes as normal_min',
-                                                    'da.amount as normal_amount',
-                                                    'dl.minutes as lunch_min',
-                                                    'dl.amount as lunch_amount'
-                                                    )
-                                                 )
-        ->leftJoin('assists as a','a.employee_id','=','e.id')
-        ->leftJoin('discounts_assists as da','da.assist_id','=','a.id')
-        ->leftJoin('lunches as l','l.date','=','a.date')
-        ->leftJoin('discounts_lunches as dl','dl.lunches_id','=','l.id')
-        ->where('e.id','=',1)
-        ->where('a.date','>=',$start)
-        ->where('a.date','<=',$end)
-        ->get();
-    return response()->json($data,200);
+    return '=)';
 });

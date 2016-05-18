@@ -4,6 +4,7 @@ namespace Dashboard\Http\Controllers;
 
 use Carbon\Carbon;
 use Dashboard\Models\Planilla\Employee;
+use Dashboard\User;
 use Illuminate\Http\Request;
 
 use Dashboard\Http\Requests;
@@ -48,13 +49,25 @@ class EmployeeController extends Controller
                 return response()->json(['message' => 'No posee todo los campos necesarios para crear un empleado'],401);
             }
 
+            $user = new User();
+            $user->first_name = $request->input('name');
+            $user->last_name = 'Empleado';
+            $user->email = $request->input('name').'@nosvenden.com';
+            $user->sex = $request->input('sex');
+            $user->role_id = 6;
+            $user->password = \Hash::make($request->input('name'));
+            $user->status = 1;
+            $user->save();
+
             $employee = new Employee();
+            $employee->user_id = $user->id;
             $employee->area_id = $request->input('area_id');
             $employee->name = $request->input('name');
             $employee->sex = $request->input('sex');
             $employee->salary = $request->input('salary');
             $employee->break = $request->input('break');
             $employee->save();
+
             $days = Array();
             foreach($request->input('days') as $key => $day){
                 $days[$key]['day_id'] = $day['day_id'];

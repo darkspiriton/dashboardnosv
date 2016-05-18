@@ -198,12 +198,28 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
 });
 
 Route::get('/test', function(\Illuminate\Http\Request $request){
-//    Carbon\Carbon::createFromDate(2000,5,1,-5);
-//    $data = \DB::table('employees as e')->select(array('a.date','a.start_time','a.end_time','da.minutes','da.amount'))
-//        ->leftJoin('assists as a','a.employee','=','e.id')
-//        ->leftJoin('discounts_assists as da','da.assist_id','=','a.id')
-//        ->leftJoin('lunches as l','l.employee_id','=','a.id')
-//        ->leftJoin('discounts_lunches as dl','dl.lunches_id','=','a.id')
-//        ->get();
-//    return response()->json($data,200);
+    $date = Carbon\Carbon::createFromDate(2016,5,1,-5);
+
+    $start = $date->copy()->firstOfMonth();
+    $end = $date->copy()->lastOfMonth();
+
+    $data = \DB::table('employees as e')->select(array('a.date','a.start_time as start',
+                                                    'l.start_time as break',
+                                                    'l.end_time as end_break',
+                                                    'a.end_time as end',
+                                                    'da.minutes as normal_min',
+                                                    'da.amount as normal_amount',
+                                                    'dl.minutes as lunch_min',
+                                                    'dl.amount as lunch_amount'
+                                                    )
+                                                 )
+        ->leftJoin('assists as a','a.employee_id','=','e.id')
+        ->leftJoin('discounts_assists as da','da.assist_id','=','a.id')
+        ->leftJoin('lunches as l','l.date','=','a.date')
+        ->leftJoin('discounts_lunches as dl','dl.lunches_id','=','l.id')
+        ->where('e.id','=',1)
+        ->where('a.date','>=',$start)
+        ->where('a.date','<=',$end)
+        ->get();
+    return response()->json($data,200);
 });

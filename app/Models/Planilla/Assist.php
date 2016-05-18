@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Assist extends Model
 {
+    protected $table = 'assists';
     public function discount(){
         return $this->hasOne(DiscountAssist::class);
     }

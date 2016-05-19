@@ -99,10 +99,10 @@ class CreatePlanillaTable extends Migration
 
         Schema::create('discounts_lunches', function(Blueprint $table){
             $table->increments('id');
-            $table->integer('lunches_id')->unsigned();
+            $table->integer('lunch_id')->unsigned();
             $table->float('amount');
             $table->integer('minutes')->unsigned();
-            $table->foreign('lunches_id')->references('id')->on('lunches');
+            $table->foreign('lunch_id')->references('id')->on('lunches');
             $table->timestamps();
         });
 

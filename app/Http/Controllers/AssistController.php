@@ -3,11 +3,16 @@
 namespace Dashboard\Http\Controllers;
 
 use Dashboard\Models\Planilla\Assist;
-use Dashboard\Models\Planilla\Employe;
+use Dashboard\Models\Planilla\DiscountAssist;
+use Dashboard\Models\Planilla\DiscountLunch;
+use Dashboard\Models\Planilla\Employee;
+use Dashboard\Models\Planilla\Extra;
+use Dashboard\Models\Planilla\Lunch;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Dashboard\Http\Requests;
 use Mockery\CountValidator\Exception;
+use Illuminate\Support\Facades\DB;
 
 class AssistController extends Controller
 {
@@ -41,12 +46,12 @@ class AssistController extends Controller
     {
         $rules = [
             'employe_id' => 'required',
-            'start_time' => 'required',
-            'end_time' => 'required',
-            'date' => 'required',
-            'start_time_launch' => 'required',
-            'end_time_launch' => 'required',
-            'type' => 'required',
+            'start_time' => 'date',
+            'end_time' => 'date',
+            'date' => 'required|date',
+            'start_time_launch' => 'date',
+            'end_time_launch' => 'date',
+            'conciliate' => 'required',
             'justification' => 'required',
         ];
 
@@ -55,188 +60,201 @@ class AssistController extends Controller
             if($validator->fails()){
                 return response()->json(['message'=>'No posee todo los campos necesarios para crear una asistencia'],401);
             }
-            $type=$request->input('type');
-            $justification=$request->input('justification');
+            $emp= Employee::find($request->input('employe_id'));
 
             $date = Carbon::Parse($request->input('date'));
             $date->setTimezone('-5');
 
-            $fin=$date->copy()->endOfMonth();
-            $ini=$date->copy()->startOfMonth();
+            $existe=DB::table('assists')
+                ->where('employee_id','=',$request->input('employe_id'))
+                ->where('date','=',$date->toDateString())->exists();
 
-            $domingo=0;$lunes=0;$martes=0;$miercoles=0;$jueves=0;$viernes=0;$sabado=0;
+            if($emp != null){
+                if($existe == false){
+                    $employe = Employee::with(['days'])
+                        ->where('id','=',$request->input('employe_id'))
+                        ->get();
 
-            while($ini->diffInDays($fin) >= 0){
-                $j=$ini->dayOfWeek;
-                switch($j){
-                    case 0:
-                        $domingo++;
-                        break;
-                    case 1:
-                        $lunes++;
-                        break;
-                    case 2:
-                        $martes++;
-                        break;
-                    case 3:
-                        $miercoles++;
-                        break;
-                    case 4:
-                        $jueves++;
-                        break;
-                    case 5:
-                        $viernes++;
-                        break;
-                    case 6:
-                        $sabado++;
-                        break;
-                }
-                if ($ini->diffInDays($fin)  == 0 )break;
-                $ini=$ini->copy()->addDay(1);
-            }
+                    $arrays=$employe->toArray()[0]["days"];
+                    $sueldo=$employe->toArray()[0]["salary"];
 
-            $employe = Employe::with(['days'])
-                ->where('id','=',$request->input('employe_id'))
-                ->get();
+                    $conciliate=$request->input('conciliate');
+                    $justification=$request->input('justification');
 
-            $arrays=$employe->toArray()[0]["days"];
-            $sueldo=$employe->toArray()[0]["sueldo"];
-            $cantD=0;$cantL=0;$cantM=0;$cantMi=0;$cantJ=0;$cantV=0;$cantS=0;
-            for ($i=0;$i<count($arrays);$i++){
-                $startt=Carbon::Parse($arrays[$i]["pivot"]["start_time"]);
-                $endt=Carbon::Parse($arrays[$i]["pivot"]["end_time"]);
+                    //Cantidad de dias al mes laborables para calculo de costo x minuto
+                    $fin=$date->copy()->endOfMonth();
+                    $ini=$date->copy()->startOfMonth();
+                    $domingo=0;$lunes=0;$martes=0;$miercoles=0;$jueves=0;$viernes=0;$sabado=0;
+                    while($ini->diffInDays($fin) >= 0){
+                        $j=$ini->dayOfWeek;
+                        switch($j){
+                            case 0:
+                                $domingo++;
+                                break;
+                            case 1:
+                                $lunes++;
+                                break;
+                            case 2:
+                                $martes++;
+                                break;
+                            case 3:
+                                $miercoles++;
+                                break;
+                            case 4:
+                                $jueves++;
+                                break;
+                            case 5:
+                                $viernes++;
+                                break;
+                            case 6:
+                                $sabado++;
+                                break;
+                        }
+                        if ($ini->diffInDays($fin)  == 0 )break;
+                        $ini=$ini->copy()->addDay(1);
+                    }
 
-                $cant=$startt->diffInMinutes($endt)-$employe->toArray()[0]['almuerzo'];
+                    //Se cuenta los dias que labora y cuandos minutos diarios
+                    $cantD=0;$cantL=0;$cantM=0;$cantMi=0;$cantJ=0;$cantV=0;$cantS=0;
+                    for ($i=0;$i<count($arrays);$i++){
+                        $startt=Carbon::Parse($arrays[$i]["pivot"]["start_time"]);
+                        $endt=Carbon::Parse($arrays[$i]["pivot"]["end_time"]);
 
-                switch($arrays[$i]['id']){
-                    case 0:
-                        $cantD=$cant*$domingo;
-                        break;
-                    case 1:
-                        $cantL=$cant*$lunes;
-                        break;
-                    case 2:
-                        $cantM=$cant*$martes;
-                        break;
-                    case 3:
-                        $cantMi=$cant*$miercoles;
-                        break;
-                    case 4:
-                        $cantJ=$cant*$jueves;
-                        break;
-                    case 5:
-                        $cantV=$cant*$viernes;
-                        break;
-                    case 6:
-                        $cantS=$cant*$sabado;
-                        break;
-                }
-            }
-            $cantT=$cantD+$cantL+$cantM+$cantMi+$cantJ+$cantV+$cantS;
-            $minuto=$sueldo/$cantT;
+                        $cant=$startt->diffInMinutes($endt)-$employe->toArray()[0]['break'];
 
-            //Busco al usuario para determinar la hora de trabajo de ese dia
-            $employe = Employe::with(['days' => function($query) use($date)
-            {
-                $query->where('day_id','=', $date->dayOfWeek);
-
-            }])->where('id','=',$request->input('employe_id'))
-            ->get();
-
-            $almuerzo=$employe->toArray()[0]['almuerzo'];
-            $start = Carbon::Parse($employe->toArray()[0]["days"][0]["pivot"]["start_time"]);
-            $end = Carbon::Parse($employe->toArray()[0]["days"][0]["pivot"]["end_time"]);
-
-            $laboral=$start->diffInMinutes($end)-$almuerzo;
-//            return response()->json(['message'=>$employe],200);
-
-            if($request->input('start_time')!=null){
-                $start_day = Carbon::Parse($request->input('start_time'));
-                $start_day->setTimezone('-5');
-                if($request->input('end_time')!=null){
-                    $end_day = Carbon::Parse($request->input('end_time'));
-                    $end_day->setTimezone('-5');
-                    if($request->input('end_time_launch')!=null){
-                        $end_time_launch= Carbon::Parse($request->input('end_time_launch'));
-                        $end_time_launch->setTimezone('-5');
-                        if($request->input('start_time_launch')!=null){
-                            $start_time_launch = Carbon::Parse($request->input('start_time_launch'));
-                            $start_time_launch->setTimezone('-5');
-                            //Calculo de horas 1234
-                            $this->calculo1234($start_day,$start_time_launch,$end_time_launch,$end_day,$laboral,$almuerzo,$minuto,$type,$justification);
-
+                        switch($arrays[$i]['id']){
+                            case 0:
+                                $cantD=$cant*$domingo;
+                                break;
+                            case 1:
+                                $cantL=$cant*$lunes;
+                                break;
+                            case 2:
+                                $cantM=$cant*$martes;
+                                break;
+                            case 3:
+                                $cantMi=$cant*$miercoles;
+                                break;
+                            case 4:
+                                $cantJ=$cant*$jueves;
+                                break;
+                            case 5:
+                                $cantV=$cant*$viernes;
+                                break;
+                            case 6:
+                                $cantS=$cant*$sabado;
+                                break;
                         }
                     }
-                }elseif($request->input('end_time_launch')!=null) {
-                    $end_day = Carbon::Parse($request->input('end_time_launch'));
-                    $end_day->setTimezone('-5');
-                    if($request->input('start_time_launch')!=null){
+
+                    //Calculo de costo por minuto mensual
+                    $cantT=$cantD+$cantL+$cantM+$cantMi+$cantJ+$cantV+$cantS;
+                    $minuto=$sueldo/$cantT;
+
+                    $date->dayOfWeek;
+
+                    //Busco al usuario para determinar la hora de trabajo de ese dia
+                    $employe = Employee::with(['days' => function($query) use($date)
+                    {
+                        $query->where('day_id','=', $date->dayOfWeek);
+
+                    }])->where('id','=',$request->input('employe_id'))
+                        ->get();
+
+                    $employe->toArray()[0]["days"][0]["pivot"]["start_time"];
+                    $almuerzo=$employe->toArray()[0]['break'];
+                    $start = Carbon::Parse($employe->toArray()[0]["days"][0]["pivot"]["start_time"]);
+                    $end = Carbon::Parse($employe->toArray()[0]["days"][0]["pivot"]["end_time"]);
+
+                    //Horas laborables al mes de ese empleado
+                    $laboral=$start->diffInMinutes($end)-$almuerzo;
+
+                    $employeId=$employe->toArray()[0]['id'];
+                    //Funcion que procese la asistencia y realice el calculo si fuera necesario.
+                    $assist = new Assist();
+                    $assist->employee_id=$employeId;
+                    $assist->start_time="10:00:00";
+                    $assist->end_time="20:00:00";
+                    $assist->date=$date;
+                    $assist->conciliate=$request->input('conciliate');
+                    $assist->justification=$request->input('justification');
+                    $assist->save();
+
+                    $id=$assist->id;
+
+                    if($request->input('start_time')!=null){
+                        $start_day = Carbon::Parse($request->input('start_time'));
+                        $start_day->setTimezone('-5');
+                        if($request->input('end_time')!=null){
+                            $end_day = Carbon::Parse($request->input('end_time'));
+                            $end_day->setTimezone('-5');
+                            if($request->input('end_time_launch')!=null){
+                                $end_time_launch= Carbon::Parse($request->input('end_time_launch'));
+                                $end_time_launch->setTimezone('-5');
+                                if($request->input('start_time_launch')!=null){
+                                    $start_time_launch = Carbon::Parse($request->input('start_time_launch'));
+                                    $start_time_launch->setTimezone('-5');
+                                    //Calculo de horas 1234
+                                    $this->asistencia($start_day,$end_day,$start_time_launch,$end_time_launch,$laboral,$almuerzo,$minuto,$conciliate,$justification,$id,$date,$employeId);
+                                }
+                            }
+
+                        }elseif($request->input('end_time_launch')!=null) {
+                            $end_time_launch = Carbon::Parse($request->input('end_time_launch'));
+                            $end_time_launch->setTimezone('-5');
+                            if($request->input('start_time_launch')!=null){
+                                $start_time_launch = Carbon::Parse($request->input('start_time_launch'));
+                                $start_time_launch->setTimezone('-5');
+                                //Calculo de horas 123
+                                $this->asistencia($start_day,$end_time_launch,$start_time_launch,$end_time_launch,$laboral,$almuerzo,$minuto,$conciliate,$justification,$id,$date,$employeId);
+                            }
+
+                        }elseif($request->input('start_time_launch')!=null){
+                            $start_time_launch = Carbon::Parse($request->input('start_time_launch'));
+                            $start_time_launch->setTimezone('-5');
+                            //Calculo de horas 12
+                            $this->asistencia($start_day,$start_time_launch,$start_time_launch,$start_time_launch,$laboral,$almuerzo,$minuto,$conciliate,$justification,$id,$date,$employeId);
+                        }
+
+                    }elseif($request->input('start_time_launch')!=null){
                         $start_time_launch = Carbon::Parse($request->input('start_time_launch'));
                         $start_time_launch->setTimezone('-5');
-                        //Calculo de horas 123
-                        $this->calculo123($start_day,$start_time_launch,$end_day,$laboral,$almuerzo,$minuto,$type,$justification);
+                        if($request->input('end_time')!=null){
+                            $end_day = Carbon::Parse($request->input('end_time'));
+                            $end_day->setTimezone('-5');
+                            if($request->input('end_time_launch')!=null){
+                                $end_time_launch = Carbon::Parse($request->input('end_time_launch'));
+                                $end_time_launch->setTimezone('-5');
+                                //Calculo de horas 234
+                                $this->asistencia($start_time_launch,$end_day,$start_time_launch,$end_time_launch,$laboral,$almuerzo,$minuto,$conciliate,$justification,$id,$date,$employeId);
+                            }
 
-                    }
-                }elseif($request->input('start_time_launch')!=null){
-                    $end_day = Carbon::Parse($request->input('start_time_launch'));
-                    $end_day->setTimezone('-5');
-                    //Calculo de horas 12
-                    $this->calculo12($start_day,$end_day,$laboral,$almuerzo,$minuto,$type,$justification);
+                        }elseif($request->input('end_time_launch')!= null){
+                            $end_time_launch = Carbon::Parse($request->input('end_time_launch'));
+                            $end_time_launch->setTimezone('-5');
+                            //Calculo de horas 23
+                            $this->asistencia($start_time_launch,$end_time_launch,$start_time_launch,$end_time_launch,$laboral,$almuerzo,$minuto,$conciliate,$justification,$id,$date,$employeId);
+                        }
 
-                }
-
-            }elseif($request->input('start_time_launch')!=null){
-                $start_day = Carbon::Parse($request->input('start_time_launch'));
-                $start_day->setTimezone('-5');
-                if($request->input('end_time')!=null){
-                    $end_day = Carbon::Parse($request->input('end_time'));
-                    $end_day->setTimezone('-5');
-                    if($request->input('end_time_launch')!=null){
+                    }elseif($request->input('end_time_launch')!=null){
                         $end_time_launch = Carbon::Parse($request->input('end_time_launch'));
                         $end_time_launch->setTimezone('-5');
-                        //Calculo de horas 234
-                        $this->calculo234($start_day,$end_time_launch,$end_day,$laboral,$almuerzo,$minuto,$type,$justification);
-
+                        if($request->input('end_time')!=null){
+                            $end_day = Carbon::Parse($request->input('end_time'));
+                            $end_day->setTimezone('-5');
+                            //Calculo de horas 34
+                            $this->asistencia($end_time_launch,$end_day,$end_time_launch,$end_time_launch,$laboral,$almuerzo,$minuto,$conciliate,$justification,$id,$date,$employeId);
+                        }
                     }
-
-                }elseif($request->input('end_time_launch')!= null){
-                    $end_day = Carbon::Parse($request->input('end_time_launch'));
-                    $end_day->setTimezone('-5');
-                    //Calculo de horas 23
-                    $this->calculo23($start_day,$end_day,$laboral,$almuerzo,$minuto,$type,$justification);
-
+                }else{
+                    return response()->json(["message" => "Ya se registro una asistencia para ese dia"],404);
                 }
 
-            }elseif($request->input('end_time_launch')!=null){
-                $start_day = Carbon::Parse($request->input('end_time_launch'));
-                $start_day->setTimezone('-5');
-                if($request->input('end_time')!=null){
-                    $end_day = Carbon::Parse($request->input('end_time'));
-                    $end_day->setTimezone('-5');
-                    //Calculo de horas 34
-                    $this->calculo34($start_day,$end_day,$laboral,$almuerzo,$minuto,$type,$justification);
-                }
+
+
+            }else{
+                return response()->json(["message" => "El empleado no existe"],404);
             }
-
-//            dd($start_day->diffInMinutes($end_day));
-
-            
-
-//            $assist = new Assist();
-//            $assist->employe_id=$employe->id;
-//            $assist->start_time=$start_day->toTimeString();
-//            $assist->end_time=$end_day->toTimeString();
-////            $assist->type=$request->input('type');
-////            $assist->type=$request->input('justification');
-//            $assist->save();
-
-
-
-//            dd($assist->created_at);
-
-
-
-            //Funcion que procese la asistencia y realice el calculo si fuera necesario.
 
 
         }catch(Exception $e){
@@ -280,63 +298,54 @@ class AssistController extends Controller
         //
     }
 
-    private function calculo1234($inicio,$inicioAlmuerzo,$finAlmuerzo,$fin,$laboral,$almuerzo,$minuto,$type,$justification){
+    private function asistencia($start,$end,$startA,$endA,$laboral,$almuerzo,$minuto,$conciliate,$justification,$id,$date,$employeId){
 
-//       dd($inicio->diffInMinutes($fin)-$almuerzo);
-        //Si el valor es positivo es que falto para completar descuento por lo tanto se descuenta
-        $resultado=($laboral-($inicio->diffInMinutes($fin)-$almuerzo))*round($minuto,2);
-//        dd($resultado);
-        if($resultado>=0){
-            //si es justificado no se descuenta
+        $asistencia=(($start->diffInMinutes($end)-$almuerzo)-$laboral)*round($minuto,2);
+
+        $asist = Assist::find($id);
+        $asist->start_time=$start;
+        $asist->end_time=$end;
+        $asist->monto=($start->diffInMinutes($end)-$almuerzo)*round($minuto,2);
+        $asist->save();
+
+        $lunch = new Lunch();
+        $lunch->employee_id=$employeId;
+        $lunch->start_time=$startA;
+        $lunch->end_time=$endA;
+        $lunch->date=$date;
+        $lunch->save();
+
+        if($asistencia<0){
             if($justification==false){
-                dd($resultado*-1);
-            }else{
-                dd(0);
+                $descuento = new DiscountAssist();
+                $descuento->assist_id=$employeId;
+                $descuento->amount=$asistencia;
+                $descuento->minutes=(int)(($laboral-($start->diffInMinutes($end)-$almuerzo)));
+                $asist->discount()->save($descuento);
+
             }
 
-            //descuento
-        }else{
-            //si es conciliado aumento
-            if($type==true){
-                dd($resultado*-1);
-            }else{
-                dd(0);
+        }elseif($asistencia>0){
+            if($conciliate==true){
+                $extra = new Extra();
+                $extra->assist_id=$employeId;
+                $extra->amount=$asistencia;
+                $extra->minutes=(int)((($start->diffInMinutes($end)-$almuerzo)-$laboral));
+                $asist->extra()->save($extra);
+
             }
-            //aumento
         }
 
-//       dd(($almuerzo-$inicioAlmuerzo->diffInMinutes($finAlmuerzo))*round($minuto,3));
+        $alm=($almuerzo-$startA->diffInMinutes($endA))*round($minuto,3);
 
-        if($resultado>=0){
-            //si es justificado no se descuenta
+        if($alm<0){
+            $desct = new DiscountLunch();
+            $desct->lunches_id=$lunch->id;
+            $desct->amount=$alm;
+            $desct->minutes=(int)($startA->diffInMinutes($endA)-$almuerzo);
+            $lunch->discount()->save($desct);
 
-            //descuento
-        }elseif (true){
-            //si es conciliado aumento
-
-            //aumento
         }
-
-    }
-
-    private function calculo123($inicio,$inicioAlmuerzo,$fin,$laboral,$almuerzo,$minuto,$type,$justification){
-
-    }
-
-    private function calculo12($inicio,$inicioAlmuerzo,$laboral,$almuerzo,$minuto,$type,$justification){
-
-    }
-
-    private function calculo234($inicioAlmuerzo,$finAlmuerzo,$fin,$laboral,$almuerzo,$minuto,$type,$justification){
-
-    }
-
-    private function calculo23($inicioAlmuerzo,$finAlmuerzo,$laboral,$almuerzo,$minuto,$type,$justification){
-
-    }
-
-    private function calculo34($finAlmuerzo,$fin,$laboral,$almuerzo,$minuto,$type,$justification){
-
     }
 
 }

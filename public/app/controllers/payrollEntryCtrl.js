@@ -43,7 +43,7 @@ angular.module('App')
         $scope.entryClear = {
             id: null,
             employee: null,
-            reconsile: 0,
+            conciliate: 0,
             justified: 0,
             date: null,
             ini: null,

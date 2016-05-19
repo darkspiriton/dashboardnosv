@@ -12,6 +12,6 @@ class Lunch extends Model
     }
     
     public function discount(){
-        return $this->hasOne(DiscountLunch::class,'lunches_id', 'id');
+        return $this->hasOne(DiscountLunch::class,'lunch_id', 'id');
     }
 }

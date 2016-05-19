@@ -14,9 +14,11 @@ angular.module('App')
         $scope.tableConfig 	= 	{
             columns :	[
                 {"sTitle": "Nombre de empleado", "bSortable" : true},
-                {"sTitle": "Hora de ingreso", "bSortable" : true},
-                {"sTitle": "Hora de salida" ,"bSearchable": false , "bSortable" : false },
-                {"sTitle": "Accion" , "bSearchable": false , "bSortable" : false , "sWidth": "190px"}
+                {"sTitle": "Ingreso", "bSortable" : false},
+                {"sTitle": "Break", "bSortable" : false},
+                {"sTitle": "F. Break", "bSortable" : false},
+                {"sTitle": "Salida" ,"bSearchable": false , "bSortable" : false },
+                {"sTitle": "Accion" , "bSearchable": false , "bSortable" : false , "sWidth": "90px"}
             ],
             actions	:  	[
                 ['actions', [
@@ -24,53 +26,55 @@ angular.module('App')
                 ]
                 ]
             ],
-            data  	: 	['name','sexo','area','actions'],
+            data  	: 	['name','start','break','end_break','end','actions'],
             configStatus : 'status'
         };
 
-        var alertConfig = {
-            title: "¿Esta seguro?",
-            text: "",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: "SI",
-            cancelButtonColor: "#212121",
-            cancelButtonText: "CANCELAR",
-            closeOnConfirm: true
-        };
+        //var alertConfig = {
+        //    title: "¿Esta seguro?",
+        //    text: "",
+        //    type: "warning",
+        //    showCancelButton: true,
+        //    confirmButtonColor: "#DD6B55",
+        //    confirmButtonText: "SI",
+        //    cancelButtonColor: "#212121",
+        //    cancelButtonText: "CANCELAR",
+        //    closeOnConfirm: true
+        //};
 
         $scope.entryClear = {
             id: null,
-            employee: null,
+            employee_id: null,
             conciliate: 0,
-            justified: 0,
+            justification: 0,
             date: null,
-            ini: null,
-            fin: null
+            start_time: null,
+            end_time: null,
+            start_time_launch: null,
+            end_time_launch: null
         };
 
-        $scope.list = function() {
-            petition.get('api/user')
+        $scope.list = function(date) {
+            date || (date = new Date());
+            petition.get('api/payroll/employee/assists/day', {params: {date: date}})
                 .then(function(data){
-                    $scope.tableData = data.users;
+                    $scope.tableData = data.registers;
                     $('#table').AJQtable('view', $scope, $compile);
                     $scope.updateList = false;
                 }, function(error){
                     console.log(error);
-                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                    toastr.error('Uyuyuy dice: ' + error.data.message);
                     $scope.updateList = false;
                 });
         };
 
-        $scope.view = function( ind ){
-            var id = $scope.tableData[ind].id;
-            petition.get('api/user/' + id)
+        $scope.listEmployee = function() {
+            petition.get('api/employee')
                 .then(function(data){
-                    $scope.userDetail = data.user;
-                    util.modal();
+                    $scope.employees = data.employees;
                 }, function(error){
-                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                    console.log(error);
+                    toastr.error('Uyuyuy dice: ' + error.data.message);
                 });
         };
 
@@ -87,9 +91,10 @@ angular.module('App')
         //};
 
         $scope.submit = function () {
-            if($scope.entry.fin < $scope.entry.ini) return toastr.error('Uyuyuy dice: La hora de salida debe ser mayor.');
+            if($scope.entry.start_time > $scope.entry.end_time) return toastr.error('Uyuyuy dice: La hora de salida debe ser mayor.');
+            if($scope.entry.start_time_launch > $scope.entry.end_time_launch) return toastr.error('Uyuyuy dice: La hora de fin de almuerzo debe ser mayor.');
             var method = ( $scope.entry.id )?'PUT':'POST';
-            var url = ( method == 'PUT')? util.baseUrl('api/lllllll/' + $scope.entry.id): util.baseUrl('api/lll');
+            var url = ( method == 'PUT')? util.baseUrl('api/assist/' + $scope.entry.id): util.baseUrl('api/assist');
             var config = {
                 method: method,
                 url: url,
@@ -99,21 +104,27 @@ angular.module('App')
             petition.custom(config).then(function(data){
                 toastr.success(data.message);
                 $scope.formSubmit=false;
-                $scope.list();
-                util.ocultaformulario();
+                $scope.list($scope.entry.date);
+                ClearFroAdd();
             }, function(error){
-                toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                toastr.error('Uyuyuy dice: '+error.data.message);
                 $scope.formSubmit=false;
             });
         };
 
+        function ClearFroAdd(){
+            $scope.entry.id = null;
+            $scope.entry.conciliate = 0;
+            $scope.entry.justification = 0;
+            $scope.entry.start_time = null;
+            $scope.entry.end_time = null;
+            $scope.entry.start_time_launch = null;
+            $scope.entry.end_time_launch = null;
+        }
+
         $scope.cancel = function () {
             $scope.entry = angular.copy($scope.entryClear);
             util.ocultaformulario();
-        };
-
-        $scope.cancel2 = function () {
-            console.log($scope.entry);
         };
 
         $scope.new = function(){
@@ -124,8 +135,7 @@ angular.module('App')
         angular.element(document).ready(function(){
             $scope.entry = angular.copy($scope.entryClear);
 
-            $scope.employees = [{id: 1, name:'Mario Vargas Llosa'}, {id: 2, name: 'Pedro Marmol Picapiedra'}];
-
             $scope.list();
+            $scope.listEmployee();
         });
     });

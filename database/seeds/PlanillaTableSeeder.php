@@ -91,6 +91,7 @@ class PlanillaTableSeeder extends Seeder
                     'employee_id' => $id_Employee,
                     'start_time' => '0'.$ini.'00',
                     'end_time' => $end,
+                    'amount' => 40.5,
                     'conciliate' =>  $conciliate, //$faker->boolean(),
                     'justification' => 0, //$faker->boolean(),
                     'date' => '2016-05-'.$x
@@ -122,7 +123,7 @@ class PlanillaTableSeeder extends Seeder
         $minutes = ((integer)$ini - 15);
         $amount = $minutes * 0.08966587;
         DB::table('discounts_lunches')->insertGetId(array(
-            'lunches_id' => $id,
+            'lunch_id' => $id,
             'amount' => $amount,
             'minutes' => $minutes
         ));

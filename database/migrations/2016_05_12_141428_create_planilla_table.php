@@ -84,6 +84,7 @@ class CreatePlanillaTable extends Migration
             $table->time('start_time');
             $table->time('end_time');
             $table->date('date');
+            $table->float('amount');
             $table->boolean('conciliate');
             $table->boolean('justification');
             $table->foreign('employee_id')->references('id')->on('employees');

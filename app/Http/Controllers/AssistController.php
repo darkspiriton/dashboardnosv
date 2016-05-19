@@ -11,7 +11,7 @@ use Dashboard\Models\Planilla\Lunch;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Dashboard\Http\Requests;
-use Mockery\CountValidator\Exception;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
 class AssistController extends Controller
@@ -45,7 +45,7 @@ class AssistController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'employe_id' => 'required',
+            'employee_id' => 'required',
             'start_time' => 'date',
             'end_time' => 'date',
             'date' => 'required|date',
@@ -60,19 +60,19 @@ class AssistController extends Controller
             if($validator->fails()){
                 return response()->json(['message'=>'No posee todo los campos necesarios para crear una asistencia'],401);
             }
-            $emp= Employee::find($request->input('employe_id'));
+            $emp= Employee::find($request->input('employee_id'));
 
             $date = Carbon::Parse($request->input('date'));
             $date->setTimezone('-5');
 
             $existe=DB::table('assists')
-                ->where('employee_id','=',$request->input('employe_id'))
+                ->where('employee_id','=',$request->input('employee_id'))
                 ->where('date','=',$date->toDateString())->exists();
 
             if($emp != null){
                 if($existe == false){
                     $employe = Employee::with(['days'])
-                        ->where('id','=',$request->input('employe_id'))
+                        ->where('id','=',$request->input('employee_id'))
                         ->get();
 
                     $arrays=$employe->toArray()[0]["days"];
@@ -158,13 +158,18 @@ class AssistController extends Controller
                     {
                         $query->where('day_id','=', $date->dayOfWeek);
 
-                    }])->where('id','=',$request->input('employe_id'))
+                    }])->where('id','=',$request->input('employee_id'))
                         ->get();
 
-                    $employe->toArray()[0]["days"][0]["pivot"]["start_time"];
-                    $almuerzo=$employe->toArray()[0]['break'];
-                    $start = Carbon::Parse($employe->toArray()[0]["days"][0]["pivot"]["start_time"]);
-                    $end = Carbon::Parse($employe->toArray()[0]["days"][0]["pivot"]["end_time"]);
+                    try {
+                        $employe->toArray()[0]["days"][0]["pivot"]["start_time"];
+                        $almuerzo = $employe->toArray()[0]['break'];
+                        $start = Carbon::Parse($employe->toArray()[0]["days"][0]["pivot"]["start_time"]);
+                        $end = Carbon::Parse($employe->toArray()[0]["days"][0]["pivot"]["end_time"]);
+                    } catch(Exception $e){
+                        return response()->json(['message' => 'El empleado no labora este dia, no se puede guardar la asistencia'],404);
+                    }
+
 
                     //Horas laborables al mes de ese empleado
                     $laboral=$start->diffInMinutes($end)-$almuerzo;
@@ -195,7 +200,7 @@ class AssistController extends Controller
                                     $start_time_launch = Carbon::Parse($request->input('start_time_launch'));
                                     $start_time_launch->setTimezone('-5');
                                     //Calculo de horas 1234
-                                    $this->asistencia($start_day,$end_day,$start_time_launch,$end_time_launch,$laboral,$almuerzo,$minuto,$conciliate,$justification,$id,$date,$employeId);
+                                    return $this->asistencia($start_day,$end_day,$start_time_launch,$end_time_launch,$laboral,$almuerzo,$minuto,$conciliate,$justification,$id,$date,$employeId);
                                 }
                             }
 
@@ -206,14 +211,14 @@ class AssistController extends Controller
                                 $start_time_launch = Carbon::Parse($request->input('start_time_launch'));
                                 $start_time_launch->setTimezone('-5');
                                 //Calculo de horas 123
-                                $this->asistencia($start_day,$end_time_launch,$start_time_launch,$end_time_launch,$laboral,$almuerzo,$minuto,$conciliate,$justification,$id,$date,$employeId);
+                                return $this->asistencia($start_day,$end_time_launch,$start_time_launch,$end_time_launch,$laboral,$almuerzo,$minuto,$conciliate,$justification,$id,$date,$employeId);
                             }
 
                         }elseif($request->input('start_time_launch')!=null){
                             $start_time_launch = Carbon::Parse($request->input('start_time_launch'));
                             $start_time_launch->setTimezone('-5');
                             //Calculo de horas 12
-                            $this->asistencia($start_day,$start_time_launch,$start_time_launch,$start_time_launch,$laboral,$almuerzo,$minuto,$conciliate,$justification,$id,$date,$employeId);
+                            return $this->asistencia($start_day,$start_time_launch,$start_time_launch,$start_time_launch,$laboral,$almuerzo,$minuto,$conciliate,$justification,$id,$date,$employeId);
                         }
 
                     }elseif($request->input('start_time_launch')!=null){
@@ -226,14 +231,14 @@ class AssistController extends Controller
                                 $end_time_launch = Carbon::Parse($request->input('end_time_launch'));
                                 $end_time_launch->setTimezone('-5');
                                 //Calculo de horas 234
-                                $this->asistencia($start_time_launch,$end_day,$start_time_launch,$end_time_launch,$laboral,$almuerzo,$minuto,$conciliate,$justification,$id,$date,$employeId);
+                                return $this->asistencia($start_time_launch,$end_day,$start_time_launch,$end_time_launch,$laboral,$almuerzo,$minuto,$conciliate,$justification,$id,$date,$employeId);
                             }
 
                         }elseif($request->input('end_time_launch')!= null){
                             $end_time_launch = Carbon::Parse($request->input('end_time_launch'));
                             $end_time_launch->setTimezone('-5');
                             //Calculo de horas 23
-                            $this->asistencia($start_time_launch,$end_time_launch,$start_time_launch,$end_time_launch,$laboral,$almuerzo,$minuto,$conciliate,$justification,$id,$date,$employeId);
+                            return $this->asistencia($start_time_launch,$end_time_launch,$start_time_launch,$end_time_launch,$laboral,$almuerzo,$minuto,$conciliate,$justification,$id,$date,$employeId);
                         }
 
                     }elseif($request->input('end_time_launch')!=null){
@@ -243,7 +248,7 @@ class AssistController extends Controller
                             $end_day = Carbon::Parse($request->input('end_time'));
                             $end_day->setTimezone('-5');
                             //Calculo de horas 34
-                            $this->asistencia($end_time_launch,$end_day,$end_time_launch,$end_time_launch,$laboral,$almuerzo,$minuto,$conciliate,$justification,$id,$date,$employeId);
+                            return $this->asistencia($end_time_launch,$end_day,$end_time_launch,$end_time_launch,$laboral,$almuerzo,$minuto,$conciliate,$justification,$id,$date,$employeId);
                         }
                     }
                 }else{
@@ -305,7 +310,7 @@ class AssistController extends Controller
         $asist = Assist::find($id);
         $asist->start_time=$start;
         $asist->end_time=$end;
-        $asist->monto=($start->diffInMinutes($end)-$almuerzo)*round($minuto,2);
+        $asist->amount=($start->diffInMinutes($end)-$almuerzo)*round($minuto,2);
         $asist->save();
 
         $lunch = new Lunch();
@@ -340,12 +345,14 @@ class AssistController extends Controller
 
         if($alm<0){
             $desct = new DiscountLunch();
-            $desct->lunches_id=$lunch->id;
+            $desct->lunch_id=$lunch->id;
             $desct->amount=$alm;
             $desct->minutes=(int)($startA->diffInMinutes($endA)-$almuerzo);
             $lunch->discount()->save($desct);
 
         }
+
+        return response()->json(['message' => 'Se registro la asistencia'],200);
     }
 
 }

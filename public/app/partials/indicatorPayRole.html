@@ -7,21 +7,23 @@
     </div>
     <div class="card-header bgm-blue">
         <div ng-form="dates" class="row report-date">
-            <h2 class="col-xs-12 col-sm-1 text-right">Fecha Inicio</h2>
-            <input type="date" class="btn btn-default col-sm-2" ng-model="data.date1" required>
-            <h2 class="col-xs-12 col-sm-1 text-right">Fecha Final</h2>
-            <input type="date" class="btn btn-default col-sm-2" ng-model="data.date2" required>
+            <h2 class="col-xs-12 col-sm-1 text-right">Año</h2>
+            <select class="col-sm-1" ng-options="year as year for year in years" ng-model="data.year" required>
+                <option value="" disabled="disabled" selected="selected">Seleccione</option>
+            </select>
+            <h2 class="col-xs-12 col-sm-1 text-right">Mes</h2>
+            <select class="col-sm-1" ng-options="month.id as month.name for month in months" ng-model="data.month" required>>
+                <option value="" disabled="disabled" selected="selected">Seleccione</option>
+            </select>
             <h2 class="col-xs-12 col-sm-1 text-right">Empleado</h2>
-            <select class="col-sm-2" ng-change="data.area = null" ng-options="employee.id as employee.name for employee in employees" ng-model="data.employee">
+            <select class="col-sm-2" ng-change="data.area_id = null" ng-options="employee.id as employee.name for employee in employees" ng-model="data.employee_id">
                 <option value="" disabled="disabled" selected="selected">Seleccione</option>
             </select>
             <h2 class="col-xs-12 col-sm-1 text-right">Area</h2>
-            <select class="col-sm-2" ng-change="data.employee = null" ng-options="area.id as area.name for area in areas" ng-model="data.area">
+            <select class="col-sm-2" ng-change="data.employee_id = null" ng-options="area.id as area.name for area in areas" ng-model="data.area_id">
                 <option value="" disabled="disabled" selected="selected">Seleccione</option>
             </select>
-            <input type="button" ng-disabled="!dates.$valid" ng-click="filter()" class="btn bgm-indigo m-l-20 m-t-20 col-sm-1" value="buscar">
-            <input type="button" ng-click="filter()" class="btn bgm-teal m-l-20 m-t-20 col-sm-2 pull-right" value="Resumen x sueldos (tardansas)">
-            <input type="button" ng-if="reportDownload" ng-click="download()" class="btn bgm-purple m-l-20 m-t-20 col-sm-1" value="DESCARGAR PDF">
+            <input type="button" ng-disabled="!dates.$valid" ng-click="list()" class="btn bgm-indigo m-l-20 col-sm-1" value="buscar">
         </div>
     </div>
     <div class="card-body card-padding table-responsive">
@@ -30,18 +32,3 @@
         </div><br>
     </div><br>
 </div>
-
-<!--<div class="row">-->
-    <!--<div class="col-md-12">-->
-        <!--<div ng-show="drawShow" class="card">-->
-            <!--<div class="card-header">-->
-                <!--<h2>Vista grafica</h2>-->
-            <!--</div>-->
-
-            <!--<div class="card-body card-padding-sm">-->
-                <!--<div id="bar-chart" class="flot-chart"></div>-->
-                <!--<div class="flc-bar"></div>-->
-            <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
-<!--</div>-->

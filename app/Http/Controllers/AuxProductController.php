@@ -25,14 +25,10 @@ class AuxProductController extends Controller
      */
     public function index()
     {
-        $products=Product::all();
-        foreach ($products as $product){
-            $product->size;
-            $product->color;
-            $product->provider;
-            $product->move = $product->movements->first();
-            $product->types;
-        }
+        $products = Product::with(['types' => function($query){
+//            $query->selectRaw(DB::raw('GROUP_CONCAT(types.name SEPARATOR \' \') as types_names'));
+        },'provider','size','color'])->get();
+
         return response()->json(['products' => $products],200);
     }
 

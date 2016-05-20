@@ -9,15 +9,15 @@ class Product extends Model
     protected $table="auxproducts";
     
     public function size(){
-        return $this->belongsTo(Size::class)->select('name');
+        return $this->belongsTo(Size::class);
     }
 
     public function color(){
-        return $this->belongsTo(Color::class)->select('name');
+        return $this->belongsTo(Color::class);
     }
 
     public function provider(){
-        return $this->belongsTo(Provider::class)->select('name');
+        return $this->belongsTo(Provider::class);
     }
 
     public function alarm(){

@@ -13,102 +13,78 @@ angular.module('App')
 
         $scope.tableConfig 	= 	{
             columns :	[
-                {"sTitle": "Fecha", "bSortable" : true, "sWidth" : '80px'},
-                {"sTitle": "H. Llegada", "bSortable" : false,"bSearchable": false},
-                {"sTitle": "H. Inicio Break", "bSortable" : false,"bSearchable": false},
-                {"sTitle": "H. Fin Break", "bSortable" : false,"bSearchable": false},
-                {"sTitle": "H. Salida", "bSortable" : false,"bSearchable": false},
-                {"sTitle": "Monto x día", "bSortable" : true,"bSearchable": false},
-                {"sTitle": "Perdida x día", "bSortable" : true,"bSearchable": false}
+                {"sTitle": "Empleado", "bSortable" : true,"bSearchable": false},
+                {"sTitle": "Sueldo", "bSortable" : false,"bSearchable": false},
+                {"sTitle": "Pago del mes", "bSortable" : false,"bSearchable": false},
+                {"sTitle": "Minutos tarde", "bSortable" : false,"bSearchable": false},
+                {"sTitle": "Descuento por tardanza", "bSortable" : false,"bSearchable": false},
+                {"sTitle": "Minutos demora break", "bSortable" : false,"bSearchable": false},
+                {"sTitle": "descuento por break", "bSortable" : false,"bSearchable": false},
             ],
-            data  	: 	['fecha', 'codigo','product','color','talla','status']
+            data  	: 	['name', 'salary','pay_amount','delay_min','delay_amount','lunch_min','lunch_amount']
         };
 
         $scope.data = {
-            date1 : null,
-            date2: null,
-            employee: null,
-            area: null
+            year : null,
+            month: null,
+            employee_id: null,
+            area_id: null
         };
 
         $scope.areas = [
             {id: 1, name: 'Administracion'},
             {id: 2, name: 'Sistemas'},
             {id: 3, name: 'Publicidad'},
-            {id: 4, name: 'Ventas'},
+            {id: 4, name: 'Ventas'}
         ];
 
-        $scope.employees = [
-            {id: 1, name: 'Juanito Alimaña con mucha maña'},
-            {id: 2, name: 'Juan Pablo Neruda'},
-            {id: 3, name: 'Andres iniesta barca'},
-            {id: 4, name: 'Pedro Picapierda dino'},
-            {id: 5, name: 'Dross Rotzank milibro'}
+        $scope.years = [2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025,2026,2027,2028,2029,2030];
+        $scope.months = [
+            {id: 1, name: 'Enero'},
+            {id: 2, name: 'Febrero'},
+            {id: 3, name: 'Marzo'},
+            {id: 4, name: 'Abril'},
+            {id: 5, name: 'Mayo'},
+            {id: 6, name: 'Junio'},
+            {id: 7, name: 'Julio'},
+            {id: 8, name: 'Agosto'},
+            {id: 9, name: 'Septiembre'},
+            {id: 10, name: 'Octubre'},
+            {id: 11, name: 'Nomviembre'},
+            {id: 12, name: 'Diciembre'}
         ];
 
         $scope.list = function() {
             $scope.updateList = true;
-            $scope.reportDownload = false;
-            petition.get('api/auxmovement/get/movementDay')
+            petition.get('api/payroll', { params: $scope.data})
                 .then(function(data){
-                    $scope.tableData = data.movements;
+                    $scope.tableData = data.payroll;
                     $('#table').AJQtable('view', $scope, $compile);
                     $scope.updateList = false;
-                    $scope.drawShow=false;
                 }, function(error){
                     console.log(error);
-                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                    toastr.error('Uyuyuy dice: ' + error.data.message);
                     $scope.updateList = false;
+                    resetTable();
                 });
         };
 
-        //$scope.listProviders = function() {
-        //    petition.get('api/providers')
-        //        .then(function(data){
-        //            $scope.providers = data.providers;
-        //        }, function(error){
-        //            console.log(error);
-        //            toastr.error('Ups ocurrio un problema: ' + error.data.message);
-        //        });
-        //};
-
-        //$scope.filter = function(){
-        //    $scope.updateList = true;
-        //    $scope.dateSave = angular.copy($scope.data);
-        //    $scope.dateSave.date1 = $filter('date')($scope.data.date1, 'yyyy-MM-dd')
-        //    $scope.dateSave.date2 = $filter('date')($scope.data.date2, 'yyyy-MM-dd')
-        //    petition.get('api/auxmovement/get/movementDays', { params : $scope.dateSave })
-        //        .then(function(data){
-        //            $scope.reportDownload = true;
-        //            $scope.tableData = data.movements;
-        //            $('#table').AJQtable('view', $scope, $compile);
-        //            $scope.updateList = false;
-        //            if ( data.movements.length > 0){
-        //                chart.drawColummn(data.draw,data.days);
-        //                $scope.drawShow=true;
-        //            } else {
-        //                $scope.drawShow=false;
-        //            }
-        //        }, function(error){
-        //            console.log(error);
-        //            toastr.error('Ups ocurrio un problema: ' + error.data.message);
-        //            $scope.updateList = false;
-        //        });
-        //};
-
-        //$scope.download = function(){
-        //    petition.post('api/auxmovement/get/movementDays/download', $scope.dateSave, {responseType:'arraybuffer'})
-        //        .then(function(data){
-        //            var date = new Date().getTime();
-        //            var name = date + '-reporte-de-movimiento-'+ $scope.dateSave.date1+'-al-'+$scope.dateSave.date2+'.pdf';
-        //            var file = new Blob([data],{ type : 'application/pdf'});
-        //            saveAs(file, name);
-        //        }, function(error){
-        //            console.info(error);
-        //        });
-        //};
+        $scope.listEmployee = function() {
+            petition.get('api/employee')
+                .then(function(data){
+                    $scope.employees = data.employees;
+                }, function(error){
+                    console.log(error);
+                    toastr.error('Uyuyuy dice: ' + error.data.message);
+                });
+        };
+        function resetTable(){
+            $scope.tableData = [];
+            $('#table').AJQtable('view', $scope, $compile);
+        }
 
         angular.element(document).ready(function(){
-            $scope.list();
+            resetTable();
+            $scope.listEmployee();
         });
     });

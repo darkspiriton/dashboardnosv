@@ -200,6 +200,7 @@ Route::group(['prefix' => 'api'], function(){
     Route::group(['prefix' => 'payroll', 'middleware' => 'auth:EMP'], function(){
         Route::get('employee/assists', 'ReportPayRollController@get_assists_for_month');
         Route::get('employee/assists/day', 'ReportPayRollController@get_assists_by_day');
+        Route::get('/', 'ReportPayRollController@get_payroll');
     });
 });
 

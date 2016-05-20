@@ -73,8 +73,8 @@ class EmployeeController extends Controller
             $days = Array();
             foreach($request->input('days') as $key => $day){
                 $days[$key]['day_id'] = $day['day_id'];
-                $days[$key]['start_time'] = Carbon::parse($day['start_time'])->setTimezone('-5')->toTimeString();
-                $days[$key]['end_time'] = Carbon::parse($day['end_time'])->setTimezone('-5')->toTimeString();
+                $days[$key]['start_time'] = Carbon::parse($day['start_time'])->setTimezone("America/Lima")->toTimeString();
+                $days[$key]['end_time'] = Carbon::parse($day['end_time'])->setTimezone("America/Lima")->toTimeString();
             }
             $employee->days()->attach($days);
 
@@ -163,8 +163,8 @@ class EmployeeController extends Controller
                 $employee->save();
                 $days = Array();
                 foreach($request->input('days') as $key => $day){
-                    $days[$day['day_id']]['start_time'] = Carbon::parse($day['start_time'])->setTimezone('-5')->toTimeString();
-                    $days[$day['day_id']]['end_time'] = Carbon::parse($day['end_time'])->setTimezone('-5')->toTimeString();
+                    $days[$day['day_id']]['start_time'] = Carbon::parse($day['start_time'])->setTimezone("America/Lima")->toTimeString();
+                    $days[$day['day_id']]['end_time'] = Carbon::parse($day['end_time'])->setTimezone("America/Lima")->toTimeString();
                 }
                 $employee->days()->sync($days);
 
@@ -207,7 +207,7 @@ class EmployeeController extends Controller
         try{
 
             $date = Carbon::Parse($request->input('date'));
-            $date->setTimezone('-5');
+            $date->setTimezone("America/Lima");
 
 
             $fin=$date->copy()->endOfMonth();

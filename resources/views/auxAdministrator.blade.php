@@ -20,9 +20,24 @@
                 <li id="indicator6"><a  ui-sref="Indicator6"> Lista de Proveedores </a></li>
             </ul>
         </li>
+        <li class="sub-menu">
+            <a href="#"><i class="md md-now-widgets"></i> Administracion de planilla </a>
+            <ul>
+                <li id="employees">
+                    <a ui-sref="Employees"><i class="md md-security"></i> Administrar empleados</a>
+                </li>
+                <li id="payrollEntry">
+                    <a ui-sref="PayrollEntry"><i class="md md-security"></i> Registro de asistencias </a>
+                </li>
+                <li id="reportePlanilla">
+                    <a ui-sref="ReportePlanilla"><i class="md md-security"></i> Reporte de planilla entre fechas </a>
+                </li>
+            </ul>
+        </li>
         <li id="comments">
             <a href="#" ui-sref="Comentarios"><i class="md md-messenger"></i> Administrar comentarios</a>
         </li>
+
     </ul>
 @stop
 
@@ -38,4 +53,7 @@
     <script src="app/controllers/usersCtrl.js"></script>
     <script src="app/controllers/commentsCtrl.js"></script>
     <script src="app/controllers/auxStockCtrl.js"></script>
+    <script src="app/controllers/employeesCtrl.js"></script>
+    <script src="app/controllers/payrollEntryCtrl.js"></script>
+    <script src="app/controllers/indicatorPayRoleCtrl.js"></script>
 @stop

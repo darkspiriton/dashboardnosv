@@ -5,6 +5,7 @@ namespace Dashboard\Http\Controllers;
 use Carbon\Carbon;
 use Dashboard\Models\Planilla\Employee;
 use Dashboard\User;
+use DoctrineTest\InstantiatorTestAsset\ExceptionAsset;
 use Illuminate\Http\Request;
 
 use Dashboard\Http\Requests;
@@ -77,8 +78,8 @@ class EmployeeController extends Controller
             $employee->days()->attach($days);
 
             return response()->json(['message' => 'El empleado se agrego correctamente'],200);
-        } catch (\Exception $e) {
-            return \Response::json(['message' => 'Ocurrio un error al agregar producto'], 500);
+        } catch (ExceptionAsset $e) {
+            return \Response::json(['message' => 'Ocurrio un error al agregar empleado'], 500);
         }
     }
 

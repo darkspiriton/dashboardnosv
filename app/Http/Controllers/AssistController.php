@@ -65,9 +65,10 @@ class AssistController extends Controller
             $date = Carbon::Parse($request->input('date'));
             $date->setTimezone('-5');
 
-            $existe=DB::table('assists')
-                ->where('employee_id','=',$request->input('employe_id'))
-                ->where('date','=',$date->toDateString())->exists();
+//            $existe=DB::table('assists')
+//                ->where('employee_id','=',$request->input('employe_id'))
+//                ->where('date','=',$date->toDateString())->exists();
+            $existe=false;
 
             if($emp != null){
                 if($existe == false){
@@ -151,7 +152,7 @@ class AssistController extends Controller
                     $cantT=$cantD+$cantL+$cantM+$cantMi+$cantJ+$cantV+$cantS;
                     $minuto=$sueldo/$cantT;
 
-                    $date->dayOfWeek;
+//                    $date->dayOfWeek;
 
                     //Busco al usuario para determinar la hora de trabajo de ese dia
                     $employe = Employee::with(['days' => function($query) use($date)
@@ -271,7 +272,31 @@ class AssistController extends Controller
      */
     public function show($id)
     {
-        //
+        $assits=DB::table('employees as e')
+           ->select('e.id as idE','e.name','e.salary','e.break',DB::raw('sum(d.amount) as descuento'),DB::raw('sum(d.minutes) as desMinutos'),DB::raw('sum(ex.amount) as extra'),DB::raw('sum(ex.minutes) as extraMinutos'))
+            ->join('assists as a','e.id','=','a.employee_id')
+            ->join('discounts_assists as d','a.id','=','d.assist_id')
+            ->join('extras as ex','a.id','=','ex.assist_id')
+            ->where('e.id','=',$id)
+            ->where('a.date','>=','2016-05-01')
+            ->where('a.date','<=','2016-05-31')
+            ->groupby('e.id')
+            ->get();
+
+//        $assits=Employee::with('assists',['assists.discount' => function($query){
+////            $query->where('date','>=','2016-05-01');
+//        }],'assists.extra')
+//            ->where('id','=',$id)
+//            ->where('assists.date','=','2016-05-01')->get();
+
+//        $assits=Employee::with('assists.discount','assists.extra')
+//            ->where('id','=',$id)
+//            ->where('date','=','2016-05-01')
+//            ->get();
+
+//       dd($assits);
+        return response()->json(['message'=>$assits],200);
+
     }
 
 
@@ -284,7 +309,7 @@ class AssistController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        
     }
 
     /**
@@ -305,7 +330,6 @@ class AssistController extends Controller
         $asist = Assist::find($id);
         $asist->start_time=$start;
         $asist->end_time=$end;
-        $asist->monto=($start->diffInMinutes($end)-$almuerzo)*round($minuto,2);
         $asist->save();
 
         $lunch = new Lunch();
@@ -323,6 +347,9 @@ class AssistController extends Controller
                 $descuento->minutes=(int)(($laboral-($start->diffInMinutes($end)-$almuerzo)));
                 $asist->discount()->save($descuento);
 
+                $asist = Assist::find($id);
+                $asist->monto=($laboral+$asistencia)*round($minuto,2);
+                $asist->save();
             }
 
         }elseif($asistencia>0){
@@ -333,7 +360,15 @@ class AssistController extends Controller
                 $extra->minutes=(int)((($start->diffInMinutes($end)-$almuerzo)-$laboral));
                 $asist->extra()->save($extra);
 
+                $asist = Assist::find($id);
+                $asist->monto=($laboral-$asistencia)*round($minuto,2);
+                $asist->save();
+
             }
+        }elseif($asistencia==0){
+            $asist = Assist::find($id);
+            $asist->monto=($laboral-$asistencia)*round($minuto,2);
+            $asist->save();
         }
 
         $alm=($almuerzo-$startA->diffInMinutes($endA))*round($minuto,3);
@@ -344,7 +379,6 @@ class AssistController extends Controller
             $desct->amount=$alm;
             $desct->minutes=(int)($startA->diffInMinutes($endA)-$almuerzo);
             $lunch->discount()->save($desct);
-
         }
     }
 

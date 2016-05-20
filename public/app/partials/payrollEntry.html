@@ -5,6 +5,12 @@
                 data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
                 title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
     </div>
+    <div class="card-header bgm-blue">
+        <div ng-form="dates" class="row report-date">
+            <input type="date" class="btn btn-default m-l-20 col-sm-2" ng-model="dateView" required>
+            <input type="button" ng-disabled="!dates.$valid" ng-click="view()" class="btn bgm-indigo m-l-20 col-sm-1" value="Ver fecha">
+        </div>
+    </div>
 
     <div class="card-body card-padding table-responsive">
         <div class="col-sm-12">

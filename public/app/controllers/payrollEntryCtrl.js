@@ -18,16 +18,15 @@ angular.module('App')
                 {"sTitle": "Break", "bSortable" : false},
                 {"sTitle": "F. Break", "bSortable" : false},
                 {"sTitle": "Salida" ,"bSearchable": false , "bSortable" : false },
-                {"sTitle": "Accion" , "bSearchable": false , "bSortable" : false , "sWidth": "90px"}
+                //{"sTitle": "Accion" , "bSearchable": false , "bSortable" : false , "sWidth": "90px"}
             ],
-            actions	:  	[
+            /*actions	:  	[
                 ['actions', [
                     ['Editar', 'edit' ,'btn-primary']
                 ]
                 ]
-            ],
-            data  	: 	['name','start','break','end_break','end','actions'],
-            configStatus : 'status'
+            ],*/
+            data  	: 	['name','start','break','end_break','end'/*,'actions'*/],
         };
 
         //var alertConfig = {
@@ -78,17 +77,9 @@ angular.module('App')
                 });
         };
 
-        //$scope.edit = function( ind ){
-        //    var id = $scope.tableData[ind].id;
-        //    petition.get('api/user/' + id)
-        //        .then(function(data){
-        //            $scope.empleado = data.user;
-        //            $scope.empleado.password = '**********';
-        //            util.muestraformulario();
-        //        }, function(error){
-        //            toastr.error('Ups ocurrio un problema: ' + error.data.message);
-        //        });
-        //};
+        $scope.view = function(){
+            $scope.list($scope.dateView);
+        };
 
         $scope.submit = function () {
             if($scope.entry.start_time > $scope.entry.end_time) return toastr.error('Uyuyuy dice: La hora de salida debe ser mayor.');

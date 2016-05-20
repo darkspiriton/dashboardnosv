@@ -31,12 +31,12 @@ angular.module('App')
             area_id: null
         };
 
-        $scope.areas = [
-            {id: 1, name: 'Administracion'},
-            {id: 2, name: 'Sistemas'},
-            {id: 3, name: 'Publicidad'},
-            {id: 4, name: 'Ventas'}
-        ];
+        //$scope.areas = [
+        //    {id: 1, name: 'Administracion'},
+        //    {id: 2, name: 'Sistemas'},
+        //    {id: 3, name: 'Publicidad'},
+        //    {id: 4, name: 'Ventas'}
+        //];
 
         $scope.years = [2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025,2026,2027,2028,2029,2030];
         $scope.months = [
@@ -78,6 +78,17 @@ angular.module('App')
                     toastr.error('Uyuyuy dice: ' + error.data.message);
                 });
         };
+
+        $scope.listAreas = function() {
+            petition.get('api/employee/get/roles')
+                .then(function(data){
+                    $scope.areas = data.areas;
+                }, function(error){
+                    console.log(error);
+                    toastr.error('Uyuyuy dice: ' + error.data.message);
+                });
+        };
+
         function resetTable(){
             $scope.tableData = [];
             $('#table').AJQtable('view', $scope, $compile);
@@ -86,5 +97,6 @@ angular.module('App')
         angular.element(document).ready(function(){
             resetTable();
             $scope.listEmployee();
+            $scope.listAreas();
         });
     });

@@ -3,7 +3,9 @@
 namespace Dashboard\Http\Controllers;
 
 use Carbon\Carbon;
+use Dashboard\Models\Planilla\Area;
 use Dashboard\Models\Planilla\Employee;
+use Dashboard\Role;
 use Dashboard\User;
 use Illuminate\Http\Request;
 
@@ -185,6 +187,10 @@ class EmployeeController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function getRole(){
+        return response()->json(['areas' => Area::all()]);
     }
 
     public function minuto(Request $request){

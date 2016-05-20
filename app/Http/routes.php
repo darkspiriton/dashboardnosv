@@ -203,6 +203,10 @@ Route::group(['prefix' => 'api'], function(){
         Route::get('employee/assists/day', 'ReportPayRollController@get_assists_by_day');
         Route::get('/', 'ReportPayRollController@get_payroll');
     });
+    Route::group(['prefix' => 'payroll', 'middleware' => 'auth:GOD'], function(){
+        Route::get('/', 'ReportPayRollController@get_payroll');
+    });
+    Route::get('/employee/get/roles', 'EmployeeController@getRole');
 });
 
 Route::get('/test', function(\Illuminate\Http\Request $request){

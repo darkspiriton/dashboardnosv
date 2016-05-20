@@ -74,6 +74,16 @@ angular.module('App')
                 });
         };
 
+        $scope.listAreas = function() {
+            petition.get('api/employee/get/roles')
+                .then(function(data){
+                    $scope.areas = data.areas;
+                }, function(error){
+                    console.log(error);
+                    toastr.error('Uyuyuy dice: ' + error.data.message);
+                });
+        };
+
         $scope.view = function( ind ){
             var id = $scope.tableData[ind].id;
             petition.get('api/employee/' + id)
@@ -269,13 +279,7 @@ angular.module('App')
         angular.element(document).ready(function(){
             $scope.empleado = angular.copy($scope.empleadoClear);
             $scope.days = angular.copy($scope.daysClear);
-            $scope.areas = [
-                {id : 1 , name : 'Administración'},
-                {id : 2 , name : 'Sistemas'},
-                {id : 3 , name : 'Publicidad'},
-                {id : 4 , name : 'Ventas'}
-            ];
-
             $scope.list();
+            $scope.listAreas();
         });
     });

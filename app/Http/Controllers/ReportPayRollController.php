@@ -80,17 +80,19 @@ class ReportPayRollController extends Controller
         try {
             $date = Carbon::parse($request->input('date'));
 
-            $registers = DB::table('employees as e')->select(array('e.name','a.date',
-                'a.start_time as start', 'l.start_time as break', 'l.end_time as end_break', 'a.end_time as end'))
+            $registers = DB::table('employees as e')
+                ->select(array('ar.name as area','e.name','a.date','a.start_time as start', 'l.start_time as break', 'l.end_time as end_break', 'a.end_time as end'))
                 ->leftJoin('assists as a', 'a.employee_id', '=', 'e.id')
                 ->leftJoin('discounts_assists as da', 'da.assist_id', '=', 'a.id')
                 ->leftJoin('lunches as l', 'l.date', '=', 'a.date')
                 ->leftJoin('discounts_lunches as dl', 'dl.lunch_id', '=', 'l.id')
+                ->leftJoin('areas as ar', 'ar.id', '=', 'e.area_id')
                 ->where('a.date', '=', $date->toDateString())
                 ->get();
 
             return response()->json(['registers' => $registers], 200);
-        }catch(\Exception $e){
+        }
+        catch(\Exception $e){
             return response()->json([ 'message' => 'Ocurrio un problema, no podemos atender su solicitud' ], 500);
         }
 

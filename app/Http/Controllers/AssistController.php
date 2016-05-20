@@ -8,6 +8,7 @@ use Dashboard\Models\Planilla\DiscountLunch;
 use Dashboard\Models\Planilla\Employee;
 use Dashboard\Models\Planilla\Extra;
 use Dashboard\Models\Planilla\Lunch;
+use DoctrineTest\InstantiatorTestAsset\ExceptionAsset;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Dashboard\Http\Requests;
@@ -353,7 +354,7 @@ class AssistController extends Controller
                 $asist->discount()->save($descuento);
 
                 $asist = Assist::find($id);
-                $asist->monto=($laboral+$asistencia)*round($minuto,2);
+                $asist->amount=($laboral+$asistencia)*round($minuto,2);
                 $asist->save();
             }
 
@@ -366,13 +367,13 @@ class AssistController extends Controller
                 $asist->extra()->save($extra);
 
                 $asist = Assist::find($id);
-                $asist->monto=($laboral-$asistencia)*round($minuto,2);
+                $asist->amount=($laboral-$asistencia)*round($minuto,2);
                 $asist->save();
 
             }
         }elseif($asistencia==0){
             $asist = Assist::find($id);
-            $asist->monto=($laboral-$asistencia)*round($minuto,2);
+            $asist->amount=($laboral-$asistencia)*round($minuto,2);
             $asist->save();
         }
 

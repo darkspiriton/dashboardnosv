@@ -34,7 +34,7 @@
                     <a ui-sref="Employees"><i class="md md-security"></i> Administrar empleados</a>
                 </li>
                 <li id="payrollEntry">
-                    <a ui-sref="PayrollEntry"><i class="md md-security"></i> Registro de entradas </a>
+                    <a ui-sref="PayrollEntry"><i class="md md-security"></i> Registro de asistencias </a>
                 </li>
                 <li id="reportePlanilla">
                     <a ui-sref="ReportePlanilla"><i class="md md-security"></i> Reporte de planilla entre fechas </a>

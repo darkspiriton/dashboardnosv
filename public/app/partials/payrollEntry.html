@@ -1,9 +1,15 @@
 <div class="card" >
     <div class="card-header bgm-blue">
-        <h2>Gestion regsitros de entrada</h2>
+        <h2>Gestion regsitros de asistencias</h2>
         <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="list()"
                 data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
                 title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
+    </div>
+    <div class="card-header bgm-blue">
+        <div ng-form="dates" class="row report-date">
+            <input type="date" class="btn btn-default m-l-20 col-sm-2" ng-model="dateView" required>
+            <input type="button" ng-disabled="!dates.$valid" ng-click="view()" class="btn bgm-indigo m-l-20 col-sm-1" value="Ver fecha">
+        </div>
     </div>
 
     <div class="card-body card-padding table-responsive">
@@ -44,7 +50,7 @@
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-list"></i></span>
                         <div class="fg-line select">
-                            <select class="form-control" ng-options="employee.id as employee.name for employee in employees" ng-model="entry.employee" required>
+                            <select class="form-control" ng-options="employee.id as employee.name for employee in employees" ng-model="entry.employee_id" required>
                                 <option value="" disabled="disabled" select="true">Seleccione</option>
                             </select>
                         </div>
@@ -58,7 +64,7 @@
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-access-time"></i></span>
                         <div class="fg-line">
-                            <input ng-model="entry.ini" type="time" class="form-control" required>
+                            <input ng-model="entry.start_time" type="time" class="form-control" required>
                         </div>
                     </div>
                 </div>
@@ -68,7 +74,7 @@
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-access-time"></i></span>
                         <div class="fg-line">
-                            <input ng-model="entry.fin" type="time" class="form-control" required>
+                            <input ng-model="entry.end_time" type="time" class="form-control" required>
                         </div>
                     </div>
                 </div>
@@ -80,7 +86,7 @@
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-access-time"></i></span>
                         <div class="fg-line">
-                            <input ng-model="entry.ini" type="time" class="form-control" required>
+                            <input ng-model="entry.start_time_launch" type="time" class="form-control" required>
                         </div>
                     </div>
                 </div>
@@ -90,7 +96,7 @@
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-access-time"></i></span>
                         <div class="fg-line">
-                            <input ng-model="entry.fin" type="time" class="form-control" required>
+                            <input ng-model="entry.end_time_launch" type="time" class="form-control" required>
                         </div>
                     </div>
                 </div>
@@ -102,7 +108,7 @@
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-check-box-outline-blank"></i></span>
                         <label class="checkbox checkbox-inline m-l-20 m-t-10">
-                            <input ng-model="entry.reconsile" ng-true-value="1" ng-false-value="0" type="checkbox">
+                            <input ng-model="entry.conciliate" ng-true-value="1" ng-false-value="0" type="checkbox">
                             <i class="input-helper"></i>
                         </label>
                     </div>
@@ -123,7 +129,6 @@
                 <div class="col-sm-offset-2 col-sm-10">
                     <button ng-disabled="!formDefault.$valid || formSubmit" ng-click="submit()" type="button" class="btn btn-primary btn-sm waves-effect">Guardar</button>
                     <a ng-click="cancel()" class="btn btn-danger btn-sm waves-effect">Cancelar</a>
-                    <a ng-click="cancel2()" class="btn btn-danger btn-sm waves-effect">Scope</a>
                 </div>
             </div>
         </div>

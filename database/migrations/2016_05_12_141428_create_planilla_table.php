@@ -24,12 +24,14 @@ class CreatePlanillaTable extends Migration
 
         Schema::create('employees', function(Blueprint $table){
             $table->increments('id');
+            $table->integer('user_id')->unsigned();
             $table->integer('area_id')->unsigned();
             $table->string('name');
             $table->char('sex');
             $table->float('salary');
             $table->integer('break');
             $table->foreign('area_id')->references('id')->on('areas');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
 
@@ -82,6 +84,7 @@ class CreatePlanillaTable extends Migration
             $table->time('start_time');
             $table->time('end_time');
             $table->date('date');
+            $table->float('amount');
             $table->boolean('conciliate');
             $table->boolean('justification');
             $table->foreign('employee_id')->references('id')->on('employees');

@@ -22,6 +22,7 @@ class AuthTokenController extends Controller
     {
         $payload = [
             'sub' => $user->id,
+            'role'=> $user->role->abrev,
             'iat' => time(),
             'exp' => time() + (2 * 7 * 24 * 60 * 60)
         ];
@@ -55,8 +56,7 @@ class AuthTokenController extends Controller
             return response()->json([
                                     'token' => $token,
                                     'role'=> $rol,
-                                    'name' => $full_name,
-                                    'routes' => Config::get('angularJSRoutes.'.$rol)
+                                    'name' => $full_name
                                     ]);
         } else {
             return response()->json(['message' => 'El usuario y/o contraseña no son validos'], 401);
@@ -100,6 +100,8 @@ class AuthTokenController extends Controller
                 return view('vendedor');
             } else if ($user->role->abrev == 'JVE') {
                 return view('auxCoordinador');
+            } else if ($user->role->abrev == 'EMP') {
+                return view('empleado');
             }
         }else{
             return view('logout');

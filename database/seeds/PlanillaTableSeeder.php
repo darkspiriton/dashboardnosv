@@ -36,6 +36,7 @@ class PlanillaTableSeeder extends Seeder
             $sueldo=$faker->randomFloat( $nbMaxDecimals = 0, $min= 1000, $max=2000);
 
             $id_Employee = DB::table('employees')->insertGetId(array(
+                'user_id' => 1,
                 'area_id' => $faker->randomFloat( $nbMaxDecimals = 0, $min= 1, $max=4),
                 'name' => $faker->name,
                 'sex' => $faker->randomElement($array = array ('M','F')),
@@ -61,7 +62,7 @@ class PlanillaTableSeeder extends Seeder
                 $id_lunches = DB::table('lunches')->insertGetId(array(
                     'employee_id' => $id_Employee,
                     'start_time' => '123000',
-                    'end_time' => '01'.$ini.'00',
+                    'end_time' => '13'.$ini.'00',
                     'date' => '2016-05-' . $x
                 ));
                 if ((integer)$ini > 15)$this->discounts_lunches($id_lunches, $ini);
@@ -90,6 +91,7 @@ class PlanillaTableSeeder extends Seeder
                     'employee_id' => $id_Employee,
                     'start_time' => '0'.$ini.'00',
                     'end_time' => $end,
+                    'amount' => 40.5,
                     'conciliate' =>  $conciliate, //$faker->boolean(),
                     'justification' => 0, //$faker->boolean(),
                     'date' => '2016-05-'.$x
@@ -118,10 +120,10 @@ class PlanillaTableSeeder extends Seeder
     }
 
     private function discounts_lunches($id, $ini){
-        $minutes = ((integer)$ini - 20) * -1;
+        $minutes = ((integer)$ini - 15);
         $amount = $minutes * 0.08966587;
         DB::table('discounts_lunches')->insertGetId(array(
-            'lunches_id' => $id,
+            'lunch_id' => $id,
             'amount' => $amount,
             'minutes' => $minutes
         ));

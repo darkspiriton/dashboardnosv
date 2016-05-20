@@ -13,6 +13,7 @@ angular.module('App')
 
         $scope.tableConfig 	= 	{
             columns :	[
+                {"sTitle": "Area", "bSortable" : true},
                 {"sTitle": "Nombre de empleado", "bSortable" : true},
                 {"sTitle": "Ingreso", "bSortable" : false},
                 {"sTitle": "Break", "bSortable" : false},
@@ -26,7 +27,7 @@ angular.module('App')
                 ]
                 ]
             ],*/
-            data  	: 	['name','start','break','end_break','end'/*,'actions'*/],
+            data  	: 	['area','name','start','break','end_break','end'/*,'actions'*/],
         };
 
         //var alertConfig = {

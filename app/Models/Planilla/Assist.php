@@ -16,6 +16,6 @@ class Assist extends Model
     }
 
     public function employe(){
-        return $this->belongsTo(Employe::class);
+        return $this->belongsTo(Employee::class);
     }   
 }

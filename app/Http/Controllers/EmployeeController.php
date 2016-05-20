@@ -186,4 +186,42 @@ class EmployeeController extends Controller
     {
         //
     }
+
+    public function minuto(Request $request){
+        $rules = [
+            'employee_id' => 'required',
+            'date' => 'required|date',
+        ];
+
+        $validator = \Validator::make($request->all(), $rules);
+        if($validator->fails()){
+            return response()->json(['message'=>'No posee todo los campos necesarios para realizar consulta'],401);
+        }
+
+        try{
+
+            $date = Carbon::Parse($request->input('date'));
+            $date->setTimezone('-5');
+
+
+            $fin=$date->copy()->endOfMonth();
+            $ini=$date->copy()->startOfMonth();
+
+
+            $employe = Employee::with(['days'])
+                ->where('id','=',$request->input('employee_id'))
+                ->get();
+
+            $arrays=$employe->toArray()[0]["days"];
+
+            $assist = new AssistController();
+            $minuto=round($assist->calculo($ini,$fin,$arrays,$employe),4);
+            $hora=$minuto*60;
+
+            return response()->json(["costoMinuto" => $minuto,"costoHora" => $hora ],200);
+
+        }catch(Exception $e){
+            return response()->json(['message' => 'Ocurrio un error al agregar la asistencia'],500);
+        }
+    }
 }

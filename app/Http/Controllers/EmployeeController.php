@@ -3,7 +3,9 @@
 namespace Dashboard\Http\Controllers;
 
 use Carbon\Carbon;
+use Dashboard\Models\Planilla\Area;
 use Dashboard\Models\Planilla\Employee;
+use Dashboard\Role;
 use Dashboard\User;
 use Illuminate\Http\Request;
 
@@ -187,6 +189,10 @@ class EmployeeController extends Controller
         //
     }
 
+    public function getRole(){
+        return response()->json(['areas' => Area::all()]);
+    }
+
     public function minuto(Request $request){
         $rules = [
             'employee_id' => 'required',
@@ -218,9 +224,9 @@ class EmployeeController extends Controller
             $minuto=round($assist->calculo($ini,$fin,$arrays,$employe),4);
             $hora=$minuto*60;
 
-            return response()->json(["costoMinuto" => $minuto,"costoHora" => $hora ],200);
+            return response()->json(["costoMinuto" => $minuto, "costoHora" => $hora ],200);
 
-        }catch(Exception $e){
+        }catch(\Exception $e){
             return response()->json(['message' => 'Ocurrio un error al agregar la asistencia'],500);
         }
     }

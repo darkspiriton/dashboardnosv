@@ -61,6 +61,21 @@ angular.module('App')
             domingo: false
         };
 
+        $scope.months = [
+            {id: '01', name: 'Enero'},
+            {id: '02', name: 'Febrero'},
+            {id: '03', name: 'Marzo'},
+            {id: '04', name: 'Abril'},
+            {id: '05', name: 'Mayo'},
+            {id: '06', name: 'Junio'},
+            {id: '07', name: 'Julio'},
+            {id: '08', name: 'Agosto'},
+            {id: '09', name: 'Septiembre'},
+            {id: '10', name: 'Octubre'},
+            {id: '11', name: 'Nomviembre'},
+            {id: '12', name: 'Diciembre'}
+        ];
+
         $scope.list = function() {
             petition.get('api/employee')
                 .then(function(data){
@@ -74,12 +89,41 @@ angular.module('App')
                 });
         };
 
+        $scope.listAreas = function() {
+            petition.get('api/employee/get/roles')
+                .then(function(data){
+                    $scope.areas = data.areas;
+                }, function(error){
+                    console.log(error);
+                    toastr.error('Uyuyuy dice: ' + error.data.message);
+                });
+        };
+
         $scope.view = function( ind ){
             var id = $scope.tableData[ind].id;
             petition.get('api/employee/' + id)
                 .then(function(data){
                     $scope.employeeDetail = data.employee;
+                    $scope.month = null;
+                    $scope.CostsView();
                     util.modal();
+                }, function(error){
+                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                });
+        };
+
+        $scope.costFromMonth = function (month) {
+            var date = new Date();
+            var date2 = new Date(date.getFullYear() + '-'+month+'-15');
+            $scope.CostsView(date2);
+        };
+
+        $scope.CostsView = function(date){
+            date || (date = new Date());
+            petition.get('api/employee/get/indicator', {params: {employee_id: $scope.employeeDetail.id, date:date}})
+                .then(function(data){
+                    $scope.costoxmin = data.costoMinuto;
+                    $scope.costoxhor = data.costoHora;
                 }, function(error){
                     toastr.error('Ups ocurrio un problema: ' + error.data.message);
                 });
@@ -269,13 +313,7 @@ angular.module('App')
         angular.element(document).ready(function(){
             $scope.empleado = angular.copy($scope.empleadoClear);
             $scope.days = angular.copy($scope.daysClear);
-            $scope.areas = [
-                {id : 1 , name : 'Administración'},
-                {id : 2 , name : 'Sistemas'},
-                {id : 3 , name : 'Publicidad'},
-                {id : 4 , name : 'Ventas'}
-            ];
-
             $scope.list();
+            $scope.listAreas();
         });
     });

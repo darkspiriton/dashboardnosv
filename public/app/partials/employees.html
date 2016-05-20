@@ -268,6 +268,19 @@
                         <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label f-700">Sueldo: </label>
                         <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="employeeDetail.salary"></label>
                     </div>
+                    <div class="form-group">
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label f-700">Costos x mes: </label>
+                        <select class="col-xs-8 col-sm-2 m-t-10" ng-change="costFromMonth(month)" ng-options="month.id as month.name for month in months" ng-model="month" required>>
+                            <option value="" disabled="disabled" selected="selected">Seleccione</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label f-700">Costo x min: </label>
+                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="'S/ ' + costoxmin"></label>
+
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label f-700">Costo x hora: </label>
+                        <label class="col-xs-6 col-sm-3 control-label" style="text-align: left" ng-bind="'S/ ' + costoxhor"></label>
+                    </div>
                 </form>
             </div>
             <div class="modal-footer">

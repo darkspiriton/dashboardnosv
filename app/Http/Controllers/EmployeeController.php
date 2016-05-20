@@ -33,7 +33,7 @@ class EmployeeController extends Controller
     {
         $rules = [
             'area_id'   =>  'required|between:1,4',
-            'name'      =>  'required',
+            'name'      =>  'required|alpha',
             'sex'       =>  'required|in:M,F',
             'salary'    =>  'required|integer',
             'break'     =>  'required',

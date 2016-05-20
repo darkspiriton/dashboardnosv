@@ -14,22 +14,23 @@ angular.module('App')
         $scope.tableConfig 	= 	{
             columns :	[
                 {"sTitle": "Fecha", "bSortable" : true},
-                {"sTitle": "ingreso", "bSortable" : false},
-                {"sTitle": "break", "bSortable" : false},
-                {"sTitle": "F. break", "bSortable" : false},
-                {"sTitle": "salida", "bSortable" : false},
-                {"sTitle": "T. min", "bSortable" : false, "sWidth": "80px"},
-                {"sTitle": "T. monto", "bSortable" : false, "sWidth": "80px"},
-                {"sTitle": "B. min", "bSortable" : false, "sWidth": "80px"},
-                {"sTitle": "B. monto", "bSortable" : false, "sWidth": "80px"}
+                {"sTitle": "ingreso", "bSortable" : false, "sWidth": "80px"},
+                {"sTitle": "break", "bSortable" : false, "sWidth": "80px"},
+                {"sTitle": "F. break", "bSortable" : false, "sWidth": "80px"},
+                {"sTitle": "Salida", "bSortable" : false, "sWidth": "80px"},
+                {"sTitle": "M. Día", "bSortable" : false, "sWidth": "60px"},
+                {"sTitle": "T. min", "bSortable" : false, "sWidth": "60px"},
+                {"sTitle": "T. monto", "bSortable" : false, "sWidth": "60px"},
+                {"sTitle": "B. min", "bSortable" : false, "sWidth": "60px"},
+                {"sTitle": "B. monto", "bSortable" : false, "sWidth": "60px"}
             ],
-            data  	: 	['date','start','break','end_break','end','delay_min','delay_amount','lunch_min','lunch_amount']
+            data  	: 	['date','start','break','end_break','end','amount','delay_min','delay_amount','lunch_min','lunch_amount']
         };
 
 
         $scope.list = function() {
             $scope.updateList = true;
-            petition.get('api/payroll/employee/assists',{params: {year:2016, month:5}})
+            petition.get('api/payroll/employee/assists',{params: {year:2016, month:4}})
                 .then(function(data){
                     $scope.discounts = data.discounts;
                     $scope.tableData = data.registers;

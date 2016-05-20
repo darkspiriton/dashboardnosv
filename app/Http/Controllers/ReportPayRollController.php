@@ -12,6 +12,11 @@ class ReportPayRollController extends Controller
 {
     public function get_assists_for_month(Request $request){
 
+        /*
+         *
+         * Terminos de busqueda por mes y año
+         * Por defecto se devolvera registro del mes actual
+         *
         $rules = [
             'year'  =>  'required|integer|between:2015,2035',
             'month' =>  'required|integer|between:1,12'
@@ -21,16 +26,17 @@ class ReportPayRollController extends Controller
 
         if($validator->fails())
             return response()->json(['message' => 'Terminos de busqueda erroneos'], 404);
+        */
 
         try {
-            $date = Carbon::createFromDate($request->input('year'), $request->input('month'), 1, -5);
-
+//          $date = Carbon::createFromDate($request->input('year'), $request->input('month'), 1, -5);
+            $date = Carbon::now();
             $start = $date->copy()->firstOfMonth();
             $end = $date->copy()->lastOfMonth();
             $user = $request->input('user')['sub'];
             $employee = Employee::where('user_id','=',$user)->first();
 
-            $registers = DB::table('employees as e')->select(array('a.date',
+            $registers = DB::table('employees as e')->select(array('a.date','a.amount',
                 'a.start_time as start', 'l.start_time as break', 'l.end_time as end_break', 'a.end_time as end',
                 'da.minutes as delay_min', 'da.amount as delay_amount', 'dl.minutes as lunch_min', 'dl.amount as lunch_amount'))
                 ->leftJoin('assists as a', 'a.employee_id', '=', 'e.id')
@@ -43,9 +49,10 @@ class ReportPayRollController extends Controller
                 ->get();
 
             $discounts = Array();
-            $discounts['delay_min'] = $discounts['delay_amount'] = $discounts['lunch_min'] = $discounts['lunch_amount'] = 0;
+            $discounts['delay_min'] = $discounts['delay_amount'] = $discounts['lunch_min'] = $discounts['lunch_amount'] =  $discounts['day_amount'] = 0;
 
             foreach($registers as $row){
+                $discounts['day_amount']    += $row->amount;
                 $discounts['delay_min']     += $row->delay_min;
                 $discounts['delay_amount']  += $row->delay_amount;
                 $discounts['lunch_min']     += $row->lunch_min;

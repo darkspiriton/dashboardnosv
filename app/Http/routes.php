@@ -193,6 +193,7 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
     Route::group(['prefix'=>'employee/'],function(){
         Route::get('/get/area','EmployeeController@area');
         Route::get('/get/day','EmployeeController@day');
+        Route::get('/get/indicator','EmployeeController@minuto');
     });
 });
 

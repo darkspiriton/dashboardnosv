@@ -86,74 +86,8 @@ class AssistController extends Controller
                     //Cantidad de dias al mes laborables para calculo de costo x minuto
                     $fin=$date->copy()->endOfMonth();
                     $ini=$date->copy()->startOfMonth();
-                    $domingo=0;$lunes=0;$martes=0;$miercoles=0;$jueves=0;$viernes=0;$sabado=0;
-                    while($ini->diffInDays($fin) >= 0){
-                        $j=$ini->dayOfWeek;
-                        switch($j){
-                            case 0:
-                                $domingo++;
-                                break;
-                            case 1:
-                                $lunes++;
-                                break;
-                            case 2:
-                                $martes++;
-                                break;
-                            case 3:
-                                $miercoles++;
-                                break;
-                            case 4:
-                                $jueves++;
-                                break;
-                            case 5:
-                                $viernes++;
-                                break;
-                            case 6:
-                                $sabado++;
-                                break;
-                        }
-                        if ($ini->diffInDays($fin)  == 0 )break;
-                        $ini=$ini->copy()->addDay(1);
-                    }
 
-                    //Se cuenta los dias que labora y cuandos minutos diarios
-                    $cantD=0;$cantL=0;$cantM=0;$cantMi=0;$cantJ=0;$cantV=0;$cantS=0;
-                    for ($i=0;$i<count($arrays);$i++){
-                        $startt=Carbon::Parse($arrays[$i]["pivot"]["start_time"]);
-                        $endt=Carbon::Parse($arrays[$i]["pivot"]["end_time"]);
-
-                        $cant=$startt->diffInMinutes($endt)-$employe->toArray()[0]['break'];
-
-                        switch($arrays[$i]['id']){
-                            case 0:
-                                $cantD=$cant*$domingo;
-                                break;
-                            case 1:
-                                $cantL=$cant*$lunes;
-                                break;
-                            case 2:
-                                $cantM=$cant*$martes;
-                                break;
-                            case 3:
-                                $cantMi=$cant*$miercoles;
-                                break;
-                            case 4:
-                                $cantJ=$cant*$jueves;
-                                break;
-                            case 5:
-                                $cantV=$cant*$viernes;
-                                break;
-                            case 6:
-                                $cantS=$cant*$sabado;
-                                break;
-                        }
-                    }
-
-                    //Calculo de costo por minuto mensual
-                    $cantT=$cantD+$cantL+$cantM+$cantMi+$cantJ+$cantV+$cantS;
-                    $minuto=$sueldo/$cantT;
-
-//                    $date->dayOfWeek;
+                    $minuto=$this->calculo($ini,$fin,$arrays,$employe);
 
                     //Busco al usuario para determinar la hora de trabajo de ese dia
                     $employe = Employee::with(['days' => function($query) use($date)
@@ -276,32 +210,56 @@ class AssistController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request,$id)
     {
-        $assits=DB::table('employees as e')
-           ->select('e.id as idE','e.name','e.salary','e.break',DB::raw('sum(d.amount) as descuento'),DB::raw('sum(d.minutes) as desMinutos'),DB::raw('sum(ex.amount) as extra'),DB::raw('sum(ex.minutes) as extraMinutos'))
-            ->join('assists as a','e.id','=','a.employee_id')
-            ->join('discounts_assists as d','a.id','=','d.assist_id')
-            ->join('extras as ex','a.id','=','ex.assist_id')
-            ->where('e.id','=',$id)
-            ->where('a.date','>=','2016-05-01')
-            ->where('a.date','<=','2016-05-31')
-            ->groupby('e.id')
-            ->get();
+        $rules = [
+            'employee_id' => 'required',
+            'date' => 'required|date',
+        ];
 
-//        $assits=Employee::with('assists',['assists.discount' => function($query){
-////            $query->where('date','>=','2016-05-01');
-//        }],'assists.extra')
-//            ->where('id','=',$id)
-//            ->where('assists.date','=','2016-05-01')->get();
+        try {
+            $validator = \Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return response()->json(['message' => 'No posee todo los campos necesarios para crear un empleado'],401);
+            }
+            $date = Carbon::Parse($request->input('date'));
+            $date->setTimezone('-5');
+            dd($date->toDateString());
 
-//        $assits=Employee::with('assists.discount','assists.extra')
-//            ->where('id','=',$id)
-//            ->where('date','=','2016-05-01')
+            $employee= Employee::with(['assists' => function($query) use ($date){
+                $query->where('date','=',$date);
+            }],'assists.extra','assists.discount','lunche');
+
+            dd($employee);
+
+        } catch (\Exception $e) {
+            return \Response::json(['message' => 'Ocurrio un error al agregar producto'], 500);
+        }
+
+//        $assits=DB::table('employees as e')
+//           ->select('e.id as idE','e.name','e.salary','e.break',DB::raw('sum(d.amount) as descuento'),DB::raw('sum(d.minutes) as desMinutos'),DB::raw('sum(ex.amount) as extra'),DB::raw('sum(ex.minutes) as extraMinutos'))
+//            ->join('assists as a','e.id','=','a.employee_id')
+//            ->join('discounts_assists as d','a.id','=','d.assist_id')
+//            ->join('extras as ex','a.id','=','ex.assist_id')
+//            ->where('e.id','=',$id)
+//            ->where('a.date','>=','2016-05-01')
+//            ->where('a.date','<=','2016-05-31')
+//            ->groupby('e.id')
 //            ->get();
-
-//       dd($assits);
-        return response()->json(['message'=>$assits],200);
+//
+////        $assits=Employee::with('assists',['assists.discount' => function($query){
+//////            $query->where('date','>=','2016-05-01');
+////        }],'assists.extra')
+////            ->where('id','=',$id)
+////            ->where('assists.date','=','2016-05-01')->get();
+//
+////        $assits=Employee::with('assists.discount','assists.extra')
+////            ->where('id','=',$id)
+////            ->where('date','=','2016-05-01')
+////            ->get();
+//
+////       dd($assits);
+//        return response()->json(['message'=>$assits],200);
 
     }
 
@@ -315,7 +273,163 @@ class AssistController extends Controller
      */
     public function update(Request $request, $id)
     {
-        
+        $rules = [
+            'employee_id' => 'required',
+            'start_time' => 'date',
+            'end_time' => 'date',
+            'date' => 'required|date',
+            'start_time_launch' => 'date',
+            'end_time_launch' => 'date',
+            'conciliate' => 'required',
+            'justification' => 'required',
+        ];
+
+        try {
+            $validator = \Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                return response()->json(['message' => 'No posee todo los campos necesarios para crear una asistencia'], 401);
+            }
+
+            $emp= Employee::find($request->input('employee_id'));
+
+            $date = Carbon::Parse($request->input('date'));
+            $date->setTimezone('-5');
+
+
+            $existe=DB::table('assists')
+                ->where('employee_id','=',$request->input('employee_id'))
+                ->where('date','=',$date->toDateString())->exists();
+
+            if($emp != null){
+                if($existe == true){
+                    $employe = Employee::with(['days'])
+                        ->where('id','=',$request->input('employee_id'))
+                        ->get();
+
+                    $arrays=$employe->toArray()[0]["days"];
+                    $sueldo=$employe->toArray()[0]["salary"];
+
+                    $conciliate=$request->input('conciliate');
+                    $justification=$request->input('justification');
+
+                    //Cantidad de dias al mes laborables para calculo de costo x minuto
+                    $fin=$date->copy()->endOfMonth();
+                    $ini=$date->copy()->startOfMonth();
+
+                    $minuto=$this->calculo($ini,$fin,$arrays,$employe);
+
+                    //Busco al usuario para determinar la hora de trabajo de ese dia
+                    $employe = Employee::with(['days' => function($query) use($date)
+                    {
+                        $query->where('day_id','=', $date->dayOfWeek);
+
+                    }])->where('id','=',$request->input('employee_id'))
+                        ->get();
+
+                    try {
+                        $employe->toArray()[0]["days"][0]["pivot"]["start_time"];
+                        $almuerzo = $employe->toArray()[0]['break'];
+                        $start = Carbon::Parse($employe->toArray()[0]["days"][0]["pivot"]["start_time"]);
+                        $end = Carbon::Parse($employe->toArray()[0]["days"][0]["pivot"]["end_time"]);
+                    } catch(Exception $e){
+                        return response()->json(['message' => 'El empleado no labora este dia, no se puede guardar la asistencia'],404);
+                    }
+
+
+                    //Horas laborables al mes de ese empleado
+                    $laboral=$start->diffInMinutes($end)-$almuerzo;
+
+                    $employeId=$employe->toArray()[0]['id'];
+                    //Funcion que procese la asistencia y realice el calculo si fuera necesario.
+                    $assist = new Assist();
+                    $assist->employee_id=$employeId;
+                    $assist->start_time="10:00:00";
+                    $assist->end_time="20:00:00";
+                    $assist->date=$date;
+                    $assist->conciliate=$request->input('conciliate');
+                    $assist->justification=$request->input('justification');
+                    $assist->save();
+
+                    $id=$assist->id;
+
+                    if($request->input('start_time')!=null){
+                        $start_day = Carbon::Parse($request->input('start_time'));
+                        $start_day->setTimezone('-5');
+                        if($request->input('end_time')!=null){
+                            $end_day = Carbon::Parse($request->input('end_time'));
+                            $end_day->setTimezone('-5');
+                            if($request->input('end_time_launch')!=null){
+                                $end_time_launch= Carbon::Parse($request->input('end_time_launch'));
+                                $end_time_launch->setTimezone('-5');
+                                if($request->input('start_time_launch')!=null){
+                                    $start_time_launch = Carbon::Parse($request->input('start_time_launch'));
+                                    $start_time_launch->setTimezone('-5');
+                                    //Calculo de horas 1234
+                                    return $this->asistencia($start_day,$end_day,$start_time_launch,$end_time_launch,$laboral,$almuerzo,$minuto,$conciliate,$justification,$id,$date,$employeId);
+                                }
+                            }
+
+                        }elseif($request->input('end_time_launch')!=null) {
+                            $end_time_launch = Carbon::Parse($request->input('end_time_launch'));
+                            $end_time_launch->setTimezone('-5');
+                            if($request->input('start_time_launch')!=null){
+                                $start_time_launch = Carbon::Parse($request->input('start_time_launch'));
+                                $start_time_launch->setTimezone('-5');
+                                //Calculo de horas 123
+                                return $this->asistencia($start_day,$end_time_launch,$start_time_launch,$end_time_launch,$laboral,$almuerzo,$minuto,$conciliate,$justification,$id,$date,$employeId);
+                            }
+
+                        }elseif($request->input('start_time_launch')!=null){
+                            $start_time_launch = Carbon::Parse($request->input('start_time_launch'));
+                            $start_time_launch->setTimezone('-5');
+                            //Calculo de horas 12
+                            return $this->asistencia($start_day,$start_time_launch,$start_time_launch,$start_time_launch,$laboral,$almuerzo,$minuto,$conciliate,$justification,$id,$date,$employeId);
+                        }
+
+                    }elseif($request->input('start_time_launch')!=null){
+                        $start_time_launch = Carbon::Parse($request->input('start_time_launch'));
+                        $start_time_launch->setTimezone('-5');
+                        if($request->input('end_time')!=null){
+                            $end_day = Carbon::Parse($request->input('end_time'));
+                            $end_day->setTimezone('-5');
+                            if($request->input('end_time_launch')!=null){
+                                $end_time_launch = Carbon::Parse($request->input('end_time_launch'));
+                                $end_time_launch->setTimezone('-5');
+                                //Calculo de horas 234
+                                return $this->asistencia($start_time_launch,$end_day,$start_time_launch,$end_time_launch,$laboral,$almuerzo,$minuto,$conciliate,$justification,$id,$date,$employeId);
+                            }
+
+                        }elseif($request->input('end_time_launch')!= null){
+                            $end_time_launch = Carbon::Parse($request->input('end_time_launch'));
+                            $end_time_launch->setTimezone('-5');
+                            //Calculo de horas 23
+                            return $this->asistencia($start_time_launch,$end_time_launch,$start_time_launch,$end_time_launch,$laboral,$almuerzo,$minuto,$conciliate,$justification,$id,$date,$employeId);
+                        }
+
+                    }elseif($request->input('end_time_launch')!=null){
+                        $end_time_launch = Carbon::Parse($request->input('end_time_launch'));
+                        $end_time_launch->setTimezone('-5');
+                        if($request->input('end_time')!=null){
+                            $end_day = Carbon::Parse($request->input('end_time'));
+                            $end_day->setTimezone('-5');
+                            //Calculo de horas 34
+                            return $this->asistencia($end_time_launch,$end_day,$end_time_launch,$end_time_launch,$laboral,$almuerzo,$minuto,$conciliate,$justification,$id,$date,$employeId);
+                        }
+                    }
+                }else{
+                    return response()->json(["message" => "Ya se registro una asistencia para ese dia"],404);
+                }
+
+
+
+            }else{
+                return response()->json(["message" => "El empleado no existe"],404);
+            }
+
+
+        }catch(Exception $e){
+            return response()->json(['message' => 'Ocurrio un error al agregar la asistencia'],500);
+        }
     }
 
     /**
@@ -389,5 +503,79 @@ class AssistController extends Controller
 
         return response()->json(['message' => 'Se registro la asistencia'],200);
     }
+
+    public function calculo($ini,$fin,$arrays,$employe){
+        $sueldo=$employe->toArray()[0]["salary"];
+        $domingo=0;$lunes=0;$martes=0;$miercoles=0;$jueves=0;$viernes=0;$sabado=0;
+
+        while($ini->diffInDays($fin) >= 0){
+            $j=$ini->dayOfWeek;
+            switch($j){
+                case 0:
+                    $domingo++;
+                    break;
+                case 1:
+                    $lunes++;
+                    break;
+                case 2:
+                    $martes++;
+                    break;
+                case 3:
+                    $miercoles++;
+                    break;
+                case 4:
+                    $jueves++;
+                    break;
+                case 5:
+                    $viernes++;
+                    break;
+                case 6:
+                    $sabado++;
+                    break;
+            }
+            if ($ini->diffInDays($fin)  == 0 )break;
+            $ini=$ini->copy()->addDay(1);
+        }
+
+        //Se cuenta los dias que labora y cuandos minutos diarios
+        $cantD=0;$cantL=0;$cantM=0;$cantMi=0;$cantJ=0;$cantV=0;$cantS=0;
+        for ($i=0;$i<count($arrays);$i++){
+            $startt=Carbon::Parse($arrays[$i]["pivot"]["start_time"]);
+            $endt=Carbon::Parse($arrays[$i]["pivot"]["end_time"]);
+
+            $cant=$startt->diffInMinutes($endt)-$employe->toArray()[0]['break'];
+
+            switch($arrays[$i]['id']){
+                case 0:
+                    $cantD=$cant*$domingo;
+                    break;
+                case 1:
+                    $cantL=$cant*$lunes;
+                    break;
+                case 2:
+                    $cantM=$cant*$martes;
+                    break;
+                case 3:
+                    $cantMi=$cant*$miercoles;
+                    break;
+                case 4:
+                    $cantJ=$cant*$jueves;
+                    break;
+                case 5:
+                    $cantV=$cant*$viernes;
+                    break;
+                case 6:
+                    $cantS=$cant*$sabado;
+                    break;
+            }
+        }
+
+        //Calculo de costo por minuto mensual
+        $cantT=$cantD+$cantL+$cantM+$cantMi+$cantJ+$cantV+$cantS;
+        $minuto=$sueldo/$cantT;
+
+        return $minuto;
+    }
+
 
 }

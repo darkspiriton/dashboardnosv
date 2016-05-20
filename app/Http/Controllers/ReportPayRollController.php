@@ -97,4 +97,8 @@ class ReportPayRollController extends Controller
         }
 
     }
+
+    public function indicator(){
+
+    }
 }

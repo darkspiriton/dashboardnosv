@@ -224,9 +224,9 @@ class EmployeeController extends Controller
             $minuto=round($assist->calculo($ini,$fin,$arrays,$employe),4);
             $hora=$minuto*60;
 
-            return response()->json(["costoMinuto" => $minuto,"costoHora" => $hora ],200);
+            return response()->json(["costoMinuto" => $minuto, "costoHora" => $hora ],200);
 
-        }catch(Exception $e){
+        }catch(\Exception $e){
             return response()->json(['message' => 'Ocurrio un error al agregar la asistencia'],500);
         }
     }

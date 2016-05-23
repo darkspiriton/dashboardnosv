@@ -196,14 +196,15 @@ class AuxProductController extends Controller
     public function destroy($id)
     {
         $auxproduct= Product::find($id);
-        if($auxproduct != null ){
-            $resultado=$auxproduct->movements;
+        if($auxproduct->exists){
+            $resultado = $auxproduct->movements;
 
-            if($resultado->count()==0){
+            if($resultado->count() == 0){
+                $auxproduct->types()->detach();
                 $auxproduct->delete();
-                return response()->json(['message'=>'El producto correctamente']);
+                return response()->json(['message'=>'Se elimino el producto correctamente'],200);
             }else{
-                return response()->json(['message'=>'No se puede eliminar este producto porque posee movimiento asociados']);
+                return response()->json(['message'=>'No se puede eliminar este producto porque posee movimiento asociados'], 404);
             }
         }else{
             return response()->json(['message'=>'No existe este producto']);
@@ -310,6 +311,13 @@ class AuxProductController extends Controller
             }
             $i=$codigo->cod;
         }
+        if (count($codigo) == 0){
+            $data[] = 1;
+        } else {
+            $data[] = $codigo->cod + 1;
+        }
+
+
         return response()->json(['codes' => $data],200);
     }
 

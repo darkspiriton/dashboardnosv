@@ -7,7 +7,7 @@ angular.module('App')
                 controller : 'productsCtrl'
             });
     })
-    .controller('productsCtrl', function($scope, $compile, $state, $log, util, petition, toformData, toastr){
+    .controller('productsCtrl', function($scope, $compile, $state, $log, util, petition, toastr){
 
         util.liPage('products');
 
@@ -19,9 +19,18 @@ angular.module('App')
                 {"sTitle": "Proveedor", "bSortable" : true},
                 {"sTitle": "Talla", "bSortable" : true},
                 {"sTitle": "Color" , "bSearchable": true},
-                {"sTitle": "Tipos" , "bSearchable": true}
+                {"sTitle": "Tipos" , "bSearchable": true},
+                {"sTitle": "Accion" , "bSearchable": true}
             ],
-            data  	: 	['date','cod','name','provider','size','color','types'],
+            actions	:  	[
+                ['actions',
+                    [
+                        ['eliminar', 'delete' ,'bgm-red'],
+                        ['editar', 'edit' ,'btn-primary']
+                    ]
+                ]
+            ],
+            data  	: 	['date','cod','name','provider','size','color','types','actions'],
             configStatus : 'status'
         };
 
@@ -76,6 +85,20 @@ angular.module('App')
                     toastr.error('Ups ocurrio un problema: ' + error.data.message);
                     $scope.updateList = false;
                 });
+        };
+
+
+        $scope.delete = function (i) {
+            alertConfig.title = "¿El producto se eliminara sin medio de retorno, esta seguro?";
+            sweetAlert(alertConfig, function () {
+                petition.delete('api/auxproduct/' + $scope.tableData[i].id)
+                    .then(function (data) {
+                        $scope.list();
+                        toastr.success(data.message);
+                    }, function (error) {
+                        toastr.error('Uyuyuy dice: ' + error.data.message);
+                    });
+            });
         };
 
         $scope.listProviders = function() {

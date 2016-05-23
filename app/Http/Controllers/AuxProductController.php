@@ -26,7 +26,7 @@ class AuxProductController extends Controller
     public function index()
     {
         $products = Product::with(['types' => function($query){
-            $query->selectRaw(DB::raw('GROUP_CONCAT(types.name SEPARATOR \' \') as types_names'));
+//            $query->selectRaw(DB::raw('GROUP_CONCAT(types.name SEPARATOR \' \') as types_names'));
         },'provider','size','color'])->get();
 
         return response()->json(['products' => $products],200);
@@ -256,7 +256,7 @@ class AuxProductController extends Controller
             $color = Color::where('name','=',$request->input('name'))->exists();
 
             if(!$color){
-
+                
                 $c = new Color();
                 $c->name = $request->input('name');
                 $c->save();
@@ -280,6 +280,8 @@ class AuxProductController extends Controller
             ->get();
         $i=0;
         $j=0;
+
+        $data= Array();
         foreach ($codigos as $codigo){
             if($codigo->cod - $i != 1){
                 if ($i !=0) {

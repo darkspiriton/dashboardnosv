@@ -135,7 +135,7 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
     //RUTAS EXPERIMENTALES
     //Rutas para API REST auxproducts
     Route::resource('auxproduct','AuxProductController',
-        ['only'=>['index','store','update','show']]);
+        ['only'=>['index','store','update','show','destroy']]);
 
     Route::resource('auxproduct/get/type','TypeAuxProductController',
         ['only'=>['index','store','update','show']]);

@@ -26,7 +26,7 @@ class AuxProductController extends Controller
     public function index()
     {
         $products = Product::with(['types' => function($query){
-//            $query->selectRaw(DB::raw('GROUP_CONCAT(types.name SEPARATOR \' \') as types_names'));
+            $query->selectRaw(DB::raw('GROUP_CONCAT(types.name SEPARATOR \' \') as types_names'));
         },'provider','size','color'])->get();
 
         return response()->json(['products' => $products],200);
@@ -152,7 +152,55 @@ class AuxProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        
+//        $rules = [
+//            'cod'          => 'required',
+//            'provider_id'         => 'required',
+//            'color_id'           => 'required',
+//            'size_id'     => 'required',
+//            'name'   => 'required',
+//            'day'        => 'required',
+//            'count'        => 'required',
+//            'cant'        => 'required',
+//        ];
+//
+//        //Se va a pasar datos del producto, attributos y su cantidad
+//        try {
+//            // Ejecutamos el validador y en caso de que falle devolvemos la respuesta
+//            // con los errores
+//            $validator = \Validator::make($request->all(), $rules);
+//            if ($validator->fails()) {
+//                return response()->json(['message' => 'No posee todo los campos necesario para crear un producto'], 401);
+//            }
+//
+//        } catch (Exception $e) {
+//            // Si algo sale mal devolvemos un error.
+//            return \Response::json(['message' => 'Ocurrio un error al agregar producto'], 500);
+//        }
+
+
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        $auxproduct= Product::find($id);
+        if($auxproduct != null ){
+            $resultado=$auxproduct->movements;
+
+            if($resultado->count()==0){
+                $auxproduct->delete();
+                return response()->json(['message'=>'El producto correctamente']);
+            }else{
+                return response()->json(['message'=>'No se puede eliminar este producto porque posee movimiento asociados']);
+            }
+        }else{
+            return response()->json(['message'=>'No existe este producto']);
+        }
     }
 
     public function setProvider(Request $request){

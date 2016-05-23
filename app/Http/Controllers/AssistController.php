@@ -64,7 +64,7 @@ class AssistController extends Controller
             $emp= Employee::find($request->input('employee_id'));
 
             $date = Carbon::Parse($request->input('date'));
-            $date->setTimezone('-5');
+            $date->setTimezone("America/Lima");
 
 
             $existe=DB::table('assists')
@@ -125,16 +125,16 @@ class AssistController extends Controller
 
                     if($request->input('start_time')!=null){
                         $start_day = Carbon::Parse($request->input('start_time'));
-                        $start_day->setTimezone('-5');
+                        $start_day->setTimezone("America/Lima");
                         if($request->input('end_time')!=null){
                             $end_day = Carbon::Parse($request->input('end_time'));
-                            $end_day->setTimezone('-5');
+                            $end_day->setTimezone("America/Lima");
                             if($request->input('end_time_launch')!=null){
                                 $end_time_launch= Carbon::Parse($request->input('end_time_launch'));
-                                $end_time_launch->setTimezone('-5');
+                                $end_time_launch->setTimezone("America/Lima");
                                 if($request->input('start_time_launch')!=null){
                                     $start_time_launch = Carbon::Parse($request->input('start_time_launch'));
-                                    $start_time_launch->setTimezone('-5');
+                                    $start_time_launch->setTimezone("America/Lima");
                                     //Calculo de horas 1234
                                     return $this->asistencia($start_day,$end_day,$start_time_launch,$end_time_launch,$laboral,$almuerzo,$minuto,$conciliate,$justification,$id,$date,$employeId);
                                 }
@@ -142,47 +142,47 @@ class AssistController extends Controller
 
                         }elseif($request->input('end_time_launch')!=null) {
                             $end_time_launch = Carbon::Parse($request->input('end_time_launch'));
-                            $end_time_launch->setTimezone('-5');
+                            $end_time_launch->setTimezone("America/Lima");
                             if($request->input('start_time_launch')!=null){
                                 $start_time_launch = Carbon::Parse($request->input('start_time_launch'));
-                                $start_time_launch->setTimezone('-5');
+                                $start_time_launch->setTimezone("America/Lima");
                                 //Calculo de horas 123
                                 return $this->asistencia($start_day,$end_time_launch,$start_time_launch,$end_time_launch,$laboral,$almuerzo,$minuto,$conciliate,$justification,$id,$date,$employeId);
                             }
 
                         }elseif($request->input('start_time_launch')!=null){
                             $start_time_launch = Carbon::Parse($request->input('start_time_launch'));
-                            $start_time_launch->setTimezone('-5');
+                            $start_time_launch->setTimezone("America/Lima");
                             //Calculo de horas 12
                             return $this->asistencia($start_day,$start_time_launch,$start_time_launch,$start_time_launch,$laboral,$almuerzo,$minuto,$conciliate,$justification,$id,$date,$employeId);
                         }
 
                     }elseif($request->input('start_time_launch')!=null){
                         $start_time_launch = Carbon::Parse($request->input('start_time_launch'));
-                        $start_time_launch->setTimezone('-5');
+                        $start_time_launch->setTimezone("America/Lima");
                         if($request->input('end_time')!=null){
                             $end_day = Carbon::Parse($request->input('end_time'));
-                            $end_day->setTimezone('-5');
+                            $end_day->setTimezone("America/Lima");
                             if($request->input('end_time_launch')!=null){
                                 $end_time_launch = Carbon::Parse($request->input('end_time_launch'));
-                                $end_time_launch->setTimezone('-5');
+                                $end_time_launch->setTimezone("America/Lima");
                                 //Calculo de horas 234
                                 return $this->asistencia($start_time_launch,$end_day,$start_time_launch,$end_time_launch,$laboral,$almuerzo,$minuto,$conciliate,$justification,$id,$date,$employeId);
                             }
 
                         }elseif($request->input('end_time_launch')!= null){
                             $end_time_launch = Carbon::Parse($request->input('end_time_launch'));
-                            $end_time_launch->setTimezone('-5');
+                            $end_time_launch->setTimezone("America/Lima");
                             //Calculo de horas 23
                             return $this->asistencia($start_time_launch,$end_time_launch,$start_time_launch,$end_time_launch,$laboral,$almuerzo,$minuto,$conciliate,$justification,$id,$date,$employeId);
                         }
 
                     }elseif($request->input('end_time_launch')!=null){
                         $end_time_launch = Carbon::Parse($request->input('end_time_launch'));
-                        $end_time_launch->setTimezone('-5');
+                        $end_time_launch->setTimezone("America/Lima");
                         if($request->input('end_time')!=null){
                             $end_day = Carbon::Parse($request->input('end_time'));
-                            $end_day->setTimezone('-5');
+                            $end_day->setTimezone("America/Lima");
                             //Calculo de horas 34
                             return $this->asistencia($end_time_launch,$end_day,$end_time_launch,$end_time_launch,$laboral,$almuerzo,$minuto,$conciliate,$justification,$id,$date,$employeId);
                         }
@@ -223,7 +223,7 @@ class AssistController extends Controller
 //                return response()->json(['message' => 'No posee todo los campos necesarios para crear un empleado'],401);
 //            }
 //            $date = Carbon::Parse($request->input('date'));
-//            $date->setTimezone('-5');
+//            $date->setTimezone("America/Lima");
 //
 //            $employee= Employee::with(['assists' => function($query) use ($date){
 //                $query->where('date','=',$date->toDateString());
@@ -268,7 +268,7 @@ class AssistController extends Controller
 //            $emp= Employee::find($request->input('employee_id'));
 //
 //            $date = Carbon::Parse($request->input('date'));
-//            $date->setTimezone('-5');
+//            $date->setTimezone("America/Lima");
 //
 //
 //            $existe=DB::table('assists')
@@ -329,16 +329,16 @@ class AssistController extends Controller
 //
 //                    if($request->input('start_time')!=null){
 //                        $start_day = Carbon::Parse($request->input('start_time'));
-//                        $start_day->setTimezone('-5');
+//                        $start_day->setTimezone("America/Lima");
 //                        if($request->input('end_time')!=null){
 //                            $end_day = Carbon::Parse($request->input('end_time'));
-//                            $end_day->setTimezone('-5');
+//                            $end_day->setTimezone("America/Lima");
 //                            if($request->input('end_time_launch')!=null){
 //                                $end_time_launch= Carbon::Parse($request->input('end_time_launch'));
-//                                $end_time_launch->setTimezone('-5');
+//                                $end_time_launch->setTimezone("America/Lima");
 //                                if($request->input('start_time_launch')!=null){
 //                                    $start_time_launch = Carbon::Parse($request->input('start_time_launch'));
-//                                    $start_time_launch->setTimezone('-5');
+//                                    $start_time_launch->setTimezone("America/Lima");
 //                                    //Calculo de horas 1234
 //                                    return $this->asistencia($start_day,$end_day,$start_time_launch,$end_time_launch,$laboral,$almuerzo,$minuto,$conciliate,$justification,$id,$date,$employeId);
 //                                }
@@ -346,47 +346,47 @@ class AssistController extends Controller
 //
 //                        }elseif($request->input('end_time_launch')!=null) {
 //                            $end_time_launch = Carbon::Parse($request->input('end_time_launch'));
-//                            $end_time_launch->setTimezone('-5');
+//                            $end_time_launch->setTimezone("America/Lima");
 //                            if($request->input('start_time_launch')!=null){
 //                                $start_time_launch = Carbon::Parse($request->input('start_time_launch'));
-//                                $start_time_launch->setTimezone('-5');
+//                                $start_time_launch->setTimezone("America/Lima");
 //                                //Calculo de horas 123
 //                                return $this->asistencia($start_day,$end_time_launch,$start_time_launch,$end_time_launch,$laboral,$almuerzo,$minuto,$conciliate,$justification,$id,$date,$employeId);
 //                            }
 //
 //                        }elseif($request->input('start_time_launch')!=null){
 //                            $start_time_launch = Carbon::Parse($request->input('start_time_launch'));
-//                            $start_time_launch->setTimezone('-5');
+//                            $start_time_launch->setTimezone("America/Lima");
 //                            //Calculo de horas 12
 //                            return $this->asistencia($start_day,$start_time_launch,$start_time_launch,$start_time_launch,$laboral,$almuerzo,$minuto,$conciliate,$justification,$id,$date,$employeId);
 //                        }
 //
 //                    }elseif($request->input('start_time_launch')!=null){
 //                        $start_time_launch = Carbon::Parse($request->input('start_time_launch'));
-//                        $start_time_launch->setTimezone('-5');
+//                        $start_time_launch->setTimezone("America/Lima");
 //                        if($request->input('end_time')!=null){
 //                            $end_day = Carbon::Parse($request->input('end_time'));
-//                            $end_day->setTimezone('-5');
+//                            $end_day->setTimezone("America/Lima");
 //                            if($request->input('end_time_launch')!=null){
 //                                $end_time_launch = Carbon::Parse($request->input('end_time_launch'));
-//                                $end_time_launch->setTimezone('-5');
+//                                $end_time_launch->setTimezone("America/Lima");
 //                                //Calculo de horas 234
 //                                return $this->asistencia($start_time_launch,$end_day,$start_time_launch,$end_time_launch,$laboral,$almuerzo,$minuto,$conciliate,$justification,$id,$date,$employeId);
 //                            }
 //
 //                        }elseif($request->input('end_time_launch')!= null){
 //                            $end_time_launch = Carbon::Parse($request->input('end_time_launch'));
-//                            $end_time_launch->setTimezone('-5');
+//                            $end_time_launch->setTimezone("America/Lima");
 //                            //Calculo de horas 23
 //                            return $this->asistencia($start_time_launch,$end_time_launch,$start_time_launch,$end_time_launch,$laboral,$almuerzo,$minuto,$conciliate,$justification,$id,$date,$employeId);
 //                        }
 //
 //                    }elseif($request->input('end_time_launch')!=null){
 //                        $end_time_launch = Carbon::Parse($request->input('end_time_launch'));
-//                        $end_time_launch->setTimezone('-5');
+//                        $end_time_launch->setTimezone("America/Lima");
 //                        if($request->input('end_time')!=null){
 //                            $end_day = Carbon::Parse($request->input('end_time'));
-//                            $end_day->setTimezone('-5');
+//                            $end_day->setTimezone("America/Lima");
 //                            //Calculo de horas 34
 //                            return $this->asistencia($end_time_launch,$end_day,$end_time_launch,$end_time_launch,$laboral,$almuerzo,$minuto,$conciliate,$justification,$id,$date,$employeId);
 //                        }

@@ -13,14 +13,15 @@ angular.module('App')
 
         $scope.tableConfig 	= 	{
             columns :	[
-                {"sTitle": "Fecha", "bSortable" : true},
-                {"sTitle": "Codigo", "bSortable" : true},
+                {"sTitle": "Fecha", "bSortable" : true, 'sWidth': '80px'},
+                {"sTitle": "Codigo", "bSortable" : true, 'sWidth': '1px'},
                 {"sTitle": "Nombre", "bSortable" : true},
                 {"sTitle": "Proveedor", "bSortable" : true},
                 {"sTitle": "Talla", "bSortable" : true},
-                {"sTitle": "Color" , "bSearchable": true}
+                {"sTitle": "Color" , "bSearchable": true},
+                {"sTitle": "Tipos" , "bSearchable": true}
             ],
-            data  	: 	['created_at','cod','name','provider.name','size.name','color.name'],
+            data  	: 	['date','cod','name','provider','size','color','types'],
             configStatus : 'status'
         };
 
@@ -120,6 +121,16 @@ angular.module('App')
                 });
         };
 
+        $scope.listCodes = function() {
+            petition.get('api/auxproduct/get/code')
+                .then(function(data){
+                    $scope.codes = data.codes;
+                }, function(error){
+                    console.log(error);
+                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                });
+        };
+
         $scope.view = function( ind ){
             var id = $scope.tableData[ind].id;
             petition.get('api/product/group_attributes/' + id )
@@ -141,6 +152,7 @@ angular.module('App')
                         toastr.success(data.message);
                         $scope.formSubmit=false;
                         $scope.list();
+                        $scope.listCodes();
                         util.ocultaformulario();
                     }, function(error){
                         toastr.error('Uyuyuy dice: ' + error.data.message);
@@ -236,5 +248,6 @@ angular.module('App')
             $scope.listSizes();
             $scope.listColors();
             $scope.listTypes();
+            $scope.listCodes();
         });
     });

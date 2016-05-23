@@ -11,7 +11,8 @@ use Dashboard\Models\Experimental\Type;
 use Illuminate\Support\Facades\Event;
 use Dashboard\Models\Experimental\Product;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use \DB;
+use \Exception;
 use Dashboard\Models\Experimental\Alarm;
 
 use Dashboard\Http\Requests;
@@ -25,9 +26,15 @@ class AuxProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with(['types' => function($query){
-//            $query->selectRaw(DB::raw('GROUP_CONCAT(types.name SEPARATOR \' \') as types_names'));
-        },'provider','size','color'])->get();
+        $products = DB::table('auxproducts as p')
+                        ->select(DB::raw('DATE_FORMAT(p.created_at,\'%d-%m-%Y\') as date'),'p.id','p.cod','p.name','c.name as color','c.name as size','p.name as provider',DB::raw('GROUP_CONCAT(t.name SEPARATOR \' - \') as types'))
+                        ->join('types_auxproducts as tp','tp.product_id','=','p.id')
+                        ->join('types as t','t.id','=','tp.type_id')
+                        ->join('colors as c','c.id','=','p.color_id')
+                        ->join('sizes as s','s.id','=','p.size_id')
+                        ->join('providers as pv','pv.id','=','p.provider_id')
+                        ->groupBy('cod')
+                        ->get();
 
         return response()->json(['products' => $products],200);
     }
@@ -138,7 +145,7 @@ class AuxProductController extends Controller
             }
             return \Response::json(['message' => 'No existe ese producto'], 404);
 
-        }catch (ErrorException $e){
+        }catch (Exception $e){
             return \Response::json(['message' => 'Ocurrio un error'], 500);
         }
     }
@@ -232,6 +239,8 @@ class AuxProductController extends Controller
             ->get();
         $i=0;
         $j=0;
+
+        $data = Array();
         foreach ($codigos as $codigo){
             if($codigo->cod - $i != 1){
                 if ($i !=0) {
@@ -253,7 +262,7 @@ class AuxProductController extends Controller
             }
             $i=$codigo->cod;
         }
-        return response()->json(['codigos' =>$data],200);
+        return response()->json(['codes' => $data],200);
     }
 
     public function cantPro(){
@@ -270,14 +279,26 @@ class AuxProductController extends Controller
     public function stockProd(){
 
         $stock = DB::table('auxproducts as p')
-                ->select('p.name','c.name as color','s.name as size',DB::raw('count(p.name) as cantP',''))
+                ->select('p.id','p.name','c.name as color','s.name as size',DB::raw('count(p.name) as cantP',''))
                 ->join('colors as c','c.id','=','p.color_id')
                 ->join('sizes as s','s.id','=','p.size_id')
                 ->where('p.status','=',1)
                 ->groupby('p.name','c.name','s.name')->get();
 
-        return response()->json(['stock'=>$stock],200);
+        return response()->json(['stock' => $stock],200);
         
+    }
+
+    public function stockProdType($id) {
+        $types = DB::table('auxproducts as p')
+            ->select(DB::raw('GROUP_CONCAT(t.name SEPARATOR \' - \') as types'))
+            ->join('types_auxproducts as tp','tp.product_id','=','p.id')
+            ->join('types as t','t.id','=','tp.type_id')
+            ->where('p.id','=',$id)
+            ->groupBy('cod')
+            ->first();
+
+        return response()->json($types,200);
     }
 
     public function stockIni(){

@@ -161,6 +161,7 @@ Route::group(['prefix'=>'api','middleware'=>['auth']],function(){
 
         Route::get('/get/cantPro','AuxProductController@cantPro');
         Route::get('/get/stockProd','AuxProductController@stockProd');
+        Route::get('/get/stockProd/type/{id}','AuxProductController@stockProdType');
         Route::get('/get/stockIni','AuxProductController@stockIni');
         Route::get('/get/prodSize','AuxProductController@prodSize');
         Route::get('/get/prodColor','AuxProductController@prodColor');

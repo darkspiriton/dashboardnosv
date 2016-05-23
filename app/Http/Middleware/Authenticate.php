@@ -43,7 +43,7 @@ class Authenticate {
         } elseif ($request->input('Authorization')) {
             return $this->Authorization($request->input('Authorization'),$request,$next,$role);
         } else {
-            return response()->json(['message' => 'Por favor verifique que la solicitud tentga un campo de autorizacion valido'], 401);
+            return response()->json(['message' => 'Por favor verifique que la solicitud tenga un campo de autorización valido'], 401);
         }
     }
 

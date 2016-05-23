@@ -23,6 +23,16 @@
 
     <div class="card-body card-padding" >
         <div class="card-header">
+            <h2>Disponibilidad</h2>
+        </div>
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label class="col-xs-2 col-sm-2 control-label">Códigos: </label>
+                <div class="col-xs-10 m-t-15"><span ng-repeat="code in codes">{{ code + ',&nbsp;&nbsp;&nbsp;&nbsp;' }}</span>--></div>
+            </div>
+        </form>
+
+        <div class="card-header">
             <h2>Datos de Producto</h2>
         </div>
 

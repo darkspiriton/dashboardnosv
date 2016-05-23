@@ -41,7 +41,7 @@
 				acc['actions'] = function(ind){
 					var btns = ''
 					for (x in acc.dataA){
-						btns = btns + '<button class="btn btn-xs '+ acc.dataA[x][2] +'" ng-click="'+ acc.dataA[x][1] +'(' + ind + "," +"$event" + ')" style="width: 82px;">'+ acc.dataA[x][0] +'</button>';
+						btns = btns + `<button class="btn btn-xs ${acc.dataA[x][2]}" ng-click="${acc.dataA[x][1]}('${ind}','$event')" style="min-width: 82px;">${acc.dataA[x][0]}</button>`;
 					}
 					return btns;
 				}
@@ -51,7 +51,7 @@
 	        if (actions[i][0]  === 'status' ) {
 	            acc['dataS'] =  actions[i][1];
 				acc['status'] = function(ind, est){
-					return "<button class='btn btn-xs " + acc.dataS[est].cls + "' ng-click='status("+ ind + ','+ '$event' + ")' style='width: 82px;' "+ ((acc.dataS[est].dis === false)?'disabled="disabled"':'') + " >" + acc.dataS[est].txt + "</button>";
+					return "<button class='btn btn-xs " + acc.dataS[est].cls + "' ng-click='status("+ ind + ','+ '$event' + ")' style='min-width: 82px;' "+ ((acc.dataS[est].dis === false)?'disabled="disabled"':'') + " >" + acc.dataS[est].txt + "</button>";
 				}
 	        } else if (! acc.hasOwnProperty('status'))
 	        	acc['status'] = function(){ return '' }

@@ -155,9 +155,7 @@ class ReportPayRollController extends Controller
         $registers = DB::table('assists as a')->select(array('a.amount',
             'da.minutes as delay_min', 'da.amount as delay_amount', 'dl.minutes as lunch_min', 'dl.amount as lunch_amount'))
             ->leftJoin('discounts_assists as da', 'da.assist_id', '=', 'a.id')
-            ->join('lunches as l', function($join){
-                $join->on('l.date', '=', 'a.date')->on('l.employee_id','=','e.id');
-            })
+            ->leftJoin('lunches as l', 'l.date', '=', 'a.date')
             ->leftJoin('discounts_lunches as dl', 'dl.lunch_id', '=', 'l.id')
             ->where('a.employee_id', '=', $employee->id)
             ->where('a.date', '>=', $start)

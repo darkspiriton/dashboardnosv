@@ -54,10 +54,10 @@ class EmployeeController extends Controller
             $user = new User();
             $user->first_name = $request->input('name');
             $user->last_name = 'Empleado';
-            $user->email = $request->input('name').'@nosvenden.com';
+            $user->email = strtolower($request->input('name')).'@nosvenden.com';
             $user->sex = $request->input('sex');
             $user->role_id = 6;
-            $user->password = \Hash::make($request->input('name'));
+            $user->password = \Hash::make(strtolower($request->input('name')));
             $user->status = 1;
             $user->save();
 

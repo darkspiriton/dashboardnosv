@@ -41,7 +41,9 @@ class ReportPayRollController extends Controller
                 'da.minutes as delay_min', 'da.amount as delay_amount', 'dl.minutes as lunch_min', 'dl.amount as lunch_amount'))
                 ->leftJoin('assists as a', 'a.employee_id', '=', 'e.id')
                 ->leftJoin('discounts_assists as da', 'da.assist_id', '=', 'a.id')
-                ->leftJoin('lunches as l', 'l.date', '=', 'a.date')
+                ->join('lunches as l', function($join){
+                    $join->on('l.date', '=', 'a.date')->on('l.employee_id','=','e.id');
+                })
                 ->leftJoin('discounts_lunches as dl', 'dl.lunch_id', '=', 'l.id')
                 ->where('e.id', '=', $employee->id)
                 ->where('a.date', '>=', $start)
@@ -84,7 +86,9 @@ class ReportPayRollController extends Controller
                 ->select(array('ar.name as area','e.name','a.date','a.start_time as start', 'l.start_time as break', 'l.end_time as end_break', 'a.end_time as end'))
                 ->leftJoin('assists as a', 'a.employee_id', '=', 'e.id')
                 ->leftJoin('discounts_assists as da', 'da.assist_id', '=', 'a.id')
-                ->leftJoin('lunches as l', 'l.date', '=', 'a.date')
+                ->join('lunches as l', function($join){
+                    $join->on('l.date', '=', 'a.date')->on('l.employee_id','=','e.id');
+                })
                 ->leftJoin('discounts_lunches as dl', 'dl.lunch_id', '=', 'l.id')
                 ->leftJoin('areas as ar', 'ar.id', '=', 'e.area_id')
                 ->where('a.date', '=', $date->toDateString())
@@ -151,7 +155,9 @@ class ReportPayRollController extends Controller
         $registers = DB::table('assists as a')->select(array('a.amount',
             'da.minutes as delay_min', 'da.amount as delay_amount', 'dl.minutes as lunch_min', 'dl.amount as lunch_amount'))
             ->leftJoin('discounts_assists as da', 'da.assist_id', '=', 'a.id')
-            ->leftJoin('lunches as l', 'l.date', '=', 'a.date')
+            ->join('lunches as l', function($join){
+                $join->on('l.date', '=', 'a.date')->on('l.employee_id','=','e.id');
+            })
             ->leftJoin('discounts_lunches as dl', 'dl.lunch_id', '=', 'l.id')
             ->where('a.employee_id', '=', $employee->id)
             ->where('a.date', '>=', $start)

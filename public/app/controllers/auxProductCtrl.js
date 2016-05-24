@@ -87,6 +87,26 @@ angular.module('App')
                 });
         };
 
+        $scope.edit = function (i) {
+            petition.get('api/auxproduct/' + $scope.tableData[i].id)
+                .then(function (data) {
+                    console.log(data);
+                    productEdit(data.product);
+                    $scope.productState = false;
+                    util.muestraformulario();
+                }, function (error) {
+                    console.log(error);
+                    toastr.error('Uyuyuy dice: '+ error.data.message);
+                });
+        };
+
+        function productEdit(data){
+            for(var i in data.types){
+                console.log(data.types[i]);
+                delete data.types[i].pivot;
+            }
+            $scope.product = data;
+        }
 
         $scope.delete = function (i) {
             alertConfig.title = "¿El producto se eliminara sin medio de retorno, esta seguro?";
@@ -170,8 +190,15 @@ angular.module('App')
             alertConfig.title = '¿Todo es correcto?'
             swal(alertConfig ,
                 function() {
+                    var method = ( $scope.product.id ) ? 'PUT' : 'POST';
+                    var url = ( method == 'PUT') ? util.baseUrl('api/auxproduct/' + $scope.product.id) : util.baseUrl('api/auxproduct');
+                    var config = {
+                        method: method,
+                        url: url,
+                        data: $scope.product
+                    };
                     $scope.formSubmit=true;
-                    petition.post('api/auxproduct', $scope.product).then(function(data){
+                    petition.custom(config).then(function(data){
                         toastr.success(data.message);
                         $scope.formSubmit=false;
                         $scope.list();
@@ -187,11 +214,13 @@ angular.module('App')
 
         $scope.cancel = function () {
             $scope.product = angular.copy($scope.productClear);
+            $scope.productState = true;
             util.ocultaformulario();
         };
 
-         $scope.new = function(){
+        $scope.new = function(){
             $scope.product = angular.copy($scope.productClear);
+            $scope.productState = true;
             util.muestraformulario();
         };
 

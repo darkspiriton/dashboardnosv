@@ -118,7 +118,7 @@
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-picture-in-picture"></i></span>
                         <div class="fg-line">
-                            <input ng-model="product.cant" type="number" class="form-control" required>
+                            <input ng-model="product.cant" type="number" class="form-control" ng-disabled="!productState" ng-required="productState">
                         </div>
                     </div>
                 </div>
@@ -134,7 +134,7 @@
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-picture-in-picture"></i></span>
                         <div class="fg-line">
-                            <input ng-model="product.day" type="number" class="form-control" required>
+                            <input ng-model="product.day" type="number" class="form-control" ng-disabled="!productState" ng-required="productState">
                         </div>
                     </div>
                 </div>
@@ -144,7 +144,7 @@
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-picture-in-picture"></i></span>
                         <div class="fg-line">
-                            <input ng-model="product.count" type="number" class="form-control" required>
+                            <input ng-model="product.count" type="number" class="form-control" ng-disabled="!productState" ng-required="productState">
                         </div>
                     </div>
                 </div>

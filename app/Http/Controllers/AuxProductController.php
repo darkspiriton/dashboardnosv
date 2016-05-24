@@ -27,7 +27,7 @@ class AuxProductController extends Controller
     public function index()
     {
         $products = DB::table('auxproducts as p')
-                        ->select(DB::raw('DATE_FORMAT(p.created_at,\'%d-%m-%Y\') as date'),'p.id','p.cod','p.name','c.name as color','c.name as size','pv.name as provider',DB::raw('GROUP_CONCAT(t.name SEPARATOR \' - \') as types'))
+                        ->select(DB::raw('DATE_FORMAT(p.created_at,\'%d-%m-%Y\') as date'),'p.id','p.cod','p.name','c.name as color','c.name as size','pv.name as provider',DB::raw('GROUP_CONCAT(t.name ORDER BY t.name ASC SEPARATOR \' - \') as types'))
                         ->join('types_auxproducts as tp','tp.product_id','=','p.id')
                         ->join('types as t','t.id','=','tp.type_id')
                         ->join('colors as c','c.id','=','p.color_id')
@@ -49,14 +49,16 @@ class AuxProductController extends Controller
     {
         // Creamos las reglas de validación
         $rules = [
-            'cod'          => 'required',
-            'provider_id'         => 'required',
-            'color_id'           => 'required',
-            'size_id'     => 'required',
-            'name'   => 'required',
-            'day'        => 'required',
-            'count'        => 'required',
-            'cant'        => 'required',
+            'cod'           => 'required|integer',
+            'provider_id'   => 'required|integer|exists:providers,id',
+            'color_id'      => 'required|integer|exists:colors,id',
+            'size_id'       => 'required|integer|exists:sizes,id',
+            'name'          => 'required|max:25|unique:employees|alpha',
+            'types'         => 'required|array',
+            'types.*.id'    => 'required|integer',
+            'day'           => 'required|integer',
+            'count'         => 'required|integer',
+            'cant'          => 'required|integer'
         ];
 
         //Se va a pasar datos del producto, attributos y su cantidad
@@ -133,16 +135,14 @@ class AuxProductController extends Controller
     public function show($id)
     {
         try{
-            $product = Product::find($id);
-            if ($product !== null) {
-                $product->movements;
-                $product->provider;
-                return response()->json([
-                    'message' => 'Mostrar detalles de producto',
-                    'product'=> $product,
-                    //'attributes' => $product->attributes,
-                ],200);
-            }
+
+            $product = Product::with('types')
+                            ->select(array('id','cod','provider_id','color_id','size_id','name'))
+                            ->find($id);
+
+            if($product !== null)
+                return response()->json(['product' => $product],200);
+
             return \Response::json(['message' => 'No existe ese producto'], 404);
 
         }catch (Exception $e){
@@ -159,31 +159,50 @@ class AuxProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-//        $rules = [
-//            'cod'          => 'required',
-//            'provider_id'         => 'required',
-//            'color_id'           => 'required',
-//            'size_id'     => 'required',
-//            'name'   => 'required',
-//            'day'        => 'required',
-//            'count'        => 'required',
-//            'cant'        => 'required',
-//        ];
-//
-//        //Se va a pasar datos del producto, attributos y su cantidad
-//        try {
-//            // Ejecutamos el validador y en caso de que falle devolvemos la respuesta
-//            // con los errores
-//            $validator = \Validator::make($request->all(), $rules);
-//            if ($validator->fails()) {
-//                return response()->json(['message' => 'No posee todo los campos necesario para crear un producto'], 401);
-//            }
-//
-//        } catch (Exception $e) {
-//            // Si algo sale mal devolvemos un error.
-//            return \Response::json(['message' => 'Ocurrio un error al agregar producto'], 500);
-//        }
 
+        $rules = [
+            'id'           => 'required|integer',
+            'cod'           => 'required|integer',
+            'provider_id'   => 'required|integer|exists:providers,id',
+            'color_id'      => 'required|integer|exists:colors,id',
+            'size_id'       => 'required|integer|exists:sizes,id',
+            'name'          => 'required|max:25|unique:employees|alpha',
+            'types'         => 'required|array',
+            'types.*.id'    => 'required|integer'
+        ];
+
+        try {
+            $validator = \Validator::make($request->all(), $rules);
+            if ($validator->fails())
+                return response()->json(['message' => 'No posee todo los campos necesario para crear un producto y/o el codigo de producto ya existe'], 401);
+
+            if (Product::select(DB::raw('count(*)'))->where('cod','=',$request->input('cod'))->where('id','<>',$request->input('id'))->count() > 0)
+                return response()->json(['message' => 'El codigo ya esta en uso'],401);
+
+            $product = Product::find($id);
+
+            if($product->exists())
+                response()->json(['message' => 'El producto no existe', 404]);
+
+            $product->cod = $request->input('cod');
+            $product->provider_id = $request->input('provider_id');
+            $product->color_id = $request->input('color_id');
+            $product->size_id = $request->input('size_id');
+            $product->name = $request->input('name');
+            $product->save();
+
+            $types = Array();
+            foreach ($request->input('types') as $i => $type){
+                $types[$i] = $type["id"];
+            }
+
+            $product->types()->sync($types);
+
+            return response()->json(['message' => 'Prodcuto editado']);
+
+        } catch (Exception $e) {
+            return \Response::json(['message' => 'Ocurrio un error al agregar producto'], 500);
+        }
 
     }
 
@@ -347,7 +366,7 @@ class AuxProductController extends Controller
 
     public function stockProdType($id) {
         $types = DB::table('auxproducts as p')
-            ->select(DB::raw('GROUP_CONCAT(t.name SEPARATOR \' - \') as types'))
+            ->select(DB::raw('GROUP_CONCAT(t.name ORDER BY t.name ASC SEPARATOR \' - \') as types'))
             ->join('types_auxproducts as tp','tp.product_id','=','p.id')
             ->join('types as t','t.id','=','tp.type_id')
             ->where('p.id','=',$id)

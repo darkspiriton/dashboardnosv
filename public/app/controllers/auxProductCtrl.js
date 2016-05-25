@@ -102,9 +102,12 @@ angular.module('App')
 
         function productEdit(data){
             for(var i in data.types){
-                console.log(data.types[i]);
                 delete data.types[i].pivot;
             }
+            data.cod = parseInt(data.cod);
+            data.provider_id = parseInt(data.provider_id);
+            data.color_id = parseInt(data.color_id);
+            data.size_id = parseInt(data.size_id);
             $scope.product = data;
         }
 

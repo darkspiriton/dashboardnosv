@@ -422,19 +422,16 @@ class AuxProductController extends Controller
     
     public function getProviders(){
         $providers = Provider::all();
-
         return response()->json(['providers' => $providers ],200);
     }
 
     public function getSizes(){
         $sizes = Size::all();
-
         return response()->json(['sizes' => $sizes],200);
     }
 
     public function getColors(){
         $colors = Color::all();
-
         return response()->json(['colors' => $colors],200);
 
     }

@@ -23,16 +23,16 @@ angular.module('App')
                 {"sTitle": "Status" , "bSearchable": true},
                 {"sTitle": "Accion" , "bSearchable": true}
             ],
-            actions	:  	[
-                [ ['status',   {
+            actions	:   	[
+                ['status',   {
                     0 : { txt : 'Inactivo' , cls : 'btn-danger', dis : false},
-                    1 : { txt : 'Activo' ,  cls : 'btn-success', dis : false} ,                    
+                    1 : { txt : 'Activo' ,  cls : 'btn-success', dis : false} ,
                 }
-                ],'actions',
-                    [
-                        ['eliminar', 'delete' ,'bgm-red'],
-                        ['editar', 'edit' ,'btn-primary']
-                    ]
+                ],
+                ['actions', [
+                    ['eliminar', 'delete' ,'bgm-red'],
+                    ['editar', 'edit' ,'btn-primary']
+                ]
                 ]
             ],
             data  	: 	['date','cod','name','provider','size','color','types','status','actions'],

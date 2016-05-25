@@ -27,7 +27,7 @@ class AuxProductController extends Controller
     public function index()
     {
         $products = DB::table('auxproducts as p')
-                        ->select(DB::raw('DATE_FORMAT(p.created_at,\'%d-%m-%Y\') as date'),'p.id','p.cod','p.name','s.name as size','c.name as color','pv.name as provider',DB::raw('GROUP_CONCAT(t.name ORDER BY t.name ASC SEPARATOR \' - \') as types'))
+                        ->select('p.status',DB::raw('DATE_FORMAT(p.created_at,\'%d-%m-%Y\') as date'),'p.id','p.cod','p.name','s.name as size','c.name as color','pv.name as provider',DB::raw('GROUP_CONCAT(t.name ORDER BY t.name ASC SEPARATOR \' - \') as types'))
                         ->join('types_auxproducts as tp','tp.product_id','=','p.id')
                         ->join('types as t','t.id','=','tp.type_id')
                         ->join('colors as c','c.id','=','p.color_id')

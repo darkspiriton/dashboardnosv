@@ -17,6 +17,12 @@ use Illuminate\Support\Facades\DB;
 
 class AssistController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth:GOD,ADM');
+    }
+
     /**
      * Display a listing of the resource.
      *

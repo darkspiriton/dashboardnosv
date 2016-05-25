@@ -10,6 +10,12 @@ use Dashboard\Http\Requests;
 
 class UserController extends Controller
 {
+    
+    public function __construct()
+    {
+        $this->middleware('auth:GOD');
+    }
+
     /**
      * Display a listing of the resource.
      *

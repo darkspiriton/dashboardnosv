@@ -33,7 +33,7 @@ angular.module('App')
 
         $scope.list = function() {
             $scope.updateList = true;
-            petition.get('api/providers')
+            petition.get('api/auxproviders')
                 .then(function(data){
                     $scope.tableData = data.providers;
                     $('#table').AJQtable('view', $scope, $compile);

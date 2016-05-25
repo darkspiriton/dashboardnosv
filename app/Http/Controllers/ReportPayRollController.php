@@ -10,6 +10,12 @@ use Dashboard\Http\Requests;
 
 class ReportPayRollController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:GOD,EMP');
+        $this->middleware('auth:GOD' , ['only' => 'get_payroll']);
+    }
+
     public function get_assists_for_month(Request $request){
 
         /*

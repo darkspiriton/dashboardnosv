@@ -15,6 +15,11 @@ use Illuminate\Http\Request;
 
 class AuthTokenController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:all', ['only' => 'dashboard']);
+    }
+
     /**
      * Generate JSON Web Token.
      */
@@ -45,11 +50,15 @@ class AuthTokenController extends Controller
         }
 
         if (Hash::check($password, $user->password)) {
-            $token = $this->createToken($user);
 
-            unset($user->password);
-            $user->token = $token;
-            $user->save();
+            if(!$user->token){
+                unset($user->password);
+                $token = $this->createToken($user);
+                $user->token = $token;
+                $user->save();
+            } else {
+                $token = $user->token;
+            }
 
             $rol = $user->role->name;
             $full_name = $user->last_name.', '.$user->first_name;

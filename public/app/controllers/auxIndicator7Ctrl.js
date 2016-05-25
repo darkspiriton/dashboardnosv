@@ -74,7 +74,7 @@ angular.module('App')
         };
 
         $scope.listProviders = function() {
-            petition.get('api/providers')
+            petition.get('api/auxproviders')
                 .then(function(data){
                     $scope.providers = data.providers;
                 }, function(error){

@@ -2,7 +2,7 @@ angular.module('App')
     .config(function($stateProvider) {
         $stateProvider
             .state('Alarma', {
-                url: '/stock-general-de-productos',
+                url: '/Alarma-de-productos',
                 template: '<div class="card" >'+
                 '    <div class="card-header bgm-blue">'+
                 '        <h2>Stock general de productos</h2>'+

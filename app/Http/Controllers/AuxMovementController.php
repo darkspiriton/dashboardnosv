@@ -12,6 +12,13 @@ use Dashboard\Http\Requests;
 
 class AuxMovementController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth:GOD,JVB');
+        $this->middleware('auth:GOD' , ['only' => ['movementPending','movementDay','movementDays','movementDaysDownload']]);
+    }
+
     /**
      * Display a listing of the resource.
      *

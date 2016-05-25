@@ -13,6 +13,12 @@ use Dashboard\Http\Requests;
 
 class EmployeeController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth:GOD,ADM');
+    }
+
     /**
      * Display a listing of the resource.
      *

@@ -9,6 +9,12 @@
         <li id="stock">
             <a href="#" ui-sref="Stock"><i class="md md-shop-two"></i>Stock de Productos</a>
         </li>
+        <li id="movimientos">
+            <a href="#" ui-sref="Movimientos"><i class="md md-shop-two"></i>Generar Salida</a>
+        </li>
+        <li id="movimientos2">
+            <a href="#" ui-sref="Movimientos2"><i class="md md-shop-two"></i>Generar Retorno - Venta</a>
+        </li>
         <li class="sub-menu">
             <a href="#"><i class="md md-now-widgets"></i> Inidcadores </a>
             <ul>
@@ -20,6 +26,7 @@
                 <li id="indicator6"><a  ui-sref="Indicator6"> Lista de Proveedores </a></li>
             </ul>
         </li>
+
         <li class="sub-menu">
             <a href="#"><i class="md md-now-widgets"></i> Administracion de planilla </a>
             <ul>
@@ -56,4 +63,6 @@
     <script src="app/controllers/employeesCtrl.js"></script>
     <script src="app/controllers/payrollEntryCtrl.js"></script>
     <script src="app/controllers/indicatorPayRoleCtrl.js"></script>
+    <script src="app/controllers/auxMovementCtrl.js"></script>
+    <script src="app/controllers/auxMovement2Ctrl.js"></script>
 @stop

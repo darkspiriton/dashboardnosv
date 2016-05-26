@@ -20,17 +20,22 @@ angular.module('App')
                 {"sTitle": "Talla", "bSortable" : true},
                 {"sTitle": "Color" , "bSearchable": true},
                 {"sTitle": "Tipos" , "bSearchable": true},
+                {"sTitle": "Status" , "bSearchable": true},
                 {"sTitle": "Accion" , "bSearchable": true}
             ],
-            actions	:  	[
-                ['actions',
-                    [
-                        ['eliminar', 'delete' ,'bgm-red'],
-                        ['editar', 'edit' ,'btn-primary']
-                    ]
+            actions	:   	[
+                ['status',   {
+                    0 : { txt : 'Inactivo' , cls : 'btn-danger', dis : false},
+                    1 : { txt : 'Activo' ,  cls : 'btn-success', dis : false} ,
+                }
+                ],
+                ['actions', [
+                    ['eliminar', 'delete' ,'bgm-red'],
+                    ['editar', 'edit' ,'btn-primary']
+                ]
                 ]
             ],
-            data  	: 	['date','cod','name','provider','size','color','types','actions'],
+            data  	: 	['date','cod','name','provider','size','color','types','status','actions'],
             configStatus : 'status'
         };
 
@@ -102,9 +107,12 @@ angular.module('App')
 
         function productEdit(data){
             for(var i in data.types){
-                console.log(data.types[i]);
                 delete data.types[i].pivot;
             }
+            data.cod = parseInt(data.cod);
+            data.provider_id = parseInt(data.provider_id);
+            data.color_id = parseInt(data.color_id);
+            data.size_id = parseInt(data.size_id);
             $scope.product = data;
         }
 

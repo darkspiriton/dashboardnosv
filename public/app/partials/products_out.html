@@ -1,6 +1,9 @@
 <div class="card">
     <div class="card-header block-header">
         <h2> movimientos <small>Indecadores de movimiento del dia de hoy.</small></h2>
+        <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="list()"
+                data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
+                title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
     </div>
     <div class="card-body p-l-20">
         <div class="mini-charts">

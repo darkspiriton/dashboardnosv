@@ -6,6 +6,9 @@
         <li id="alarma">
             <a ui-sref="Alarma"><i class="md md-shop-two"></i> Alarma de productos </a>
         </li>
+        <li id="outs">
+            <a ui-sref="outs"><i class="md md-shop-two"></i> Productos en stock-salida-ventas de hoy</a>
+        </li>
         <li id="products">
             <a href="#" ui-sref="Productos"><i class="md md-shop-two"></i> Administrar Productos</a>
         </li>
@@ -65,4 +68,5 @@
     <script src="app/controllers/employeesCtrl.js"></script>
     <script src="app/controllers/payrollEntryCtrl.js"></script>
     <script src="app/controllers/indicatorPayRoleCtrl.js"></script>
+    <script src="app/controllers/products_out.js"></script>
 @stop

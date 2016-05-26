@@ -15,8 +15,10 @@ class AuxMovementController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:GOD,JVB');
-        $this->middleware('auth:GOD' , ['only' => ['movementPending','movementDay','movementDays','movementDaysDownload']]);
+        $this->middleware('auth:GOD,ADM,JVE');
+        $this->middleware('auth:JVE' , ['only' => ['index','store','show','update','destroy','product_out']]);
+        $this->middleware('auth:GOD,JVE' , ['only' => 'movementPending']);
+        $this->middleware('auth:GOD' , ['only' => ['movementDay','movementDays','movementDaysDownload']]);
     }
 
     /**
@@ -155,7 +157,7 @@ class AuxMovementController extends Controller
                 $response[] = $prd;
             }
 
-            return response()->json(['message' => 'El producto se agrego correctamente',
+            return response()->json(['message' => 'Se genero la salida de los productos correctamente',
                                         'products' => $response],200);
 
         } catch (\Exception $e) {

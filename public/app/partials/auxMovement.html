@@ -41,11 +41,11 @@
                     </thead>
                     <tbody>
                     <tr ng-repeat="product in products">
-                        <td>{{ product.cod }}</td>
-                        <td>{{ product.name }}</td>
-                        <td>{{ product.size }}</td>
-                        <td>{{ product.color }}</td>
-                        <td style="width: 160px">
+                        <td style="display: table-cell;">{{ product.cod }}</td>
+                        <td style="display: table-cell;">{{ product.name }}</td>
+                        <td style="display: table-cell;">{{ product.size }}</td>
+                        <td style="display: table-cell;">{{ product.color }}</td>
+                        <td style="display: table-cell; width: 160px">
                             <input class="form-control input-sm" type="date" ng-model="dataProducts[$index].date" required>
                         </td>
                         <td style="width: 80px"><button ng-click="removeProduct($index)" class="btn btn-danger btn-sm waves-effect">Eliminar</button></td>

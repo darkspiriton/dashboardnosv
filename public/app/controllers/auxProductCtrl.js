@@ -26,7 +26,8 @@ angular.module('App')
             actions	:   	[
                 ['status',   {
                     0 : { txt : 'no disponible' , cls : 'btn-danger', dis : false},
-                    1 : { txt : 'disponible' ,  cls : 'btn-success', dis : false} ,
+                    1 : { txt : 'disponible' ,  cls : 'btn-success', dis : false},
+                    2 : { txt : 'vendido' ,  cls : 'bgm-teal', dis : false}
                 }
                 ],
                 ['actions', [

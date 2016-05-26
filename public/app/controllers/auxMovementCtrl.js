@@ -68,6 +68,7 @@ angular.module('App')
                             $scope.formSubmit = false;
                             $scope.list();
                             util.ocultaformulario();
+                            $scope.anadir = false;
                         }, function (error) {
                             toastr.error('Uyuyuy dice: ' + error.data.message);
                             $scope.formSubmit = false;
@@ -94,7 +95,8 @@ angular.module('App')
                 }
             }
 
-            if (count == 0){
+            if (count == 0 && $scope.anadir){
+                toastr.success('se añadio');
                 $scope.dataProducts.push({id: $scope.tableData[ind].id});
                 $scope.products.push(angular.copy($scope.tableData[ind]));
             }
@@ -107,21 +109,16 @@ angular.module('App')
         };
 
         $scope.cancel = function () {
+            $scope.anadir = false;
             resetProduct();
             util.ocultaformulario();
         };
 
         $scope.new = function(){
+            $scope.anadir = true;
             resetProduct();
             util.muestraformulario();
         };
-
-        //$scope.getDate = function(i){
-        //    var local = new Date();
-        //    //$scope.dataProducts[i].date = local;
-        //    //$scope.products[i].date= local;
-        //    return local;
-        //};
 
         function resetProduct(){
             $scope.dataProducts = angular.copy($scope.productsClear);

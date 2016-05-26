@@ -57,8 +57,8 @@
         <div class="sidebar-inner c-overflow">
             <div class="profile-menu">
                 <a href="#">
-                    <div class="profile-pic">
-                        <img src="" alt="">
+                    <div class="profile-pic" style="padding-bottom: 65px;">
+                        <img src="" alt="" style="display: none">
                     </div>
 
                     <div class="profile-info">

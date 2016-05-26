@@ -330,30 +330,17 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
                 $window.location.href = "/";
             };
 
-            var list = storage.get('routesList');
-            var urls = list.split(",");
             var role = storage.get('roleName');
             var name = storage.get('fullName');
 
-            if (!urls || !role || !name)$scope.logout();
+            if (!role || !name)$scope.logout();
 
             $scope.userInfo = {
-                urls: urls,
                 role: role,
                 name: name
             };
-            $log.log($scope.userInfo);
 
             $scope.$on('$stateChangeSuccess', function (event, toState) {
-
-                // test routes
-                //$log.log([$scope.userInfo.urls,toState.url,$scope.userInfo.urls.indexOf(toState.url)]);
-
-                //if($scope.userInfo.urls.indexOf(toState.url) === -1){
-                //    event.preventDefault();
-                //    $state.go('Home');
-                //}
-
                 if (angular.isDefined(toState.name)) {
                     $scope.pageTitle = toState.name + ' | NosVenden';
                 }

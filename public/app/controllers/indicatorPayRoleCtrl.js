@@ -97,6 +97,7 @@ angular.module('App')
 
         angular.element(document).ready(function(){
             util.resetTable($scope,$compile);
+            util.resetTable($scope,$compile);
             $scope.list();
             $scope.listEmployee();
             $scope.listAreas();

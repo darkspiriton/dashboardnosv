@@ -41,6 +41,7 @@ angular.module('App')
         };
 
         angular.element(document).ready(function(){
+            util.resetTable($scope,$compile);
             var data = {};
             data.id = $stateParams.id;
             data.year = $stateParams.year;

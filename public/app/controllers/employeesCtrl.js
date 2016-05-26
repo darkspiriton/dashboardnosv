@@ -311,6 +311,7 @@ angular.module('App')
         // End days
 
         angular.element(document).ready(function(){
+            util.resetTable($scope,$compile);
             $scope.empleado = angular.copy($scope.empleadoClear);
             $scope.days = angular.copy($scope.daysClear);
             $scope.list();

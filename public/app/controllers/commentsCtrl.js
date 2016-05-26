@@ -132,6 +132,7 @@ angular.module('App')
         };
 
         angular.element(document).ready(function(){
+            util.resetTable($scope,$compile);
             $scope.comment = {};
             $scope.list();
         });

@@ -436,10 +436,30 @@ class AuxMovementController extends Controller
 
     public function move_day(){
         $salida = Product::where('status',0)->count();
-        $vendido = Product::where('status',3)->count();
+        $vendido = Product::where('status',2)->count();
         $stock = Product::where('status',1)->count();
 
         return response()->json(['data' => [ 'sal' => $salida, 'ven' => $vendido, 'stock' => $stock]],200);
+    }
+
+    public function get_cod_prod(Request $request){
+        $rules = [
+            'id'    =>  'required|integer'
+        ];
+
+        if(\Validator::make($request->all(), $rules)->fails())
+            return response()->json(['message' => 'No posee los campos necesarios para realizar una consulta'], 404);
+
+        $prd = Product::find($request->input('id'));
+
+        $product =  Product::select('id','cod')
+            ->where('name','=',$prd->name)
+            ->where('color_id','=',$prd->color_id)
+            ->where('size_id','=',$prd->size_id)
+            ->where('status','=',1)
+            ->get();
+
+        return response()->json(['codes' => $product],200);
     }
 
 }

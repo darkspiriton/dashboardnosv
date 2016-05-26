@@ -66,3 +66,37 @@
 
     </div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="codes" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bgm-teal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title c-white">codigos disponibles</h3>
+            </div>
+            <div class="modal-body card-padding">
+                <form name="default" class="form-horizontal" autocomplete="off">
+                    <div class="form-group m-b-0">
+                        <label class="col-xs-2 col-sm-4 control-label">Seleccione codigo</label>
+                        <div class="col-xs-10 col-sm-4">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="md md-list"></i></span>
+                                <div class="fg-line select">
+                                    <select class="form-control" ng-options="$index as ('codigo: ' + code.cod) for ($index, code) in codes" ng-model="otherCod" required>
+                                        <option value="" disabled="disabled" select="true">Seleccione</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <a class="btn btn-primary m-t-5 col-xs-12 col-sm-3" ng-disabled="!default.$valid" ng-click="addProduct2(otherCod)">agregar</a>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

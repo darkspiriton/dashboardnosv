@@ -123,6 +123,7 @@ Route::group(['prefix' => 'api'], function(){
         Route::get('/get/movementDays','AuxMovementController@movementDays');
         Route::post('/get/movementDays/download','AuxMovementController@movementDaysDownload');
         Route::get('/get/movement/day','AuxMovementController@move_day');
+        Route::get('/get/codes','AuxMovementController@get_cod_prod');
     });
 
     /*
@@ -134,7 +135,23 @@ Route::group(['prefix' => 'api'], function(){
 });
 
 Route::get('/test', function(\Illuminate\Http\Request $request){
-    return '=)';
+    $rules = [
+        'id'    =>  'required|integer'
+    ];
+
+    if(\Validator::make($request->all(), $rules)->fails())
+        return response()->json(['message' => 'No posee los campos necesarios para realizar una consulta'],200);
+
+    $prd =  \Dashboard\Models\Experimental\Product::find($request->input('id'));
+
+    $product = \Dashboard\Models\Experimental\Product::select('id','cod')
+        ->where('name','=',$prd->name)
+        ->where('color_id','=',$prd->color_id)
+        ->where('size_id','=',$prd->size_id)
+        ->where('status','=',1)
+        ->get();
+
+    return response()->json($product,200);
 });
 
 /*

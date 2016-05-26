@@ -318,6 +318,11 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
                 var prot = $location.protocol();
                 var host = $location.host();
                 return prot + '://' + host + '/' + URL;
+            },
+            resetTable: function (scope, compile, table){
+                table || (table = '#table');
+                scope.tableData = [];
+                $(table).AJQtable('view', scope, compile);
             }
         }
     })

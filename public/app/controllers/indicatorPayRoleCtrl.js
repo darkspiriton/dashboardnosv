@@ -7,7 +7,7 @@ angular.module('App')
                 controller : 'reportPayRolCtrl'
             });
     })
-    .controller('reportPayRolCtrl', function($scope, $compile, $log, util, petition, toastr, $filter, chart){
+    .controller('reportPayRolCtrl', function($scope, $compile, $log, util, petition, toastr, $state){
 
         util.liPage('reportePlanilla');
 
@@ -20,8 +20,16 @@ angular.module('App')
                 {"sTitle": "Descuento por tardanza", "bSortable" : false,"bSearchable": false},
                 {"sTitle": "Minutos demora break", "bSortable" : false,"bSearchable": false},
                 {"sTitle": "descuento por break", "bSortable" : false,"bSearchable": false},
+                {"sTitle": "Accion", "bSortable" : false,"bSearchable": false}
             ],
-            data  	: 	['name', 'salary','pay_amount','delay_min','delay_amount','lunch_min','lunch_amount']
+            actions	:  	[
+                ['actions',
+                    [
+                        ['ver dias', 'view' ,'btn-primary']
+                    ]
+                ]
+            ],
+            data  	: 	['name', 'salary','pay_amount','delay_min','delay_amount','lunch_min','lunch_amount','actions']
         };
 
         $scope.data = {
@@ -30,13 +38,6 @@ angular.module('App')
             employee_id: null,
             area_id: null
         };
-
-        //$scope.areas = [
-        //    {id: 1, name: 'Administracion'},
-        //    {id: 2, name: 'Sistemas'},
-        //    {id: 3, name: 'Publicidad'},
-        //    {id: 4, name: 'Ventas'}
-        //];
 
         $scope.years = [2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025,2026,2027,2028,2029,2030];
         $scope.months = [
@@ -54,9 +55,10 @@ angular.module('App')
             {id: 12, name: 'Diciembre'}
         ];
 
-        $scope.list = function() {
+        $scope.list = function(data) {
+            data || (data = {});
             $scope.updateList = true;
-            petition.get('api/payroll', { params: $scope.data})
+            petition.get('api/payroll', { params: data})
                 .then(function(data){
                     $scope.tableData = data.payroll;
                     $('#table').AJQtable('view', $scope, $compile);
@@ -65,8 +67,12 @@ angular.module('App')
                     console.log(error);
                     toastr.error('Uyuyuy dice: ' + error.data.message);
                     $scope.updateList = false;
-                    resetTable();
+                    util.resetTable($scope,$compile);
                 });
+        };
+
+        $scope.view = function(i) {
+            $state.go("assistsByGod", { id: $scope.tableData[i].id, year: $scope.data.year, month: $scope.data.month });
         };
 
         $scope.listEmployee = function() {
@@ -89,13 +95,9 @@ angular.module('App')
                 });
         };
 
-        function resetTable(){
-            $scope.tableData = [];
-            $('#table').AJQtable('view', $scope, $compile);
-        }
-
         angular.element(document).ready(function(){
-            resetTable();
+            util.resetTable($scope,$compile);
+            $scope.list();
             $scope.listEmployee();
             $scope.listAreas();
         });

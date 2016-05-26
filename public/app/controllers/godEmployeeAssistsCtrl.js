@@ -1,13 +1,13 @@
 angular.module('App')
     .config(function($stateProvider) {
         $stateProvider
-            .state('assists', {
-                url: '/Asistencias-por-mes',
-                templateUrl: 'app/partials/employeeAssists.html',
-                controller : 'employeeAssistsCtrl'
+            .state('assistsByGod', {
+                url: '/Asistencias-por-mes-por-empleado/:id/:year/:month',
+                templateUrl: 'app/partials/godEmployeeAssists.html',
+                controller : 'godEmployeeAssistsCtrl'
             });
     })
-    .controller('employeeAssistsCtrl', function($scope, $compile, $log, util, petition, toastr){
+    .controller('godEmployeeAssistsCtrl', function($scope, $compile, $stateParams, $log, util, petition, toastr){
 
         util.liPage('assists');
 
@@ -28,22 +28,23 @@ angular.module('App')
         };
 
 
-        $scope.list = function() {
-            $scope.updateList = true;
-            petition.get('api/payroll/employee/assists')
+        $scope.list = function(data) {
+            petition.get('api/payroll/employee/assists/by/god',{ params : data})
                 .then(function(data){
                     $scope.discounts = data.discounts;
                     $scope.tableData = data.registers;
                     $('#table').AJQtable('view', $scope, $compile);
-                    $scope.updateList = false;
                 }, function(error){
                     console.log(error);
                     toastr.error('Ups ocurrio un problema: ' + error.data.message);
-                    $scope.updateList = false;
                 });
         };
 
         angular.element(document).ready(function(){
-            $scope.list();
+            var data = {};
+            data.id = $stateParams.id;
+            data.year = $stateParams.year;
+            data.month = $stateParams.month;
+            $scope.list(data);
         });
     });

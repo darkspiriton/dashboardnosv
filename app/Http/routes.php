@@ -63,6 +63,7 @@ Route::group(['prefix' => 'api'], function(){
         Route::get('employee/assists', 'ReportPayRollController@get_assists_for_month');
         Route::get('employee/assists/day', 'ReportPayRollController@get_assists_by_day');
         Route::get('/', 'ReportPayRollController@get_payroll');
+        Route::get('employee/assists/by/god', 'ReportPayRollController@get_assists_for_month_by_god');
     });
 
     /*

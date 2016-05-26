@@ -58,6 +58,7 @@
     <script src="app/controllers/auxStockCtrl.js"></script>
     <script src="app/controllers/employeesCtrl.js"></script>
     <script src="app/controllers/payrollEntryCtrl.js"></script>
+    <script src="app/controllers/godEmployeeAssistsCtrl.js"></script>
     <script src="app/controllers/indicatorPayRoleCtrl.js"></script>
     <script src="app/controllers/products_out.js"></script>
 @stop

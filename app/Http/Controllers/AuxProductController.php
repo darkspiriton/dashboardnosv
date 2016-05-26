@@ -474,7 +474,7 @@ class AuxProductController extends Controller
         if(!empty($data)){
             return response()->json([ 'alarms' => $alarms ],200);
         }else{
-            return response()->json([ 'message' => 'Por el momento no hay alarmas' ],401);
+            return response()->json([ 'message' => 'Por el momento no hay alarmas' ],404);
         }
     }
 

@@ -435,11 +435,13 @@ class AuxMovementController extends Controller
     }
 
     public function move_day(){
-        $salida = Product::where('status',0)->count();
-        $vendido = Product::where('status',2)->count();
+        $date = Carbon::now();
+        $salida = Movement::where('status','=','salida')->where('date_shipment','=',$date->toDateString())->count();
+        $vendido = Movement::where('status','=','Vendido')->where('date_shipment','=',$date->toDateString())->count();
+        $retornado = Movement::where('status','=','Retornado')->where('date_shipment','=',$date->toDateString())->count();
         $stock = Product::where('status',1)->count();
 
-        return response()->json(['data' => [ 'sal' => $salida, 'ven' => $vendido, 'stock' => $stock]],200);
+        return response()->json(['data' => [ 'sal' => $salida, 'ven' => $vendido, 'ret' => $retornado, 'stock' => $stock]],200);
     }
 
     public function get_cod_prod(Request $request){

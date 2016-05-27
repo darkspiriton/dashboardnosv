@@ -60,6 +60,7 @@ angular.module('App')
         };
 
         $scope.otherProduct = function (i) {
+            if ($scope.anadir)
             petition.get('api/auxmovement/get/codes' , {params: {id: $scope.tableData[i].id}})
                 .then(function(data){
                     $scope.codes = data.codes;

@@ -49,7 +49,7 @@ class QuestionnairesTableSeeder extends Seeder
 
                 DB::table('questionnaires_questions')->insertGetId(array(
                     'questionnaire_id' => $questionnaire_id,
-                    '$question_id' => $question_id,
+                    'question_id' => $question_id,
                 ));
 
                 for($x=0;$x<5;$x++){

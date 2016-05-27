@@ -44,6 +44,17 @@
                 </li>
             </ul>
         </li>
+        <li class="sub-menu">
+            <a href="#"><i class="md md-now-widgets"></i> Administracion de cuestionarios </a>
+            <ul>
+                <li id="questionnaires">
+                    <a ui-sref="questionnaires"><i class="md md-security"></i> Administrar cuestionarios</a>
+                </li>
+                <li id="payrollEntry">
+                    <a ui-sref="PayrollEntry"><i class="md md-security"></i> Registro de asistencias </a>
+                </li>
+            </ul>
+        </li>
         <li id="comments">
             <a href="#" ui-sref="Comentarios"><i class="md md-messenger"></i> Administrar comentarios</a>
         </li>
@@ -70,4 +81,5 @@
     <script src="app/controllers/godEmployeeAssistsCtrl.js"></script>
     <script src="app/controllers/indicatorPayRoleCtrl.js"></script>
     <script src="app/controllers/products_out.js"></script>
+    <script src="app/controllers/q_questionnairesCtrl.js"></script>
 @stop

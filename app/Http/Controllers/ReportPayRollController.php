@@ -10,6 +10,12 @@ use Dashboard\Http\Requests;
 
 class ReportPayRollController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth:GOD,EMP');
+        $this->middleware('auth:GOD' , ['only' => ['get_payroll','get_assists_for_month_by_god']]);
+    }
+
     public function get_assists_for_month(Request $request){
 
         /*
@@ -17,24 +23,95 @@ class ReportPayRollController extends Controller
          * Terminos de busqueda por mes y año
          * Por defecto se devolvera registro del mes actual
          *
+         */
+
         $rules = [
-            'year'  =>  'required|integer|between:2015,2035',
-            'month' =>  'required|integer|between:1,12'
+            'year'  =>  'integer|between:2015,2035',
+            'month' =>  'integer|between:1,12'
         ];
 
         $validator = \Validator::make($request->all(),$rules);
 
         if($validator->fails())
             return response()->json(['message' => 'Terminos de busqueda erroneos'], 404);
-        */
+
 
         try {
-//          $date = Carbon::createFromDate($request->input('year'), $request->input('month'), 1, -5);
-            $date = Carbon::now();
+            if ($request->input('year') && $request->input('year')){
+                $date = Carbon::createFromDate($request->input('year'), $request->input('month'), 1, 'America/Lima');
+            }else{
+                $date = Carbon::now();
+            }
+
             $start = $date->copy()->firstOfMonth();
             $end = $date->copy()->lastOfMonth();
             $user = $request->input('user')['sub'];
             $employee = Employee::where('user_id','=',$user)->first();
+
+            $registers = DB::table('employees as e')->select(array('a.date','a.amount',
+                'a.start_time as start', 'l.start_time as break', 'l.end_time as end_break', 'a.end_time as end',
+                'da.minutes as delay_min', 'da.amount as delay_amount', 'dl.minutes as lunch_min', 'dl.amount as lunch_amount'))
+                ->leftJoin('assists as a', 'a.employee_id', '=', 'e.id')
+                ->leftJoin('discounts_assists as da', 'da.assist_id', '=', 'a.id')
+                ->join('lunches as l', function($join){
+                    $join->on('l.date', '=', 'a.date')->on('l.employee_id','=','e.id');
+                })
+                ->leftJoin('discounts_lunches as dl', 'dl.lunch_id', '=', 'l.id')
+                ->where('e.id', '=', $employee->id)
+                ->where('a.date', '>=', $start)
+                ->where('a.date', '<=', $end)
+                ->get();
+
+            $discounts = Array();
+            $discounts['delay_min'] = $discounts['delay_amount'] = $discounts['lunch_min'] = $discounts['lunch_amount'] =  $discounts['day_amount'] = 0;
+
+            foreach($registers as $row){
+                $discounts['day_amount']    += $row->amount;
+                $discounts['delay_min']     += $row->delay_min;
+                $discounts['delay_amount']  += $row->delay_amount;
+                $discounts['lunch_min']     += $row->lunch_min;
+                $discounts['lunch_amount']  += $row->lunch_amount;
+            }
+
+            return response()->json(['registers' => $registers, 'discounts' => $discounts], 200);
+        }catch(\Exception $e){
+            return response()->json([ 'message' => 'Ocurrio un problema, no podemos atender su solicitud' ], 500);
+        }
+
+    }
+
+    public function get_assists_for_month_by_god(Request $request){
+
+        /*
+         *
+         * Terminos de busqueda por mes y año
+         * Por defecto se devolvera registro del mes actual
+         *
+         */
+
+        $rules = [
+            'id'    =>  'required|integer',
+            'year'  =>  'integer|between:2015,2035',
+            'month' =>  'integer|between:1,12'
+        ];
+
+        $validator = \Validator::make($request->all(),$rules);
+
+        if($validator->fails())
+            return response()->json(['message' => 'Terminos de busqueda erroneos'], 404);
+
+
+        try {
+            if ($request->input('year') && $request->input('year')){
+                $date = Carbon::createFromDate($request->input('year'), $request->input('month'), 1, 'America/Lima');
+            }else{
+                $date = Carbon::now();
+            }
+
+            $start = $date->copy()->firstOfMonth();
+            $end = $date->copy()->lastOfMonth();
+
+            $employee = Employee::find($request->input('id'));
 
             $registers = DB::table('employees as e')->select(array('a.date','a.amount',
                 'a.start_time as start', 'l.start_time as break', 'l.end_time as end_break', 'a.end_time as end',
@@ -106,8 +183,8 @@ class ReportPayRollController extends Controller
     public function get_payroll(Request $request){
 
         $rules = [
-            'year'  =>  'required|integer|between:2015,2035',
-            'month' =>  'required|integer|between:1,12',
+            'year'  =>  'integer|between:2015,2035',
+            'month' =>  'integer|between:1,12',
             'employee_id' =>  'integer',
             'area_id' =>  'integer'
         ];
@@ -118,7 +195,11 @@ class ReportPayRollController extends Controller
             return response()->json(['message' => 'Terminos de busqueda erroneos'], 404);
 
         try {
-            $date = Carbon::createFromDate($request->input('year'), $request->input('month'), 1, -5);
+            if ($request->input('year') && $request->input('year')){
+                $date = Carbon::createFromDate($request->input('year'), $request->input('month'), 1, 'America/Lima');
+            }else{
+                $date = Carbon::now();
+            }
 
             $start = $date->copy()->firstOfMonth();
             $end = $date->copy()->lastOfMonth();
@@ -141,7 +222,14 @@ class ReportPayRollController extends Controller
                     $payroll[] = $this->getPayroll_for_user($employee, $start, $end);
                 }
             } else {
-                return response()->json(['message' => 'Terminos de busqueda erroneos*'], 404);
+                $employees = Employee::all();
+
+                if(count($employees) == 0)
+                    return response()->json(['message' => 'No hay empleados para listar'], 404);
+
+                foreach($employees as $employee){
+                    $payroll[] = $this->getPayroll_for_user($employee, $start, $end);
+                }
             }
 
             return response()->json(['payroll' => $payroll], 200);

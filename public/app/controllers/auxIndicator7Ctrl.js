@@ -74,7 +74,7 @@ angular.module('App')
         };
 
         $scope.listProviders = function() {
-            petition.get('api/providers')
+            petition.get('api/auxproviders')
                 .then(function(data){
                     $scope.providers = data.providers;
                 }, function(error){
@@ -137,6 +137,7 @@ angular.module('App')
         }
 
         angular.element(document).ready(function(){
+            util.resetTable($scope,$compile);
             $scope.product = angular.copy($scope.productClear);
             $scope.list();
             $scope.listProviders();

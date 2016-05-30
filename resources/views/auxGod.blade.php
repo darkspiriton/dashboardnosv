@@ -6,6 +6,9 @@
         <li id="alarma">
             <a ui-sref="Alarma"><i class="md md-shop-two"></i> Alarma de productos </a>
         </li>
+        <li id="outs">
+            <a ui-sref="outs"><i class="md md-shop-two"></i> Productos en stock-salida-ventas de hoy</a>
+        </li>
         <li id="products">
             <a href="#" ui-sref="Productos"><i class="md md-shop-two"></i> Administrar Productos</a>
         </li>
@@ -41,6 +44,17 @@
                 </li>
             </ul>
         </li>
+        <li class="sub-menu">
+            <a href="#"><i class="md md-now-widgets"></i> Administracion de cuestionarios </a>
+            <ul>
+                <li id="questionnaires">
+                    <a ui-sref="questionnaires"><i class="md md-security"></i> Administrar cuestionarios</a>
+                </li>
+                <li id="payrollEntry">
+                    <a ui-sref="PayrollEntry"><i class="md md-security"></i> Registro de asistencias </a>
+                </li>
+            </ul>
+        </li>
         <li id="comments">
             <a href="#" ui-sref="Comentarios"><i class="md md-messenger"></i> Administrar comentarios</a>
         </li>
@@ -64,5 +78,8 @@
     <script src="app/controllers/commentsCtrl.js"></script>
     <script src="app/controllers/employeesCtrl.js"></script>
     <script src="app/controllers/payrollEntryCtrl.js"></script>
+    <script src="app/controllers/godEmployeeAssistsCtrl.js"></script>
     <script src="app/controllers/indicatorPayRoleCtrl.js"></script>
+    <script src="app/controllers/products_out.js"></script>
+    <script src="app/controllers/q_questionnairesCtrl.js"></script>
 @stop

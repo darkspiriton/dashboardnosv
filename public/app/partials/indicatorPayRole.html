@@ -23,7 +23,7 @@
             <select class="col-sm-2" ng-change="data.employee_id = null" ng-options="area.id as area.name for area in areas" ng-model="data.area_id">
                 <option value="" disabled="disabled" selected="selected">Seleccione</option>
             </select>
-            <input type="button" ng-disabled="!dates.$valid" ng-click="list()" class="btn bgm-indigo m-l-20 col-sm-1" value="buscar">
+            <input type="button" ng-disabled="!dates.$valid" ng-click="list(data)" class="btn bgm-indigo m-l-20 col-sm-1" value="buscar">
         </div>
     </div>
     <div class="card-body card-padding table-responsive">

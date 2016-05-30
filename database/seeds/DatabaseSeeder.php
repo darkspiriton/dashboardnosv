@@ -12,12 +12,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        Model::unguard();
-        
+        Model::unguard();       
         
 //        $this->call(UbigeoTableSeeder::class);
-//        $this->call(UsersTableSeeder::class);
-//        $this->call(PlanillaTableSeeder::class);
+        $this->call(UsersTableSeeder::class);
+        $this->call(PlanillaTableSeeder::class);
+        $this->call(QuestionnairesTableSeeder::class);
 //        $this->call(ProductsTableSeeder::class);
 //        $this->call(GeneralTablesSeeder::class);
 //        $this->call(AuxProductsTableSeeder::class);

@@ -10,6 +10,12 @@ use Dashboard\Http\Requests;
 
 class TypeAuxProductController extends Controller
 {
+    
+    public function __construct()
+    {
+        $this->middleware('auth:GOD,ADM');
+    }
+
     /**
      * Display a listing of the resource.
      *

@@ -25,8 +25,9 @@ angular.module('App')
             ],
             actions	:   	[
                 ['status',   {
-                    0 : { txt : 'Inactivo' , cls : 'btn-danger', dis : false},
-                    1 : { txt : 'Activo' ,  cls : 'btn-success', dis : false} ,
+                    0 : { txt : 'no disponible' , cls : 'btn-danger', dis : false},
+                    1 : { txt : 'disponible' ,  cls : 'btn-success', dis : false},
+                    2 : { txt : 'vendido' ,  cls : 'bgm-teal', dis : false}
                 }
                 ],
                 ['actions', [
@@ -130,7 +131,7 @@ angular.module('App')
         };
 
         $scope.listProviders = function() {
-            petition.get('api/providers')
+            petition.get('api/auxproviders')
                 .then(function(data){
                     $scope.providers = data.providers;
                     $scope.providers.push(newProvider);
@@ -301,6 +302,7 @@ angular.module('App')
         // End events
 
         angular.element(document).ready(function(){
+            util.resetTable($scope,$compile);
             $scope.product = angular.copy($scope.productClear);
             $scope.newFeature = {};
             $scope.list();

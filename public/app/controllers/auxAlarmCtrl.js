@@ -2,10 +2,10 @@ angular.module('App')
     .config(function($stateProvider) {
         $stateProvider
             .state('Alarma', {
-                url: '/stock-general-de-productos',
+                url: '/Alarma-de-productos',
                 template: '<div class="card" >'+
                 '    <div class="card-header bgm-blue">'+
-                '        <h2>Stock general de productos</h2>'+
+                '        <h2>Alarma de productos</h2>'+
                 '        <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="list()"'+
                 '                data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"'+
                 '                title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>'+
@@ -46,6 +46,7 @@ angular.module('App')
         };
 
         angular.element(document).ready(function(){
+            util.resetTable($scope,$compile);
             $scope.list();
         });
     });

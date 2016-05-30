@@ -19,6 +19,13 @@ use Dashboard\Http\Requests;
 
 class AuxProductController extends Controller
 {
+    
+    public function __construct()
+    {
+        $this->middleware('auth:GOD,ADM,JVE');
+        $this->middleware('auth:GOD,ADM', ['except' => ['stockProd','stockProdType']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -463,7 +470,7 @@ class AuxProductController extends Controller
         if(!empty($data)){
             return response()->json([ 'alarms' => $alarms ],200);
         }else{
-            return response()->json([ 'message' => 'Por el momento no hay alarmas' ],401);
+            return response()->json([ 'message' => 'Por el momento no hay alarmas' ],404);
         }
     }
 

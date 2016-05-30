@@ -17,11 +17,12 @@ angular.module('App')
                 {"sTitle": "Nombre", "bSortable" : true},
                 {"sTitle": "Color", "bSortable" : true},
                 {"sTitle": "Size", "bSortable" : true},
-                {"sTitle": "Acción" , "bSearchable": false , "sWidth": "80px"}
+                {"sTitle": "Acción" , "bSearchable": false , "sWidth": "190px"}
             ],
             actions	:  	[
                 ['actions', [
-                    ['Agregar', 'addProduct' ,'bgm-teal']
+                    ['Agregar', 'addProduct' ,'bgm-teal'],
+                    ['x codigo', 'otherProduct' ,'bgm-purple']
                 ]
                 ]
             ],
@@ -53,12 +54,26 @@ angular.module('App')
                     $scope.updateList = false;
                 }, function(error){
                     console.log(error);
-                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                    toastr.error('Uyuyuy dice: ' + error.data.message);
                     $scope.updateList = false;
                 });
         };
 
-        $scope.submit = function () {
+        $scope.otherProduct = function (i) {
+            if ($scope.anadir)
+            petition.get('api/auxmovement/get/codes' , {params: {id: $scope.tableData[i].id}})
+                .then(function(data){
+                    $scope.codes = data.codes;
+                    $scope.prdTemp = angular.copy($scope.tableData[i]);
+                    util.modal('codes');
+                }, function(error){
+                    console.log(error);
+                    toastr.error('Uyuyuy dice: ' + error.data.message);
+                    $scope.updateList = false;
+                });
+        };
+
+        $scope.submit = function() {
             valid_product_date($scope.dataProducts, function() {
                 alertConfig.title = '¿Todo es correcto?';
                 swal(alertConfig,
@@ -68,6 +83,7 @@ angular.module('App')
                             $scope.formSubmit = false;
                             $scope.list();
                             util.ocultaformulario();
+                            $scope.anadir = false;
                         }, function (error) {
                             toastr.error('Uyuyuy dice: ' + error.data.message);
                             $scope.formSubmit = false;
@@ -94,11 +110,33 @@ angular.module('App')
                 }
             }
 
-            if (count == 0){
+            if (count == 0 && $scope.anadir){
+                toastr.success('se añadio');
                 $scope.dataProducts.push({id: $scope.tableData[ind].id});
                 $scope.products.push(angular.copy($scope.tableData[ind]));
             }
 
+        };
+
+        $scope.addProduct2 = function(ind){
+            $scope.prdTemp.id = $scope.codes[ind].id;
+            $scope.prdTemp.cod =  $scope.codes[ind].cod;
+            console.log($scope.prdTemp,ind);
+            var count = 0;
+            for(i in  $scope.products){
+                if(angular.equals($scope.prdTemp,$scope.products[i])){
+                    count++;
+                }
+            }
+
+            if (count == 0 && $scope.anadir){
+                toastr.success('se añadio');
+                $scope.dataProducts.push({id: $scope.codes[ind].id});
+                $scope.products.push(angular.copy($scope.prdTemp));
+            }
+
+            $scope.otherCod = null;
+            util.modalClose('codes');
         };
 
         $scope.removeProduct = function(i){
@@ -107,21 +145,16 @@ angular.module('App')
         };
 
         $scope.cancel = function () {
+            $scope.anadir = false;
             resetProduct();
             util.ocultaformulario();
         };
 
         $scope.new = function(){
+            $scope.anadir = true;
             resetProduct();
             util.muestraformulario();
         };
-
-        //$scope.getDate = function(i){
-        //    var local = new Date();
-        //    //$scope.dataProducts[i].date = local;
-        //    //$scope.products[i].date= local;
-        //    return local;
-        //};
 
         function resetProduct(){
             $scope.dataProducts = angular.copy($scope.productsClear);
@@ -129,6 +162,7 @@ angular.module('App')
         }
 
         angular.element(document).ready(function(){
+            util.resetTable($scope,$compile);
             resetProduct();
             $scope.list();
         });

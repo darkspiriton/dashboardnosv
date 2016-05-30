@@ -12,6 +12,15 @@ use Dashboard\Http\Requests;
 
 class AuxMovementController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth:GOD,ADM,JVE');
+        $this->middleware('auth:JVE' , ['only' => ['index','store','show','update','destroy','product_out']]);
+        $this->middleware('auth:GOD,JVE' , ['only' => 'movementPending']);
+        $this->middleware('auth:GOD' , ['only' => ['movementDay','movementDays','movementDaysDownload']]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -148,7 +157,7 @@ class AuxMovementController extends Controller
                 $response[] = $prd;
             }
 
-            return response()->json(['message' => 'El producto se agrego correctamente',
+            return response()->json(['message' => 'Se genero la salida de los productos correctamente',
                                         'products' => $response],200);
 
         } catch (\Exception $e) {
@@ -426,11 +435,33 @@ class AuxMovementController extends Controller
     }
 
     public function move_day(){
-        $salida = Product::where('status',0)->count();
-        $vendido = Product::where('status',3)->count();
+        $date = Carbon::now();
+        $salida = Movement::where('status','=','salida')->where('date_shipment','=',$date->toDateString())->count();
+        $vendido = Movement::where('status','=','Vendido')->where('date_shipment','=',$date->toDateString())->count();
+        $retornado = Movement::where('status','=','Retornado')->where('date_shipment','=',$date->toDateString())->count();
         $stock = Product::where('status',1)->count();
 
-        return response()->json(['data' => [ 'sal' => $salida, 'ven' => $vendido, 'stock' => $stock]],200);
+        return response()->json(['data' => [ 'sal' => $salida, 'ven' => $vendido, 'ret' => $retornado, 'stock' => $stock]],200);
+    }
+
+    public function get_cod_prod(Request $request){
+        $rules = [
+            'id'    =>  'required|integer'
+        ];
+
+        if(\Validator::make($request->all(), $rules)->fails())
+            return response()->json(['message' => 'No posee los campos necesarios para realizar una consulta'], 404);
+
+        $prd = Product::find($request->input('id'));
+
+        $product =  Product::select('id','cod')
+            ->where('name','=',$prd->name)
+            ->where('color_id','=',$prd->color_id)
+            ->where('size_id','=',$prd->size_id)
+            ->where('status','=',1)
+            ->get();
+
+        return response()->json(['codes' => $product],200);
     }
 
 }

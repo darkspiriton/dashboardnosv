@@ -125,8 +125,8 @@ angular.module('App')
         };
 
         angular.element(document).ready(function(){
+            util.resetTable($scope,$compile);
             $scope.entry = angular.copy($scope.entryClear);
-
             $scope.list();
             $scope.listEmployee();
         });

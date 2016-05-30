@@ -34,8 +34,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
       nameRole : 'roleName',
       configInfo : 'name',
       nameInfo : 'fullName',
-      configRoutes : 'routes',
-      nameRoutes: 'routesList',
       providers: {
         facebook: {
           name: 'facebook',
@@ -330,8 +328,7 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
           }
 
           var accessToken = response && response.access_token;
-          var token,routes,role,name;
-          var nameRoutes = config.nameRoutes;
+          var token,role,name;
           var nameRole = config.nameRole;
           var nameInfo = config.nameInfo;
 
@@ -346,7 +343,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
           if (!token && response) {
             var tokenRootData = config.tokenRoot && config.tokenRoot.split('.').reduce(function(o, x) { return o[x]; }, response.data);
             token = tokenRootData ? tokenRootData[config.tokenName] : response.data && response.data[config.tokenName];
-            routes = response.data && response.data[config.configRoutes];
             role = response.data && response.data[config.configRol];
             name = response.data && response.data[config.configInfo];
           }
@@ -357,7 +353,6 @@ if (typeof module !== 'undefined' && typeof exports !== 'undefined' && module.ex
           }
 
           storage.set(tokenName, token);
-          storage.set(nameRoutes, routes);
           storage.set(nameRole, role);
           storage.set(nameInfo, name);
         };

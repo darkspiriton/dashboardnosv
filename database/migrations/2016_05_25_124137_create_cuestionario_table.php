@@ -21,6 +21,7 @@ class CreateCuestionarioTable extends Migration
         Schema::create('questionnaires', function(Blueprint $table){
             $table->increments('id');
             $table->integer('category_id')->unsigned();
+            $table->string('description');
             $table->foreign('category_id')->references('id')->on('categories');
             $table->timestamps();
         });
@@ -50,6 +51,7 @@ class CreateCuestionarioTable extends Migration
         Schema::create('options', function(Blueprint $table){
             $table->increments('id');
             $table->integer('question_id')->unsigned();
+            $table->string('option');
             $table->foreign('question_id')->references('id')->on('questions');
             $table->timestamps();
         });

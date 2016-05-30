@@ -36,7 +36,7 @@ class Authenticate {
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next, $role = null)
+    public function handle($request, Closure $next, ...$role)
     {
         if ($request->header('Authorization')) {
             return $this->Authorization(explode(' ', $request->header('Authorization'))[1],$request,$next,$role);
@@ -47,10 +47,8 @@ class Authenticate {
         }
     }
 
-    private function Authorization($authorization,$request,Closure $next,$role){
+    private function Authorization($token,$request,Closure $next,$role){
         try{
-            $token = $authorization;
-
             $payload = (array) JWT::decode($token, Config::get('app.jwt_token'), array('HS256'));
 
             if ($payload['exp'] < time())
@@ -58,11 +56,12 @@ class Authenticate {
 
             if($payload == null)
                 return response()->json(['message' => 'El Token Alterado'],401);
+
             /*
             * Restringir acceso por nivel de rol
             */
-//            if($payload['role'] != $role)
-//                return response()->json(['message' => 'Acceso no autorizado'],401);
+            if(!in_array($payload['role'],$role) && $role[0] != 'all')
+                return response()->json(['message' => 'Acceso no autorizado'],401);
 
             $request['user'] = $payload;
             return $next($request);

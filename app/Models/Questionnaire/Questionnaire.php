@@ -15,4 +15,12 @@ class Questionnaire extends Model
     public function category(){
         return $this->belongsTo(Category::class);
     }
+
+    public function answersP(){
+        return $this->hasMany(AnswerProduct::class);
+    }
+
+    public function answersC(){
+        return $this->hasMany(AnswerCustomer::class);
+    }
 }

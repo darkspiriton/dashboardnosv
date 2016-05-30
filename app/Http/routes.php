@@ -145,6 +145,11 @@ Route::group(['prefix' => 'api'], function(){
 
     Route::resource('questionnaire', 'QuestionnairesController',
         ['only' => ['index', 'store', 'show', 'edit', 'update']]);
+
+    //Rutas de creacion de producto y cliente
+    Route::resource('auxqcustomer','AuxQCustomer',['only'=>['index','store','update','show','destroy']]);
+    Route::resource('auxqproduct','AuxQProduct',['only'=>['index','store','update','show','destroy']]);
+
 });
 
 Route::get('/test', function(\Illuminate\Http\Request $request){

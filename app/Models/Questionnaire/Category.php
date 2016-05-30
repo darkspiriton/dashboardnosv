@@ -11,4 +11,8 @@ class Category extends Model
     public function questionnaires(){
         return $this->hasMany(Questionnaire::class);
     }
+
+    public function products(){
+        return $this->hasMany(Product::class);
+    }
 }

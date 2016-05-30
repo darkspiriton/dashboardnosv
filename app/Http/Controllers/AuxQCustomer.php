@@ -41,52 +41,43 @@ class AuxQCustomer extends Controller
             $query->where('questionnaire_id','=',$number);
         },'answers.option'])->get();
 
+        foreach ($customers as $customer){
 
-        foreach ($products as $product){
-
-
-            //cant de respuestas de un producto y sus respuestas
-            $cantAP=$product['answers']->count();
-
+            //respuestas a las preguntas
+            $cantAC=$customer['answers']->count();
 
             $z=0;
-            for($i=0;$i<$cantAP;$i++){
-                echo "Respuesta Usuario";
+            $countP = 0;
+            foreach($products as $product) {
+                for ($i = 0; $i < $cantAC; $i++) {
 
-                //obtenemos el id de la pregunta y id de la respuesta del producto
-                $idPP=(int)$product['answers'][$i]['option']['question_id'];
-                $idPR=(int) $product['answers'][$i]['option']['id'];
+                    //obtenemos el id de la pregunta y id de la respuesta del usuario
+                    $idCP = (int)$customer['answers'][$i]['option']['question_id'];
+                    $idCR = (int)$customer['answers'][$i]['option']['id'];
+                    
+                    //cant de respuestas de un producto y sus respuestas
+                    $cantAP = $product['answers']->count();
+                    $j = 0;
+                    $termino = false;
+                    while ($termino == false and $j < $cantAP) {
 
-                $countP=0;
-
-                foreach($customers as $customer){
-
-                    //respuestas a las preguntas
-                    $cantAC=$customer['answers']->count();
-                    $j=0;
-                    $termino=false;
-                    while($termino==false and $j < $cantAC){
-
-                        //obtenemos el id de la pregunta y id de la respuesta del usuario
-                        echo $idCP= (int) $customer['answers'][$j]['option']['question_id'];
-                        echo $idCR= (int) $customer['answers'][$j]['option']['id'];
-                        if($idCP==$idPP){
-                            if($idCR==$idPR){
+                        //obtenemos el id de la pregunta y id de la respuesta del producto
+                        $idPP = (int)$product['answers'][$j]['option']['question_id'];
+                        $idPR = (int)$product['answers'][$j]['option']['id'];
+                        if ($idCP == $idPP) {
+                            if ($idCR == $idPR) {
                                 //Coincidencia se agrega 1 contador y el id del product
-                                $termino=true;
+                                $termino = true;
                                 $countP++;
                             }
                         }
                         $j++;
-                        $countP;
                     }
-                    $porcentaje[$z]=round(100*$countP/$cantAC,2);
-                    $z++;
+      
+                    $porcentaje[$z] = round(100 * $countP / $cantAC, 2);
 
                 }
-
-
-
+                $z++;
             }
             dd($porcentaje);
         }

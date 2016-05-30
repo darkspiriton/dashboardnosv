@@ -1,28 +1,28 @@
 angular.module('App')
     .config(function($stateProvider) {
         $stateProvider
-            .state('questions', {
-                url: '/Gestion-de-preguntas',
-                templateUrl: 'app/partials/q_questions.html',
-                controller : 'questionsCtrl'
+            .state('categories', {
+                url: '/Gestion-de-categorias',
+                templateUrl: 'app/partials/q_categories.html',
+                controller : 'categoriesCtrl'
             });
     })
-    .controller('questionsCtrl', function($scope, $compile, $state, util, petition, toastr){
+    .controller('categoriesCtrl', function($scope, $compile, $state, util, petition, toastr){
 
-        util.liPage('questions');
+        util.liPage('categories');
 
         $scope.tableConfig 	= 	{
             columns :	[
-                {"sTitle": "pregunta", "bSortable" : true},
+                {"sTitle": "categoria", "bSortable" : true},
                 {"sTitle": "Accion" , "bSearchable": true, "sWidth": '80px'}
             ],
             actions	:   	[
                 ['actions', [
-                    ['detalle', 'view' ,'btn-info']
+                    ['editar', 'edit' ,'btn-primary']
                 ]
                 ]
             ],
-            data  	: 	['question','actions'],
+            data  	: 	['name','actions'],
             configStatus : 'status'
         };
 
@@ -38,16 +38,15 @@ angular.module('App')
             closeOnConfirm: true
         };
 
-        $scope.questionClear = {
-            question: null,
-            options: []
+        $scope.categoryClear = {
+            name: null
         };
 
         $scope.list = function() {
             $scope.updateList = true;
-            petition.get('api/question')
+            petition.get('api/q_category')
                 .then(function(data){
-                    $scope.tableData = data.questions;
+                    $scope.tableData = data.categories;
                     $('#table').AJQtable('view', $scope, $compile);
                     $scope.updateList = false;
                 }, function(error){
@@ -57,49 +56,28 @@ angular.module('App')
                 });
         };
 
-        $scope.addOption = function(option){
-            var count = 0;
-            for(i in  $scope.question.options){
-                if(angular.equals(option,$scope.question.options[i])){
-                    count++;
-                    break;
-                }
-            }
-
-            if (count == 0){
-                toastr.success('se añadio');
-                $scope.question.options.push(option);
-                $scope.option = null;
-            }
-
-        };
-        
-        $scope.removeOption = function (i) {
-            $scope.question.options.splice(i,1);
-        };
-
-        $scope.view = function( ind ){
+        $scope.edit = function( ind ){
             var id = $scope.tableData[ind].id;
-            petition.get('api/question/' + id )
+            petition.get('api/q_category/' + id )
                 .then(function(data){
-                    $scope.questionDetail = data.question;
-                    util.modal();
+                    $scope.category = data.category;
+                    util.muestraformulario();
                 }, function(error){
                     toastr.error('Huy Huy dice: ' + error.data.message);
                 });
         };
 
+
         $scope.submit = function () {
-            if($scope.question.options.length == 0)return toastr.error('La pregunta debe tener al menos una opción');
             alertConfig.title = '¿Todo es correcto?';
             swal(alertConfig ,
                 function() {
-                    var method = ( $scope.question.id ) ? 'PUT' : 'POST';
-                    var url = ( method == 'PUT') ? util.baseUrl('api/question/' + $scope.question.id) : util.baseUrl('api/question');
+                    var method = ( $scope.category.id ) ? 'PUT' : 'POST';
+                    var url = ( method == 'PUT') ? util.baseUrl('api/q_category/' + $scope.category.id) : util.baseUrl('api/q_category');
                     var config = {
                         method: method,
                         url: url,
-                        data: $scope.question
+                        data: $scope.category
                     };
                     $scope.formSubmit=true;
                     petition.custom(config).then(function(data){
@@ -115,19 +93,19 @@ angular.module('App')
         };
 
         $scope.cancel = function () {
-            $scope.question = angular.copy($scope.questionClear);
+            $scope.category = angular.copy($scope.categoryClear);
             util.ocultaformulario();
         };
 
         $scope.new = function(){
-            $scope.question = angular.copy($scope.questionClear);
+            $scope.category = angular.copy($scope.categoryClear);
             util.muestraformulario();
         };
 
 
         angular.element(document).ready(function(){
             util.resetTable($scope,$compile);
-            $scope.question = angular.copy($scope.questionClear);
+            $scope.category = angular.copy($scope.categoryClear);
             $scope.list();
         });
     });

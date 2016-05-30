@@ -37,12 +37,12 @@ class QuestionnairesTableSeeder extends Seeder
             ));
         }
 
-        for($i=0;$i<20;$i++){
+        for($i=0;$i<1;$i++){
             $questionnaire_id= DB::table('questionnaires')->insertGetId(array(
                 'category_id' => $faker->randomFloat( $nbMaxDecimals = 0, $min= 1, $max=4),
             ));
 
-            for($j=0;$j<10;$j++){
+            for($j=0;$j<5;$j++){
                 $question_id= DB::table('questions')->insertGetId(array(
                     'question' => $faker->sentence($nbWords = 6, $variableNbWords = true),
                 ));
@@ -52,9 +52,10 @@ class QuestionnairesTableSeeder extends Seeder
                     'question_id' => $question_id,
                 ));
 
-                for($x=0;$x<5;$x++){
+                for($x=0;$x<2;$x++){
                     $option_id=DB::table('options')->insertGetId(array(
                         'question_id' => $question_id,
+                        'option' => $faker->sentence($nbWords = 6, $variableNbWords = true)
                     ));
 
                     DB::table('answers_customers')->insert(array(

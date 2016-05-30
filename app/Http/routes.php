@@ -132,6 +132,13 @@ Route::group(['prefix' => 'api'], function(){
     Route::get('auxproviders', 'AuxProductController@getProviders');
     Route::get('sizes', 'AuxProductController@getSizes');
     Route::get('colors', 'AuxProductController@getColors');
+
+    /*
+     * QUESTIONNAIRES
+     */
+
+    Route::resource('question', 'QuestionController',
+        ['only' => ['index', 'store', 'show']]);
 });
 
 Route::get('/test', function(\Illuminate\Http\Request $request){

@@ -28,13 +28,13 @@
             </ul>
         </li>
         <li id="users">
-            <a href="#" ui-sref="Usuarios"><i class="md md-security"></i> Administrar usuarios</a>
+            <a href="#" ui-sref="Usuarios"><i class="md md-security"></i> Gestion de usuarios</a>
         </li>
         <li class="sub-menu">
-            <a href="#"><i class="md md-now-widgets"></i> Administracion de planilla </a>
+            <a href="#"><i class="md md-now-widgets"></i> Gestionar planilla </a>
             <ul>
                 <li id="employees">
-                    <a ui-sref="Employees"><i class="md md-security"></i> Administrar empleados</a>
+                    <a ui-sref="Employees"><i class="md md-security"></i> Gestionar empleados</a>
                 </li>
                 <li id="payrollEntry">
                     <a ui-sref="PayrollEntry"><i class="md md-security"></i> Registro de asistencias </a>
@@ -45,18 +45,18 @@
             </ul>
         </li>
         <li class="sub-menu">
-            <a href="#"><i class="md md-now-widgets"></i> Administracion de cuestionarios </a>
+            <a href="#"><i class="md md-now-widgets"></i> Gestion de cuestionarios </a>
             <ul>
                 <li id="questionnaires">
-                    <a ui-sref="questionnaires"><i class="md md-security"></i> Administrar cuestionarios</a>
+                    <a ui-sref="questionnaires"><i class="md md-security"></i> Gestionar cuestionarios</a>
                 </li>
-                <li id="payrollEntry">
-                    <a ui-sref="PayrollEntry"><i class="md md-security"></i> Registro de asistencias </a>
+                <li id="questions">
+                    <a ui-sref="questions"><i class="md md-security"></i> Gestionar preguntas </a>
                 </li>
             </ul>
         </li>
         <li id="comments">
-            <a href="#" ui-sref="Comentarios"><i class="md md-messenger"></i> Administrar comentarios</a>
+            <a href="#" ui-sref="Comentarios"><i class="md md-messenger"></i> Gestionar comentarios</a>
         </li>
     </ul>
 @stop
@@ -82,4 +82,5 @@
     <script src="app/controllers/indicatorPayRoleCtrl.js"></script>
     <script src="app/controllers/products_out.js"></script>
     <script src="app/controllers/q_questionnairesCtrl.js"></script>
+    <script src="app/controllers/q_questionsCtrl.js"></script>
 @stop

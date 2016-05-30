@@ -44,7 +44,7 @@
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-list"></i></span>
                         <div class="fg-line select">
-                            <select class="form-control" ng-options="provider.id as provider.name for provider in providers" ng-model="questionnaire.category_id" required>
+                            <select class="form-control" ng-options="category.id as category.name for category in categories" ng-model="questionnaire.category_id" required>
                                 <option value="" disabled="disabled" select="true">Seleccione</option>
                             </select>
                         </div>
@@ -58,7 +58,7 @@
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-list"></i></span>
                         <div class="fg-line select">
-                            <select class="form-control" ng-change="addType(typeSelect)" ng-options="$index as type.name for ($index, type) in types" ng-model="typeSelect">
+                            <select class="form-control" ng-change="addQuestion(question)" ng-options="$index as question.question for ($index, question) in questions" ng-model="question">
                                 <option value="" disabled="disabled" select="true">Seleccione</option>
                             </select>
                         </div>
@@ -75,14 +75,14 @@
                     <table class="table table-bordered w-100 table-attr text-center">
                         <thead>
                         <tr>
-                            <th>Pregunta</th>
+                            <th>pregunta</th>
                             <th>Accion</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="product in products">
-                            <td style="display: table-cell;">{{ product.cod }}</td>
-                            <td style="width: 80px"><button ng-click="removeProduct($index)" class="btn btn-danger btn-sm waves-effect">Eliminar</button></td>
+                        <tr ng-repeat="question in questionsView">
+                            <td style="display: table-cell;">{{ question.question }}</td>
+                            <td style="width: 80px"><button ng-click="removeQuestion($index)" class="btn btn-danger btn-sm waves-effect">Eliminar</button></td>
                         </tr>
                         </tbody>
                     </table>
@@ -99,5 +99,53 @@
             </div>
         </form>
 
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="Modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bgm-teal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title c-white">Detalle de cuestionario</h3>
+            </div>
+            <div class="modal-body card-padding">
+                <form class="form-horizontal" autocomplete="off" submit="return false;">
+                    <div class="form-group form-pad-top">
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Descripción: </label>
+                        <label class="col-xs-6 col-sm-9 control-label" style="text-align: left" ng-bind="questionnaireDetail.description"></label>
+
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Categoría: </label>
+                        <label class="col-xs-6 col-sm-9 control-label" style="text-align: left" ng-bind="questionnaireDetail.category.name"></label>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Preguntas: </label>
+                        <div class="col-xs-8 col-sm-9">
+                            <div class="row">
+                                <div class="attr-group col-xs-12">
+                                    <table class="table table-bordered w-100 table-attr text-center">
+                                        <thead>
+                                        <tr>
+                                            <th>Pregunta</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="question in questionnaireDetail.questions">
+                                            <td>{{ question.question }}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
     </div>
 </div>

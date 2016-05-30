@@ -6,8 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Questionnaire extends Model
 {
+    protected $hidden = ['created_at','updated_at'];
+
     public function questions(){
-        return $this->hasMany(Question::class,'questionnaires_questions','question_id');
+        return $this->belongsToMany(Question::class,'questionnaires_questions','questionnaire_id');
     }
 
     public function category(){

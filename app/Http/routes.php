@@ -142,6 +142,9 @@ Route::group(['prefix' => 'api'], function(){
     
     Route::resource('q_category', 'q_CategoryController',
         ['only' => ['index', 'store', 'show', 'update']]);
+
+    Route::resource('questionnaire', 'QuestionnairesController',
+        ['only' => ['index', 'store', 'show', 'edit', 'update']]);
 });
 
 Route::get('/test', function(\Illuminate\Http\Request $request){

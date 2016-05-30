@@ -35,29 +35,33 @@ class QuestionController extends Controller
      */
     public function store(Request $request)
     {
-        $rules = [
-            'question'  => 'required|string|max:255',
-            'options'   =>  'required|array',
-            'options.*' =>  'string'
-        ];
+        try{
+            $rules = [
+                'question'  => 'required|string|max:255',
+                'options'   =>  'required|array',
+                'options.*' =>  'string'
+            ];
 
-        if(\Validator::make($request->all(), $rules)->fails())
-            return response()->json(['message' => 'Campos requeridos no recibidos'],401);
+            if(\Validator::make($request->all(), $rules)->fails())
+                return response()->json(['message' => 'Campos requeridos no recibidos'],401);
 
-        $question = new Question();
-        $question->question = '¿ '.ucfirst($request->input('question')).' ?';
-        $question->save();
+            $question = new Question();
+            $question->question = '¿ '.ucfirst($request->input('question')).' ?';
+            $question->save();
 
-        $options = array();
-        foreach ($request->input('options') as $option){
-            $optionModel = new Option();
-            $optionModel->option = $option;
-            array_push($options, $optionModel);
+            $options = array();
+            foreach ($request->input('options') as $option){
+                $optionModel = new Option();
+                $optionModel->option = $option;
+                array_push($options, $optionModel);
+            }
+
+            $question->options()->saveMany($options);
+
+            return response()->json(['message' => 'Se agrego la pregunta'],200);
+        }catch (\Exception $e){
+            return response()->json(['message' => 'Ocurrio un problema inesperado'],500);
         }
-
-        $question->options()->saveMany($options);
-
-        return response()->json(['message' => 'Se agrego la pregunta'],200);
     }
 
     /**
@@ -69,6 +73,10 @@ class QuestionController extends Controller
     public function show($id)
     {
         $question = Question::with('options')->find($id);
+
+        if(!$question->exists())
+            return response()->json(['message' => 'la pregunta a mostrar no existe'],404);
+
         return response()->json(['question' => $question],200);
     }
 

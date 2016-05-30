@@ -38,29 +38,33 @@ class QuestionnairesController extends Controller
      */
     public function store(Request $request)
     {
-        $rules = [
-            'description'   =>  'required|string|max:255',
-            'category_id'   =>  'required|integer|exists:categories,id',
-            'questions'     =>  'required|array',
-            'questions.*.id'    =>  'required|integer|exists:questions,id'
-        ];
+        try{
+            $rules = [
+                'description'   =>  'required|string|max:255',
+                'category_id'   =>  'required|integer|exists:categories,id',
+                'questions'     =>  'required|array',
+                'questions.*.id'    =>  'required|integer|exists:questions,id'
+            ];
 
-        if(\Validator::make($request->all(), $rules)->fails())
-            return response()->json(['message' => 'La informacion enviada no es valida'],401);
+            if(\Validator::make($request->all(), $rules)->fails())
+                return response()->json(['message' => 'La informacion enviada no es valida'],401);
 
-        $questionnaire = new Questionnaire();
-        $questionnaire->description = $request->input('description');
-        $questionnaire->category_id = $request->input('category_id');
-        $questionnaire->save();
+            $questionnaire = new Questionnaire();
+            $questionnaire->description = $request->input('description');
+            $questionnaire->category_id = $request->input('category_id');
+            $questionnaire->save();
 
-        $questions = array();
-        foreach ($request->input('questions') as $key => $question){
-            $questions[$key]['question_id'] = $question['id'];
+            $questions = array();
+            foreach ($request->input('questions') as $key => $question){
+                $questions[$key]['question_id'] = $question['id'];
+            }
+
+            $questionnaire->questions()->attach($questions);
+
+            return response()->json(['message' => 'Se guardo el cuestionario correctamente'],200);
+        }catch (\Exception $e){
+            return response()->json(['message' => 'Ocurrio un problema inesperado'],500);
         }
-
-        $questionnaire->questions()->attach($questions);
-
-        return response()->json(['message' => 'Se guardo el cuestionario correctamente'],200);
     }
 
     /**
@@ -86,16 +90,20 @@ class QuestionnairesController extends Controller
      */
     public function edit($id)
     {
-        $questionnaire = Questionnaire::find($id);
-        if($questionnaire == null)
-            return response()->json(['message' => 'El cuestionario no existe'],404);
+        try{
+            $questionnaire = Questionnaire::find($id);
+            if($questionnaire == null)
+                return response()->json(['message' => 'El cuestionario no existe'],404);
 
-        $questions = \DB::table('questionnaires_questions as qq')->select(array('qq.question_id as id','q.question'))
-                    ->join('questions as q','q.id','=','qq.question_id')
-                    ->where('qq.questionnaire_id','=',$id)
-                    ->get();
+            $questions = \DB::table('questionnaires_questions as qq')->select(array('qq.question_id as id','q.question'))
+                        ->join('questions as q','q.id','=','qq.question_id')
+                        ->where('qq.questionnaire_id','=',$id)
+                        ->get();
 
-        return response()->json(['questionnaire' => $questionnaire, 'questions' => $questions],200);
+            return response()->json(['questionnaire' => $questionnaire, 'questions' => $questions],200);
+        }catch (\Exception $e){
+            return response()->json(['message' => 'Ocurrio un problema inesperado'],500);
+        }
     }
 
     /**

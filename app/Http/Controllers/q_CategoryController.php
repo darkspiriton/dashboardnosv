@@ -38,18 +38,22 @@ class q_CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $rules = [
-            'name'  =>  'required|unique:categories'
-        ];
+        try{
+            $rules = [
+                'name'  =>  'required|unique:categories'
+            ];
 
-        if(\Validator::make($request->all(), $rules)->fails())
-            return response()->json(['message' =>  'El nombre de categoria no es valido o ya existe'],401);
+            if(\Validator::make($request->all(), $rules)->fails())
+                return response()->json(['message' =>  'El nombre de categoria no es valido o ya existe'],401);
 
-        $category = new Category();
-        $category->name = ucfirst($request->input('name'));
-        $category->save();
+            $category = new Category();
+            $category->name = ucfirst($request->input('name'));
+            $category->save();
 
-        return response()->json(['message' => 'La categoria se agrego correctamente'],200);
+            return response()->json(['message' => 'La categoria se agrego correctamente'],200);
+        }catch (\Exception $e){
+            return response()->json(['message' => 'Ocurrio un problema inesperado'],500);
+        }
     }
 
     /**
@@ -84,24 +88,28 @@ class q_CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $rules = [
-            'name'  =>  'required'
-        ];
+        try{
+            $rules = [
+                'name'  =>  'required'
+            ];
 
-        if(\Validator::make($request->all(), $rules)->fails())
-            return response()->json(['messages' => 'El nombre de categoria no es valido'],401);
+            if(\Validator::make($request->all(), $rules)->fails())
+                return response()->json(['messages' => 'El nombre de categoria no es valido'],401);
 
-        if(Category::where('name','=',$request->input('name'))->where('id','<>',$id)->count() > 0)
-            return response()->json(['message' => 'La categoria ya existe'],401);
+            if(Category::where('name','=',$request->input('name'))->where('id','<>',$id)->count() > 0)
+                return response()->json(['message' => 'La categoria ya existe'],401);
 
-        $category = Category::find($id);
-        if(!$category->exists())
-            return response()->json(['message' => 'La categoria a editar no existe'],401);
+            $category = Category::find($id);
+            if(!$category->exists())
+                return response()->json(['message' => 'La categoria a editar no existe'],401);
 
-        $category->name = ucfirst($request->input('name'));
-        $category->save();
+            $category->name = ucfirst($request->input('name'));
+            $category->save();
 
-        return response()->json(['message' => 'Se edito con exito la categoria'],200);
+            return response()->json(['message' => 'Se edito con exito la categoria'],200);
+        }catch (\Exception $e){
+            return response()->json(['message' => 'Ocurrio un problema inesperado'],500);
+        }
     }
 
     /**

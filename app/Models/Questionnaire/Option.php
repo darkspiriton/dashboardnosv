@@ -4,13 +4,9 @@ namespace Dashboard\Models\Questionnaire;
 
 use Illuminate\Database\Eloquent\Model;
 
-
 class Option extends Model
 {
-    protected $table="options";
-    protected $hidden=[
-      'created_at','updated_at'
-    ];
+    protected $hidden=['created_at','updated_at'];
     
     public function answersP(){
         return $this->hasMany(AnswerProduct::class);

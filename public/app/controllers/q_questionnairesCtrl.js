@@ -13,156 +13,171 @@ angular.module('App')
 
         $scope.tableConfig 	= 	{
             columns :	[
-                {"sTitle": "Fecha", "bSortable" : true, 'sWidth': '80px'},
-                {"sTitle": "descripciont", "bSortable" : true},
-                {"sTitle": "Categoria", "bSortable" : true, "sWidth": '100px'},
-                {"sTitle": "Status" , "bSearchable": true, "sWidth": '80px'},
+                {"sTitle": "description", "bSortable" : true},
+                {"sTitle": "Categoria", "bSortable" : true, "sWidth": '1px'},
                 {"sTitle": "Accion" , "bSearchable": true, "sWidth": '190px'}
             ],
             actions	:   	[
-                ['status',   {
-                    0 : { txt : 'Inactivo' , cls : 'btn-danger', dis : false},
-                    1 : { txt : 'Activo' ,  cls : 'btn-success', dis : false},
-                }
-                ],
                 ['actions', [
-                    ['eliminar', 'delete' ,'bgm-red'],
+                    ['detalle', 'detail' ,'btn-info'],
                     ['editar', 'edit' ,'btn-primary']
                 ]
                 ]
             ],
-            data  	: 	['date','description','category.name','status','actions'],
-            configStatus : 'status'
+            data  	: 	['description','category.name','actions'],
         };
 
-        // var alertConfig = {
-        //     title: "¿Esta seguro?",
-        //     text: "",
-        //     type: "warning",
-        //     showCancelButton: true,
-        //     confirmButtonColor: "#DD6B55",
-        //     confirmButtonText: "SI",
-        //     cancelButtonColor: "#212121",
-        //     cancelButtonText: "CANCELAR",
-        //     closeOnConfirm: true
-        // };
+        var alertConfig = {
+            title: "¿Esta seguro?",
+            text: "",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "SI",
+            cancelButtonColor: "#212121",
+            cancelButtonText: "CANCELAR",
+            closeOnConfirm: true
+        };
 
-        // $scope.productClear = {
-        //     name: null,
-        //     cant: null,
-        //     cod: null,
-        //     provider_id: null,
-        //     size_id : null,
-        //     color_id: null,
-        //     day: null,
-        //     count: null,
-        //     types: []
-        // };
+        $scope.questionnaireClear = {
+            description: null,
+            category_id: null,
+            questions: []
+        };
 
         $scope.list = function() {
-            // $scope.updateList = true;
-            // petition.get('api/auxproduct')
-            //     .then(function(data){
-            //         $scope.tableData = data.products;
-            //         $('#table').AJQtable('view', $scope, $compile);
-            //         $scope.updateList = false;
-            //     }, function(error){
-            //         console.log(error);
-            //         toastr.error('Ups ocurrio un problema: ' + error.data.message);
-            //         $scope.updateList = false;
-            //     });
+            $scope.updateList = true;
+            petition.get('api/questionnaire')
+                .then(function(data){
+                    $scope.tableData = data.questionnaires;
+                    $('#table').AJQtable('view', $scope, $compile);
+                    $scope.updateList = false;
+                }, function(error){
+                    console.log(error);
+                    toastr.error('Huy Huy: ' + error.data.message);
+                    $scope.updateList = false;
+                });
         };
 
-        // $scope.edit = function (i) {
-        //     petition.get('api/auxproduct/' + $scope.tableData[i].id)
-        //         .then(function (data) {
-        //             console.log(data);
-        //             productEdit(data.product);
-        //             $scope.productState = false;
-        //             util.muestraformulario();
-        //         }, function (error) {
-        //             console.log(error);
-        //             toastr.error('Uyuyuy dice: '+ error.data.message);
-        //         });
-        // };
+        $scope.edit = function (i) {
+            petition.get('api/questionnaire/' + $scope.tableData[i].id + '/edit')
+                .then(function (data) {
+                    productEdit(data.questionnaire, data.questions);
+                    $scope.productState = false;
+                    util.muestraformulario();
+                }, function (error) {
+                    console.log(error);
+                    toastr.error('Uyuyuy dice: '+ error.data.message);
+                });
+        };
+        
+        function productEdit(questionnaire,questions) {
+            $scope.questionnaire = questionnaire;
+            $scope.questionnaire.questions = [];
+            for(i in questions){
+                $scope.questionnaire.questions.push({id: questions[i].id});
+            }
+            $scope.questionsView = questions;
+        }
+        
+        $scope.addQuestion = function (ind) {
+            var count = 0;
+            for(i in  $scope.questionnaire.questions){
+                if($scope.questions[ind].id == $scope.questionnaire.questions[i].id){
+                    count++;
+                    $scope.question = null;
+                    break;
+                }
+            }
 
-        // $scope.delete = function (i) {
-        //     alertConfig.title = "¿El producto se eliminara sin medio de retorno, esta seguro?";
-        //     sweetAlert(alertConfig, function () {
-        //         petition.delete('api/auxproduct/' + $scope.tableData[i].id)
-        //             .then(function (data) {
-        //                 $scope.list();
-        //                 toastr.success(data.message);
-        //             }, function (error) {
-        //                 toastr.error('Uyuyuy dice: ' + error.data.message);
-        //             });
-        //     });
-        // };
+            if (count == 0){
+                toastr.success('se añadio');
+                $scope.questionnaire.questions.push({id: $scope.questions[ind].id});
+                $scope.questionsView.push($scope.questions[ind]);
+                $scope.question = null;
+            }
+        };
 
-        // $scope.listSizes = function() {
-        //     petition.get('api/sizes')
-        //         .then(function(data){
-        //             $scope.sizes = data.sizes;
-        //         }, function(error){
-        //             console.log(error);
-        //             toastr.error('Ups ocurrio un problema: ' + error.data.message);
-        //         });
-        // };
+        $scope.removeQuestion = function (i) {
+            $scope.questionnaire.questions.splice(i,1);
+            $scope.questionsView.splice(i,1);
+        };
 
-        // $scope.view = function( ind ){
-        //     var id = $scope.tableData[ind].id;
-        //     petition.get('api/product/group_attributes/' + id )
-        //         .then(function(data){
-        //             $scope.productGroupAttributes = data.grp_attributes;
-        //             $scope.productDetail = angular.copy($scope.tableData[ind]);
-        //             util.modal();
-        //         }, function(error){
-        //             toastr.error('Ups ocurrio un problema: ' + error.data.message);
-        //         });
-        // };
-        //
-        // $scope.submit = function () {
-        //     alertConfig.title = '¿Todo es correcto?'
-        //     swal(alertConfig ,
-        //         function() {
-        //             var method = ( $scope.product.id ) ? 'PUT' : 'POST';
-        //             var url = ( method == 'PUT') ? util.baseUrl('api/auxproduct/' + $scope.product.id) : util.baseUrl('api/auxproduct');
-        //             var config = {
-        //                 method: method,
-        //                 url: url,
-        //                 data: $scope.product
-        //             };
-        //             $scope.formSubmit=true;
-        //             petition.custom(config).then(function(data){
-        //                 toastr.success(data.message);
-        //                 $scope.formSubmit=false;
-        //                 $scope.list();
-        //                 $scope.listCodes();
-        //                 util.ocultaformulario();
-        //             }, function(error){
-        //                 toastr.error('Uyuyuy dice: ' + error.data.message);
-        //                 $scope.formSubmit=false;
-        //             })
-        //         });
-        //
-        // };
+        $scope.listQuestions = function() {
+            petition.get('api/question')
+                .then(function(data){
+                    $scope.questions = data.questions;
+                }, function(error){
+                    console.log(error);
+                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                });
+        };
+
+        $scope.listCategories = function() {
+            petition.get('api/q_category')
+                .then(function(data){
+                    $scope.categories = data.categories;
+                }, function(error){
+                    console.log(error);
+                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                });
+        };
+
+        $scope.detail = function( ind ){
+            var id = $scope.tableData[ind].id;
+            petition.get('api/questionnaire/' + id )
+                .then(function(data){
+                    $scope.questionnaireDetail = data.questionnaire;
+                    util.modal();
+                }, function(error){
+                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                });
+        };
+
+        $scope.submit = function () {
+            if($scope.questionnaire.questions.length == 0)return toastr.error('El cuestionario debe tener al menos una pregunta');
+            alertConfig.title = '¿Todo es correcto?';
+            swal(alertConfig ,
+                function() {
+                    var method = ( $scope.questionnaire.id ) ? 'PUT' : 'POST';
+                    var url = ( method == 'PUT') ? util.baseUrl('api/questionnaire/' + $scope.questionnaire.id) : util.baseUrl('api/questionnaire');
+                    var config = {
+                        method: method,
+                        url: url,
+                        data: $scope.questionnaire
+                    };
+                    $scope.formSubmit=true;
+                    petition.custom(config).then(function(data){
+                        toastr.success(data.message);
+                        $scope.formSubmit=false;
+                        $scope.list();
+                        util.ocultaformulario();
+                    }, function(error){
+                        toastr.error('Uyuyuy dice: ' + error.data.message);
+                        $scope.formSubmit=false;
+                    })
+                });
+
+        };
 
         $scope.cancel = function () {
-            $scope.product = angular.copy($scope.productClear);
-            $scope.productState = true;
+            $scope.questionnaire = angular.copy($scope.questionnaireClear);
+            $scope.questionsView = [];
             util.ocultaformulario();
         };
 
         $scope.new = function(){
-            $scope.product = angular.copy($scope.productClear);
-            $scope.productState = true;
+            $scope.questionnaire = angular.copy($scope.questionnaireClear);
+            $scope.questionsView = [];
             util.muestraformulario();
         };
 
-
         angular.element(document).ready(function(){
             util.resetTable($scope,$compile);
-            // $scope.product = angular.copy($scope.productClear);
+            $scope.questionnaire = angular.copy($scope.questionnaireClear);
+            $scope.questionsView = [];
             $scope.list();
+            $scope.listQuestions();
+            $scope.listCategories();
         });
     });

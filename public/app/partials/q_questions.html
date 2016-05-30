@@ -1,6 +1,6 @@
 <div class="card" >
     <div class="card-header bgm-blue">
-        <h2>Gestión de cuestionarios</h2>
+        <h2>Gestión de preguntas</h2>
         <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="list()"
                 data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
                 title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
@@ -18,52 +18,39 @@
 
 <div class="card" id="formulariohide">
     <div class="card-header bgm-blue">
-        <h2>Gestionar cuestionario</h2>
+        <h2>Gestionar preguntas</h2>
     </div>
 
     <div class="card-body card-padding" >
         <div class="card-header">
-            <h2>Datos de cuestionario</h2>
+            <h2>Informacióm</h2>
         </div>
 
         <form name="formproduct" id="form" class="form-horizontal" autocomplete="off">
             <div class="form-group">
-                <label class="col-xs-2 col-sm-2 control-label">Descripción</label>
-                <div class="col-xs-10 col-sm-4">
+                <label class="col-xs-2 col-sm-2 control-label">pregunta</label>
+                <div class="col-xs-10 col-sm-10">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-assignment"></i></span>
                         <div class="fg-line">
-                            <input ng-model="questionnaire.id" type="hidden">
-                            <input ng-model="questionnaire.description" type="text" class="form-control" required>
-                        </div>
-                    </div>
-                </div>
-
-                <label class="col-xs-2 col-sm-2 control-label">Categoría</label>
-                <div class="col-xs-10 col-sm-4">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="md md-list"></i></span>
-                        <div class="fg-line select">
-                            <select class="form-control" ng-options="category.id as category.name for category in categories" ng-model="questionnaire.category_id" required>
-                                <option value="" disabled="disabled" select="true">Seleccione</option>
-                            </select>
+                            <input ng-model="question.id" type="hidden">
+                            <input ng-model="question.question" type="text" class="form-control" required>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="form-group">
-                <label class="col-xs-2 col-sm-2 control-label">Preguntas</label>
+                <label class="col-xs-2 col-sm-2 control-label">Opciones</label>
                 <div class="col-xs-10 col-sm-4">
                     <div class="input-group">
-                        <span class="input-group-addon"><i class="md md-list"></i></span>
-                        <div class="fg-line select">
-                            <select class="form-control" ng-change="addQuestion(question)" ng-options="$index as question.question for ($index, question) in questions" ng-model="question">
-                                <option value="" disabled="disabled" select="true">Seleccione</option>
-                            </select>
+                        <span class="input-group-addon"><i class="md md-receipt"></i></span>
+                        <div class="fg-line">
+                            <input ng-model="option" type="text" class="form-control">
                         </div>
                     </div>
                 </div>
+                <a class="btn btn-primary col-xs-2" ng-click="addOption(option)">Agregar</a>
             </div>
 
             <div class="card-header">
@@ -75,14 +62,14 @@
                     <table class="table table-bordered w-100 table-attr text-center">
                         <thead>
                         <tr>
-                            <th>pregunta</th>
+                            <th>Opción</th>
                             <th>Accion</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr ng-repeat="question in questionsView">
-                            <td style="display: table-cell;">{{ question.question }}</td>
-                            <td style="width: 80px"><button ng-click="removeQuestion($index)" class="btn btn-danger btn-sm waves-effect">Eliminar</button></td>
+                        <tr ng-repeat="option in question.options">
+                            <td style="display: table-cell;">{{ option }}</td>
+                            <td style="width: 80px"><button ng-click="removeOption($index)" class="btn btn-danger btn-sm waves-effect">Eliminar</button></td>
                         </tr>
                         </tbody>
                     </table>
@@ -109,31 +96,28 @@
             <div class="modal-header bgm-teal">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h3 class="modal-title c-white">Detalle de cuestionario</h3>
+                <h3 class="modal-title c-white">Detalle de pregunta</h3>
             </div>
             <div class="modal-body card-padding">
                 <form class="form-horizontal" autocomplete="off" submit="return false;">
                     <div class="form-group form-pad-top">
-                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Descripción: </label>
-                        <label class="col-xs-6 col-sm-9 control-label" style="text-align: left" ng-bind="questionnaireDetail.description"></label>
-
-                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Categoría: </label>
-                        <label class="col-xs-6 col-sm-9 control-label" style="text-align: left" ng-bind="questionnaireDetail.category.name"></label>
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Pregunta: </label>
+                        <label class="col-xs-6 col-sm-9 control-label" style="text-align: left" ng-bind="questionDetail.question"></label>
                     </div>
                     <div class="form-group">
-                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Preguntas: </label>
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Opciones: </label>
                         <div class="col-xs-8 col-sm-9">
                             <div class="row">
                                 <div class="attr-group col-xs-12">
                                     <table class="table table-bordered w-100 table-attr text-center">
                                         <thead>
                                         <tr>
-                                            <th>Pregunta</th>
+                                            <th>opción</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr ng-repeat="question in questionnaireDetail.questions">
-                                            <td>{{ question.question }}</td>
+                                        <tr ng-repeat="option in questionDetail.options">
+                                            <td>{{ option.option }}</td>
                                         </tr>
                                         </tbody>
                                     </table>

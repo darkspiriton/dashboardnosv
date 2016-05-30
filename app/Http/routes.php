@@ -133,6 +133,19 @@ Route::group(['prefix' => 'api'], function(){
     Route::get('sizes', 'AuxProductController@getSizes');
     Route::get('colors', 'AuxProductController@getColors');
 
+    /*
+     * QUESTIONNAIRES
+     */
+
+    Route::resource('question', 'QuestionController',
+        ['only' => ['index', 'store', 'show']]);
+    
+    Route::resource('q_category', 'q_CategoryController',
+        ['only' => ['index', 'store', 'show', 'update']]);
+
+    Route::resource('questionnaire', 'QuestionnairesController',
+        ['only' => ['index', 'store', 'show', 'edit', 'update']]);
+
     //Rutas de creacion de producto y cliente
     Route::resource('auxqcustomer','AuxQCustomer',['only'=>['index','store','update','show','destroy']]);
     Route::resource('auxqproduct','AuxQProduct',['only'=>['index','store','update','show','destroy']]);

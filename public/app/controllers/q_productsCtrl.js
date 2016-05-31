@@ -168,13 +168,13 @@ angular.module('App')
 
         $scope.cancel = function () {
             $scope.product = angular.copy($scope.productClear);
-            $scope.responsessView = [];
+            $scope.responsesView = [];
             util.ocultaformulario();
         };
 
         $scope.new = function(){
             $scope.product = angular.copy($scope.productClear);
-            $scope.responsessView = [];
+            $scope.responsesView = [];
             util.muestraformulario();
         };
 

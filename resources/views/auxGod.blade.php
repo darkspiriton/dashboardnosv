@@ -56,6 +56,14 @@
                 <li id="categories">
                     <a ui-sref="categories"><i class="md md-security"></i> Gestionar categorías </a>
                 </li>
+
+                <li id="customerAuxQ">
+                    <a ui-sref="customerAuxQ"><i class="md md-security"></i> Gestionar Clientes</a>
+                </li>
+                <li id="productAuxQ">
+                    <a ui-sref="productAuxQ"><i class="md md-security"></i> Gestionar Productos</a>
+                </li>
+
             </ul>
         </li>
         <li id="comments">
@@ -87,4 +95,7 @@
     <script src="app/controllers/q_questionnairesCtrl.js"></script>
     <script src="app/controllers/q_questionsCtrl.js"></script>
     <script src="app/controllers/q_categoriesCtrl.js"></script>
+
+    <script src="app/controllers/customersCtrlAuxQ.js"></script>
+    <script src="app/controllers/productsCtrlAuxQ.js"></script>
 @stop

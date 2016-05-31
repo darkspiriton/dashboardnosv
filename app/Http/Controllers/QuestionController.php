@@ -102,4 +102,13 @@ class QuestionController extends Controller
     {
         //
     }
+
+    public function OptionsForQuestion($id){
+        $options = Option::where('question_id','=',$id)->get();
+
+        if($options->count() == 0)
+            return response()->json(['message' => 'La pregunta no tiene respuestas o no existe'],404);
+
+        return response()->json(['options' => $options],200);
+    }
 }

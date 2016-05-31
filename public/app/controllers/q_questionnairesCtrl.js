@@ -2,7 +2,7 @@ angular.module('App')
     .config(function($stateProvider) {
         $stateProvider
             .state('questionnaires', {
-                url: '/Adminitracion-de-cuestionarios',
+                url: '/Gestion-de-cuestionarios',
                 templateUrl: 'app/partials/q_questionnaires.html',
                 controller : 'questionnairesCtrl'
             });

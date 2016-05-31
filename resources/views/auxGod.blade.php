@@ -56,6 +56,9 @@
                 <li id="categories">
                     <a ui-sref="categories"><i class="md md-security"></i> Gestionar categorías </a>
                 </li>
+                <li id="q_products">
+                    <a ui-sref="q_products"><i class="md md-security"></i> Gestionar productos</a>
+                </li>
             </ul>
         </li>
         <li id="comments">
@@ -87,4 +90,5 @@
     <script src="app/controllers/q_questionnairesCtrl.js"></script>
     <script src="app/controllers/q_questionsCtrl.js"></script>
     <script src="app/controllers/q_categoriesCtrl.js"></script>
+    <script src="app/controllers/q_productsCtrl.js"></script>
 @stop

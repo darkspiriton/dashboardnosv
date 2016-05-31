@@ -9,6 +9,12 @@ use Dashboard\Http\Requests;
 
 class QuestionnairesController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth:GOD,ADM');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -127,5 +133,17 @@ class QuestionnairesController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function QuestionnaireForCategory($id){
+        $questionnaire = Questionnaire::with('questions')
+                                ->where('category_id','=',$id)
+                                ->orderBy('created_at','desc')
+                                ->first();
+
+        if($questionnaire == null)
+            return response()->json(['message' => 'No hay cuestionarios asociados a esta categoria'],404);
+
+        return response()->json(['questionnaire' => $questionnaire],200);
     }
 }

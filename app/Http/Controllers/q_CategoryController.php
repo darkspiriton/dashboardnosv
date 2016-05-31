@@ -9,6 +9,12 @@ use Dashboard\Http\Requests;
 
 class q_CategoryController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth:GOD,ADM');
+    }
+
     /**
      * Display a listing of the resource.
      *

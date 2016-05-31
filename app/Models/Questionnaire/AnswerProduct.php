@@ -6,8 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class AnswerProduct extends Model
 {
-    protected $table="answers_products";
-    protected $timestamp=false;
+    protected $table = "answers_products";
+    protected $timestamp = false;
+    protected $hidden = ["created_at","updated_at","product_id"];
 
     public function questionnaire(){
         return $this->belongsTo(Questionnaire::class);

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Question extends Model
 {
-    protected $hidden = ['created_at', 'updated_at'];
+    protected $hidden = ['created_at', 'updated_at','pivot'];
 
     public function questionnaires(){
         return $this->belongsToMany(Questionnaire::class,'questionnaires_questions','question_id');

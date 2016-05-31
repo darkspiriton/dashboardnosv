@@ -8,7 +8,9 @@ class Product extends Model
 {
     protected $table="aux2products";
 
-    public function categories(){
+    protected $hidden = ['created_at','updated_at'];
+
+    public function category(){
         return $this->belongsTo(Category::class);
     }
 

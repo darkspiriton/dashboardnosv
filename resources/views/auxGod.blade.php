@@ -57,11 +57,15 @@
                     <a ui-sref="categories"><i class="md md-security"></i> Gestionar categorías </a>
                 </li>
 
+
                 <li id="customerAuxQ">
-                    <a ui-sref="customerAuxQ"><i class="md md-security"></i> Gestionar Clientes</a>
+                    <a ui-sref="customerAuxQ"><i class="md md-security"></i> Gestionar Coincidencias Clientes</a>
                 </li>
                 <li id="productAuxQ">
-                    <a ui-sref="productAuxQ"><i class="md md-security"></i> Gestionar Productos</a>
+                    <a ui-sref="productAuxQ"><i class="md md-security"></i> Gestionar Coincidencias Productos</a>
+                </li>
+                <li id="q_products">
+                    <a ui-sref="q_products"><i class="md md-security"></i> Gestionar productos</a>
                 </li>
 
             </ul>
@@ -95,7 +99,11 @@
     <script src="app/controllers/q_questionnairesCtrl.js"></script>
     <script src="app/controllers/q_questionsCtrl.js"></script>
     <script src="app/controllers/q_categoriesCtrl.js"></script>
+<<<<<<< HEAD
 
     <script src="app/controllers/customersCtrlAuxQ.js"></script>
     <script src="app/controllers/productsCtrlAuxQ.js"></script>
+=======
+    <script src="app/controllers/q_productsCtrl.js"></script>
+>>>>>>> 6257f6444eb8b36f6813d073b15ba6bae8f7190e
 @stop

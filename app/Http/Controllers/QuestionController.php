@@ -50,6 +50,10 @@ class QuestionController extends Controller
             $question->save();
 
             $options = array();
+
+            $optionModel = new Option();
+            $optionModel->option = 'Ninguno';
+            array_push($options, $optionModel);
             foreach ($request->input('options') as $option){
                 $optionModel = new Option();
                 $optionModel->option = $option;

@@ -26,7 +26,7 @@ class AuxQCustomer extends Controller
     public function index()
     {
         $customers=Customer::all();
-        return response()->json(['clientes'=>$customers]);
+        return response()->json(['customers'=>$customers]);
     }
 
 
@@ -63,7 +63,7 @@ class AuxQCustomer extends Controller
         $cantAC=$customer['answers']->count();
         
         if($cantAC==null){
-            return response()->json(['message'=>'No existe cuestionario resueltos del cliente'],500);
+            return response()->json(['message'=>'No existe cuestionario resueltos del cliente'],404);
         }
 
         $z=0;
@@ -77,13 +77,34 @@ class AuxQCustomer extends Controller
         $cod4=Array();
         $cod5=Array();
         $cod6=Array();
-        $resultados[0]=0;
-        $resultados[1]=0;
-        $resultados[2]=0;
-        $resultados[3]=0;
-        $resultados[4]=0;
-        $resultados[5]=0;
-        $resultados[6]=0;
+
+        // 6 filas
+        $resultados[0]['count'] = 0;
+        $resultados[1]['count'] = 0;
+        $resultados[2]['count'] = 0;
+        $resultados[3]['count'] = 0;
+        $resultados[4]['count'] = 0;
+        $resultados[5]['count'] = 0;
+        $resultados[6]['count'] = 0;
+
+        // 1 fila
+        $resul_0[0]['col_1'] = 0;
+        $resul_0[0]['col_2'] = 0;
+        $resul_0[0]['col_3'] = 0;
+        $resul_0[0]['col_4'] = 0;
+        $resul_0[0]['col_5'] = 0;
+        $resul_0[0]['col_6'] = 0;
+        $resul_0[0]['col_7'] = 0;
+
+        // labels
+        $resultados[0]['label'] = '0%';
+        $resultados[1]['label'] = '0% - 20%';
+        $resultados[2]['label'] = '20% - 40%';
+        $resultados[3]['label'] = '40% - 60%';
+        $resultados[4]['label'] = '60% - 80%';
+        $resultados[5]['label'] = '80% - 100%';
+        $resultados[6]['label'] = '100%';
+
         $x1=$x2=$x3=$x4=$x5=$x0=$x6=0;
         foreach($products as $product) {
             $idP=$product['id'];
@@ -115,37 +136,44 @@ class AuxQCustomer extends Controller
 
             $porcentaje = round(100 * $countP / $cantAC, 2);
             if($porcentaje==0){
-                $resultados[0]=$resultados[0]+1;
+                $resultados[0]['count']=$resultados[0]['count']+1;
+                $resul_0[0]['col_1'] += 1;
                 $cod0[$x0]=$idP;
                 $codigos[0]= $cod0;
                 $x0++;
             }elseif(0< $porcentaje and $porcentaje<=20){
-                $resultados[1]=$resultados[1]+1;
+                $resultados[1]['count']=$resultados[1]['count']+1;
+                $resul_0[0]['col_2'] += 1;
                 $cod1[$x1]=$idP;
                 $codigos[1]= $cod1;
                 $x1++;
             }elseif(20< $porcentaje and $porcentaje<=40){
-                $resultados[2]=$resultados[2]+1;
+                $resultados[2]['count']=$resultados[2]['count']+1;
+                $resul_0[0]['col_3'] += 1;
                 $cod2[$x2]=$idP;
                 $codigos[2]= $cod2;
                 $x2++;
             }elseif(40< $porcentaje and $porcentaje<=60){
-                $resultados[3]=$resultados[3]+1;
+                $resultados[3]['count']=$resultados[3]['count']+1;
+                $resul_0[0]['col_4'] += 1;
                 $cod3[$x3]=$idP;
                 $codigos[3]= $cod3;
                 $x3++;
             }elseif(60< $porcentaje and $porcentaje<=80){
-                $resultados[4]=$resultados[4]+1;
+                $resultados[4]['count']=$resultados[4]['count']+1;
+                $resul_0[0]['col_5'] += 1;
                 $cod4[$x4]=$idP;
                 $codigos[4]= $cod4;
                 $x4++;
             }elseif(80< $porcentaje and $porcentaje<=100){
-                $resultados[5]=$resultados[5]+1;
+                $resultados[5]['count']=$resultados[5]['count']+1;
+                $resul_0[0]['col_6'] += 1;
                 $cod5[$x5]=$idP;
                 $codigos[5]= $cod5;
                 $x5++;
             }elseif($porcentaje==100){
-                $resultados[6]=$resultados[6]+1;
+                $resultados[6]['count']=$resultados[6]['count']+1;
+                $resul_0[0]['col_7'] += 1;
                 $cod6[$x6]=$idP;
                 $codigos[6]= $cod6;
                 $x6++;
@@ -155,7 +183,7 @@ class AuxQCustomer extends Controller
             $countP = 0;
         }
 
-        return response()->json(['cantidades'=>$resultados,'codigos'=>$codigos]);
+        return response()->json(['cantidades'=>$resultados,'codigos'=>$codigos, 'row' => $resul_0],200);
     }
 
     public function cuestionario(){

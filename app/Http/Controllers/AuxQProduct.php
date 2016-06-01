@@ -34,16 +34,14 @@ class AuxQProduct extends Controller
      */
     public function show(Request $request,$id)
     {
-        $number=$this->cuestionario();
+        $number = $this->cuestionario();
 
-//        $request->input('questionnaire_id')
-
-        $products=Product::with(['answers'=>function($query) use($number){
+        $products = Product::with(['answers'=>function($query) use($number){
             $query->where('questionnaire_id','=',$number);
         },'answers.option'])->where('id','=',$id)
             ->get();
 
-        if($products==null){
+        if($products == null){
             return response()->json(['message'=>'No se encontro producto asociado'],404);
         }
 
@@ -51,7 +49,7 @@ class AuxQProduct extends Controller
             $query->where('questionnaire_id','=',$number);
         }])->get();
 
-        if($customers==null){
+        if($customers == null){
             return response()->json(['message'=>'No se encontro usuarios asociados'],404);
         }
 
@@ -63,27 +61,48 @@ class AuxQProduct extends Controller
         if($cantAP==0){
             return response()->json(['message'=>'No se posee cuestionario resuelto para este producto'],404);
         }
-        $z=0;
+        $z = 0;
         $countC = 0;
 
-        $resultados=Array();
-        $cod0=Array();
-        $cod1=Array();
-        $cod2=Array();
-        $cod3=Array();
-        $cod4=Array();
-        $cod5=Array();
-        $cod6=Array();
-        $resultados[0]=0;
-        $resultados[1]=0;
-        $resultados[2]=0;
-        $resultados[3]=0;
-        $resultados[4]=0;
-        $resultados[5]=0;
-        $resultados[6]=0;
+        $resultados = Array();
+        $cod0 = Array();
+        $cod1 = Array();
+        $cod2 = Array();
+        $cod3 = Array();
+        $cod4 = Array();
+        $cod5 = Array();
+        $cod6 = Array();
+
+        // 6 filas
+        $resultados[0]['count'] = 0;
+        $resultados[1]['count'] = 0;
+        $resultados[2]['count'] = 0;
+        $resultados[3]['count'] = 0;
+        $resultados[4]['count'] = 0;
+        $resultados[5]['count'] = 0;
+        $resultados[6]['count'] = 0;
+
+        // 1 fila
+        $resul_0[0]['col_1'] = 0;
+        $resul_0[0]['col_2'] = 0;
+        $resul_0[0]['col_3'] = 0;
+        $resul_0[0]['col_4'] = 0;
+        $resul_0[0]['col_5'] = 0;
+        $resul_0[0]['col_6'] = 0;
+        $resul_0[0]['col_7'] = 0;
+
+        // labels
+        $resultados[0]['label'] = '0%';
+        $resultados[1]['label'] = '0% - 20%';
+        $resultados[2]['label'] = '20% - 40%';
+        $resultados[3]['label'] = '40% - 60%';
+        $resultados[4]['label'] = '60% - 80%';
+        $resultados[5]['label'] = '80% - 100%';
+        $resultados[6]['label'] = '100%';
+
         $x1=$x2=$x3=$x4=$x5=$x0=$x6=0;
         foreach($customers as $customer) {
-            $idC=$customer['id'];
+            $idC = $customer['id'];
             for ($i = 0; $i < $cantAP; $i++) {
                 //obtenemos el id de la pregunta y id de la respuesta del usuario
                 $idPP = (int)$product['answers'][$i]['option']['question_id'];
@@ -112,37 +131,44 @@ class AuxQProduct extends Controller
 
             $porcentaje = round(100 * $countC / $cantAP, 2);
             if($porcentaje==0){
-                $resultados[0]=$resultados[0]+1;
+                $resultados[0]['count']=$resultados[0]['count']+1;
+                $resul_0[0]['col_1'] += 1;
                 $cod0[$x0]=$idC;
                 $codigos[0]= $cod0;
                 $x0++;
             }elseif(0< $porcentaje and $porcentaje<=20){
-                $resultados[1]=$resultados[1]+1;
+                $resultados[1]['count']=$resultados[1]['count']+1;
+                $resul_0[0]['col_2'] += 1;
                 $cod1[$x1]=$idC;
                 $codigos[1]= $cod1;
                 $x1++;
             }elseif(20< $porcentaje and $porcentaje<=40){
-                $resultados[2]=$resultados[2]+1;
+                $resultados[2]['count']=$resultados[2]['count']+1;
+                $resul_0[0]['col_3'] += 1;
                 $cod2[$x2]=$idC;
                 $codigos[2]= $cod2;
                 $x2++;
             }elseif(40< $porcentaje and $porcentaje<=60){
-                $resultados[3]=$resultados[3]+1;
+                $resultados[3]['count']=$resultados[3]['count']+1;
+                $resul_0[0]['col_4'] += 1;
                 $cod3[$x3]=$idC;
                 $codigos[3]= $cod3;
                 $x3++;
             }elseif(60< $porcentaje and $porcentaje<=80){
-                $resultados[4]=$resultados[4]+1;
+                $resultados[4]['count']=$resultados[4]['count']+1;
+                $resul_0[0]['col_5'] += 1;
                 $cod4[$x4]=$idC;
                 $codigos[4]= $cod4;
                 $x4++;
             }elseif(80< $porcentaje and $porcentaje<100){
-                $resultados[5]=$resultados[5]+1;
+                $resultados[5]['count']=$resultados[5]['count']+1;
+                $resul_0[0]['col_6'] += 1;
                 $cod5[$x5]=$idC;
                 $codigos[5]= $cod5;
                 $x5++;
             }elseif($porcentaje==100){
-                $resultados[6]=$resultados[6]+1;
+                $resultados[6]['count']=$resultados[6]['count']+1;
+                $resul_0[0]['col_7'] += 1;
                 $cod6[$x6]=$idC;
                 $codigos[6]= $cod6;
                 $x6++;
@@ -151,20 +177,20 @@ class AuxQProduct extends Controller
             $z++;
             $countC = 0;
         }
-        
-        return response()->json(['cantidades'=>$resultados,'codigos'=>$codigos],200);
+
+        return response()->json(['cantidades'=>$resultados,'codigos'=>$codigos, 'row' => $resul_0],200);
     }
-    
+
     public function mostrar($id){
         $product=Product::find($id);
         return response()->json(['producto'=>$product]);
     }
 
     public function cuestionario(){
-        $product=Product::with(['answers'=>function($query){
+        $product = Product::with(['answers'=>function($query){
             $query->orderby('questionnaire_id','desc');
         }])->get();
-        $number=$product[0]['answers'][0]['questionnaire_id'];
+        $number = $product[0]['answers'][0]['questionnaire_id'];
         return $number;
     }
 

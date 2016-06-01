@@ -56,24 +56,15 @@
                 <li id="categories">
                     <a ui-sref="categories"><i class="md md-security"></i> Gestionar categorías </a>
                 </li>
-
-
-                <li id="customerAuxQ">
-                    <a ui-sref="customerAuxQ"><i class="md md-security"></i> Gestionar Coincidencias Clientes</a>
-                </li>
-                <li id="productAuxQ">
-                    <a ui-sref="productAuxQ"><i class="md md-security"></i> Gestionar Coincidencias Productos</a>
-                </li>
                 <li id="q_products">
                     <a ui-sref="q_products"><i class="md md-security"></i> Gestionar productos</a>
                 </li>
-<<<<<<< HEAD
                 <li id="q_customers">
                     <a ui-sref="q_customers"><i class="md md-security"></i> Registro de cuestionarios de clientes</a>
                 </li>
-=======
-
->>>>>>> 31da67bab921b02268072335a9c7b075cf9d0cb7
+                <li id="q_AnswerIndicator">
+                    <a ui-sref="q_AnswerIndicator"><i class="md md-security"></i> Indicador de coincidencias</a>
+                </li>
             </ul>
         </li>
         <li id="comments">
@@ -105,8 +96,7 @@
     <script src="app/controllers/q_questionnairesCtrl.js"></script>
     <script src="app/controllers/q_questionsCtrl.js"></script>
     <script src="app/controllers/q_categoriesCtrl.js"></script>
-    <script src="app/controllers/customersCtrlAuxQ.js"></script>
-    <script src="app/controllers/productsCtrlAuxQ.js"></script>
+    <script src="app/controllers/q_AnswerIndicator.js"></script>
     <script src="app/controllers/q_productsCtrl.js"></script>
     <script src="app/controllers/q_customersCtrl.js"></script>
 

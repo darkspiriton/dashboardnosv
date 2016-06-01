@@ -44,7 +44,7 @@ class AuxQProduct extends Controller
             ->get();
 
         if($products==null){
-            return response()->json(['message'=>'No se encontro producto asociado']);
+            return response()->json(['message'=>'No se encontro producto asociado'],404);
         }
 
         $customers = Customer::with(['answers.option','answers' => function($query) use($number){
@@ -52,7 +52,7 @@ class AuxQProduct extends Controller
         }])->get();
 
         if($customers==null){
-            return response()->json(['message'=>'No se encontro usuarios asociados']);
+            return response()->json(['message'=>'No se encontro usuarios asociados'],404);
         }
 
         $product=$products[0];
@@ -61,7 +61,7 @@ class AuxQProduct extends Controller
         //respuestas a las preguntas
         $cantAP=$product['answers']->count();
         if($cantAP==0){
-            return response()->json(['message'=>'No se posee cuestionario resuelto para este producto']);
+            return response()->json(['message'=>'No se posee cuestionario resuelto para este producto'],404);
         }
         $z=0;
         $countC = 0;
@@ -73,13 +73,15 @@ class AuxQProduct extends Controller
         $cod3=Array();
         $cod4=Array();
         $cod5=Array();
+        $cod6=Array();
         $resultados[0]=0;
         $resultados[1]=0;
         $resultados[2]=0;
         $resultados[3]=0;
         $resultados[4]=0;
         $resultados[5]=0;
-        $x1=$x2=$x3=$x4=$x5=$x0=0;
+        $resultados[6]=0;
+        $x1=$x2=$x3=$x4=$x5=$x0=$x6=0;
         foreach($customers as $customer) {
             $idC=$customer['id'];
             for ($i = 0; $i < $cantAP; $i++) {
@@ -134,18 +136,23 @@ class AuxQProduct extends Controller
                 $cod4[$x4]=$idC;
                 $codigos[4]= $cod4;
                 $x4++;
-            }elseif(80< $porcentaje and $porcentaje<=100){
+            }elseif(80< $porcentaje and $porcentaje<100){
                 $resultados[5]=$resultados[5]+1;
                 $cod5[$x5]=$idC;
                 $codigos[5]= $cod5;
                 $x5++;
+            }elseif($porcentaje==100){
+                $resultados[6]=$resultados[6]+1;
+                $cod6[$x6]=$idC;
+                $codigos[6]= $cod6;
+                $x6++;
             }
 
             $z++;
             $countC = 0;
         }
-
-        return response()->json(['cantidades'=>$resultados,'codigos'=>$codigos]);
+        
+        return response()->json(['cantidades'=>$resultados,'codigos'=>$codigos],200);
     }
     
     public function mostrar($id){

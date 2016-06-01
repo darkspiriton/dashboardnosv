@@ -11,34 +11,34 @@ angular.module('App')
 
         util.liPage('productAuxQ');
 
-        // $scope.tableConfig 	= 	{
-        //     columns :	[
-        //         {"sTitle": "Fecha", "bSortable" : true, 'sWidth': '80px'},
-        //         {"sTitle": "Codigo", "bSortable" : true, 'sWidth': '1px'},
-        //         {"sTitle": "Nombre", "bSortable" : true},
-        //         {"sTitle": "Proveedor", "bSortable" : true},
-        //         {"sTitle": "Talla", "bSortable" : true},
-        //         {"sTitle": "Color" , "bSearchable": true},
-        //         {"sTitle": "Tipos" , "bSearchable": true},
-        //         {"sTitle": "Status" , "bSearchable": true},
-        //         {"sTitle": "Accion" , "bSearchable": true}
-        //     ],
-        //     actions	:   	[
-        //         ['status',   {
-        //             0 : { txt : 'no disponible' , cls : 'btn-danger', dis : false},
-        //             1 : { txt : 'disponible' ,  cls : 'btn-success', dis : false},
-        //             2 : { txt : 'vendido' ,  cls : 'bgm-teal', dis : false}
-        //         }
-        //         ],
-        //         ['actions', [
-        //             ['eliminar', 'delete' ,'bgm-red'],
-        //             ['editar', 'edit' ,'btn-primary']
-        //         ]
-        //         ]
-        //     ],
-        //     data  	: 	['date','cod','name','provider','size','color','types','status','actions'],
-        //     configStatus : 'status'
-        // };
+        $scope.tableConfig 	= 	{
+            columns :	[
+                {"sTitle": "0%", "bSortable" : true, 'sWidth': '80px'},
+                {"sTitle": "0% - 20%", "bSortable" : true, 'sWidth': '1px'},
+                {"sTitle": "20% - 40%", "bSortable" : true},
+                {"sTitle": "40% - 60%", "bSortable" : true},
+                {"sTitle": "60% - 80%", "bSortable" : true},
+                {"sTitle": "80% - 100%" , "bSearchable": true},
+                {"sTitle": "100%" , "bSearchable": true},
+                {"sTitle": "Status" , "bSearchable": true},
+                {"sTitle": "Accion" , "bSearchable": true}
+            ],
+            // actions	:   	[
+            //     ['status',   {
+            //         0 : { txt : 'no disponible' , cls : 'btn-danger', dis : false},
+            //         1 : { txt : 'disponible' ,  cls : 'btn-success', dis : false},
+            //         2 : { txt : 'vendido' ,  cls : 'bgm-teal', dis : false}
+            //     }
+            //     ],
+            //     ['actions', [
+            //         ['eliminar', 'delete' ,'bgm-red'],
+            //         ['editar', 'edit' ,'btn-primary']
+            //     ]
+            //     ]
+            // ],
+            data  	: 	['date','cod','name','provider','size','color','types','status','actions'],
+            configStatus : 'status'
+        };
 
         var alertConfig = {
             title: "¿Esta seguro?",
@@ -131,13 +131,28 @@ angular.module('App')
         // };
 
         $scope.listProviders = function() {
-            petition.get('/api/auxqproduct/')
+            petition.get('api/auxqproduct')
                 .then(function(data){
-                    $scope.providers = data.productos;
-                    $scope.providers.push(newProvider);
+                    $scope.products = data.productos;
+                    // $scope.providers.push(newProvider);
+                }, function(error){
+                    console.log(error);
+                    toastr.error('Uyuyuy dice: ' + error.data.message);
+                });
+        };
+
+        $scope.list = function() {
+            $scope.updateList = true;
+            petition.get('api/auxqproduct/'+$scope.product._id)
+                .then(function(data){
+                    $scope.tableData = data.cantidades;
+                    $('#table').AJQtable('view', $scope, $compile);
+                    $scope.updateList = false;
+                    chart.draw($scope.tableData, {data: 'cantP', label: 'name'})
                 }, function(error){
                     console.log(error);
                     toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                    $scope.updateList = false;
                 });
         };
 
@@ -173,52 +188,65 @@ angular.module('App')
         //         });
         // };
 
-        // $scope.listCodes = function() {
-        //     petition.get('api/auxproduct/get/code')
-        //         .then(function(data){
-        //             $scope.codes = data.codes;
-        //         }, function(error){
-        //             console.log(error);
-        //             toastr.error('Ups ocurrio un problema: ' + error.data.message);
-        //         });
-        // };
-        //
-        // $scope.view = function( ind ){
-        //     var id = $scope.tableData[ind].id;
-        //     petition.get('api/product/group_attributes/' + id )
-        //         .then(function(data){
-        //             $scope.productGroupAttributes = data.grp_attributes;
-        //             $scope.productDetail = angular.copy($scope.tableData[ind]);
-        //             util.modal();
-        //         }, function(error){
-        //             toastr.error('Ups ocurrio un problema: ' + error.data.message);
-        //         });
-        // };
+        $scope.listCodes = function() {
+            petition.get('api/auxqproduct/'+$scope.product._id)
+                .then(function(data){
+                    $scope.cantidades = data.cantidades;
+                    $scope.codigos=data.codigos;
+                }, function(error){
+                    $scope.cantidades=[];
+                    $scope.codigos=[];
+                    console.log(error);
+                    toastr.error('Uyuyuy dice: ' + error.data.message);
+                });
+        };
+
+        $scope.view = function( ind ){
+            var id = $scope.tableData[ind].id;
+            petition.get('api/product/group_attributes/' + id )
+                .then(function(data){
+                    $scope.productGroupAttributes = data.grp_attributes;
+                    $scope.productDetail = angular.copy($scope.tableData[ind]);
+                    util.modal();
+                }, function(error){
+                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                });
+        };
 
         $scope.submit = function () {
-            alertConfig.title = '¿Todo es correcto?'
-            swal(alertConfig ,
-                function() {
-                    var method = ( $scope.product.id ) ? 'PUT' : 'POST';
-                    var url = ( method == 'PUT') ? util.baseUrl('api/auxproduct/' + $scope.product.id) : util.baseUrl('api/auxproduct');
-                    var config = {
-                        method: method,
-                        url: url,
-                        data: $scope.product
-                    };
-                    $scope.formSubmit=true;
-                    petition.custom(config).then(function(data){
-                        toastr.success(data.message);
-                        $scope.formSubmit=false;
-                        $scope.list();
-                        $scope.listCodes();
-                        util.ocultaformulario();
-                    }, function(error){
-                        toastr.error('Uyuyuy dice: ' + error.data.message);
-                        $scope.formSubmit=false;
-                    })
-                });
+            // alertConfig.title = '¿Todo es correcto?'
+            $scope.listCodes();
+            // petition.custom(config).then(function(data){
+            //     toastr.success(data.message);
+            //     $scope.formSubmit=false;
+            //     $scope.listCodes();
+            //     // util.ocultaformulario();
+            // }, function(error){
+            //     toastr.error('Uyuyuy dice: ' + error.data.message);
+            //     $scope.formSubmit=false;
+            // })
 
+            // swal(alertConfig ,
+            //     function() {
+            //         var method = ( $scope.product.id ) ? 'PUT' : 'POST';
+            //         var url = ( method == 'PUT') ? util.baseUrl('api/auxproduct/' + $scope.product.id) : util.baseUrl('api/auxproduct');
+            //         var config = {
+            //             method: method,
+            //             url: url,
+            //             data: $scope.product
+            //         };
+            //         $scope.formSubmit=true;
+            //         petition.custom(config).then(function(data){
+            //             toastr.success(data.message);
+            //             $scope.formSubmit=false;
+            //             $scope.list();
+            //             $scope.listCodes();
+            //             util.ocultaformulario();
+            //         }, function(error){
+            //             toastr.error('Uyuyuy dice: ' + error.data.message);
+            //             $scope.formSubmit=false;
+            //         })
+            //     });
         };
 
         $scope.cancel = function () {
@@ -302,14 +330,14 @@ angular.module('App')
         // End events
 
         angular.element(document).ready(function(){
-            util.resetTable($scope,$compile);
+            // util.resetTable($scope,$compile);
             $scope.product = angular.copy($scope.productClear);
             $scope.newFeature = {};
-            $scope.list();
+            // $scope.list();
             $scope.listProviders();
-            $scope.listSizes();
-            $scope.listColors();
-            $scope.listTypes();
-            $scope.listCodes();
+            // $scope.listSizes();
+            // $scope.listColors();
+            // $scope.listTypes();
+            // $scope.listCodes();
         });
     });

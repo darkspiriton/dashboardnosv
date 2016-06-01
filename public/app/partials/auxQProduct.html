@@ -22,15 +22,7 @@
     </div>
 
     <div class="card-body card-padding" >
-        <!--<div class="card-header">-->
-            <!--<h2>Disponibilidad</h2>-->
-        <!--</div>-->
-        <!--<form class="form-horizontal">-->
-            <!--<div class="form-group">-->
-                <!--<label class="col-xs-2 col-sm-2 control-label">Códigos: </label>-->
-                <!--<div class="col-xs-10 m-t-15"><span ng-repeat="code in codes">{{ code + ',&nbsp;&nbsp;&nbsp;&nbsp;' }}</span>&ndash;&gt;</div>-->
-            <!--</div>-->
-        <!--</form>-->
+
 
         <div class="card-header">
             <h2>Datos de Producto</h2>
@@ -38,23 +30,23 @@
 
         <form name="formproduct" id="form" class="form-horizontal" autocomplete="off">
             <div class="form-group">
-                <label class="col-xs-2 col-sm-2 control-label">Nombre</label>
-                <div class="col-xs-10 col-sm-4">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="md md-person"></i></span>
-                        <div class="fg-line">
-                            <input ng-model="product.id" type="hidden">
-                            <input ng-model="product.name" type="text" class="form-control" required>
-                        </div>
-                    </div>
-                </div>
+                <!--<label class="col-xs-2 col-sm-2 control-label">Nombre</label>-->
+                <!--<div class="col-xs-10 col-sm-4">-->
+                    <!--<div class="input-group">-->
+                        <!--<span class="input-group-addon"><i class="md md-person"></i></span>-->
+                        <!--<div class="fg-line">-->
+                            <!--<input ng-model="product.id" type="hidden">-->
+                            <!--<input ng-model="product.name" type="text" class="form-control" required>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
 
-                <label class="col-xs-2 col-sm-2 control-label">Proveedor</label>
+                <label class="col-xs-2 col-sm-2 control-label">Producto</label>
                 <div class="col-xs-10 col-sm-4">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-list"></i></span>
                         <div class="fg-line select">
-                            <select class="form-control" ng-change="eventProvider(product.provider_id)" ng-options="provider.id as provider.name for provider in providers" ng-model="product.provider_id" required>
+                            <select class="form-control" ng-options="product.id as product.name for product in products" ng-model="product._id" required>
                                 <option value="" disabled="disabled" select="true">Seleccione</option>
                             </select>
                         </div>
@@ -159,12 +151,24 @@
                     <!--<label ng-repeat="type in product.types">{{type.name}}<i ng-click="removeType($index)" class="md md-delete"></i></label>-->
                 <!--</div>-->
             <!--</div>-->
+
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-xs-2 col-sm-2 control-label">Cantidades: </label>
+                    <div class="col-xs-10 m-t-15"><span ng-repeat="cantidad in cantidades track by $index">{{ cantidad + ',&nbsp;&nbsp;&nbsp;&nbsp;' }}</span>--></div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-2 col-sm-2 control-label">Codigos: </label>
+                    <div class="col-xs-10 m-t-15"><span ng-repeat="codigo in codigos ">{{ codigo + ',&nbsp;&nbsp;&nbsp;&nbsp;' }}</span>--></div>
+                </div>
+            </form>
+
         </form>
 
         <form class="form-horizontal">
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <button ng-disabled="!formproduct.$valid || formSubmit" ng-click="submit()" type="button" class="btn btn-primary btn-sm waves-effect">Guardar</button>
+                    <button ng-click="submit()" type="button" class="btn btn-primary btn-sm waves-effect">Coincidencias</button>
                     <a ng-click="cancel()" class="btn btn-danger btn-sm waves-effect">Cancelar</a>
                 </div>
             </div>

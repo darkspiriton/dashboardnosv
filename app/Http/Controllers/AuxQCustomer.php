@@ -76,13 +76,15 @@ class AuxQCustomer extends Controller
         $cod3=Array();
         $cod4=Array();
         $cod5=Array();
+        $cod6=Array();
         $resultados[0]=0;
         $resultados[1]=0;
         $resultados[2]=0;
         $resultados[3]=0;
         $resultados[4]=0;
         $resultados[5]=0;
-        $x1=$x2=$x3=$x4=$x5=$x0=0;
+        $resultados[6]=0;
+        $x1=$x2=$x3=$x4=$x5=$x0=$x6=0;
         foreach($products as $product) {
             $idP=$product['id'];
             for ($i = 0; $i < $cantAC; $i++) {
@@ -142,6 +144,11 @@ class AuxQCustomer extends Controller
                 $cod5[$x5]=$idP;
                 $codigos[5]= $cod5;
                 $x5++;
+            }elseif($porcentaje==100){
+                $resultados[6]=$resultados[6]+1;
+                $cod6[$x6]=$idP;
+                $codigos[6]= $cod6;
+                $x6++;
             }
 
             $z++;

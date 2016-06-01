@@ -99,11 +99,9 @@
     <script src="app/controllers/q_questionnairesCtrl.js"></script>
     <script src="app/controllers/q_questionsCtrl.js"></script>
     <script src="app/controllers/q_categoriesCtrl.js"></script>
-<<<<<<< HEAD
 
     <script src="app/controllers/customersCtrlAuxQ.js"></script>
     <script src="app/controllers/productsCtrlAuxQ.js"></script>
-=======
     <script src="app/controllers/q_productsCtrl.js"></script>
->>>>>>> 6257f6444eb8b36f6813d073b15ba6bae8f7190e
+
 @stop

@@ -139,7 +139,6 @@ Route::group(['prefix' => 'api'], function(){
 
     Route::resource('question', 'QuestionController',
         ['only' => ['index', 'store', 'show']]);
-
     Route::get('question/{id}/options','QuestionController@OptionsForQuestion');
     
     Route::resource('q_category', 'q_CategoryController',
@@ -147,10 +146,12 @@ Route::group(['prefix' => 'api'], function(){
 
     Route::resource('questionnaire', 'QuestionnairesController',
         ['only' => ['index', 'store', 'show', 'edit', 'update']]);
-
     Route::get('questionnaire/category/{id}','QuestionnairesController@QuestionnaireForCategory');
 
     Route::resource('q_product', 'q_ProductController',
+        ['only' => ['index', 'store', 'show']]);
+
+    Route::resource('answer/customer', 'q_AnswerController',
         ['only' => ['index', 'store', 'show']]);
 
     //Rutas de creacion de producto y cliente

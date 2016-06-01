@@ -1,0 +1,232 @@
+<div class="card" >
+    <div class="card-header bgm-blue">
+        <h2>Gestión de cliente-cuestionario</h2>
+        <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="list()"
+                data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
+                title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
+    </div>
+
+    <div class="card-body card-padding table-responsive">
+        <div class="col-sm-12">
+            <table id="table" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
+        </div><br>
+        <div class="card-footer">
+            <a  class="btn bgm-green waves-effect" ng-click="new();">Nuevo registro</a>
+        </div>
+    </div><br>
+</div>
+
+<div class="card" id="formulariohide">
+    <div class="card-header bgm-blue">
+        <h2>Gestionar cliente-cuestionario</h2>
+    </div>
+
+    <div class="card-body card-padding" >
+        <div class="card-header">
+            <h2>Información del cliente-cuestionario</h2>
+        </div>
+
+        <form name="formresponse" id="form" class="form-horizontal" autocomplete="off">
+            <div class="form-group">
+                <label class="col-xs-2 col-sm-2 control-label">Cliente</label>
+                <div class="col-xs-10 col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-list"></i></span>
+                        <div class="fg-line select">
+                            <select class="form-control" ng-change="eventCustomer(caseCustomer)" ng-model="caseCustomer">
+                                <option value="" disabled="disabled" select="true">Seleccione</option>
+                                <option value="new">Nuevo cliente</option>
+                                <option value="exist">Cliente existente</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div ng-show="existCustomer">
+                    <label class="col-xs-2 col-sm-2 control-label">busqueda</label>
+                    <div class="col-xs-10 col-sm-4">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="md md-redo"></i></span>
+                            <div class="fg-line">
+                                <input ng-model="response.user" type="text" class="form-control" ng-disabled="newCustomer" ng-required="existCustomer">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div ng-show="newCustomer">
+                <div class="form-group">
+                    <label class="col-xs-2 col-sm-2 control-label">Usuario:</label>
+                    <div class="col-xs-10 col-sm-4">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="md md-account-box"></i></span>
+                            <div class="fg-line">
+                                <input ng-model="response.user" type="text" class="form-control" ng-disabled="!newCustomer" ng-required="newCustomer">
+                            </div>
+                        </div>
+                    </div>
+
+                    <label class="col-xs-2 col-sm-2 control-label">Nombre</label>
+                    <div class="col-xs-10 col-sm-4">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="md md-account-box"></i></span>
+                            <div class="fg-line">
+                                <input ng-model="response.name" type="text" class="form-control" ng-disabled="!newCustomer" ng-required="newCustomer">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-xs-2 col-sm-2 control-label">Sexo:</label>
+                    <div class="col-xs-10 col-sm-4">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="md md-account-box"></i></span>
+                            <div class="fg-line select">
+                                <select class="form-control" ng-model="response.sex">
+                                    <option value="" disabled="disabled" select="true">Seleccione</option>
+                                    <option value="M">Masculino</option>
+                                    <option value="F">Femenino</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <label class="col-xs-2 col-sm-2 control-label">Edad</label>
+                    <div class="col-xs-10 col-sm-4">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="md md-account-box"></i></span>
+                            <div class="fg-line">
+                                <input ng-model="response.age" type="number" class="form-control" ng-disabled="!newCustomer" ng-required="newCustomer">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+            </div>
+
+            <div class="form-group">
+                <label class="col-xs-2 col-sm-2 control-label">Categoría:</label>
+                <div class="col-xs-10 col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-list"></i></span>
+                        <div class="fg-line select">
+                            <select class="form-control" ng-change="listQuestions(response.category_id)" ng-options="category.id as category.name for category in categories" ng-model="response.category_id" required>
+                                <option value="" disabled="disabled" select="true">Seleccione</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <div class="form-group">
+                <label class="col-xs-2 col-sm-2 control-label">Pregunta</label>
+                <div class="col-xs-10 col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-list"></i></span>
+                        <div class="fg-line select">
+                            <select class="form-control" ng-change="listOptions(question_i)" ng-options="$index as question.question for ($index,question) in questions" ng-model="question_i">
+                                <option value="" disabled="disabled" select="true">Seleccione</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <label class="col-xs-2 col-sm-2 control-label">Respuesta</label>
+                <div class="col-xs-10 col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-list"></i></span>
+                        <div class="fg-line select">
+                            <select class="form-control" ng-change="AddOption(option_i)" ng-options="$index as option.option for ($index, option) in options" ng-model="option_i">
+                                <option value="" disabled="disabled" select="true">Seleccione</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-header">
+                <h2>Preguntas - Respuestas</h2>
+            </div>
+
+            <div class="row">
+                <div class="attr-group col-xs-12 col-xs-offset-0 col-md-10 col-sm-offset-2">
+                    <table class="table table-bordered w-100 table-attr text-center">
+                        <thead>
+                        <tr>
+                            <th>pregunta</th>
+                            <th>respuesta</th>
+                            <th>Accion</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="response in responsesView">
+                            <td style="display: table-cell;">{{ response.question }}</td>
+                            <td style="display: table-cell;">{{ response.option }}</td>
+                            <td style="width: 80px"><button ng-click="removeQuestion($index)" class="btn btn-danger btn-sm waves-effect">Eliminar</button></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </form>
+
+        <form class="form-horizontal">
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button ng-disabled="!formresponse.$valid || formSubmit" ng-click="submit()" type="button" class="btn btn-primary btn-sm waves-effect">Guardar</button>
+                    <a ng-click="cancel()" class="btn btn-danger btn-sm waves-effect">Cancelar</a>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="Modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bgm-teal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title c-white">Detalle de producto</h3>
+            </div>
+            <div class="modal-body card-padding">
+                <form class="form-horizontal" autocomplete="off" submit="return false;">
+                    <div class="form-group form-pad-top">
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Producto: </label>
+                        <label class="col-xs-6 col-sm-9 control-label" style="text-align: left" ng-bind="productDetail.name"></label>
+
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Categoría: </label>
+                        <label class="col-xs-6 col-sm-9 control-label" style="text-align: left" ng-bind="productDetail.category.name"></label>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Preguntas: </label>
+                        <div class="col-xs-8 col-sm-9">
+                            <div class="row">
+                                <div class="attr-group col-xs-12">
+                                    <table class="table table-bordered w-100 table-attr text-center">
+                                        <thead>
+                                        <tr>
+                                            <th>Pregunta</th>
+                                            <th>Respuesta</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="response in productDetail.answers">
+                                            <td style="display: table-cell;">{{ response.option.question.question }}</td>
+                                            <td style="display: table-cell;">{{ response.option.option }}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

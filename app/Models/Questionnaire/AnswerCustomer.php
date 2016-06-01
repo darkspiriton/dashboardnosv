@@ -7,9 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 class AnswerCustomer extends Model
 {
     protected $table="answers_customers";
-    protected $hidden = [
-        'created_at','updated_at'
-    ];
+
+    protected $hidden = ['created_at','updated_at','id','customer_id','option_id','questionnaire_id'];
 
 
     public function customer(){

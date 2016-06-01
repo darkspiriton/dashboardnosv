@@ -67,13 +67,10 @@
                 <li id="q_products">
                     <a ui-sref="q_products"><i class="md md-security"></i> Gestionar productos</a>
                 </li>
-<<<<<<< HEAD
                 <li id="q_customers">
                     <a ui-sref="q_customers"><i class="md md-security"></i> Registro de cuestionarios de clientes</a>
                 </li>
-=======
 
->>>>>>> 31da67bab921b02268072335a9c7b075cf9d0cb7
             </ul>
         </li>
         <li id="comments">

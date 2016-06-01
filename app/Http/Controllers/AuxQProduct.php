@@ -49,7 +49,7 @@ class AuxQProduct extends Controller
             $query->where('questionnaire_id','=',$number);
         }])->get();
 
-        if($customers == null){
+        if($customers->count() == 0){
             return response()->json(['message'=>'No se encontro usuarios asociados'],404);
         }
 

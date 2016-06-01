@@ -53,7 +53,7 @@ class AuxQCustomer extends Controller
             $query->where('questionnaire_id','=',$number);
         },'answers.option'])->get();
         
-        if($products==null){
+        if($products->count() == 0){
             return response()->json(['message'=>'No existe productos relacionados'],404);
         }
 

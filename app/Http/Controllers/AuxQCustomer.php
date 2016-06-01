@@ -165,7 +165,7 @@ class AuxQCustomer extends Controller
                 $cod4[$x4]=$idP;
                 $codigos[4]= $cod4;
                 $x4++;
-            }elseif(80< $porcentaje and $porcentaje<=100){
+            }elseif(80< $porcentaje and $porcentaje<100){
                 $resultados[5]['count']=$resultados[5]['count']+1;
                 $resul_0[0]['col_6'] += 1;
                 $cod5[$x5]=$idP;

@@ -13,8 +13,8 @@ angular.module('App')
 
         $scope.tableConfig 	= 	{
             columns :	[
-                {"sTitle": "categoria", "bSortable" : true},
-                {"sTitle": "Accion" , "bSearchable": true, "sWidth": '80px'}
+                {"sTitle": "Categoría", "bSortable" : true},
+                {"sTitle": "Acción" , "bSearchable": true, "sWidth": '80px'}
             ],
             actions	:   	[
                 ['actions', [

@@ -175,12 +175,14 @@ angular.module('App')
         $scope.cancel = function () {
             $scope.response = angular.copy($scope.responseClear);
             $scope.responsesView = [];
+            $scope.eventCustomer('new');
             util.ocultaformulario();
         };
 
         $scope.new = function(){
             $scope.response = angular.copy($scope.responseClear);
             $scope.responsesView = [];
+            $scope.eventCustomer('new');
             util.muestraformulario();
         };
 
@@ -215,7 +217,6 @@ angular.module('App')
             $scope.newCustomer = false;
             $scope.existCustomer = false;
             $scope._hidden = false;
-            $scope.eventCustomer('new');
             $scope.list();
             $scope.listCategories();
         });

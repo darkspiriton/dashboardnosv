@@ -141,7 +141,7 @@ angular.module('App')
         };
 
         $scope.submit = function () {
-            // if(!validateResponses())return toastr.error('Debe completar todas las preguntas');
+            if(!validateResponses())return toastr.error('Debe completar todas las preguntas');
             alertConfig.title = '¿Todo es correcto?';
             swal(alertConfig ,
                 function() {
@@ -214,6 +214,8 @@ angular.module('App')
             $scope.responsesView = [];
             $scope.newCustomer = false;
             $scope.existCustomer = false;
+            $scope._hidden = false;
+            $scope.eventCustomer('new');
             $scope.list();
             $scope.listCategories();
         });

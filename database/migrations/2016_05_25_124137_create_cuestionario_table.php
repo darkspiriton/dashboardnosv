@@ -86,8 +86,7 @@ class CreateCuestionarioTable extends Migration
             $table->foreign('questionnaire_id')->references('id')->on('questionnaires');
             $table->timestamps();
         });
-
-
+        
     }
 
     /**

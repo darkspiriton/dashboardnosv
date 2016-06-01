@@ -1,6 +1,6 @@
 <div class="card" >
     <div class="card-header bgm-blue">
-        <h2>Gestión de cuestionarios</h2>
+        <h2>Cuestionarios disponibles</h2>
         <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="list()"
                 data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
                 title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
@@ -11,19 +11,19 @@
             <table id="table" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
         </div><br>
         <div class="card-footer">
-            <a  class="btn bgm-green waves-effect" ng-click="new();">Nuevo registro</a>
+            <a  class="btn bgm-green waves-effect" ng-click="new();">Crear nuevo cuestionario</a>
         </div>
     </div><br>
 </div>
 
 <div class="card" id="formulariohide">
     <div class="card-header bgm-blue">
-        <h2>Gestionar cuestionario</h2>
+        <h2>Crear nuevo cuestionario</h2>
     </div>
 
     <div class="card-body card-padding" >
         <div class="card-header">
-            <h2>Datos de cuestionario</h2>
+            <h2>Información de cuestionario</h2>
         </div>
 
         <form name="formproduct" id="form" class="form-horizontal" autocomplete="off">
@@ -53,7 +53,7 @@
             </div>
 
             <div class="form-group">
-                <label class="col-xs-2 col-sm-2 control-label">Preguntas</label>
+                <label class="col-xs-2 col-sm-2 control-label">Pregunta</label>
                 <div class="col-xs-10 col-sm-4">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-list"></i></span>
@@ -67,7 +67,7 @@
             </div>
 
             <div class="card-header">
-                <h2>Preguntas</h2>
+                <h2>Preguntas seleccionadas</h2>
             </div>
 
             <div class="row">
@@ -75,8 +75,8 @@
                     <table class="table table-bordered w-100 table-attr text-center">
                         <thead>
                         <tr>
-                            <th>pregunta</th>
-                            <th>Accion</th>
+                            <th>Pregunta</th>
+                            <th>Acción</th>
                         </tr>
                         </thead>
                         <tbody>

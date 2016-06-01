@@ -100,21 +100,27 @@ class AuthTokenController extends Controller
         
         $token = $request->input('Authorization');
         $user = User::where('token','=', $token)->first();
-        if($user!= null) {
-            if ($user->role->abrev == 'GOD') {
-                return view('auxGod');
-            } else if ($user->role->abrev == 'ADM') {
-                return view('auxAdministrator');
-            } else if ($user->role->abrev == 'VEN') {
-                return view('vendedor');
-            } else if ($user->role->abrev == 'JVE') {
-                return view('auxCoordinador');
-            } else if ($user->role->abrev == 'EMP') {
-                return view('empleado');
+        
+        try{
+            if($user!= null) {
+                if ($user->role->abrev == 'GOD') {
+                    return view('auxGod');
+                } else if ($user->role->abrev == 'ADM') {
+                    return view('auxAdministrator');
+                } else if ($user->role->abrev == 'VEN') {
+                    return view('vendedor');
+                } else if ($user->role->abrev == 'JVE') {
+                    return view('auxCoordinador');
+                } else if ($user->role->abrev == 'EMP') {
+                    return view('empleado');
+                }
+            }else{
+                return view('logout');
             }
-        }else{
-            return view('logout');
-        }
+        }catch(\Exception $e){
+            return "Error en login";
+        }   
+        
     }
 
     public function getDashboard(){

@@ -1,6 +1,6 @@
 <div class="card" >
     <div class="card-header bgm-blue">
-        <h2>Gestión de preguntas</h2>
+        <h2>Preguntas registradas</h2>
         <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="list()"
                 data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
                 title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
@@ -11,24 +11,24 @@
             <table id="table" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
         </div><br>
         <div class="card-footer">
-            <a  class="btn bgm-green waves-effect" ng-click="new();">Nuevo registro</a>
+            <a  class="btn bgm-green waves-effect" ng-click="new();">Crear nueva pregunta</a>
         </div>
     </div><br>
 </div>
 
 <div class="card" id="formulariohide">
     <div class="card-header bgm-blue">
-        <h2>Gestionar preguntas</h2>
+        <h2>Nueva pregunta</h2>
     </div>
 
     <div class="card-body card-padding" >
         <div class="card-header">
-            <h2>Informacióm</h2>
+            <h2>Datos de la pregunta</h2>
         </div>
 
         <form name="formproduct" id="form" class="form-horizontal" autocomplete="off">
             <div class="form-group">
-                <label class="col-xs-2 col-sm-2 control-label">pregunta</label>
+                <label class="col-xs-2 col-sm-2 control-label">Pregunta</label>
                 <div class="col-xs-10 col-sm-10">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-assignment"></i></span>
@@ -41,7 +41,7 @@
             </div>
 
             <div class="form-group">
-                <label class="col-xs-2 col-sm-2 control-label">Opciones</label>
+                <label class="col-xs-2 col-sm-2 control-label">Opcion</label>
                 <div class="col-xs-10 col-sm-4">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-receipt"></i></span>

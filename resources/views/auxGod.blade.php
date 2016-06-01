@@ -45,22 +45,22 @@
             </ul>
         </li>
         <li class="sub-menu">
-            <a href="#"><i class="md md-now-widgets"></i> Gestion de cuestionarios </a>
+            <a href="#"><i class="md md-now-widgets"></i> Gestión de Cuestionarios </a>
             <ul>
-                <li id="questionnaires">
-                    <a ui-sref="questionnaires"><i class="md md-security"></i> Gestionar cuestionarios</a>
+                <li id="categories">
+                    <a ui-sref="categories"><i class="md md-security"></i> Categorías de cuestionarios</a>
                 </li>
                 <li id="questions">
-                    <a ui-sref="questions"><i class="md md-security"></i> Gestionar preguntas </a>
+                    <a ui-sref="questions"><i class="md md-security"></i> Crear preguntas </a>
                 </li>
-                <li id="categories">
-                    <a ui-sref="categories"><i class="md md-security"></i> Gestionar categorías </a>
+                <li id="questionnaires">
+                    <a ui-sref="questionnaires"><i class="md md-security"></i> Crear cuestionario</a>
                 </li>
                 <li id="q_products">
-                    <a ui-sref="q_products"><i class="md md-security"></i> Gestionar productos</a>
+                    <a ui-sref="q_products"><i class="md md-security"></i> Crear cuestionario de producto</a>
                 </li>
                 <li id="q_customers">
-                    <a ui-sref="q_customers"><i class="md md-security"></i> Registro de cuestionarios de clientes</a>
+                    <a ui-sref="q_customers"><i class="md md-security"></i> Crear cuestionario de cliente</a>
                 </li>
                 <li id="q_AnswerIndicator">
                     <a ui-sref="q_AnswerIndicator"><i class="md md-security"></i> Indicador de coincidencias</a>
@@ -99,5 +99,4 @@
     <script src="app/controllers/q_AnswerIndicator.js"></script>
     <script src="app/controllers/q_productsCtrl.js"></script>
     <script src="app/controllers/q_customersCtrl.js"></script>
-
 @stop

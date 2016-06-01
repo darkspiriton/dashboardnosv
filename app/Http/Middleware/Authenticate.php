@@ -36,8 +36,15 @@ class Authenticate {
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle($request, Closure $next, ...$role)
+    public function handle($request, Closure $next)
     {
+        $role = array();
+        $args = func_get_args();
+        foreach ($args as $key => $arg){
+            if($key>1)
+                $role[] = $arg;
+        }
+
         if ($request->header('Authorization')) {
             return $this->Authorization(explode(' ', $request->header('Authorization'))[1],$request,$next,$role);
         } elseif ($request->input('Authorization')) {

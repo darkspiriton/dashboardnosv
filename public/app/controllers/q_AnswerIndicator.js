@@ -14,10 +14,10 @@ angular.module('App')
         $scope.tableConfig 	= 	{
             columns :	[
                 {"sTitle": "0%", "bSortable" : true, 'sWidth': '80px'},
-                {"sTitle": "0% - 20%", "bSortable" : true},
-                {"sTitle": "20% - 40%", "bSortable" : true},
-                {"sTitle": "40% - 60%", "bSortable" : true},
-                {"sTitle": "60% - 80%", "bSortable" : true},
+                {"sTitle": "0% - 20%]", "bSortable" : true},
+                {"sTitle": "20% - 40%]", "bSortable" : true},
+                {"sTitle": "40% - 60%]", "bSortable" : true},
+                {"sTitle": "60% - 80%]", "bSortable" : true},
                 {"sTitle": "80% - 100%" , "bSearchable": true},
                 {"sTitle": "100%" , "bSearchable": true}
             ],

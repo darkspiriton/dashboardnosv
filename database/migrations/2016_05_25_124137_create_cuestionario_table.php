@@ -58,10 +58,9 @@ class CreateCuestionarioTable extends Migration
 
         Schema::create('aux2customers', function(Blueprint $table){
             $table->increments('id');
-            $table->string('user');
+            $table->string('url');
             $table->string('name');
-            $table->string('sexo');
-            $table->integer('edad');
+            $table->string('phone');
             $table->timestamps();
         });
 

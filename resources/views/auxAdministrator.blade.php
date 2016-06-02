@@ -44,6 +44,29 @@
                 </li>
             </ul>
         </li>
+        <li class="sub-menu">
+            <a href="#"><i class="md md-now-widgets"></i> Gestión de Cuestionarios </a>
+            <ul>
+                <li id="categories">
+                    <a ui-sref="categories"><i class="md md-security"></i> Categorías de cuestionarios</a>
+                </li>
+                <li id="questions">
+                    <a ui-sref="questions"><i class="md md-security"></i> Crear preguntas </a>
+                </li>
+                <li id="questionnaires">
+                    <a ui-sref="questionnaires"><i class="md md-security"></i> Crear cuestionario</a>
+                </li>
+                <li id="q_products">
+                    <a ui-sref="q_products"><i class="md md-security"></i> Crear cuestionario de producto</a>
+                </li>
+                <li id="q_customers">
+                    <a ui-sref="q_customers"><i class="md md-security"></i> Crear cuestionario de cliente</a>
+                </li>
+                <li id="q_AnswerIndicator">
+                    <a ui-sref="q_AnswerIndicator"><i class="md md-security"></i> Indicador de coincidencias</a>
+                </li>
+            </ul>
+        </li>
         <li id="comments">
             <a href="#" ui-sref="Comentarios"><i class="md md-messenger"></i> Administrar comentarios</a>
         </li>
@@ -70,4 +93,10 @@
     <script src="app/controllers/products_out.js"></script>
     <script src="app/controllers/auxMovementCtrl.js"></script>
     <script src="app/controllers/auxMovement2Ctrl.js"></script>
+    <script src="app/controllers/q_questionnairesCtrl.js"></script>
+    <script src="app/controllers/q_questionsCtrl.js"></script>
+    <script src="app/controllers/q_categoriesCtrl.js"></script>
+    <script src="app/controllers/q_AnswerIndicator.js"></script>
+    <script src="app/controllers/q_productsCtrl.js"></script>
+    <script src="app/controllers/q_customersCtrl.js"></script>
 @stop

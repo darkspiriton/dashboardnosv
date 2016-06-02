@@ -16,8 +16,8 @@ class AuxMovementController extends Controller
     public function __construct()
     {
         $this->middleware('auth:GOD,ADM,JVE');
-        $this->middleware('auth:JVE' , ['only' => ['index','store','show','update','destroy','product_out']]);
-        $this->middleware('auth:GOD,JVE' , ['only' => 'movementPending']);
+//        $this->middleware('auth:JVE' , ['only' => ['index','store','show','update','destroy','product_out']]);
+//        $this->middleware('auth:GOD,JVE' , ['only' => 'movementPending']);
         $this->middleware('auth:GOD' , ['only' => ['movementDay','movementDays','movementDaysDownload']]);
     }
 

@@ -103,6 +103,8 @@ angular.module('App')
             var id = $scope.tableData[ind].id;
             petition.get('api/user/' + id)
                 .then(function(data){
+                    data.user.role_id = parseInt(data.user.role_id);
+                    data.user.status = parseInt(data.user.status);
                     $scope.empleado = data.user;
                     $scope.empleado.password = '**********';
                     util.muestraformulario();

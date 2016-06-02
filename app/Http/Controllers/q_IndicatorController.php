@@ -10,6 +10,12 @@ use Dashboard\Http\Requests;
 
 class q_IndicatorController extends Controller
 {
+    
+    public function __construct()
+    {
+        $this->middleware('auth:GOD,ADM');
+    }
+
     public function showProducts(Request $request){
 
         if(\Validator::make($request->all(),['codes' => 'required|array'])->fails())

@@ -10,6 +10,12 @@ use Dashboard\Http\Requests;
 
 class q_AnswerController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth:GOD,ADM');
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -41,7 +47,7 @@ class q_AnswerController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'customer_id'   =>  'integer|exists:aux2customer,id',
+            'customer_id'   =>  'integer|exists:aux2customers,id',
             'category_id'   =>  'required|integer|exists:categories,id',
             'questionnaire_id'   =>  'required|integer|exists:questionnaires,id',
             'responses'     =>  'required|array',
@@ -56,7 +62,7 @@ class q_AnswerController extends Controller
                 $responseModel = new AnswerCustomer();
                 $responseModel->customer_id = $request->input('customer_id');
                 $responseModel->questionnaire_id = $request->input('questionnaire_id');
-                $responseModel->option_id = $response->id;
+                $responseModel->option_id = $response['id'];
                 $responseModel->save();
             }
         } else {
@@ -94,9 +100,18 @@ class q_AnswerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id, $qq)
     {
-        //
+        $customer = Customer::with(['answers' => function($query) use ($qq){
+            return $query->with(['option' => function($query){
+                return $query->with('question');
+            }])->where('questionnaire_id','=',$qq)->first();
+        }])->find($id);
+
+        if($customer == null)
+            return response()->json(['message' => 'El cliente no eciste'],404);
+
+        return response()->json(['customer' => $customer],200);
     }
 
     /**
@@ -131,5 +146,10 @@ class q_AnswerController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function search($string){
+        $customer = Customer::where('name','LIKE','%'.$string.'%')->orWhere('phone','LIKE','%'.$string.'%')->get();
+        return response()->json( ['customers' => $customer] ,200);
     }
 }

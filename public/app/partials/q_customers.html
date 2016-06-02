@@ -27,7 +27,7 @@
         </div>
 
         <form name="formresponse" id="form" class="form-horizontal" autocomplete="off">
-            <div class="form-group" ng-show="_hidden">
+            <div class="form-group">
                 <label class="col-xs-2 col-sm-2 control-label">Cliente</label>
                 <div class="col-xs-10 col-sm-4">
                     <div class="input-group">
@@ -47,7 +47,7 @@
                         <div class="input-group">
                             <span class="input-group-addon"><i class="md md-redo"></i></span>
                             <div class="fg-line">
-                                <input ng-model="response.user" type="text" class="form-control" ng-disabled="newCustomer" ng-required="existCustomer">
+                                <input id="searchCustomer" ng-focus="listSearch()" ng-change="listSearch()" ng-blur="listView=false" type="text" class="form-control input-sm" ng-model="search" ng-required="existCustomer">
                             </div>
                         </div>
                     </div>
@@ -167,6 +167,14 @@
     </div>
 </div>
 
+<div id="list" class="search-list" style="top: 580px; left: 1236.64px; position: absolute;">
+    <ul ng-show="listView" class="dropdown-menu dm-icon">
+        <li ng-repeat="customer in customers" ng-click="selectCustomer($index)">
+            <a ui-sref="Intereses">{{ customer.name + ' - ' + customer.phone }}</a>
+        </li>
+    </ul>
+</div>
+
 <!-- Modal -->
 <div class="modal fade" id="Modal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
@@ -174,16 +182,16 @@
             <div class="modal-header bgm-teal">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h3 class="modal-title c-white">Detalle de producto</h3>
+                <h3 class="modal-title c-white">Detalle de cliente-cuestionario</h3>
             </div>
             <div class="modal-body card-padding">
                 <form class="form-horizontal" autocomplete="off" submit="return false;">
                     <div class="form-group form-pad-top">
-                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Producto: </label>
-                        <label class="col-xs-6 col-sm-9 control-label" style="text-align: left" ng-bind="productDetail.name"></label>
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Nombre: </label>
+                        <label class="col-xs-6 col-sm-9 control-label" style="text-align: left" ng-bind="customerDetail.name"></label>
 
-                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Categoría: </label>
-                        <label class="col-xs-6 col-sm-9 control-label" style="text-align: left" ng-bind="productDetail.category.name"></label>
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Telefono: </label>
+                        <label class="col-xs-6 col-sm-9 control-label" style="text-align: left" ng-bind="customerDetail.phone"></label>
                     </div>
                     <div class="form-group">
                         <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Preguntas: </label>
@@ -198,7 +206,7 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr ng-repeat="response in productDetail.answers">
+                                        <tr ng-repeat="response in customerDetail.answers">
                                             <td style="display: table-cell;">{{ response.option.question.question }}</td>
                                             <td style="display: table-cell;">{{ response.option.option }}</td>
                                         </tr>

@@ -128,10 +128,12 @@ angular.module('App')
         };
 
         $scope.detail = function( ind ){
-            var id = $scope.tableData[ind].id;
-            petition.get('api/q_response/' + id )
+            var id = $scope.tableData[ind].customer.id;
+            var qq = $scope.tableData[ind].questionnaire.id;
+            petition.get('api/answer/customer/' + id + '/' + qq)
                 .then(function(data){
-                    $scope.responseDetail = data.response;
+                    $scope.customerDetail = data.customer;
+                    console.log( $scope.customerDetail);
                     util.modal();
                 }, function(error){
                     toastr.error('Ups ocurrio un problema: ' + error.data.message);

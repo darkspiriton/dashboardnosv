@@ -174,16 +174,16 @@
             <div class="modal-header bgm-teal">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h3 class="modal-title c-white">Detalle de producto</h3>
+                <h3 class="modal-title c-white">Detalle de cliente-cuestionario</h3>
             </div>
             <div class="modal-body card-padding">
                 <form class="form-horizontal" autocomplete="off" submit="return false;">
                     <div class="form-group form-pad-top">
-                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Producto: </label>
-                        <label class="col-xs-6 col-sm-9 control-label" style="text-align: left" ng-bind="productDetail.name"></label>
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Nombre: </label>
+                        <label class="col-xs-6 col-sm-9 control-label" style="text-align: left" ng-bind="customerDetail.name"></label>
 
-                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Categoría: </label>
-                        <label class="col-xs-6 col-sm-9 control-label" style="text-align: left" ng-bind="productDetail.category.name"></label>
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Telefono: </label>
+                        <label class="col-xs-6 col-sm-9 control-label" style="text-align: left" ng-bind="customerDetail.phone"></label>
                     </div>
                     <div class="form-group">
                         <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Preguntas: </label>
@@ -198,7 +198,7 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr ng-repeat="response in productDetail.answers">
+                                        <tr ng-repeat="response in customerDetail.answers">
                                             <td style="display: table-cell;">{{ response.option.question.question }}</td>
                                             <td style="display: table-cell;">{{ response.option.option }}</td>
                                         </tr>

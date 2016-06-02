@@ -47,7 +47,7 @@ angular.module('App')
 
         $scope.list = function() {
             $scope.updateList = true;
-            petition.get('api/q_product')
+            petition.get('api/answer/product')
                 .then(function(data){
                     $scope.tableData = data.products;
                     $('#table').AJQtable('view', $scope, $compile);
@@ -125,7 +125,7 @@ angular.module('App')
 
         $scope.detail = function( ind ){
             var id = $scope.tableData[ind].id;
-            petition.get('api/q_product/' + id )
+            petition.get('api/answer/product/' + id )
                 .then(function(data){
                     $scope.productDetail = data.product;
                     util.modal();
@@ -140,7 +140,7 @@ angular.module('App')
             swal(alertConfig ,
                 function() {
                     var method = ( $scope.product.id ) ? 'PUT' : 'POST';
-                    var url = ( method == 'PUT') ? util.baseUrl('api/q_product/' + $scope.product.id) : util.baseUrl('api/q_product');
+                    var url = ( method == 'PUT') ? util.baseUrl('api/answer/product/' + $scope.product.id) : util.baseUrl('api/answer/product');
                     var config = {
                         method: method,
                         url: url,

@@ -148,11 +148,13 @@ Route::group(['prefix' => 'api'], function(){
         ['only' => ['index', 'store', 'show', 'edit', 'update']]);
     Route::get('questionnaire/category/{id}','QuestionnairesController@QuestionnaireForCategory');
 
-    Route::resource('q_product', 'q_ProductController',
+    Route::resource('answer/product', 'q_ProductController',
         ['only' => ['index', 'store', 'show']]);
 
     Route::resource('answer/customer', 'q_AnswerController',
-        ['only' => ['index', 'store', 'show']]);
+        ['only' => ['index', 'store']]);
+    Route::get('answer/customer/{id}/{qq}', ['as' => 'show','uses' => 'q_AnswerController@show']);
+
 
     Route::post('indicator/questionnaire/for/products', 'q_IndicatorController@showProducts');
     Route::post('indicator/questionnaire/for/customers', 'q_IndicatorController@showCustomers');

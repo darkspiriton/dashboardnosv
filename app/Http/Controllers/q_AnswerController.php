@@ -94,9 +94,18 @@ class q_AnswerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id, $qq)
     {
-        //
+        $customer = Customer::with(['answers' => function($query) use ($qq){
+            return $query->with(['option' => function($query){
+                return $query->with('question');
+            }])->where('questionnaire_id','=',$qq)->first();
+        }])->find($id);
+
+        if($customer == null)
+            return response()->json(['message' => 'El cliente no eciste'],404);
+
+        return response()->json(['customer' => $customer],200);
     }
 
     /**

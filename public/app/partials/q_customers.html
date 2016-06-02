@@ -27,7 +27,7 @@
         </div>
 
         <form name="formresponse" id="form" class="form-horizontal" autocomplete="off">
-            <div class="form-group" ng-show="_hidden">
+            <div class="form-group">
                 <label class="col-xs-2 col-sm-2 control-label">Cliente</label>
                 <div class="col-xs-10 col-sm-4">
                     <div class="input-group">
@@ -47,7 +47,7 @@
                         <div class="input-group">
                             <span class="input-group-addon"><i class="md md-redo"></i></span>
                             <div class="fg-line">
-                                <input ng-model="response.user" type="text" class="form-control" ng-disabled="newCustomer" ng-required="existCustomer">
+                                <input id="searchCustomer" ng-focus="listSearch()" ng-change="listSearch()" ng-blur="listView=false" type="text" class="form-control input-sm" ng-model="search" ng-required="existCustomer">
                             </div>
                         </div>
                     </div>
@@ -165,6 +165,14 @@
         </form>
 
     </div>
+</div>
+
+<div id="list" class="search-list" style="top: 580px; left: 1236.64px; position: absolute;">
+    <ul ng-show="listView" class="dropdown-menu dm-icon">
+        <li ng-repeat="customer in customers" ng-click="selectCustomer($index)">
+            <a ui-sref="Intereses">{{ customer.name + ' - ' + customer.phone }}</a>
+        </li>
+    </ul>
 </div>
 
 <!-- Modal -->

@@ -40,7 +40,7 @@ angular.module('App')
         };
 
         $scope.responseClear = {
-            user_id:null,
+            customer_id:null,
             url: null,
             name: null,
             phone: null,
@@ -175,30 +175,28 @@ angular.module('App')
         $scope.cancel = function () {
             $scope.response = angular.copy($scope.responseClear);
             $scope.responsesView = [];
-            $scope.eventCustomer('new');
             util.ocultaformulario();
         };
 
         $scope.new = function(){
             $scope.response = angular.copy($scope.responseClear);
             $scope.responsesView = [];
-            $scope.eventCustomer('new');
             util.muestraformulario();
         };
 
         //  Event
 
-            $scope.eventCustomer = function (caseCustomer) {
-                if (caseCustomer == 'new') {
-                    $scope.newCustomer = true;
-                    $scope.existCustomer = false;
-                    clearCustomer();
-                }else if (caseCustomer == 'exist'){
-                    $scope.newCustomer = false;
-                    $scope.existCustomer = true;
-                    clearCustomer();
-                }
-            };
+        $scope.eventCustomer = function (caseCustomer) {
+            if (caseCustomer == 'new') {
+                $scope.newCustomer = true;
+                $scope.existCustomer = false;
+                clearCustomer();
+            }else if (caseCustomer == 'exist'){
+                $scope.newCustomer = false;
+                $scope.existCustomer = true;
+                clearCustomer();
+            }
+        };
         
         function clearCustomer() {
             $scope.response.user_id = null;
@@ -210,13 +208,35 @@ angular.module('App')
 
         //
 
+        $scope.listSearch = function() {
+            $scope.listPositiontion();
+            $scope.listView = true;
+            $scope.response.customer_id = null;
+            petition.get('api/answer/customer/search/tag/' + $scope.search)
+                .then(function(data){
+                    $scope.customers = data.customers;
+                }, function(error){
+                    console.log(error);
+                    toastr.error('Huy Huy dice: ' + error.data.message);
+                });
+        };
+
+        $scope.selectCustomer = function(i){
+            $scope.response.customer_id = $scope.customers[i].id;
+            $scope.search = $scope.customers[i].name;
+        };
+
+        $scope.listPositiontion = function(){
+            var pos = $('#searchCustomer').offset();
+            $("#list").css({top: pos.top - 35, left: pos.left});
+        };
+
         angular.element(document).ready(function(){
             util.resetTable($scope,$compile);
             $scope.response = angular.copy($scope.responseClear);
             $scope.responsesView = [];
             $scope.newCustomer = false;
             $scope.existCustomer = false;
-            $scope._hidden = false;
             $scope.list();
             $scope.listCategories();
         });

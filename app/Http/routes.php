@@ -154,6 +154,7 @@ Route::group(['prefix' => 'api'], function(){
     Route::resource('answer/customer', 'q_AnswerController',
         ['only' => ['index', 'store']]);
     Route::get('answer/customer/{id}/{qq}', ['as' => 'show','uses' => 'q_AnswerController@show']);
+    Route::get('answer/customer/search/tag/{string}','q_AnswerController@search');
 
 
     Route::post('indicator/questionnaire/for/products', 'q_IndicatorController@showProducts');

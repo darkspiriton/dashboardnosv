@@ -41,7 +41,7 @@ class q_AnswerController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'customer_id'   =>  'integer|exists:aux2customer,id',
+            'customer_id'   =>  'integer|exists:aux2customers,id',
             'category_id'   =>  'required|integer|exists:categories,id',
             'questionnaire_id'   =>  'required|integer|exists:questionnaires,id',
             'responses'     =>  'required|array',
@@ -56,7 +56,7 @@ class q_AnswerController extends Controller
                 $responseModel = new AnswerCustomer();
                 $responseModel->customer_id = $request->input('customer_id');
                 $responseModel->questionnaire_id = $request->input('questionnaire_id');
-                $responseModel->option_id = $response->id;
+                $responseModel->option_id = $response['id'];
                 $responseModel->save();
             }
         } else {
@@ -140,5 +140,10 @@ class q_AnswerController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function search($string){
+        $customer = Customer::where('name','LIKE','%'.$string.'%')->orWhere('phone','LIKE','%'.$string.'%')->get();
+        return response()->json( ['customers' => $customer] ,200);
     }
 }

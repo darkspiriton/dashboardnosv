@@ -93,10 +93,10 @@ class AuxQProduct extends Controller
 
         // labels
         $resultados[0]['label'] = '0%';
-        $resultados[1]['label'] = '0% - 20%';
-        $resultados[2]['label'] = '20% - 40%';
-        $resultados[3]['label'] = '40% - 60%';
-        $resultados[4]['label'] = '60% - 80%';
+        $resultados[1]['label'] = '0% - 20%]';
+        $resultados[2]['label'] = '20% - 40%]';
+        $resultados[3]['label'] = '40% - 60%]';
+        $resultados[4]['label'] = '60% - 80%]';
         $resultados[5]['label'] = '80% - 100%';
         $resultados[6]['label'] = '100%';
 

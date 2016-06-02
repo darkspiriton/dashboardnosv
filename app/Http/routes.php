@@ -154,6 +154,9 @@ Route::group(['prefix' => 'api'], function(){
     Route::resource('answer/customer', 'q_AnswerController',
         ['only' => ['index', 'store', 'show']]);
 
+    Route::post('indicator/questionnaire/for/products', 'q_IndicatorController@showProducts');
+    Route::post('indicator/questionnaire/for/customers', 'q_IndicatorController@showCustomers');
+
     //Rutas de creacion de producto y cliente
     Route::resource('auxqcustomer','AuxQCustomer',['only'=>['index','store','update','show','destroy']]);
     Route::resource('auxqproduct','AuxQProduct',['only'=>['index','store','update','show','destroy']]);

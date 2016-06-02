@@ -31,7 +31,7 @@ angular.module('App')
                     $scope.products = data.productos;
                 }, function(error){
                     console.log(error);
-                    toastr.error('Uyuyuy dice: ' + error.data.message);
+                    toastr.error('Huy Huy dice: ' + error.data.message);
                 });
         };
 
@@ -41,7 +41,7 @@ angular.module('App')
                     $scope.customers = data.customers;
                 }, function(error){
                     console.log(error);
-                    toastr.error('Uyuyuy dice: ' + error.data.message);
+                    toastr.error('Huy Huy dice: ' + error.data.message);
                 });
         };
 
@@ -61,19 +61,55 @@ angular.module('App')
                     $scope.codigos = data.codigos;
                     $scope.tableData = data.row;
                     $('#table').AJQtable('view', $scope, $compile);
-                    chart.draw(data.cantidades, {data: 'count', label: 'label'})
+                    chart.draw(data.cantidades, {data: 'count', label: 'label'});
+                    if(Object.keys($scope.codigos).length > 0) {
+                        $scope.showDetail = true;
+                    } else {
+                        $scope.showDetail = false;
+                    }
                 }, function(error){
                     $scope.cantidades=[];
                     $scope.codigos=[];
                     util.resetTable($scope,$compile);
                     chart.draw([], {});
                     console.log(error);
-                    toastr.error('Uyuyuy dice: ' + error.data.message);
+                    toastr.error('Huy Huy dice: ' + error.data.message);
                 });
         };
 
         $scope.submit = function () {
             $scope.list();
+        };
+
+        $scope.detail = function (i) {
+            console.log('=)');
+            if($scope.searchP != null){
+                $scope.detailForProducts(i);
+            } else if($scope.searchC != null){
+                $scope.detailForCustomers(i);
+            }
+        };
+
+        $scope.detailForCustomers = function (i) {
+            petition.post('api/indicator/questionnaire/for/products', {codes : $scope.codigos[i].codes})
+                .then(function(data){
+                    $scope.records = data.records;
+                    util.modal('forProducts');
+                }, function(error){
+                    console.log(error);
+                    toastr.error('Huy Huy dice: ' + error.data.message);
+                });
+        };
+
+        $scope.detailForProducts = function (i) {
+            petition.post('api/indicator/questionnaire/for/customers', {codes : $scope.codigos[i].codes})
+                .then(function(data){
+                    $scope.records = data.records;
+                    util.modal('forCustomers');
+                }, function(error){
+                    console.log(error);
+                    toastr.error('Huy Huy dice: ' + error.data.message);
+                });
         };
 
         $scope.cancel = function () {
@@ -90,6 +126,8 @@ angular.module('App')
 
         angular.element(document).ready(function(){
             util.resetTable($scope,$compile);
+            $scope.codigos = [];
+            $scope.showDetail = false;
             $scope.listProducts();
             $scope.listCustomer();
         });

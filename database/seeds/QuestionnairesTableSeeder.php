@@ -23,10 +23,9 @@ class QuestionnairesTableSeeder extends Seeder
 
         for($k=0;$k<5;$k++){
             DB::table('aux2customers')->insert(array(
-                'user'=>$faker->unique()->email,
+                'url'=>$faker->url,
                 'name'=>$faker->name,
-                'sexo'=>$faker->randomElement($array = array ('M','F')),
-                'edad'=>$faker->randomFloat( $nbMaxDecimals = 0, $min= 18, $max=60),
+                'phone'=>$faker->phoneNumber,
             ));
         }
 

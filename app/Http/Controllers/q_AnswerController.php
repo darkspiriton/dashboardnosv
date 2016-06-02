@@ -61,20 +61,18 @@ class q_AnswerController extends Controller
             }
         } else {
             $rules = [
-                'user'  =>  'required|string|max:255',
+                'url'  =>  'required|string|max:255',
                 'name'  =>  'required|string|max:255',
-                'sex'   =>  'required|string|in:M,F',
-                'age'   =>  'required|integer|max:99'
+                'phone'   =>  'required|string|max:255s',
             ];
 
             if(\Validator::make($request->all(), $rules)->fails())
                 return response()->json(['message' => 'Valores recibidos no son validos'],401);
 
             $customer = new Customer();
-            $customer->user = $request->input('user');
+            $customer->url = $request->input('url');
             $customer->name = $request->input('name');
-            $customer->sexo = $request->input('sex');
-            $customer->edad = $request->input('age');
+            $customer->phone = $request->input('phone');
             $customer->save();
 
             foreach ($request->input('responses') as $response){

@@ -139,43 +139,50 @@ class AuxQCustomer extends Controller
                 $resultados[0]['count']=$resultados[0]['count']+1;
                 $resul_0[0]['col_1'] += 1;
                 $cod0[$x0]=$idP;
-                $codigos[0]= $cod0;
+                $codigos[0]['codes']= $cod0;
+                $codigos[0]['label']= '0%';
                 $x0++;
             }elseif(0< $porcentaje and $porcentaje<=20){
                 $resultados[1]['count']=$resultados[1]['count']+1;
                 $resul_0[0]['col_2'] += 1;
                 $cod1[$x1]=$idP;
-                $codigos[1]= $cod1;
+                $codigos[1]['codes']= $cod1;
+                $codigos[1]['label']= '0% - 20%';
                 $x1++;
             }elseif(20< $porcentaje and $porcentaje<=40){
                 $resultados[2]['count']=$resultados[2]['count']+1;
                 $resul_0[0]['col_3'] += 1;
                 $cod2[$x2]=$idP;
-                $codigos[2]= $cod2;
+                $codigos[2]['codes']= $cod2;
+                $codigos[2]['label']= '20% - 40%';
                 $x2++;
             }elseif(40< $porcentaje and $porcentaje<=60){
                 $resultados[3]['count']=$resultados[3]['count']+1;
                 $resul_0[0]['col_4'] += 1;
                 $cod3[$x3]=$idP;
-                $codigos[3]= $cod3;
+                $codigos[3]['codes']= $cod3;
+                $codigos[3]['label']= '40% - 60%';
                 $x3++;
             }elseif(60< $porcentaje and $porcentaje<=80){
                 $resultados[4]['count']=$resultados[4]['count']+1;
                 $resul_0[0]['col_5'] += 1;
                 $cod4[$x4]=$idP;
-                $codigos[4]= $cod4;
+                $codigos[4]['codes']= $cod4;
+                $codigos[4]['label']= '60% - 80%';
                 $x4++;
             }elseif(80< $porcentaje and $porcentaje<100){
                 $resultados[5]['count']=$resultados[5]['count']+1;
                 $resul_0[0]['col_6'] += 1;
                 $cod5[$x5]=$idP;
-                $codigos[5]= $cod5;
+                $codigos[5]['codes']= $cod5;
+                $codigos[5]['label']= '80% - 100%';
                 $x5++;
             }elseif($porcentaje==100){
                 $resultados[6]['count']=$resultados[6]['count']+1;
                 $resul_0[0]['col_7'] += 1;
                 $cod6[$x6]=$idP;
-                $codigos[6]= $cod6;
+                $codigos[6]['codes']= $cod6;
+                $codigos[6]['label']= '100%';
                 $x6++;
             }
 

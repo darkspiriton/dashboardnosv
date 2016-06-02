@@ -15,8 +15,7 @@ angular.module('App')
             columns :	[
                 {"sTitle": "Cuestionario", "bSortable" : true},
                 {"sTitle": "Cliente", "bSortable" : true},
-                {"sTitle": "Sexo", "bSortable" : true, "sWidth": '1px'},
-                {"sTitle": "Edad", "bSortable" : true, "sWidth": '1px'},
+                {"sTitle": "Telefono", "bSortable" : true, "sWidth": '1px'},
                 {"sTitle": "Accion" , "bSearchable": true, "sWidth": '80px'}
             ],
             actions	:   	[
@@ -25,7 +24,7 @@ angular.module('App')
                 ]
                 ]
             ],
-            data  	: 	['questionnaire.description', 'customer.name', 'customer.sexo','customer.edad','actions']
+            data  	: 	['questionnaire.description', 'customer.name', 'customer.phone','actions']
         };
 
         var alertConfig = {
@@ -42,10 +41,9 @@ angular.module('App')
 
         $scope.responseClear = {
             user_id:null,
-            user: null,
+            url: null,
             name: null,
-            sex: null,
-            age: null,
+            phone: null,
             category_id: null,
             questionnaire_id: null,
             responses: []

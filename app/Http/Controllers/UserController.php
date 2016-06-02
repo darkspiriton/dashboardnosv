@@ -106,10 +106,10 @@ class UserController extends Controller
                         'user' => $user,
                     ],200);
             }
-            return \Response::json(['message' => 'No existe ese usuario'], 404);
+            return response()->json(['message' => 'No existe ese usuario'], 404);
 
-        }catch (ErrorException $e){
-            return \Response::json(['message' => 'Ocurrio un error'], 500);
+        }catch (\ErrorException $e){
+            return response()->json(['message' => 'Ocurrio un error'], 500);
         }
     }
 

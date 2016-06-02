@@ -46,6 +46,7 @@ angular.module('App')
         };
 
         $scope.list = function(s) {
+            $scope.codeDetail = null;
             var controller = (s == 'p')?'auxqproduct':'auxqcustomer';
             var id;
             if(s == 'p'){
@@ -91,6 +92,7 @@ angular.module('App')
         };
 
         $scope.detailForCustomers = function (i) {
+            $scope.codeDetail = null;
             petition.post('api/indicator/questionnaire/for/products', {codes : $scope.codigos[i].codes})
                 .then(function(data){
                     $scope.records = data.records;
@@ -102,6 +104,7 @@ angular.module('App')
         };
 
         $scope.detailForProducts = function (i) {
+            $scope.codeDetail = null;
             petition.post('api/indicator/questionnaire/for/customers', {codes : $scope.codigos[i].codes})
                 .then(function(data){
                     $scope.records = data.records;

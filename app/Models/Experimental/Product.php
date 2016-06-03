@@ -31,4 +31,12 @@ class Product extends Model
     public function types(){
         return $this->belongsToMany(Type::class,"types_auxproducts","product_id");
     }
+
+    public function outfits(){
+        return $this->belongsToMany(Outfit::class,"products_outfits","product_id");
+    }
+
+    public function settlement(){
+        return $this->hasOne(Settlement::class);
+    }
 }

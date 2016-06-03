@@ -211,6 +211,7 @@ angular.module('App')
         //
 
         $scope.listSearch = function() {
+            if(typeof $scope.search == 'undefined')return;
             $scope.listPositiontion();
             $scope.listView = true;
             $scope.response.customer_id = null;

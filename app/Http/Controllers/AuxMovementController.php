@@ -38,7 +38,7 @@ class AuxMovementController extends Controller
                 ->orderby('p.id','asc')->get();
 
             $products = DB::table('auxproducts AS p')
-                ->select('p.name','c.name AS color','s.name AS size','p.id','p.cod',DB::raw('count(p.cod) as cant'))
+                ->select('p.name','c.name AS color','s.name AS size','p.id','p.cod',DB::raw('count(p.cod) as cant'),DB::raw('p.cost_provider + p.utility as price'))
                 ->join('colors AS c','c.id','=','p.color_id')
                 ->join('sizes AS s','s.id','=','p.size_id')
                 //->leftjoin('auxmovements AS m','m.product_id','=','p.id')
@@ -127,7 +127,10 @@ class AuxMovementController extends Controller
     public function product_out(Request $request){
         // Creamos las reglas de validación
         $rules = [
-            'products'    => 'required',
+            'products'    => 'required|array',
+            'products.*.id'    => 'required|integer|exists:auxproducts,id',
+            'products.*.discount'    => 'required|numeric',
+            'products.*.date'    => 'required|date',
         ];
 
         //Se va a pasar datos del movimiento
@@ -148,6 +151,7 @@ class AuxMovementController extends Controller
                 if($prd->status == 1){
                     $movement = new Movement();
                     $movement->date_shipment = $product['date'];
+                    $movement->discount = $product['discount'];
                     $movement->status = 'salida';
                     $prd->movements()->save($movement);
                     $prd->status = 0;
@@ -235,7 +239,7 @@ class AuxMovementController extends Controller
 
     public function movementPending(){
         $products = DB::table('auxproducts AS p')
-            ->select('p.cod', 'm.date_shipment','p.status','p.id as product_id','p.name','s.name as size','c.name as color','m.id as movement_id',DB::raw('max(m.created_at) as date'))
+            ->select('p.cod', 'm.date_shipment','p.status','p.id as product_id','p.name','s.name as size','c.name as color','m.id as movement_id',DB::raw('max(m.created_at) as date'),DB::raw('p.cost_provider+utility-m.discount as price'))
             ->join('auxmovements AS m','m.product_id','=','p.id')
             ->join('colors AS c','c.id','=','p.color_id')
             ->join('sizes AS s','s.id','=','p.size_id')

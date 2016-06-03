@@ -14,7 +14,7 @@ class UpdateProductsauxTable extends Migration
     {
         Schema::table('auxproducts',function($table){
             $table->float('cost_provider');
-            $table->float('utility');
+            $table->float('utility');            
         });
 
         Schema::table('auxmovements',function($table){

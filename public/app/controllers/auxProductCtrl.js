@@ -20,6 +20,9 @@ angular.module('App')
                 {"sTitle": "Talla", "bSortable" : true},
                 {"sTitle": "Color" , "bSearchable": true},
                 {"sTitle": "Tipos" , "bSearchable": true},
+                {"sTitle": "Precio Proveedor" , "bSearchable": true},
+                {"sTitle": "Utilidad" , "bSearchable": true},
+                {"sTitle": "Precio" , "bSearchable": true},
                 {"sTitle": "Status" , "bSearchable": true},
                 {"sTitle": "Accion" , "bSearchable": true}
             ],
@@ -36,7 +39,7 @@ angular.module('App')
                 ]
                 ]
             ],
-            data  	: 	['date','cod','name','provider','size','color','types','status','actions'],
+            data  	: 	['date','cod','name','provider','size','color','types','cost_provider','utility','precio','status','actions',],
             configStatus : 'status'
         };
 
@@ -61,6 +64,8 @@ angular.module('App')
             color_id: null,
             day: null,
             count: null,
+            cost:null,
+            uti:null,
             types: []
         };
 

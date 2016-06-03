@@ -34,7 +34,7 @@ class AuxProductController extends Controller
     public function index()
     {
         $products = DB::table('auxproducts as p')
-                        ->select('p.status',DB::raw('DATE_FORMAT(p.created_at,\'%d-%m-%Y\') as date'),'p.id','p.cod','p.name','s.name as size','c.name as color','pv.name as provider',DB::raw('GROUP_CONCAT(t.name ORDER BY t.name ASC SEPARATOR \' - \') as types'))
+                        ->select('p.status',DB::raw('DATE_FORMAT(p.created_at,\'%d-%m-%Y\') as date'),'p.id','p.cod','p.name','s.name as size','c.name as color','pv.name as provider',DB::raw('GROUP_CONCAT(t.name ORDER BY t.name ASC SEPARATOR \' - \') as types'),'p.cost_provider','p.utility',DB::raw('p.cost_provider + p.utility as precio'))
                         ->join('types_auxproducts as tp','tp.product_id','=','p.id')
                         ->join('types as t','t.id','=','tp.type_id')
                         ->join('colors as c','c.id','=','p.color_id')
@@ -42,6 +42,8 @@ class AuxProductController extends Controller
                         ->join('providers as pv','pv.id','=','p.provider_id')
                         ->groupBy('cod')
                         ->get();
+
+//        $products=Product::with('size','color','provider');
 
         return response()->json(['products' => $products],200);
     }
@@ -65,7 +67,9 @@ class AuxProductController extends Controller
             'types.*.id'    => 'required|integer',
             'day'           => 'required|integer',
             'count'         => 'required|integer',
-            'cant'          => 'required|integer'
+            'cant'          => 'required|integer',
+            'cost'          => 'required|numeric',
+            'uti'          => 'required|numeric',
         ];
 
         //Se va a pasar datos del producto, attributos y su cantidad
@@ -90,6 +94,8 @@ class AuxProductController extends Controller
                 $data['name'] = $request->input('name');
                 $data['cant'] = $request->input('cant');
                 $data['cod'] = $request->input('cod');
+                $data['cost']=$request->input('cost');
+                $data['uti']=$request->input('uti');
 
                 $types = $request->input('types');
 
@@ -110,6 +116,8 @@ class AuxProductController extends Controller
                     $product->alarm_id= $alarm->id;
                     $product->name= $data['name'];
                     $product->status= 1;
+                    $product->cost_provider=$data['cost'];
+                    $product->utility=$data['uti'];
                     $product->save();
 
                     foreach($types as $type){
@@ -144,7 +152,7 @@ class AuxProductController extends Controller
         try{
 
             $product = Product::with('types')
-                            ->select(array('id','cod','provider_id','color_id','size_id','name'))
+                            ->select(array('id','cod','provider_id','color_id','size_id','name','cost_provider as cost','utility as uti'))
                             ->find($id);
 
             if($product !== null)
@@ -175,7 +183,9 @@ class AuxProductController extends Controller
             'size_id'       => 'required|integer|exists:sizes,id',
             'name'          => 'required|max:25|unique:employees|alpha',
             'types'         => 'required|array',
-            'types.*.id'    => 'required|integer'
+            'types.*.id'    => 'required|integer',
+            'cost'          => 'required|numeric',
+            'uti'          => 'required|numeric',
         ];
 
         try {
@@ -196,6 +206,8 @@ class AuxProductController extends Controller
             $product->color_id = $request->input('color_id');
             $product->size_id = $request->input('size_id');
             $product->name = $request->input('name');
+            $product->cost_provider = $request->input('cost');
+            $product->utility = $request->input('uti');
             $product->save();
 
             $types = Array();

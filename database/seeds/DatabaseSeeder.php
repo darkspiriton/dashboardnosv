@@ -16,11 +16,11 @@ class DatabaseSeeder extends Seeder
         
 //        $this->call(UbigeoTableSeeder::class);
         $this->call(UsersTableSeeder::class);
-        $this->call(PlanillaTableSeeder::class);
-        $this->call(QuestionnairesTableSeeder::class);
+//        $this->call(PlanillaTableSeeder::class);
+//        $this->call(QuestionnairesTableSeeder::class);
 //        $this->call(ProductsTableSeeder::class);
 //        $this->call(GeneralTablesSeeder::class);
-//        $this->call(AuxProductsTableSeeder::class);
+        $this->call(AuxProductsTableSeeder::class);
         Model::reguard();
     }
 }

@@ -18,6 +18,7 @@ angular.module('App')
                 {"sTitle": "Producto", "bSortable" : true},
                 {"sTitle": "Talla", "bSortable" : true},
                 {"sTitle": "Color", "bSortable" : true},
+                {"sTitle": "Precio Final (S/.)", "bSortable" : true},
                 {"sTitle": "Estado", "bSortable" : true, "sWidth": "80px"},
                 {"sTitle": "Acción" , "bSearchable": false , "sWidth": "190px"}
             ],
@@ -33,7 +34,7 @@ angular.module('App')
                 ]
                 ]
             ],
-            data  	: 	['date_shipment','cod','name','size','color','status','actions'],
+            data  	: 	['date_shipment','cod','name','size','color','price','status','actions'],
             configStatus : 'status'
         };
 

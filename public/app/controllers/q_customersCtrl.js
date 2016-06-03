@@ -188,6 +188,8 @@ angular.module('App')
 
         $scope.eventCustomer = function (caseCustomer) {
             if (caseCustomer == 'new') {
+                $scope.response.customer_id = null;
+                $scope.search = null;
                 $scope.newCustomer = true;
                 $scope.existCustomer = false;
                 clearCustomer();

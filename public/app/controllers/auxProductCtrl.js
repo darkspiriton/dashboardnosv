@@ -20,9 +20,9 @@ angular.module('App')
                 {"sTitle": "Talla", "bSortable" : true},
                 {"sTitle": "Color" , "bSearchable": true},
                 {"sTitle": "Tipos" , "bSearchable": true},
-                {"sTitle": "Precio Proveedor" , "bSearchable": true},
-                {"sTitle": "Utilidad" , "bSearchable": true},
-                {"sTitle": "Precio" , "bSearchable": true},
+                {"sTitle": "Precio Proveedor (S/.)" , "bSearchable": true},
+                {"sTitle": "Utilidad (S/.)" , "bSearchable": true},
+                {"sTitle": "Precio (S/.)" , "bSearchable": true},
                 {"sTitle": "Status" , "bSearchable": true},
                 {"sTitle": "Accion" , "bSearchable": true}
             ],

@@ -239,18 +239,22 @@ class AuxMovementController extends Controller
 
     public function movementPending(){
         $products = DB::table('auxproducts AS p')
-            ->select('p.cod', 'm.date_shipment','p.status','p.id as product_id','p.name','s.name as size','c.name as color','m.id as movement_id',DB::raw('max(m.created_at) as date'),DB::raw('p.cost_provider+utility-m.discount as price'))
+            ->select('p.cod',DB::raw('max(m.date_shipment) as date_shipment'),'p.status','p.id as product_id',
+            'p.name','s.name as size','c.name as color','m.id as movement_id',
+            DB::raw('max(m.created_at) as date'),DB::raw('p.cost_provider+utility-m.discount as price'))
             ->join('auxmovements AS m','m.product_id','=','p.id')
             ->join('colors AS c','c.id','=','p.color_id')
             ->join('sizes AS s','s.id','=','p.size_id')
             ->where('p.status','=',0)
+            ->where('m.status','=','salida')
             ->groupby('p.id')->get();
         return \Response::json(['products' => $products], 200);
     }
+    
 
     public function movementDay(){
         $date1 = Carbon::today();
-        $date2 = $date1->copy()->addDay();
+        $date2 = $date1->copy()->addDay(21);
 
         $movements = $this->entrefechas($date1,$date2);
 
@@ -447,6 +451,52 @@ class AuxMovementController extends Controller
 
         return response()->json(['data' => [ 'sal' => $salida, 'ven' => $vendido, 'ret' => $retornado, 'stock' => $stock]],200);
     }
+
+    public function consolidado(){
+        $date1 = Carbon::today();
+        $date2 = $date1->copy()->addDay(20);
+        $status = "salida";
+
+        $movements = DB::table('auxproducts AS p')
+            ->select('m.date_shipment','p.id',DB::raw('count(p.id) as cant'),DB::raw('sum(p.utility) as uti'),DB::raw('sum(p.cost_provider+utility-m.discount) as price')
+                ,DB::raw('sum(m.discount) as desct'),DB::raw('max(m.created_at) as creat'))
+            ->join('auxmovements AS m','m.product_id','=','p.id')
+            ->join('colors AS c','c.id','=','p.color_id')
+            ->join('sizes AS s','s.id','=','p.size_id')
+            ->where('p.status','=',0)
+            ->where('m.situation','=',null)
+            ->where('m.status','like','%'.$status.'%')
+            ->where(DB::raw('DATE(m.date_shipment)'),'>=',$date1->toDateString())
+            ->where(DB::raw('DATE(m.date_shipment)'),'<',$date2->toDateString())
+            ->groupby('m.date_shipment')
+            ->get();
+
+//        $products = DB::table('auxproducts AS p')
+//            ->select('p.cod',DB::raw('max(m.date_shipment) as date_shipment'),'p.status','p.id as product_id',
+//                'p.name','s.name as size','c.name as color','m.id as movement_id',
+//                DB::raw('max(m.created_at) as date'),DB::raw('p.cost_provider+utility-m.discount as price'))
+//            ->join('auxmovements AS m','m.product_id','=','p.id')
+//            ->join('colors AS c','c.id','=','p.color_id')
+//            ->join('sizes AS s','s.id','=','p.size_id')
+//            ->where('p.status','=',0)
+//            ->where('m.status','=','salida')
+//            ->groupby('p.id')->get();
+
+//        $movements=DB::table('auxproducts as p')
+//            ->select('m.date_shipment as fecha','p.cod as codigo','p.name as product','c.name as color','s.name as talla','m.status')
+//            ->join('auxmovements as m','p.id','=','m.product_id')
+//            ->join('colors as c','c.id','=','p.color_id')
+//            ->join('sizes as s','s.id','=','p.size_id')
+//            ->where('m.status','like','%'.$status.'%')
+//            ->where(DB::raw('DATE(m.date_shipment)'),'>=',$date1->toDateString())
+//            ->where(DB::raw('DATE(m.date_shipment)'),'<',$date2->toDateString())
+//            ->orderby('p.name','c.name','s.name')
+//            ->get();
+
+        return response()->json(['data'=>$movements[0]]);
+    }
+
+
 
     public function get_cod_prod(Request $request){
         $rules = [

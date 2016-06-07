@@ -241,7 +241,7 @@ class AuxMovementController extends Controller
         $products = DB::table('auxproducts AS p')
             ->select('p.cod',DB::raw('max(m.date_shipment) as date_shipment'),'p.status','p.id as product_id',
             'p.name','s.name as size','c.name as color','m.id as movement_id',
-            DB::raw('max(m.created_at) as date'),DB::raw('p.cost_provider+utility-m.discount as price'))
+            DB::raw('max(m.created_at) as date'),DB::raw('p.cost_provider+utility-m.discount as price'),'m.discount as discount')
             ->join('auxmovements AS m','m.product_id','=','p.id')
             ->join('colors AS c','c.id','=','p.color_id')
             ->join('sizes AS s','s.id','=','p.size_id')
@@ -454,21 +454,19 @@ class AuxMovementController extends Controller
 
     public function consolidado(){
         $date1 = Carbon::today();
-        $date2 = $date1->copy()->addDay(20);
+        $date2 = $date1->copy()->addDay();
         $status = "salida";
 
         $movements = DB::table('auxproducts AS p')
-            ->select('m.date_shipment','p.id',DB::raw('count(p.id) as cant'),DB::raw('sum(p.utility) as uti'),DB::raw('sum(p.cost_provider+utility-m.discount) as price')
-                ,DB::raw('sum(m.discount) as desct'),DB::raw('max(m.created_at) as creat'))
+            ->select(DB::raw('count(p.id) as cant'),DB::raw('sum(p.utility-m.discount) as uti'),DB::raw('sum(p.cost_provider+utility-m.discount) as price')
+                ,DB::raw('sum(m.discount) as desct'))
             ->join('auxmovements AS m','m.product_id','=','p.id')
-            ->join('colors AS c','c.id','=','p.color_id')
-            ->join('sizes AS s','s.id','=','p.size_id')
             ->where('p.status','=',0)
             ->where('m.situation','=',null)
             ->where('m.status','like','%'.$status.'%')
             ->where(DB::raw('DATE(m.date_shipment)'),'>=',$date1->toDateString())
             ->where(DB::raw('DATE(m.date_shipment)'),'<',$date2->toDateString())
-            ->groupby('m.date_shipment')
+//            ->groupby('m.id')
             ->get();
 
 //        $products = DB::table('auxproducts AS p')

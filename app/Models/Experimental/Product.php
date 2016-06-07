@@ -40,4 +40,8 @@ class Product extends Model
     public function settlement(){
         return $this->hasOne(Settlement::class);
     }
+
+    public function outfit_movement(){
+        return $this->belongsToMany(MovementOutFit::class,'aux_outfit_movements_detail','product_id');
+    }
 }

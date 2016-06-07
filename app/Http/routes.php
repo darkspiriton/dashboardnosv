@@ -166,6 +166,14 @@ Route::group(['prefix' => 'api'], function(){
      */
 
     Route::resource('outfit','OutFitController',['only' => ['index','store','show','destroy']]);
+    Route::get('outfit/get/actives','OutFitController@actives');
+    Route::get('outfit/get/products/{name}','OutFitController@codes_by_product');
+
+    /*
+     * OUTFIT MOVEMENTS
+     */
+
+    Route::resource('auxmovements-outfit','AuxMovementOutFitController',['only' => ['store']]);
 
     //Rutas de creacion de producto y cliente
     Route::resource('auxqcustomer','AuxQCustomer',['only'=>['index','store','update','show','destroy']]);

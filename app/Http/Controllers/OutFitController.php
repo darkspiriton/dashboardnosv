@@ -13,7 +13,8 @@ class OutFitController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:GOD,ADM');
+        $this->middleware('auth:GOD,ADM,JVE');
+        $this->middleware('auth:GOD,ADM', ['only' => ['index','store','destroy']]);
     }
 
     /**
@@ -24,7 +25,6 @@ class OutFitController extends Controller
     public function index()
     {
         $outfits = Outfit::all();
-
         return response()->json(['outfits' => $outfits],200);
     }
 
@@ -130,4 +130,34 @@ class OutFitController extends Controller
 
         return response()->json(['message' => 'Se cambio el estado del outfit'],200);
     }
+
+    public function actives()
+    {
+        $outfits = Outfit::where('status','=',1)->get();
+        return response()->json(['outfits' => $outfits],200);
+    }
+
+    public function codes_by_product($name)
+    {
+        try {
+            $products = \DB::table('auxproducts AS p')
+                ->select(array('p.id','p.name as n',\DB::raw('concat(p.cod," - ",p.name," - ",c.name," - ",s.name) as name')))
+                ->join('colors AS c','c.id','=','p.color_id')
+                ->join('sizes AS s','s.id','=','p.size_id')
+                ->where('p.status','=',1)
+                ->where('p.name','=',$name)
+                ->groupBy('p.name','s.name','c.name')
+                ->orderBy('p.id','asc')
+                ->get();
+
+            if(count($products) == 0)
+                return response()->json(['message' => 'No hay productos en existencia'],404);
+
+            return response()->json(['codes' => $products],200);
+
+        } catch (\Exception $e) {
+            return \Response::json(['message' => 'Ocurrio un error al agregar producto'], 500);
+        }
+    }
+
 }

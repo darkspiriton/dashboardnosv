@@ -26,6 +26,8 @@ class UpdateProductsauxTable extends Migration
             $table->string('name');
             $table->integer('cod');
             $table->float('price');
+            $table->boolean('status');
+            $table->timestamps();
         });
 
         Schema::create('settlements',function(Blueprint $table){

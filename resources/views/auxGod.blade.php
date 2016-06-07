@@ -10,7 +10,10 @@
             <a ui-sref="outs"><i class="md md-shop-two"></i> Productos en stock-salida-ventas de hoy</a>
         </li>
         <li id="products">
-            <a href="#" ui-sref="Productos"><i class="md md-shop-two"></i> Administrar Productos</a>
+            <a href="#" ui-sref="Productos"><i class="md md-shop-two"></i> Gestionar Productos</a>
+        </li>
+        <li id="out_fit">
+            <a href="#" ui-sref="out_fit"><i class="md md-shop-two"></i> Gestionar Out Fit</a>
         </li>
         <li id="stock">
             <a ui-sref="Stock"><i class="md md-shop-two"></i>Stock de Productos</a>
@@ -99,4 +102,5 @@
     <script src="app/controllers/q_AnswerIndicator.js"></script>
     <script src="app/controllers/q_productsCtrl.js"></script>
     <script src="app/controllers/q_customersCtrl.js"></script>
+    <script src="app/controllers/outFitCtrl.js"></script>
 @stop

@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    protected $table="auxproducts";
+    protected $table = "auxproducts";
+    protected $hidden = ['pivot', 'updated_at'];
     
     public function size(){
         return $this->belongsTo(Size::class);

@@ -51,8 +51,7 @@
 	        if (actions[i][0]  === 'status' ) {
 	            acc.dataS =  actions[i][1];
 				acc.status = function(ind, est){
-					console.log(est);
-					return `<a class="btn btn-xs ${acc.dataS[est].cls}" ng-click="status(${ind},'$event')" style="min-width: 82px;" ${((acc.dataS[est].dis === false)?'disabled="disabled"':'')}>${acc.dataS[est].txt}</a>`;
+					return `<a class="btn btn-xs ${acc.dataS[est].cls}" ng-click="status(${ind},$event)" style="min-width: 82px;" ${((acc.dataS[est].dis === false)?'disabled="disabled"':'')}>${acc.dataS[est].txt}</a>`;
 				}
 	        } else if (! acc.hasOwnProperty('status'))
 	        	acc['status'] = function(){ return '' }

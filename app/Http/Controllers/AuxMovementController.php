@@ -458,7 +458,7 @@ class AuxMovementController extends Controller
         $status = "salida";
 
         $movements = DB::table('auxproducts AS p')
-            ->select(DB::raw('count(p.id) as cant'),DB::raw('sum(p.utility-m.discount) as uti'),DB::raw('sum(p.cost_provider+utility-m.discount) as price')
+            ->select(DB::raw('count(p.id) as cant'),DB::raw('sum(p.utility-m.discount) as uti'),DB::raw('sum(p.cost_provider+p.utility-m.discount) as price')
                 ,DB::raw('sum(m.discount) as desct'))
             ->join('auxmovements AS m','m.product_id','=','p.id')
             ->where('p.status','=',0)
@@ -492,6 +492,26 @@ class AuxMovementController extends Controller
 //            ->get();
 
         return response()->json(['data'=>$movements[0]]);
+    }
+
+    public function providertest(){
+        $date1 = Carbon::today();
+        $date2 = $date1->copy()->addDay();
+        $status = "salida";
+
+        $movements = DB::table('auxproducts AS p')
+            ->select('pv.name',DB::raw('count(m.id) as cant'),DB::raw('sum(p.utility-m.discount) as uti'),DB::raw('sum(p.cost_provider+p.utility-m.discount) as price'),DB::raw('sum(m.discount) as desct'))
+            ->join('auxmovements AS m','m.product_id','=','p.id')
+            ->join('providers AS pv','pv.id','=','p.provider_id')
+            ->where('p.status','=',0)
+            ->where('m.situation','=',null)
+            ->where('m.status','like','%'.$status.'%')
+            ->where(DB::raw('DATE(m.date_shipment)'),'>=',$date1->toDateString())
+//            ->where(DB::raw('DATE(m.date_shipment)'),'<',$date2->toDateString())
+            ->groupby('pv.id')
+            ->get();
+
+        return response()->json(['movements',$movements],200);
     }
 
 

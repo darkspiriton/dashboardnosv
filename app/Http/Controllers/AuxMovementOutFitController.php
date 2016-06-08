@@ -17,7 +17,8 @@ class AuxMovementOutFitController extends Controller
      */
     public function index()
     {
-        //
+        $outfits = MovementOutFit::with('outfit')->where('status','=','salida')->where('respond','=',0)->get();
+        return \Response::json(['outfits' => $outfits], 200);
     }
 
     /**
@@ -76,7 +77,12 @@ class AuxMovementOutFitController extends Controller
      */
     public function show($id)
     {
-        //
+        $movement = MovementOutFit::with('products')->find($id);
+
+        if($movement == null)
+            return response()->json(['message' => 'El movimiento no existe'],404);
+
+        return response()->json(['movement' => $movement],200);
     }
 
     /**
@@ -99,7 +105,53 @@ class AuxMovementOutFitController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if(\Validator::make($request->all(), ['case'  =>  'required|integer|in:1,2'])->fails())
+            return response()->json(['message' => 'Parametros recibidos no validos'], 401);
+
+        $movement = MovementOutFit::with('products')->find($id);
+
+        if($movement == null)
+            return response()->json(['message' => 'El movimiento no existe'], 404);
+
+        if($movement->status == 'vendido' || $movement->products[0]->status == 2)
+            return response()->json(['message' => 'Este movimiento se cuentra con estado "VENDIDO"'], 401);
+
+        $message = '';
+
+        if($request->input('case') == 1){
+            // Replicando movimiento
+            $newMovement = $movement->replicate();
+            $newMovement->status = 'vendido';
+            $newMovement->push();
+            $newMovement->products()->saveMany($movement->products);
+
+            // Replicando productos del movimiento
+            Product::whereIn('id',$movement->products->lists('id'))->update(['status' => 2]);
+
+            // Movimiento base atendido
+            $movement->respond = 1;
+            $movement->save();
+
+            $message = 'Se genero la venta correctamente';
+        }else if($request->input('case') == 2){
+            // Replicando movimiento
+            $newMovement = $movement->replicate();
+            $newMovement->status = 'retornado';
+            $newMovement->situation = $request->input('situation');
+            $newMovement->push();
+            $newMovement->products()->saveMany($movement->products);
+
+            // Replicando productos del movimiento
+            Product::whereIn('id',$movement->products->lists('id'))->update(['status' => 1]);
+
+            // Movimiento base atendido
+            $movement->respond = 1;
+            $movement->save();
+
+            $message = 'Se genero el retorno correctamente';
+        }
+
+        return response()->json(['message' => $message],200);
     }
 
     /**

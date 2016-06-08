@@ -15,6 +15,9 @@
         <li id="movimientos_outfit">
             <a href="#" ui-sref="Movimientos Out Fit"><i class="md md-shop-two"></i>Generar Salida Out Fit</a>
         </li>
+        <li id="movimientos_outfit2">
+            <a href="#" ui-sref="Retorno Out Fit"><i class="md md-shop-two"></i>Generar Retorno - Venta de OutFit</a>
+        </li>
     </ul>
 @stop
 
@@ -24,4 +27,5 @@
     <script src="app/controllers/auxMovement2Ctrl.js"></script>
     <script src="app/controllers/auxStockCtrl.js"></script>
     <script src="app/controllers/auxMovementOutFitCtrl.js"></script>
+    <script src="app/controllers/auxMovementOutFit2Ctrl.js"></script>
 @stop

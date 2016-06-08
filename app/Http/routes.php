@@ -173,7 +173,7 @@ Route::group(['prefix' => 'api'], function(){
      * OUTFIT MOVEMENTS
      */
 
-    Route::resource('auxmovements-outfit','AuxMovementOutFitController',['only' => ['store']]);
+    Route::resource('auxmovements-outfit','AuxMovementOutFitController',['only' => ['index','show','store','update']]);
 
     //Rutas de creacion de producto y cliente
     Route::resource('auxqcustomer','AuxQCustomer',['only'=>['index','store','update','show','destroy']]);

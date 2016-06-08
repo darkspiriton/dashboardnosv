@@ -50,6 +50,7 @@ class UpdateProductsauxTable extends Migration
             $table->date('date_shipment');
             $table->string('situation',50)->nullable();
             $table->string('status');
+            $table->boolean('respond')->default(0);
             $table->timestamps();
             $table->foreign('outfit_id')->references('id')->on('outfits');
         });

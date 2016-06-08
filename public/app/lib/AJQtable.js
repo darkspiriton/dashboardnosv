@@ -76,7 +76,7 @@
 		if (actions.length > 0){
 				$.each($scope.tableData, function(i , obj){
 					var temp = [];
-					var est = obj[config.configStatus];
+					var est = searchObject(obj,config.configStatus);
 					$.each( data , function(x, val){
 						if (val == 'actions'){
 							temp[x] = acc.actions(i);

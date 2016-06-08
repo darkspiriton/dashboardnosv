@@ -128,10 +128,6 @@ class AuxMovementOutFitController extends Controller
             // Replicando productos del movimiento
             Product::whereIn('id',$movement->products->lists('id'))->update(['status' => 2]);
 
-            // Movimiento base atendido
-            $movement->respond = 1;
-            $movement->save();
-
             $message = 'Se genero la venta correctamente';
         }else if($request->input('case') == 2){
             // Replicando movimiento
@@ -144,12 +140,12 @@ class AuxMovementOutFitController extends Controller
             // Replicando productos del movimiento
             Product::whereIn('id',$movement->products->lists('id'))->update(['status' => 1]);
 
-            // Movimiento base atendido
-            $movement->respond = 1;
-            $movement->save();
-
             $message = 'Se genero el retorno correctamente';
         }
+
+        // Movimiento base atendido
+        $movement->respond = 1;
+        $movement->save();
 
         return response()->json(['message' => $message],200);
     }

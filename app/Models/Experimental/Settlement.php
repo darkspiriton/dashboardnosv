@@ -6,10 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Settlement extends Model
 {
-    protected $table="settlements";
-    
-    protected function product(){
-        return $this->hasOne(Product::class);
+    protected $table = "settlements";
+
+    public $timestamps = false;
+
+    public function product(){
+        return $this->belongsTo(Product::class);
     }
     
 }

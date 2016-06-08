@@ -175,6 +175,12 @@ Route::group(['prefix' => 'api'], function(){
 
     Route::resource('auxmovements-outfit','AuxMovementOutFitController',['only' => ['index','show','store','update']]);
 
+    /*
+     * LIQUIDATION
+     */
+
+    Route::resource('liquidation','liquidationController',['only' => ['index','store','destroy']]);
+
     //Rutas de creacion de producto y cliente
     Route::resource('auxqcustomer','AuxQCustomer',['only'=>['index','store','update','show','destroy']]);
     Route::resource('auxqproduct','AuxQProduct',['only'=>['index','store','update','show','destroy']]);

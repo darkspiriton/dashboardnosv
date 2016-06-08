@@ -510,4 +510,14 @@ class AuxProductController extends Controller
             return \Response::json(['message' => 'Ocurrio un problema =('], 500);
         }
     }
+
+    public function UniqueProduct(){
+        try{
+            $products = Product::select(array('name'/*,'price'*/))->groupBy('name')->get();
+
+            return response()->json(['products' => $products], 200);
+        }catch(Exception $e){
+            return response()->json(['message' => 'Ocurrio un problema =('],500);
+        }
+    }
 }

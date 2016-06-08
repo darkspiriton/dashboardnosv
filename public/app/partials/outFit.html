@@ -1,0 +1,178 @@
+<div class="card" >
+    <div class="card-header bgm-blue">
+        <h2>Gestionar Out Fit</h2>
+        <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="list()"
+                data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
+                title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
+    </div>
+
+    <div class="card-body card-padding table-responsive">
+        <div class="col-sm-12">
+            <table id="table" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
+        </div><br>
+        <div class="card-footer">
+            <a  class="btn bgm-green waves-effect" ng-click="new();">Crear nuevo Out Fit</a>
+        </div>
+    </div><br>
+</div>
+
+<div class="card" id="formulariohide">
+    <div class="card-header bgm-blue">
+        <h2>Out Fit</h2>
+    </div>
+
+    <div class="card-body card-padding" >
+        <div class="card-header">
+            <h2>Información de out fit</h2>
+        </div>
+
+        <form name="formproduct" id="form" class="form-horizontal" autocomplete="off">
+            <div class="form-group">
+                <label class="col-xs-2 col-sm-2 control-label">Descripción</label>
+                <div class="col-xs-10 col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-assignment"></i></span>
+                        <div class="fg-line">
+                            <input ng-model="outfit.description" type="text" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+
+                <label class="col-xs-2 col-sm-2 control-label">Activar/Desactivar</label>
+                <div class="col-xs-10 col-sm-4 m-t-10">
+                    <div class="input-group">
+                        <div class="toggle-switch" data-ts-color="green">
+                            <label for="ts4" class="ts-label"></label>
+                            <input ng-true-value="1" ng-false-value="0" ng-checked="outfit.status" ng-model="outfit.status" id="ts4" type="checkbox" hidden="hidden">
+                            <label for="ts4" class="ts-helper"></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-xs-2 col-sm-2 control-label">Código</label>
+                <div class="col-xs-10 col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-assignment"></i></span>
+                        <div class="fg-line">
+                            <input ng-model="outfit.code" type="number" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+
+                <label class="col-xs-2 col-sm-2 control-label">Precio</label>
+                <div class="col-xs-10 col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-assignment"></i></span>
+                        <div class="fg-line">
+                            <input ng-model="outfit.price" type="number" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-xs-2 col-sm-2 control-label">Producto</label>
+                <div class="col-xs-10 col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-list"></i></span>
+                        <div class="fg-line select">
+                            <select class="form-control" ng-change="addProduct(product)" ng-options="$index as product.name for ($index, product) in products" ng-model="product">
+                                <option value="" disabled="disabled" select="true">Seleccione</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-header">
+                <h2>Productos seleccionadas</h2>
+            </div>
+
+            <div class="row">
+                <div class="attr-group col-xs-12">
+                    <table class="table table-bordered w-100 table-attr text-center">
+                        <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Acción</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="product in productsView">
+                            <td style="display: table-cell;">{{ product.name }}</td>
+                            <td style="width: 80px"><button ng-click="removeProduct($index)" class="btn btn-danger btn-sm waves-effect">Eliminar</button></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </form>
+
+        <form class="form-horizontal">
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button ng-disabled="!formproduct.$valid || formSubmit" ng-click="submit()" type="button" class="btn btn-primary btn-sm waves-effect">Guardar</button>
+                    <a ng-click="cancel()" class="btn btn-danger btn-sm waves-effect">Cancelar</a>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="Modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bgm-teal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title c-white">Detalle de Out Fit</h3>
+            </div>
+            <div class="modal-body card-padding">
+                <form class="form-horizontal" autocomplete="off" submit="return false;">
+                    <div class="form-group form-pad-top">
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Descripción: </label>
+                        <label class="col-xs-6 col-sm-2 control-label" style="text-align: left" ng-bind="outfitDetail.name"></label>
+
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Codigo: </label>
+                        <label class="col-xs-6 col-sm-2 control-label" style="text-align: left" ng-bind="outfitDetail.cod"></label>
+                    </div>
+                    <div class="form-group form-pad-top">
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Precio: </label>
+                        <label class="col-xs-6 col-sm-2 control-label" style="text-align: left" ng-bind="outfitDetail.price"></label>
+
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Estado: </label>
+                        <label class="col-xs-6 col-sm-2 control-label" style="text-align: left" ng-bind="nameStatus(outfitDetail.status)"></label>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Productos: </label>
+                        <div class="col-xs-8 col-sm-9">
+                            <div class="row">
+                                <div class="attr-group col-xs-12">
+                                    <table class="table table-bordered w-100 table-attr text-center">
+                                        <thead>
+                                        <tr>
+                                            <th>Producto</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="product in outfitDetail.products">
+                                            <td>{{ product.name }}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

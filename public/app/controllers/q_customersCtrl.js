@@ -188,6 +188,8 @@ angular.module('App')
 
         $scope.eventCustomer = function (caseCustomer) {
             if (caseCustomer == 'new') {
+                $scope.response.customer_id = null;
+                $scope.search = null;
                 $scope.newCustomer = true;
                 $scope.existCustomer = false;
                 clearCustomer();
@@ -209,6 +211,7 @@ angular.module('App')
         //
 
         $scope.listSearch = function() {
+            if(typeof $scope.search == 'undefined')return;
             $scope.listPositiontion();
             $scope.listView = true;
             $scope.response.customer_id = null;

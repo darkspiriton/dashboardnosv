@@ -107,6 +107,8 @@ Route::group(['prefix' => 'api'], function(){
 
         Route::get('/get/report','AuxProductController@listProduct');
 
+        Route::get('/get/uniques','AuxProductController@UniqueProduct');
+
     });
 
     /*
@@ -159,9 +161,28 @@ Route::group(['prefix' => 'api'], function(){
     Route::get('answer/customer/{id}/{qq}', ['as' => 'show','uses' => 'q_AnswerController@show']);
     Route::get('answer/customer/search/tag/{string}','q_AnswerController@search');
 
-
     Route::post('indicator/questionnaire/for/products', 'q_IndicatorController@showProducts');
     Route::post('indicator/questionnaire/for/customers', 'q_IndicatorController@showCustomers');
+
+    /*
+     * OUTFIT
+     */
+
+    Route::resource('outfit','OutFitController',['only' => ['index','store','show','destroy']]);
+    Route::get('outfit/get/actives','OutFitController@actives');
+    Route::get('outfit/get/products/{name}','OutFitController@codes_by_product');
+
+    /*
+     * OUTFIT MOVEMENTS
+     */
+
+    Route::resource('auxmovements-outfit','AuxMovementOutFitController',['only' => ['index','show','store','update']]);
+
+    /*
+     * LIQUIDATION
+     */
+
+    Route::resource('liquidation','liquidationController',['only' => ['index','store','destroy']]);
 
     //Rutas de creacion de producto y cliente
     Route::resource('auxqcustomer','AuxQCustomer',['only'=>['index','store','update','show','destroy']]);
@@ -177,22 +198,9 @@ Route::group(['prefix' => 'api'], function(){
 });
 
 Route::get('/test', function(\Illuminate\Http\Request $request){
-    $rules = [
-        'id'    =>  'required|integer'
-    ];
 
-    if(\Validator::make($request->all(), $rules)->fails())
-        return response()->json(['message' => 'No posee los campos necesarios para realizar una consulta'],200);
-
-    $prd =  \Dashboard\Models\Experimental\Product::find($request->input('id'));
-
-    $product = \Dashboard\Models\Experimental\Product::select('id','cod')
-        ->where('name','=',$prd->name)
-        ->where('color_id','=',$prd->color_id)
-        ->where('size_id','=',$prd->size_id)
-        ->where('status','=',1)
-        ->get();
-
+    $product = \Dashboard\Models\Experimental\Product::select('id')->where('name','=','kasandra')->get();
+//    var_dump($product);
     return response()->json($product,200);
 });
 

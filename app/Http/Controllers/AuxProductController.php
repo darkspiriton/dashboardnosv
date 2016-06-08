@@ -520,4 +520,24 @@ class AuxProductController extends Controller
             return response()->json(['message' => 'Ocurrio un problema =('],500);
         }
     }
+
+    public function CodesLists($name){
+        try {
+            $products = \DB::table('auxproducts AS p')
+                ->select(array('p.id','p.name as n',\DB::raw('concat(p.cod," - ",p.name," - ",c.name," - ",s.name) as name')))
+                ->join('colors AS c','c.id','=','p.color_id')
+                ->join('sizes AS s','s.id','=','p.size_id')
+                ->where('p.status','=',1)
+                ->where('p.name','=',$name)
+                ->get();
+
+            if(count($products) == 0)
+                return response()->json(['message' => 'No hay productos en existencia'],404);
+
+            return response()->json(['codes' => $products],200);
+
+        } catch (\Exception $e) {
+            return \Response::json(['message' => 'Ocurrio un error al agregar producto'], 500);
+        }
+    }
 }

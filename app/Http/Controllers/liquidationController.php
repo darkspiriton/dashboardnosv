@@ -42,7 +42,7 @@ class liquidationController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'id'    =>  'required|integer|exists:auxproducts,id',
+            'id'    =>  'required|integer|exists:auxproducts,id|unique:settlements,product_id',
             'price' =>  'required|numeric'
         ];
 

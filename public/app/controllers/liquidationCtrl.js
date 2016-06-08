@@ -77,7 +77,7 @@ angular.module('App')
 
         $scope.ListCodes = function(name) {
             if(name == undefined)return;
-            petition.get('api/outfit/get/products/'+ name)
+            petition.get('api/auxproduct/get/uniques/'+ name +'/codes')
                 .then(function(data){
                     $scope.codes = data.codes;
                 }, function(error){
@@ -121,6 +121,7 @@ angular.module('App')
         };
 
         $scope.new = function(){
+            $scope.liquidation = {};
             util.modal();
         };
 

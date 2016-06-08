@@ -108,7 +108,7 @@ Route::group(['prefix' => 'api'], function(){
         Route::get('/get/report','AuxProductController@listProduct');
 
         Route::get('/get/uniques','AuxProductController@UniqueProduct');
-
+        Route::get('/get/uniques/{name}/codes','AuxProductController@CodesLists');
     });
 
     /*

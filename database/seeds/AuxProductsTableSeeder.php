@@ -58,22 +58,56 @@ class AuxProductsTableSeeder extends Seeder
             ));
 
             $idProduct = DB::table('auxproducts')->insertGetId(array(
-                'cod' => $faker->randomFloat( $nbMaxDecimals = 0, $min= 1, $max=2000),
+                'cod' => $faker->randomFloat( $nbMaxDecimals = 0, $min= 1, $max=10000),
                 'provider_id' => $randomProvider,
                 'color_id' => $randomColor,
                 'size_id' => $randomSize,
                 'alarm_id' => $idAlarm,
+                'cost_provider' => $faker->randomFloat( $nbMaxDecimals = 2, $min= 20, $max=50),
+                'utility' => $faker->randomFloat( $nbMaxDecimals = 0, $min= 10, $max=30),
                 'name' => $faker->company,               
                 'status' => $faker->randomFloat( $nbMaxDecimals = 0, $min= 0, $max=1),
             ));
+            DB::table('types_auxproducts')->insert(array(
+                'type_id' => $faker->randomFloat($nbMaxDecimals = 0, $min= 1, $max= 5),
+                'product_id' => $idProduct,
+            ));
+
             for($j=0;$j<5;$j++){
                 DB::table('auxmovements')->insertGetId(array(
                     'product_id' => $idProduct,
                     'date_shipment' => $faker->dateTime($max = 'now', $timezone = date_default_timezone_get()),
                     'situation' => $faker->word,
                     'status' => $faker->word,
+                    'discount' => $faker->randomFloat( $nbMaxDecimals = 0, $min= 10, $max=15),
                 ));
             }
         }
+
+        for($x=0;$x<5;$x++){
+            $outfitid=DB::table('outfits')->insertGetId(array(
+               'name'=>$faker->colorName,
+               'cod' => $faker->randomFloat( $nbMaxDecimals = 0, $min= 100, $max= 1500),
+               'price' => $faker->randomFloat( $nbMaxDecimals = 2, $min= 20, $max= 50),
+            ));
+
+            $exist=$faker->boolean($chanceOfGettingTrue = 40);
+            $productid=$faker->randomFloat( $nbMaxDecimals = 0, $min= 1, $max= 5);
+            $productid2=$faker->randomFloat( $nbMaxDecimals = 0, $min= 6, $max= 11);
+            
+            if($exist==true){
+                DB::table('products_outfits')->insert(array(
+                   'product_id'=>$productid,
+                   'outfit_id'=>$outfitid,
+                ));
+            }
+            
+            DB::table('settlements')->insert(array(
+               'price'=> $faker->randomFloat( $nbMaxDecimals = 2, $min= 20, $max= 50),
+               'product_id'=>$productid2,
+            ));
+
+        }
+
     }
 }

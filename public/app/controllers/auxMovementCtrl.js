@@ -16,7 +16,8 @@ angular.module('App')
                 {"sTitle": "Codigo", "bSortable" : true},
                 {"sTitle": "Nombre", "bSortable" : true},
                 {"sTitle": "Color", "bSortable" : true},
-                {"sTitle": "Size", "bSortable" : true},
+                {"sTitle": "Talla", "bSortable" : true},
+                {"sTitle": "Precio Venta (S/.)", "bSortable" : true},
                 {"sTitle": "Acción" , "bSearchable": false , "sWidth": "190px"}
             ],
             actions	:  	[
@@ -26,7 +27,7 @@ angular.module('App')
                 ]
                 ]
             ],
-            data  	: 	['cod','name','color','size','actions'],
+            data  	: 	['cod','name','color','size','price','actions','cost'],
             configStatus : 'status'
         };
 
@@ -43,7 +44,6 @@ angular.module('App')
         };
 
         $scope.productsClear = [];
-
 
         $scope.list = function() {
             $scope.updateList = true;
@@ -92,6 +92,23 @@ angular.module('App')
             });
         };
 
+        $scope.preciofinal=function (i){
+            if($scope.products[i].discount>$scope.products[i].price ){
+                $scope.products[i].discount = 0;
+                $scope.products[i].preciofinal=$scope.products[i].price;
+                return ;
+            } else if($scope.products[i].discount == undefined){
+                $scope.products[i].preciofinal = $scope.products[i].price;
+                return ;
+            }
+
+            // $scope.products[i].discount = parseInt($scope.products[i].discount);
+            $scope.products[i].preciofinal = Math.round(($scope.products[i].price - $scope.products[i].discount)*100)/100;
+            $scope.dataProducts[i].discount = angular.copy($scope.products[i].discount);
+            
+        }
+
+
         function valid_product_date(prd, callback){
             for(i in prd){
                 if (prd[i].date == undefined){
@@ -112,10 +129,11 @@ angular.module('App')
 
             if (count == 0 && $scope.anadir){
                 toastr.success('se añadio');
-                $scope.dataProducts.push({id: $scope.tableData[ind].id});
+                $scope.dataProducts.push({id: $scope.tableData[ind].id, discount:0});
+                $scope.tableData[ind].discount = 0;
+                $scope.tableData[ind].preciofinal = $scope.tableData[ind].price-$scope.tableData[ind].discount;
                 $scope.products.push(angular.copy($scope.tableData[ind]));
             }
-
         };
 
         $scope.addProduct2 = function(ind){

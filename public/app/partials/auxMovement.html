@@ -35,6 +35,9 @@
                         <th>Nombre</th>
                         <th>Talla</th>
                         <th>Color</th>
+                        <th>Precio Venta</th>
+                        <th>Descuento</th>
+                        <th>Precio Final</th>
                         <th>F. Salida</th>
                         <th>Accion</th>
                     </tr>
@@ -45,6 +48,11 @@
                         <td style="display: table-cell;">{{ product.name }}</td>
                         <td style="display: table-cell;">{{ product.size }}</td>
                         <td style="display: table-cell;">{{ product.color }}</td>
+                        <td style="display: table-cell;">{{ product.price }}</td>
+                        <td style="display: table-cell; width: 160px">
+                            <input class="form-control input-sm" type="number"  ng-change="preciofinal($index)" ng-model="product.discount" required>
+                        </td>
+                        <td style="display: table-cell;">{{ product.preciofinal }}</td>
                         <td style="display: table-cell; width: 160px">
                             <input class="form-control input-sm" type="date" ng-model="dataProducts[$index].date" required>
                         </td>

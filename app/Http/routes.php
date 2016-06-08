@@ -126,6 +126,7 @@ Route::group(['prefix' => 'api'], function(){
         Route::post('/get/movementDays/download','AuxMovementController@movementDaysDownload');
         Route::get('/get/movement/day','AuxMovementController@move_day');
         Route::get('/get/codes','AuxMovementController@get_cod_prod');
+        Route::get('/get/movementDay/consolidado','AuxMovementController@consolidado');
     });
 
     /*
@@ -188,6 +189,8 @@ Route::group(['prefix' => 'api'], function(){
     Route::group(['prefix'=>'auxqproduct'],function(){
        Route::get('mostrar/{id}','AuxQProduct@mostrar');
     });
+
+
 });
 
 Route::get('/test', function(\Illuminate\Http\Request $request){

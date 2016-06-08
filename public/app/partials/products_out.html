@@ -1,6 +1,6 @@
 <div class="card">
     <div class="card-header block-header">
-        <h2> movimientos <small>Indecadores de movimiento del dia de hoy.</small></h2>
+        <h2> movimientos de hoy <small>Indicadores de movimiento del dia de hoy.</small></h2>
         <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="list()"
                 data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
                 title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
@@ -32,13 +32,13 @@
                     </div>
                 </div>
 
-               <div class="col-sm-3">
+                <div class="col-sm-3">
                     <div class="mini-charts-item bgm-lightgreen">
-                       <div class="clearfix">
+                        <div class="clearfix">
                             <div class="chart stats-bar-2" style="width: 120px;"></div>
                             <div class="count">
                                 <small>Prendas vendidad</small>
-                               <h2 ng-bind="infoData.ven"></h2>
+                                <h2 ng-bind="infoData.ven"></h2>
                             </div>
                         </div>
                     </div>
@@ -51,6 +51,61 @@
                             <div class="count">
                                 <small>Total stock Almacen</small>
                                 <h2 ng-bind="infoData.stock"></h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body p-l-20">
+        <div class="mini-charts">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="mini-charts-item bgm-cyan">
+                        <div class="clearfix">
+                            <div class="chart stats-bar" style="width: 120px;"></div>
+                            <div class="count">
+                                <small>N° de productos</small>
+                                <h2 ng-bind="infoData2.cant"></h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <div class="mini-charts-item bgm-teal">
+                        <div class="clearfix">
+                            <div class="chart stats-bar-2" style="width: 120px;"></div>
+                            <div class="count">
+                                <small>Total utilidad S/.</small>
+                                <h2 ng-bind="infoData2.uti"></h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <div class="mini-charts-item bgm-lightgreen">
+                        <div class="clearfix">
+                            <div class="chart stats-bar-2" style="width: 120px;"></div>
+                            <div class="count">
+                                <small>Total precio compra S/.</small>
+                                <h2 ng-bind="infoData2.price"></h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-3">
+                    <div class="mini-charts-item bgm-bluegray">
+                        <div class="clearfix">
+                            <div class="chart stats-line-2" style="width: 120px;"></div>
+                            <div class="count">
+                                <small>Total descuento S/.</small>
+                                <h2 ng-bind="infoData2.desct"></h2>
                             </div>
                         </div>
                     </div>

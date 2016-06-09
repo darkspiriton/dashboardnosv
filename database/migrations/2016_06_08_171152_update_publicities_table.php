@@ -42,7 +42,7 @@ class UpdatePublicitiesTable extends Migration
             $table->string('name');
         });
 
-        Schema::create('socials',function(Blueprint $table){
+        Schema::create('auxsocials',function(Blueprint $table){
             $table->increments('id');
             $table->string('name');
             $table->date('date');
@@ -65,7 +65,7 @@ class UpdatePublicitiesTable extends Migration
     {
         Schema::dropIfExists('processes');
         Schema::dropIfExists('types_processes');
-        Schema::dropIfExists('socials');
+        Schema::dropIfExists('auxsocials');
         Schema::dropIfExists('types_socials');
         Schema::dropIfExists('publicities');
     }

@@ -23,11 +23,13 @@ class PublicityController extends Controller
 //            ->where('date','<',$date1)
 //            ->get();
         $publicities=DB::table('auxproducts as p')
-            ->select('pu.date','p.name','tp.name as proceso','','')
+            ->select('pu.date','p.name','tp.name as proceso')
             ->join('publicities as pu','pu.product_id','=','p.id')
             ->join('auxsocials as s','s.publicity_id','=','pu.id')
             ->join('processes as pr','pr.publicity_id','=','p.id')
             ->join('types_processes as tp','tp.id','=','pr.type_process_id')
+            ->join('colors as c','','','')
+            ->join('sizes as s','','','')
             ->get();
 
         return response()->json(['publicity',$publicities],200);

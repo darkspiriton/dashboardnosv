@@ -15,6 +15,7 @@ class UpdatePublicitiesTable extends Migration
         Schema::create('publicities', function(Blueprint$table){
             $table->increments('id');
             $table->dateTime('date');
+            $table->dateTime('date_finish');
             $table->integer('product_id')->unsigned();
             $table->boolean('status');
 

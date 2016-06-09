@@ -18,16 +18,22 @@ angular.module('App')
                 {"sTitle": "Color", "bSortable" : true},
                 {"sTitle": "Talla", "bSortable" : true},
                 {"sTitle": "Precio Venta (S/.)", "bSortable" : true},
+                {"sTitle": "Precio" , "bSearchable": false , "sWidth": "80px"},
                 {"sTitle": "Acción" , "bSearchable": false , "sWidth": "190px"}
             ],
             actions	:  	[
+                ['status',   {
+                    0 : { txt : 'regular' , cls : 'bgm-green', dis : false },
+                    1 : { txt : 'liquidacion' ,  cls : 'btn-info',dis: false}
+                }
+                ],
                 ['actions', [
                     ['Agregar', 'addProduct' ,'bgm-teal'],
                     ['x codigo', 'otherProduct' ,'bgm-purple']
                 ]
                 ]
             ],
-            data  	: 	['cod','name','color','size','price','actions','cost'],
+            data  	: 	['cod','name','color','size','price','status','actions'],
             configStatus : 'status'
         };
 

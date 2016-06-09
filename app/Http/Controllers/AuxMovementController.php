@@ -5,7 +5,7 @@ namespace Dashboard\Http\Controllers;
 use Dashboard\Models\Experimental\Movement;
 use Dashboard\Models\Experimental\Product;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
+use DB;
 use Carbon\Carbon;
 
 use Dashboard\Http\Requests;
@@ -16,8 +16,6 @@ class AuxMovementController extends Controller
     public function __construct()
     {
         $this->middleware('auth:GOD,ADM,JVE');
-//        $this->middleware('auth:JVE' , ['only' => ['index','store','show','update','destroy','product_out']]);
-//        $this->middleware('auth:GOD,JVE' , ['only' => 'movementPending']);
         $this->middleware('auth:GOD' , ['only' => ['movementDay','movementDays','movementDaysDownload']]);
     }
 
@@ -28,32 +26,18 @@ class AuxMovementController extends Controller
      */
     public function index()
     {
-        //Se va a pasar datos del los producto, attributos y su cantidad
         try {
-            $cant = DB::table('auxproducts as p')
-                ->join('sizes as s','p.size_id','=','s.id')
-                ->join('colors as c','p.color_id','=','c.id')
-                ->where('p.status','=',1)
-                ->groupby('p.name','s.name','c.name')
-                ->orderby('p.id','asc')->get();
-
             $products = DB::table('auxproducts AS p')
-                ->select('p.name','c.name AS color','s.name AS size','p.id','p.cod',DB::raw('count(p.cod) as cant'),DB::raw('p.cost_provider + p.utility as price'))
+                ->select('p.name','c.name AS color','s.name AS size','p.id','p.cod',DB::raw('count(p.cod) as cant'),
+                    DB::raw('case when d.price then d.price else p.cost_provider + p.utility end as price'),
+                    DB::raw('case when d.price then 1 else 0 end as status'))
                 ->join('colors AS c','c.id','=','p.color_id')
                 ->join('sizes AS s','s.id','=','p.size_id')
-                //->leftjoin('auxmovements AS m','m.product_id','=','p.id')
+                ->leftJoin('settlements AS d','d.product_id','=','p.id')
                 ->where('p.status','=',1)
                 ->groupby('p.name','s.name','c.name')
                 ->orderby('p.id','asc')
-                //->unionAll($cant)
                 ->get();
-
-//            select count(p.name) from auxproducts p
-//            join sizes s on p.size_id=s.id
-//            join colors c on p.color_id=c.id
-//            where p.status=1
-//            group by p.name,s.name,c.name
-//            order by p.id asc;
 
             if($products != null){
                 return response()->json(['products' => $products],200);
@@ -61,9 +45,8 @@ class AuxMovementController extends Controller
                 return response()->json(['message' => 'No hay productos en existencia'],401);
             }
 
-        } catch (\Exception $e) {
-            // Si algo sale mal devolvemos un error.
-            return \Response::json(['message' => 'Ocurrio un error al agregar producto'], 500);
+        } catch (Exception $e) {
+            return \Response::json(['message' => 'No se pudo listar los productos =('], 500);
         }
     }
 
@@ -239,15 +222,18 @@ class AuxMovementController extends Controller
 
     public function movementPending(){
         $products = DB::table('auxproducts AS p')
-            ->select('p.cod',DB::raw('max(m.date_shipment) as date_shipment'),'p.status','p.id as product_id',
+            ->select('p.cod',DB::raw('max(m.date_shipment) as date_shipment'),'p.id as product_id',
             'p.name','s.name as size','c.name as color','m.id as movement_id',
-            DB::raw('max(m.created_at) as date'),DB::raw('p.cost_provider+utility-m.discount as price'),'m.discount as discount')
+                DB::raw('max(m.created_at) as date'),
+                DB::raw('case when d.price then d.price else p.cost_provider + p.utility end as price'),
+                DB::raw('case when d.price then 1 else 0 end as status'),'m.discount as discount')
             ->join('auxmovements AS m','m.product_id','=','p.id')
             ->join('colors AS c','c.id','=','p.color_id')
             ->join('sizes AS s','s.id','=','p.size_id')
+            ->leftJoin('settlements AS d','d.product_id','=','p.id')
             ->where('p.status','=',0)
             ->where('m.status','=','salida')
-            ->groupby('p.id')->get();
+            ->groupBy('p.id')->get();
         return \Response::json(['products' => $products], 200);
     }
     

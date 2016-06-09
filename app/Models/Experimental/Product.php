@@ -2,6 +2,7 @@
 
 namespace Dashboard\Models\Experimental;
 
+use Dashboard\Models\Publicity\Publicity;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
@@ -43,5 +44,9 @@ class Product extends Model
 
     public function outfit_movement(){
         return $this->belongsToMany(MovementOutFit::class,'aux_outfit_movements_detail','product_id');
+    }
+    
+    public function publicities(){
+        return $this->hasMany(Publicity::class);
     }
 }

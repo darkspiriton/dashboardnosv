@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Process extends Model
 {
     protected $table='processes';
+    public $timestamps=false;
 
     public function publicity(){
         return $this->belongsTo(Publicity::class);

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Social extends Model
 {
-    protected $table='socials';
+    protected $table='auxsocials';
 
     public function publicity(){
         return $this->belongsTo(Publicity::class);

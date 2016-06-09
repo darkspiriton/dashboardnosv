@@ -192,8 +192,11 @@ Route::group(['prefix' => 'api'], function(){
        Route::get('mostrar/{id}','AuxQProduct@mostrar');
     });
 
-    
-
+    /*
+     * Publicidad
+     */
+    Route::resource('publicity','PublicityController',
+        ['only'=>['index','store','update','show']]);
 
 });
 

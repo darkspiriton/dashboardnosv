@@ -32,7 +32,7 @@ class UpdatePublicitiesTable extends Migration
             $table->date('date');
             $table->integer('type_process_id')->unsigned();
             $table->boolean('status');
-
+            
             $table->foreign('publicity_id')->references('id')->on('publicities');
             $table->foreign('type_process_id')->references('id')->on('types_processes');
         });
@@ -42,9 +42,8 @@ class UpdatePublicitiesTable extends Migration
             $table->string('name');
         });
 
-        Schema::create('socials',function(Blueprint $table){
+        Schema::create('auxsocials',function(Blueprint $table){
             $table->increments('id');
-            $table->string('name');
             $table->date('date');
             $table->integer('publicity_id')->unsigned();
             $table->integer('type_social_id')->unsigned();

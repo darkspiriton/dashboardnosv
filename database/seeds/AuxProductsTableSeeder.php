@@ -15,6 +15,21 @@ class AuxProductsTableSeeder extends Seeder
         $faker = Faker::create();
 
         DB::transaction(function () {
+            DB::table('types_processes')->insert(['name' => 'Proceso']);
+            DB::table('types_processes')->insert(['name' => 'Foto']);
+            DB::table('types_processes')->insert(['name' => 'Envio']);
+        });
+
+        DB::transaction(function () {
+            DB::table('types_socials')->insert(['name' => 'Facebook']);
+            DB::table('types_socials')->insert(['name' => 'Twitter']);
+            DB::table('types_socials')->insert(['name' => 'Instagram']);
+            DB::table('types_socials')->insert(['name' => 'Youtube']);
+            DB::table('types_socials')->insert(['name' => 'Pinterest']);
+            DB::table('types_socials')->insert(['name' => 'Google+']);
+        });
+
+        DB::transaction(function () {
             DB::table('sizes')->insert(['name' => 'XS']);
             DB::table('sizes')->insert(['name' => 'S']);
             DB::table('sizes')->insert(['name' => 'M']);
@@ -81,6 +96,31 @@ class AuxProductsTableSeeder extends Seeder
                     'status' => $faker->word,
                     'discount' => $faker->randomFloat( $nbMaxDecimals = 0, $min= 10, $max=15),
                 ));
+            }
+
+            for($h=0;$h<5;$h++){
+                $idPublicity=DB::table('publicities')->insertGetId(array(
+                    'product_id'=>$idProduct,
+                    'date'=> $faker->dateTime($max = 'now', $timezone = date_default_timezone_get()),
+                    'status'=>$faker->boolean($chanceOfGettingTrue = 50),
+                ));
+
+                for($r=1;$r<=3;$r++) {
+                    DB::table('processes')->insertGetId(array(
+                        'publicity_id' =>$idPublicity,
+                        'type_process_id'=>$r,
+                        'date'=> $faker->dateTime($max = 'now', $timezone = date_default_timezone_get()),
+                        'status'=>$faker->boolean($chanceOfGettingTrue = 50),
+                    ));
+                };
+
+                for($y=1;$y<=5;$y++) {
+                    DB::table('auxsocials')->insert(array(
+                        'date' => $faker->dateTime($max = 'now', $timezone = date_default_timezone_get()),
+                        'publicity_id' =>$idPublicity,
+                        'type_social_id'=>$y,
+                    ));
+                };
             }
         }
 

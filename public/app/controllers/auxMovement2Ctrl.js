@@ -20,13 +20,13 @@ angular.module('App')
                 {"sTitle": "Color", "bSortable" : true},
                 {"sTitle": "Precio Final (S/.)", "bSortable" : true},
                 {"sTitle": "Descuento (S/.)", "bSortable" : true},
-                {"sTitle": "Estado", "bSortable" : true, "sWidth": "80px"},
+                {"sTitle": "Precio", "bSortable" : true, "sWidth": "80px"},
                 {"sTitle": "Acción" , "bSearchable": false , "sWidth": "190px"}
             ],
             actions	:  	[
                 ['status',   {
-                    0 : { txt : 'Salida' , cls : 'btn-danger', dis : false },
-                    1 : { txt : 'Disponible' ,  cls : 'btn-success',dis: false}
+                    0 : { txt : 'regular' , cls : 'bgm-green', dis : false },
+                    1 : { txt : 'liquidacion' ,  cls : 'btn-info',dis: false}
                 }
                 ],
                 ['actions', [

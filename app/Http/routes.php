@@ -195,8 +195,8 @@ Route::group(['prefix' => 'api'], function(){
 
 Route::get('/test', function(\Illuminate\Http\Request $request){
 
-    $product = \Dashboard\Models\Experimental\Product::select('id')->where('name','=','kasandra')->get();
-//    var_dump($product);
+    $product = \Dashboard\Models\Experimental\Product::find($request->input('id'));
+
     return response()->json($product,200);
 });
 

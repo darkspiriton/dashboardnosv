@@ -198,6 +198,10 @@ Route::group(['prefix' => 'api'], function(){
     Route::resource('publicity','PublicityController',
         ['only'=>['index','store','update','show']]);
 
+    Route::group(['prefix'=>'publicity'],function(){
+        Route::get('relation/{id}','PublicityController@relation');
+    });
+
 });
 
 Route::get('/test', function(\Illuminate\Http\Request $request){

@@ -31,6 +31,7 @@ class UpdatePublicitiesTable extends Migration
             $table->increments('id');
             $table->integer('publicity_id')->unsigned();
             $table->dateTime('date');
+            $table->dateTime('date_finish');
             $table->integer('type_process_id')->unsigned();
             $table->boolean('status');
             

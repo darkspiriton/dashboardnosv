@@ -232,8 +232,31 @@ class PublicityController extends Controller
         $date->timezone('America/Lima');
         $date2=$date->addDay();
 
+        $cantprocesos=$this->cantidad($date,$date2,1);
+        $cantfotos=$this->cantidad($date,$date2,2);
+        $cantenvios=$this->cantidad($date,$date2,3);
+
+        return response()->json(['procesos'=>$cantprocesos,'fotos'=>$cantfotos,'envios'=>$cantenvios]);
+
+    }
+    
+    public function esquema()
+    {
+
+        //se colocara esquema
+        $esquemas=DB::table('auxproducts as p')
+            
+
+            ->get();
+
+
+        return response()->json(['message'=>'respuesta de esquema'],200);
+        
+    }
+
+    private function cantidad($date,$date2,$status){
         $publicities=DB::table('auxproducts as p')
-            ->select('pu.id as publicity_id','p.id as product_id','pu.date','p.name','c.name as color','tp.id as type_process_id','pr.status','pr.id as process_id')
+            ->select(DB::raw('count(pu.id) as cant'))
             ->join('publicities as pu','pu.product_id','=','p.id')
             ->join('auxsocials as auxs','auxs.publicity_id','=','pu.id')
             ->join('processes as pr','pr.publicity_id','=','p.id')
@@ -242,8 +265,9 @@ class PublicityController extends Controller
             ->join('sizes as s','s.id','=','p.size_id')
             ->where('pu.date','>=',$date)
             ->where('pu.date','<',$date2)
-//           ->groupby('p.name','p.color_id','p.size_id')
-            ->orderby('name','asc')
+            ->where('tp.id','=',$status)
             ->get();
+
+        return $publicities;
     }
 }

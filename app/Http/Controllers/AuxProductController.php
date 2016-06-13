@@ -327,7 +327,7 @@ class AuxProductController extends Controller
         $i=0;
         $j=0;
 
-        if($codigos==null){
+        if($codigos != null){
             $data = Array();
             foreach ($codigos as $codigo){
                 if($codigo->cod - $i != 1){

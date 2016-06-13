@@ -245,12 +245,10 @@ class PublicityController extends Controller
 
         //se colocara esquema
         $esquemas=DB::table('auxproducts as p')
-            
-
+            ->join('publicities as pu','pu.product_id','=','p.id')
+            ->join('processes as pr','pr.publicity_id','=','pu.id')
             ->get();
-
-
-        return response()->json(['message'=>'respuesta de esquema'],200);
+        return response()->json(['message'=>$esquemas],200);
         
     }
 
@@ -259,7 +257,7 @@ class PublicityController extends Controller
             ->select(DB::raw('count(pu.id) as cant'))
             ->join('publicities as pu','pu.product_id','=','p.id')
             ->join('auxsocials as auxs','auxs.publicity_id','=','pu.id')
-            ->join('processes as pr','pr.publicity_id','=','p.id')
+            ->join('processes as pr','pr.publicity_id','=','pu.id')
             ->join('types_processes as tp','tp.id','=','pr.type_process_id')
             ->join('colors as c','c.id','=','p.color_id')
             ->join('sizes as s','s.id','=','p.size_id')

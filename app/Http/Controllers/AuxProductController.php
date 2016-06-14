@@ -152,7 +152,7 @@ class AuxProductController extends Controller
         try{
 
             $product = Product::with('types')
-                            ->select(array('id','cod','provider_id','color_id','size_id','name','cost_provider as cost','utility as uti'))
+                            ->select(array('id','cod','provider_id','color_id','size_id','name','cost_provider as cost','utility as uti','cost_provider as cost','utility as uti'))
                             ->find($id);
 
             if($product !== null)

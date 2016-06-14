@@ -241,14 +241,21 @@ class PublicityController extends Controller
     
     public function esquema()
     {
+        $date=Carbon::now(new DateTimeZone('America/Lima'));
+        $date2=$date->addDay();
 
         //se colocara esquema
         $esquemas=DB::table('auxproducts as p')
+            ->select('pu.id as pu','pr.id','pr.type_process_id','pr.date','pr.date_finish','pr.status','pu.status as aprobado')
             ->join('publicities as pu','pu.product_id','=','p.id')
             ->join('processes as pr','pr.publicity_id','=','pu.id')
+//            ->where('pu.date','>=',$date)
+//            ->where('pu.date','<',$date2)
             ->get();
-        return response()->json(['message'=>$esquemas],200);
-        
+        if($esquemas == null){
+            return response()->json(['message'=>'No hay registros de publicidad hasta el momento'],404);
+        }
+        return response()->json(['esquemas'=>$esquemas],200);
     }
 
     private function cantidad($date,$date2){

@@ -119,6 +119,8 @@ angular.module('App')
             data.provider_id = parseInt(data.provider_id);
             data.color_id = parseInt(data.color_id);
             data.size_id = parseInt(data.size_id);
+            data.cost = parseFloat(data.cost);
+            data.uti = parseFloat(data.uti);
             $scope.product = data;
         }
 

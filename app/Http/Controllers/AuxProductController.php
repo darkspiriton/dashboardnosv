@@ -62,7 +62,7 @@ class AuxProductController extends Controller
             'provider_id'   => 'required|integer|exists:providers,id',
             'color_id'      => 'required|integer|exists:colors,id',
             'size_id'       => 'required|integer|exists:sizes,id',
-            'name'          => 'required|max:100|unique:employees',
+            'name'          => 'required|max:100',
             'types'         => 'required|array',
             'types.*.id'    => 'required|integer',
             'alarm.day'           => 'required|integer',

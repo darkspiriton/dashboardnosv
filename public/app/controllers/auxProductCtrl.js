@@ -121,6 +121,8 @@ angular.module('App')
             data.size_id = parseInt(data.size_id);
             data.cost = parseFloat(data.cost);
             data.uti = parseFloat(data.uti);
+            data.alarm.day=parseInt(data.alarm.day);
+            data.alarm.count=parseInt(data.alarm.count);
             $scope.product = data;
         }
 

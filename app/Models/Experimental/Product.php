@@ -23,7 +23,7 @@ class Product extends Model
     }
 
     public function alarm(){
-        return $this->belongsTo(Alarm::class)->select('day','count');
+        return $this->belongsTo(Alarm::class)->select('id','day','count');
     }
 
     public function movements(){

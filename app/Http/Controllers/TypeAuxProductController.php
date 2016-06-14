@@ -23,7 +23,7 @@ class TypeAuxProductController extends Controller
      */
     public function index()
     {
-        $types = Type::all();        
+        $types = Type::orderBy('name','asc')->get();
         return response()->json(['types' => $types ],200);
     }
 

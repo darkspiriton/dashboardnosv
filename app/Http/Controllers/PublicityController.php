@@ -232,11 +232,10 @@ class PublicityController extends Controller
         $date->timezone('America/Lima');
         $date2=$date->addDay();
 
-        $cantprocesos=$this->cantidad($date,$date2,1);
-        $cantfotos=$this->cantidad($date,$date2,2);
-        $cantenvios=$this->cantidad($date,$date2,3);
+        $cantprocesos=$this->cantidad($date,$date2);
 
-        return response()->json(['procesos'=>$cantprocesos,'fotos'=>$cantfotos,'envios'=>$cantenvios]);
+
+        return response()->json(['procesos'=>$cantprocesos]);
 
     }
     
@@ -252,20 +251,54 @@ class PublicityController extends Controller
         
     }
 
-    private function cantidad($date,$date2,$status){
+    private function cantidad($date,$date2){
         $publicities=DB::table('auxproducts as p')
-            ->select(DB::raw('count(pu.id) as cant'))
-            ->join('publicities as pu','pu.product_id','=','p.id')
+            ->select('tp.name',DB::raw('count(pu.id) as cant'))
+            ->leftjoin('publicities as pu','pu.product_id','=','p.id')
             ->join('auxsocials as auxs','auxs.publicity_id','=','pu.id')
-            ->join('processes as pr','pr.publicity_id','=','pu.id')
-            ->join('types_processes as tp','tp.id','=','pr.type_process_id')
+            ->leftjoin('processes as pr','pr.publicity_id','=','pu.id')
+            ->leftjoin('types_processes as tp','tp.id','=','pr.type_process_id')
             ->join('colors as c','c.id','=','p.color_id')
             ->join('sizes as s','s.id','=','p.size_id')
             ->where('pu.date','>=',$date)
             ->where('pu.date','<',$date2)
-            ->where('tp.id','=',$status)
+            ->groupby('tp.id')
+            ->where('pu.status','=',0)
             ->get();
 
+        $complete=DB::table('auxproducts as p')
+            ->select(DB::raw('count(pu.id) as cant'))
+            ->leftjoin('publicities as pu','pu.product_id','=','p.id')
+            ->where('pu.date','>=',$date)
+            ->where('pu.date','<',$date2)
+            ->where('pu.status','=',1)
+            ->get();
+
+
+        if ($publicities==null){
+            $cant=0;
+            for($i=0;$i<4;$i++){
+                switch ($i){
+                    case 0:
+                        $name="Proceso";
+                        break;
+                    case 1:
+                        $name="Foto";
+                        break;
+                    case 2:
+                        $name="Envio";
+                        break;
+                    case 3:
+                        $name="Completado";
+                        $cant=$complete[0]->cant;
+                        break;
+                }
+                $publicities[$i]=["name"=>$name,"cant"=>$cant];
+            }
+            return $publicities;
+        }
+
+        $publicities[3]=["name"=>"Completado","cant"=>$complete[0]->cant];
         return $publicities;
     }
 }

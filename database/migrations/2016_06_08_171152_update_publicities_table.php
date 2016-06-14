@@ -44,7 +44,6 @@ class UpdatePublicitiesTable extends Migration
 
         Schema::create('auxsocials',function(Blueprint $table){
             $table->increments('id');
-            $table->string('name');
             $table->date('date');
             $table->integer('publicity_id')->unsigned();
             $table->integer('type_social_id')->unsigned();

@@ -69,7 +69,7 @@
 
                 <ul class="main-menu">
                     <li>
-                        <a href="#"><i class="md md-person"></i> Ver Perfil</a>
+                        <a href="#/"><i class="md md-person"></i> Ver Perfil</a>
                     </li>
                     <li>
                         <a href="#" ng-click="logout()"><i class="md md-history"></i> Cerrar Sesion</a>
@@ -144,6 +144,7 @@
 <script src="app/lib/angular/angular-toastr.tpls.js"></script>
 <script src="app/lib/satellizer.min.js"></script>
 <script src="app/lib/AJQtable.js"></script>
+<script src="app/lib/AJQtable2.js"></script>
 
 <!-- Application Code -->
 

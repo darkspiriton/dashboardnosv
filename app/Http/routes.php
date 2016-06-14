@@ -184,6 +184,18 @@ Route::group(['prefix' => 'api'], function(){
 
     Route::resource('liquidation','liquidationController',['only' => ['index','store','destroy']]);
 
+    /*
+     * PUBLICITIES - JVE
+     */
+
+    Route::resource('/sales/publicity','PublicityJVEController',['only' => ['index','store','destroy']]);
+
+    /*
+     * SOCIALS
+     */
+
+    Route::resource('/socials','AuxSocialController',['only' => ['index','store']]);
+
     //Rutas de creacion de producto y cliente
     Route::resource('auxqcustomer','AuxQCustomer',['only'=>['index','store','update','show','destroy']]);
     Route::resource('auxqproduct','AuxQProduct',['only'=>['index','store','update','show','destroy']]);

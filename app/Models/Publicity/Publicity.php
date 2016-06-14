@@ -2,8 +2,8 @@
 
 namespace Dashboard\Models\Publicity;
 
+use Dashboard\Models\Experimental\Product;
 use Illuminate\Database\Eloquent\Model;
-use Symfony\Component\Process\Process;
 
 class Publicity extends Model
 {
@@ -16,4 +16,13 @@ class Publicity extends Model
     public function processes(){
         return $this->hasMany(Process::class);
     }
+
+    public function product(){
+        return $this->belongsTo(Product::class);
+    }
+
+    public function process(){
+        return $this->hasOne(Process::class);
+    }
+
 }

@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Publicity extends Model
 {
     protected $table='publicities';
+    public $timestamps=false;
+
 
     public function socials(){
         return $this->hasMany(Social::class);

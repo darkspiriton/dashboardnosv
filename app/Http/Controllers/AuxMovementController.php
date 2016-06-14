@@ -444,8 +444,9 @@ class AuxMovementController extends Controller
         $status = "salida";
 
         $movements = DB::table('auxproducts AS p')
-            ->select(DB::raw('count(p.id) as cant'),DB::raw('sum(p.utility-m.discount) as uti'),DB::raw('sum(p.cost_provider+p.utility-m.discount) as price')
-                ,DB::raw('sum(m.discount) as desct'))
+            ->select(DB::raw('count(p.id) as cant'),DB::raw('case when sum(p.utility-m.discount) then sum(p.utility-m.discount) else 0 end as uti')
+                ,DB::raw('case when sum(p.cost_provider+p.utility-m.discount) then sum(p.cost_provider+p.utility-m.discount) else 0 end as price')
+                ,DB::raw('case when sum(m.discount) then sum(m.discount) else 0 end as desct'))
             ->join('auxmovements AS m','m.product_id','=','p.id')
             ->where('p.status','=',0)
             ->where('m.situation','=',null)

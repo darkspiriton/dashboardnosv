@@ -327,36 +327,41 @@ class AuxProductController extends Controller
         $i=0;
         $j=0;
 
-        $data = Array();
-        foreach ($codigos as $codigo){
-            if($codigo->cod - $i != 1){
-                if ($i !=0) {
-                    $cant = $codigo->cod - $i;
-                    $codAux = $i;
-                    for ($z = 1; $z < $cant; $z++) {
-                        $data[$j] = $codAux + $z;
-                        $j++;
-                    }
-                }else{
-                    $cod=$codigo->cod;
-                    if($cod!=1) {
-                        for ($p = 1; $p < $cod; $p++) {
-                            $data[$j] = $p;
+        if($codigos != null){
+            $data = Array();
+            foreach ($codigos as $codigo){
+                if($codigo->cod - $i != 1){
+                    if ($i !=0) {
+                        $cant = $codigo->cod - $i;
+                        $codAux = $i;
+                        for ($z = 1; $z < $cant; $z++) {
+                            $data[$j] = $codAux + $z;
                             $j++;
+                        }
+                    }else{
+                        $cod=$codigo->cod;
+                        if($cod!=1) {
+                            for ($p = 1; $p < $cod; $p++) {
+                                $data[$j] = $p;
+                                $j++;
+                            }
                         }
                     }
                 }
+                $i=$codigo->cod;
             }
-            $i=$codigo->cod;
-        }
-        if (count($codigo) == 0){
-            $data[] = 1;
-        } else {
-            $data[] = $codigo->cod + 1;
-        }
+            if (count($codigo) == 0){
+                $data[] = 1;
+            } else {
+                $data[] = $codigo->cod + 1;
+            }
 
 
-        return response()->json(['codes' => $data],200);
+            return response()->json(['codes' => $data],200);
+        }else{
+            return response()->json(['message' => 'No hay productos'],200);
+        }
+
     }
 
     public function cantPro(){

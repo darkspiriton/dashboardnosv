@@ -1,10 +1,11 @@
 <div class="card">
     <div class="card-header block-header">
-        <h2> movimientos de hoy <small>Indicadores de movimiento del dia de hoy.</small></h2>
+        <h2> Movimientos de Ventas de Hoy <small>Indicadores de movimiento del dia de hoy.</small></h2>
         <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="list()"
                 data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
                 title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
     </div>
+
     <div class="card-body p-l-20">
         <div class="mini-charts">
             <div class="row">
@@ -112,6 +113,37 @@
                 </div>
 
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header block-header">
+        <h2> Movimientos de Publicidad de Hoy <small>Indicadores de movimiento del dia de hoy.</small></h2>
+        <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="list()"
+                data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
+                title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
+    </div>
+
+    <div class="card-body p-l-20">
+        <div class="mini-charts">
+
+            <div class="row">
+                <div ng-repeat="proceso in infoData3 track by $index">
+                    <div class="col-sm-3">
+                        <div class="mini-charts-item bgm-cyan">
+                            <div class="clearfix">
+                                <div class="chart stats-bar" style="width: 120px;"></div>
+                                <div class="count">
+                                    <small>N° de {{proceso.name}}</small>
+                                    <h2 ng-bind="{{proceso.cant}}"></h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>

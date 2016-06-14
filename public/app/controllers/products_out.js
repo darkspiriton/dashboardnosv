@@ -37,7 +37,20 @@ angular.module('App')
                     });
             };
 
-
+            $scope.list3 = function() {
+                $scope.updateList = true;
+                petition.get('api/publicity/relation/indicator/get')
+                    .then(function(data){
+                        $scope.infoData3 = data.procesos;
+                        // console.log( $scope.infoData3);
+                        $scope.updateList = false;
+                    }, function(error){
+                        console.log(error);
+                        toastr.error('Uyuyuy dice: ' + error.data.message);
+                        $scope.updateList = false;
+                    });
+            };
             $scope.list();
             $scope.list2();
+            $scope.list3();
     });

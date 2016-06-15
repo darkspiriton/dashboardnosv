@@ -216,6 +216,7 @@ Route::group(['prefix' => 'api'], function(){
         Route::get('relation/{id}','PublicityController@relation');
         Route::get('relation/indicator/get','PublicityController@indicator');
         Route::get('relation/esquema/get','PublicityController@esquema');
+        Route::get('relation/esquemadate/get','PublicityController@esquemaDate');
     });
 
 });

@@ -244,6 +244,7 @@ class AuxMovementController extends Controller
 
         $movements = $this->entrefechas($date1,$date2);
 
+
         return response()->json(['movements' => $movements],200);
     }
 

@@ -23,19 +23,19 @@
             <a href="#"><i class="md md-now-widgets"></i> Vista Coordinador </a>
             <ul>
                 <li id="stock">
-                    <a ui-sref="Stock"><i class="md md-shop-two"></i>Stock de Productos</a>
+                    <a ui-sref="Stock">Stock de Productos</a>
                 </li>
                 <li id="movimientos">
-                    <a href="#" ui-sref="Movimientos"><i class="md md-shop-two"></i>Generar Salida</a>
+                    <a href="#" ui-sref="Movimientos">Generar Salida</a>
                 </li>
                 <li id="movimientos2">
-                    <a href="#" ui-sref="Movimientos2"><i class="md md-shop-two"></i>Generar Retorno - Venta</a>
+                    <a href="#" ui-sref="Movimientos2">Generar Retorno - Venta</a>
                 </li>
                 <li id="movimientos_outfit">
-                    <a href="#" ui-sref="Movimientos Out Fit"><i class="md md-shop-two"></i>Generar Salida Out Fit</a>
+                    <a href="#" ui-sref="Movimientos Out Fit">Generar Salida Out Fit</a>
                 </li>
                 <li id="movimientos_outfit2">
-                    <a href="#" ui-sref="Retorno Out Fit"><i class="md md-shop-two"></i>Generar Retorno - Venta de OutFit</a>
+                    <a href="#" ui-sref="Retorno Out Fit">Generar Retorno - Venta de OutFit</a>
                 </li>
             </ul>
         </li>
@@ -44,7 +44,13 @@
             <a href="#"><i class="md md-now-widgets"></i> Vista publicidad </a>
             <ul>
                 <li id="stock">
-                    <a ui-sref="Esquemas"><i class="md md-shop-two"></i>Esquema de pico de envio</a>
+                    <a ui-sref="Esquemas">Esquema de pico de envio</a>
+                </li>
+                <li id="publicity">
+                    <a ui-sref="Publicidad"> Cuadro de publicidad - PUBLICIDAD</a>
+                </li>
+                <li id="publicity">
+                    <a href="#" ui-sref="Publicidad Ventas"> Gestionar publicidad - COORDINADOR DE VENTAS</a>
                 </li>
             </ul>
         </li>
@@ -68,13 +74,13 @@
             <a href="#"><i class="md md-now-widgets"></i> Gestionar planilla </a>
             <ul>
                 <li id="employees">
-                    <a ui-sref="Employees"><i class="md md-security"></i> Gestionar empleados</a>
+                    <a ui-sref="Employees">Gestionar empleados</a>
                 </li>
                 <li id="payrollEntry">
-                    <a ui-sref="PayrollEntry"><i class="md md-security"></i> Registro de asistencias </a>
+                    <a ui-sref="PayrollEntry"> Registro de asistencias </a>
                 </li>
                 <li id="reportePlanilla">
-                    <a ui-sref="ReportePlanilla"><i class="md md-security"></i> Reporte de planilla entre fechas </a>
+                    <a ui-sref="ReportePlanilla"> Reporte de planilla entre fechas </a>
                 </li>
             </ul>
         </li>
@@ -142,4 +148,7 @@
     <script src="app/controllers/auxMovementOutFit2Ctrl.js"></script>
 
     <script src="app/controllers/auxEsquemaCtrl.js"></script>
+
+    <script src="app/controllers/publicityJVECtrl.js"></script>
+    <script src="app/controllers/publicityCtrl.js"></script>
 @stop

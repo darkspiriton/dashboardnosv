@@ -455,9 +455,8 @@ class AuxProductController extends Controller
     }
 
     public function getColors(){
-        $colors = Color::all();
+        $colors = Color::orderBy('name','asc')->get();
         return response()->json(['colors' => $colors],200);
-
     }
 
     public function alarm(){

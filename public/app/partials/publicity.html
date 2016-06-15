@@ -45,7 +45,7 @@
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="md md-list"></i></span>
                                 <div class="fg-line select">
-                                    <select class="form-control" ng-options="code.id as code.name for code in codes" ng-model="liquidation.id" required>
+                                    <select class="form-control" ng-options="code.id as code.name for code in codes" ng-model="product_id" required>
                                         <option value="" disabled="disabled" select="true">Seleccione</option>
                                     </select>
                                 </div>
@@ -62,6 +62,82 @@
                         </div>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="Photo" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bgm-teal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title c-white">Vista de diseño</h3>
+            </div>
+            <div class="modal-body card-padding">
+                <form name="form" class="form-horizontal" autocomplete="off">
+                    <div class="form-group">
+                        <div class="col-xs-12" style="margin: 0 auto">
+                            <img ng-src="{{publicity.photo}}" class="w-100">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <form name="formImage" id="formImage" class="form-horizontal" autocomplete="off">
+                    <div class="form-group">
+                        <label class="col-xs-2 col-sm-2 control-label">imagen</label>
+                        <div class="col-xs-10 col-sm-6">
+                            <div class="input-group">
+                                <div class="fg-line">
+                                    <input file-model="image" type="file" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-10 col-sm-2">
+                            <div class="input-group">
+                                <div class="fg-line">
+                                    <input ng-click="upload(publicity.id)" type="submit" value="Subir imagen" class="btn btn-primary">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <a type="button" ng-href="{{publicity.photo}}" class="btn btn-success pull-left" download>Descargar</a>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="product" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bgm-teal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title c-white">Estado de producto en outfits o liquidaciones</h3>
+            </div>
+            <div class="modal-body card-padding">
+                <form name="form" class="form-horizontal" autocomplete="off">
+                    <div class="form-group">
+                        <label class="col-xs-2 col-sm-5 control-label">Outfits</label>
+                        <label class="col-xs-2 col-sm-5 control-label" style="text-align: left">{{ detailProduct.outfits }}</label>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-2 col-sm-5 control-label">Liquidacion</label>
+                        <label class="col-xs-2 col-sm-5 control-label" style="text-align: left">{{ detailProduct.liquidation }}</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>

@@ -19,7 +19,7 @@ class PublicityJVEController extends Controller
     public function index()
     {
         $publicities = Publicity::with(['process' => function($query){
-            return $query->with('type')->orderBy('id','desc')->take(1);
+            return $query->with('type')->orderBy('id','desc');
         },'product' => function($query){
             return $query->with('color','provider');
         },'socials' => function($query){
@@ -35,9 +35,9 @@ class PublicityJVEController extends Controller
             $publicity->socials_list = implode(' ', $socials);
 
             if($publicity->photo)
-                $publicity->photo = url('/img/widgets/'.$publicity->photo);
+                $publicity->photo = url('/img/publicities/'.$publicity->photo);
             else
-                $publicity->photo = url('/img/widgets/alpha.jpg');
+                $publicity->photo = url('/img/publicities/default.png');
         }
 
         return response()->json(['publicities' => $publicities],200);
@@ -77,7 +77,7 @@ class PublicityJVEController extends Controller
             return response(['message' => 'Ya se genero una respuesta'],401);
 
         $process = new Process();
-        $process->date = Carbon::now()->toDateString();
+        $process->date = Carbon::now()->toDateTimeString();
         $process->type_process_id = 4;
 
         $message = '';
@@ -86,6 +86,7 @@ class PublicityJVEController extends Controller
             $message = "La imagen fue rechazada";
         } else if($request->input('opc') == 1){
             $process->status = 1;
+            $publicity->status = 1;
             $message = "La imagen fue aprovada";
         }
 

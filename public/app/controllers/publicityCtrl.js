@@ -7,36 +7,68 @@ angular.module('App')
                 controller : 'publicityCtrl'
             });
     })
-    .controller('publicityCtrl', function($scope, $compile, $state, util, petition, toastr){
+    .controller('publicityCtrl', function($scope, $compile, $state, util, petition,toformData, toastr){
 
         util.liPage('publicity');
 
+        var s1 = {
+            1: ['Proceso','btn-danger',false],
+            2: ['Retoque','bgm-teal',false],
+            3: ['Enviado','bgm-indigo',false],
+            4: ['aprobado','bgm-green',false]
+        };
+
+        var s2 = {
+            2: ['ver / subir','btn-info'],
+            3: ['ver / subir','btn-info'],
+            4: ['ver','btn-info'],
+            'fail': ['ver / subir','btn-info',false]
+        };
+
+        var s3 = {
+            1: ['Next Process','btn-primary'],
+            2: ['Next Process','btn-primary'],
+            3: ['Next Process','btn-primary',false],
+            'fail': ['Next Process','btn-primary',false]
+        };
+
         $scope.tableConfig 	= 	{
             columns :	[
-                {"sTitle": "Fecha", "bSortable" : true, 'sWidth': '90px'},
-                {"sTitle": "Nombre", "bSortable" : true},
-                {"sTitle": "Proveedor", "bSortable" : true},
-                {"sTitle": "Talla", "bSortable" : true},
-                {"sTitle": "Color" , "bSearchable": true},
-                {"sTitle": "proceso" , "bSearchable": true},
-                {"sTitle": "foto" , "bSearchable": true},
-                {"sTitle": "envio" , "bSearchable": true},
-                {"sTitle": "Acción" , "bSearchable": true, "sWidth": '80px'}
+                {"title": "Fecha", "bSortable" : true, 'width': '110px'},
+                {"title": "Nombre", "bSortable" : true},
+                {"title": "Proveedor", "bSortable" : true, 'width': '1px'},
+                {"title": "Color" , "bSearchable": true, 'width': '1px'},
+                {"title": "Foto" , "bSearchable": true,'bSortable':false, 'width': '1px'},
+                {"title": "Proceso" , "bSearchable": true,'bSortable':false, 'width': '1px'},
+                {"title": "Vista" , "bSearchable": true,'bSortable':false, 'width': '1px'},
+                {"title": "Redes" , "bSearchable": true,'bSortable':false, 'width': '1px'},
+                {"title": "Detalle" , "bSearchable": true,'bSortable':false, 'width': '1px'},
+                {"title": "Acción" , "bSearchable": true,'bSortable':false, "width": '1px'}
             ],
-            actions	:   	[
-                ['status',   {
-                    0 : { txt : 'salida' , cls : 'btn-danger', dis : false},
-                    1 : { txt : 'disponible' ,  cls : 'btn-success', dis : false},
-                    2 : { txt : 'vendido' ,  cls : 'bgm-teal', dis : false}
-                }
+            buttons	:
+                [
+                    {
+                        type: 'status',
+                        list:  [
+                            { name: 'process', column: 'process.type_process_id', render : s1},
+                            { name: 'view', column: 'process.type_process_id', render : s2},
+                            { name: 'nextProcess', column: 'process.type_process_id', render: s3}
+                        ]
+                    },
+                    {
+                        type: 'actions',
+                        list: [
+                            { name: 'detail', render: [['Detalle','detail','btn-info']]}
+                        ]
+                    },
+                    {
+                        type: 'custom',
+                        list: [
+                            { name: 'photo', template: '<img width="150px" src="{0}" alt="{1}">', column: ['photo','product.name']}
+                        ]
+                    }
                 ],
-                ['actions', [
-                    ['proceso >', 'nextProcess' ,'bgm-red']
-                ]
-                ]
-            ],
-            data  	: 	[['product.created_at',10],'product.cod','product.name','product.provider.name','product.size.name','product.color.name','price','status','actions'],
-            configStatus : 'product.status'
+            data  	: 	['date','product.name','product.provider.name','product.color.name','photo','process','view','socials_list','detail','nextProcess'],
         };
 
         var alertConfig = {
@@ -55,14 +87,59 @@ angular.module('App')
             $scope.updateList = true;
             petition.get('api/publicity')
                 .then(function(data){
-                    $scope.tableData = data.products;
-                    $('#table').AJQtable('view', $scope, $compile);
+                    $scope.tableData = data.publicities;
+                    $('#table').AJQtable2('view2', $scope, $compile);
                     $scope.updateList = false;
                 }, function(error){
                     var msg = error.data.message?error.data.message:'no te puedo atender';
                     toastr.error('Huy Huy dice: ' + msg);
                     $scope.updateList = false;
                 });
+        };
+
+        $scope.view = function (i) {
+            $scope.index = i;
+            petition.get('api/publicity/' + $scope.tableData[i].id)
+                .then(function(data){
+                    $scope.publicity = data.publicity;
+                    util.modal('Photo');
+                }, function(error){
+                    toastr.error('Huy Huy dice: ' + error.data.message);
+                });
+        };
+
+        $scope.detail = function (i) {
+            petition.get('api/publicity/relation/' + $scope.tableData[i].id)
+                .then(function(data){
+                    $scope.detailProduct.outfits = data.outfits;
+                    $scope.detailProduct.liquidation = data.liquidation;
+                    util.modal('product');
+                }, function(error){
+                    toastr.error('Huy Huy dice: ' + error.data.message);
+                });
+        };
+
+        $scope.upload = function (id) {
+            if($scope.image == null) return toastr.error('Ninguna imagen seleccionada');
+                var config = {
+                    method: 'POST',
+                    url: 'api/publicity/' + id +'/upload',
+                    data: toformData.dataFile({ img: $scope.image}),
+                    headers: {'Content-Type': undefined}
+                };
+                $scope.uploading = true;
+                petition.custom(config).then(function(data){
+                    $scope.image = null;
+                    $('#formImage').trigger("reset");
+                    toastr.success(data.message);
+                    $scope.uploading = false;
+                    $scope.list();
+                    $scope.view($scope.index);
+                }, function(error){
+                    toastr.error('Huy Huy dice: ' + error.data.message);
+                    $scope.uploading = false;
+                });
+
         };
 
         //
@@ -110,15 +187,16 @@ angular.module('App')
             swal(alertConfig ,
                 function() {
                     $scope.formSubmit=true;
-                    petition.post('api/liquidation', $scope.liquidation ).then(function(data){
-                        toastr.success(data.message);
-                        $scope.formSubmit=false;
-                        $scope.list();
-                        util.modalClose();
-                    }, function(error){
-                        toastr.error('Huy Huy dice: ' + error.data.message);
-                        $scope.formSubmit=false;
-                    })
+                    petition.post('api/publicity', { product_id: $scope.product_id})
+                        .then(function(data){
+                            toastr.success(data.message);
+                            $scope.formSubmit=false;
+                            $scope.list();
+                            util.modalClose();
+                        }, function(error){
+                            toastr.error('Huy Huy dice: ' + error.data.message);
+                            $scope.formSubmit=false;
+                        })
                 });
         };
 
@@ -128,6 +206,7 @@ angular.module('App')
 
         angular.element(document).ready(function(){
             util.resetTable($scope,$compile);
+            $scope.detailProduct = {};
             $scope.list();
             $scope.listProduct();
         });

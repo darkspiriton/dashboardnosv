@@ -38,7 +38,6 @@
             return obj[prop];
         }
 
-
         $.each(buttons, function(i , obj){
             if(obj.type == 'status'){
                 $.each(obj.list, function(l , button){
@@ -75,8 +74,8 @@
                     AJQactions2[button.name]['column'] = button.column;
                     AJQactions2[button.name]['run'] = function (i) {
                         var template = this.render;
-                        for(var i in this.column){
-                            template = template.replace(`{${i}}`, searchObject(rows[i], this.column[i]));
+                        for(var y in this.column){
+                            template = template.replace(`{${y}}`, searchObject(rows[i], this.column[y]));
                         }
                         return template;
                     }

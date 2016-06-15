@@ -35,8 +35,8 @@ angular.module('App')
                 {"title": "Nombre", "bSortable" : true},
                 {"title": "Proveedor", "bSortable" : true, 'width': '1px'},
                 {"title": "Color" , "bSearchable": true, 'width': '1px'},
-                {"title": "foto" , "bSearchable": true,'bSortable':false, 'width': '1px'},
-                {"title": "proceso" , "bSearchable": true,'bSortable':false, 'width': '1px'},
+                {"title": "Foto" , "bSearchable": true,'bSortable':false, 'width': '1px'},
+                {"title": "Froceso" , "bSearchable": true,'bSortable':false, 'width': '1px'},
                 {"title": "Aprobar" , "bSearchable": true,'bSortable':false, 'width': '1px'},
                 {"title": "Redes" , "bSearchable": true,'bSortable':false, 'width': '1px'},
                 {"title": "Acción" , "bSearchable": true,'bSortable':false, "width": '80px'}
@@ -58,8 +58,7 @@ angular.module('App')
                         ]
                     }
                 ],
-            data  	: 	[['product.created_at',10],'product.name','product.provider.name','product.color.name','photo','process','approve','socials_list','addSocials'],
-            configStatus : 'process.type_process_id'
+            data  	: 	['date','product.name','product.provider.name','product.color.name','photo','process','approve','socials_list','addSocials'],
         };
 
         $scope.list = function() {

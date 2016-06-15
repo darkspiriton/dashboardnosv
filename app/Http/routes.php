@@ -205,10 +205,12 @@ Route::group(['prefix' => 'api'], function(){
     });
 
     /*
-     * Publicidad
+     * PUBLICITY
      */    
     Route::resource('publicity','PublicityController',
         ['only'=>['index','store','update','show']]);
+    Route::post('publicity/{id}/upload','PublicityController@upload_image');
+
 
     Route::group(['prefix'=>'publicity'],function(){
         Route::get('relation/{id}','PublicityController@relation');
@@ -220,9 +222,15 @@ Route::group(['prefix' => 'api'], function(){
 
 Route::get('/test', function(\Illuminate\Http\Request $request){
 
-    $product = \Dashboard\Models\Experimental\Product::find($request->input('id'));
+    $outfits = \DB::table('products_outfits as po')
+        ->select(array('o.name'))
+        ->join('outfits as o','o.id','=','po.outfit_id')
+        ->where('po.product_id','=',3)
+        ->where('o.status','=',1)
+        ->lists('name');
 
-    return response()->json($product,200);
+    $list = $outfits;
+    return response()->json(implode(' | ',$list),200);
 });
 
 /*

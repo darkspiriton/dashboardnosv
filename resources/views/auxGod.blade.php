@@ -41,6 +41,15 @@
         </li>
 
         <li class="sub-menu">
+            <a href="#"><i class="md md-now-widgets"></i> Vista publicidad </a>
+            <ul>
+                <li id="stock">
+                    <a ui-sref="Esquemas"><i class="md md-shop-two"></i>Esquema de pico de envio</a>
+                </li>
+            </ul>
+        </li>
+
+        <li class="sub-menu">
             <a href="#"><i class="md md-now-widgets"></i> Inidcadores </a>
             <ul>
                 <li id="indicator1"><a ui-sref="Indicator1"> Stock General  </a></li>
@@ -131,4 +140,6 @@
     <script src="app/controllers/auxMovement2Ctrl.js"></script>
     <script src="app/controllers/auxMovementOutFitCtrl.js"></script>
     <script src="app/controllers/auxMovementOutFit2Ctrl.js"></script>
+
+    <script src="app/controllers/auxEsquemaCtrl.js"></script>
 @stop

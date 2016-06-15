@@ -78,7 +78,7 @@ class AuxProductController extends Controller
             // con los errores
             $validator = \Validator::make($request->all(), $rules);
             if ($validator->fails()) {
-                return response()->json(['message' => 'No posee todo los campos necesario para crear un producto'],401);
+                return response()->json(['message' => 'No posee todo los campos necesarios para crear un producto'],401);
             }
 
             $product = DB::table('auxproducts')
@@ -198,7 +198,7 @@ class AuxProductController extends Controller
         try {
             $validator = \Validator::make($request->all(), $rules);
             if ($validator->fails())
-                return response()->json(['message' => 'No posee todo los campos necesarios para crear un producto y/o el codigo de producto ya existe'], 401);
+                return response()->json(['message' => 'No posee todo los campos necesarios para actualizar un producto y/o el codigo de producto ya existe'], 401);
 
             if (Product::select(DB::raw('count(*)'))->where('cod','=',$request->input('cod'))->where('id','<>',$request->input('id'))->count() > 0)
                 return response()->json(['message' => 'El código ya esta en uso'],401);

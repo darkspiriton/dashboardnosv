@@ -234,7 +234,6 @@ class PublicityController extends Controller
 
         $cantprocesos=$this->cantidad($date,$date2);
 
-
         return response()->json(['procesos'=>$cantprocesos]);
 
     }
@@ -242,20 +241,54 @@ class PublicityController extends Controller
     public function esquema()
     {
         $date=Carbon::now(new DateTimeZone('America/Lima'));
-        $date2=$date->addDay();
 
-        //se colocara esquema
-        $esquemas=DB::table('auxproducts as p')
-            ->select('pu.id as pu','pr.id','pr.type_process_id','pr.date','pr.date_finish','pr.status','pu.status as aprobado')
-            ->join('publicities as pu','pu.product_id','=','p.id')
-            ->join('processes as pr','pr.publicity_id','=','pu.id')
-//            ->where('pu.date','>=',$date)
-//            ->where('pu.date','<',$date2)
-            ->get();
+        $esquemas=$this->getEsquemas($date);
+
+        $this->formatEsquemas($esquemas);
         if($esquemas == null){
             return response()->json(['message'=>'No hay registros de publicidad hasta el momento'],404);
         }
         return response()->json(['esquemas'=>$esquemas],200);
+    }
+
+    public function esquemaDate(Request $request){
+        $date=Carbon::now($request->input('dateSave.date1'));
+        $date->setTimezone('America/Latina');
+
+        $esquemas=$this->getEsquemas($date);
+        $this->formatEsquemas($esquemas);
+
+        if($esquemas == null){
+            return response()->json(['message'=>'No hay registros de publicidad hasta el momento'],404);
+        }
+        return response()->json(['esquemas'=>$esquemas],200);
+    }
+
+    private function getEsquemas($date){
+        $date2=$date->addDay();
+
+        $esquemas=DB::table('auxproducts as p')
+            ->select('p.name','pu.id as pu','pr.type_process_id as type','pr.date','pr.date_finish','pr.status','pu.status as aprobado')
+            ->join('publicities as pu','pu.product_id','=','p.id')
+            ->join('processes as pr','pr.publicity_id','=','pu.id')
+//            ->where('pr.type_process_id',3)
+//            ->where('pu.status',1)
+//            ->where('pu.date','>=',$date)
+//            ->where('pu.date','<',$date2)
+            ->get();
+
+        return $esquemas;
+    }
+
+    private function formatEsquemas($esquemas){
+        foreach ($esquemas as $esquema){
+            $date1=Carbon::parse($esquema->date);
+            $date2=Carbon::parse($esquema->date_finish);
+            $min=$date1->diffInMinutes($date2);
+            $esquema->diff=$min;
+            $esquema->date=$date1->toTimeString();
+            $esquema->date_finish=$date2->toTimeString();
+        }
     }
 
     private function cantidad($date,$date2){

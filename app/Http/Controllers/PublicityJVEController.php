@@ -82,6 +82,7 @@ class PublicityJVEController extends Controller
             $message = "La imagen fue rechazada";
         } else if($request->input('opc') == 1){
             $publicity->status = 1;
+            $publicity->date_finish = Carbon::now()->toDateTimeString();
             $message = "La imagen fue aprovada";
         }
 

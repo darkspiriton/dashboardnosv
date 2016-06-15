@@ -29,6 +29,12 @@ angular.module('App')
             'fail': ['R. sociales','btn-info',false]
         };
 
+        var s4 = {
+            0: ['Espera','bgm-purple',false],
+            1: ['Aprobado','bgm-green',false],
+            2: ['Rechazado','bgm-red',false]
+        };
+
         $scope.tableConfig 	= 	{
             columns :	[
                 {"title": "Fecha", "bSortable" : true, 'width': '80px'},
@@ -37,6 +43,7 @@ angular.module('App')
                 {"title": "Color" , "bSearchable": true, 'width': '1px'},
                 {"title": "Foto" , "bSearchable": true,'bSortable':false, 'width': '1px'},
                 {"title": "Froceso" , "bSearchable": true,'bSortable':false, 'width': '1px'},
+                {"title": "Estado" , "bSearchable": true,'bSortable':false, 'width': '1px'},
                 {"title": "Aprobar" , "bSearchable": true,'bSortable':false, 'width': '1px'},
                 {"title": "Redes" , "bSearchable": true,'bSortable':false, 'width': '1px'},
                 {"title": "Acción" , "bSearchable": true,'bSortable':false, "width": '80px'}
@@ -48,7 +55,22 @@ angular.module('App')
                         list:  [
                             { name: 'process', column: 'process.type_process_id', render : s1},
                             { name: 'approve', column: 'process.type_process_id', render : s2},
-                            { name: 'addSocials', column: 'process.type_process_id', render: a1}
+                            { name: 'addSocials', column: 'process.type_process_id', render: a1},
+                            { name: 'status', render: s4 , call_me: function (row) {
+                                console.log(row);
+                                if(row.process.type_process_id == 3){
+                                    if(row.process.status == 1){
+                                        if(row.status == 0){
+                                            return 2;
+                                        } else if(row.status == 1) {
+                                            return 1;
+                                        }
+                                    } else {
+                                        return 0;
+                                    }
+                                }
+                                return -1;
+                            }}
                         ]
                     },
                     {
@@ -58,7 +80,7 @@ angular.module('App')
                         ]
                     }
                 ],
-            data  	: 	['date','product.name','product.provider.name','product.color.name','photo','process','approve','socials_list','addSocials'],
+            data  	: 	['date','product.name','product.provider.name','product.color.name','photo','process','status','approve','socials_list','addSocials']
         };
 
         $scope.list = function() {

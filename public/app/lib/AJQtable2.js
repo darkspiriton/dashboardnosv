@@ -45,10 +45,19 @@
                     AJQactions2[button.name]['render'] = button.render;
                     AJQactions2[button.name]['event'] = button.name;
                     AJQactions2[button.name]['column'] = button.column;
-                    AJQactions2[button.name]['run'] = function (i) {
-                        var est = searchObject(rows[i], this.column);
-                        if(!this.render.hasOwnProperty(est)) if(this.render.hasOwnProperty('fail')) est = 'fail'; else return '';
-                        return `<a class="btn btn-xs ${this.render[est][1]}" ng-click="${this.event}(${i},$event)" style="min-width: 82px;" ${((this.render[est][2] === false) ? 'disabled="disabled"' : '')}>${this.render[est][0]}</a>`;
+                    if(button.call_me) {
+                        AJQactions2[button.name]['call_me'] = button.call_me;
+                        AJQactions2[button.name]['run'] = function (i) {
+                            var est = this.call_me(rows[i]);
+                            if (!this.render.hasOwnProperty(est)) if (this.render.hasOwnProperty('fail')) est = 'fail'; else return '';
+                            return `<a class="btn btn-xs ${this.render[est][1]}" ng-click="${this.event}(${i},$event)" style="min-width: 82px;" ${((this.render[est][2] === false) ? 'disabled="disabled"' : '')}>${this.render[est][0]}</a>`;
+                        }
+                    } else {
+                        AJQactions2[button.name]['run'] = function (i) {
+                            var est = searchObject(rows[i], this.column);
+                            if (!this.render.hasOwnProperty(est)) if (this.render.hasOwnProperty('fail')) est = 'fail'; else return '';
+                            return `<a class="btn btn-xs ${this.render[est][1]}" ng-click="${this.event}(${i},$event)" style="min-width: 82px;" ${((this.render[est][2] === false) ? 'disabled="disabled"' : '')}>${this.render[est][0]}</a>`;
+                        }
                     }
                 });
             }

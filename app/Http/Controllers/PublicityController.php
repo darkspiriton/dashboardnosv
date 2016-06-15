@@ -168,7 +168,9 @@ class PublicityController extends Controller
     }
 
     public function upload_image(Request $request, $id){
-        $publicity = Publicity::find($id);
+        $publicity = Publicity::with(['process' => function($query){
+            return $query->with('type')->orderBy('id','desc');
+        }])->find($id);
 
         if(is_null($publicity))
             return response()->json(['message' => 'La publicidad no existe'], 404);
@@ -182,8 +184,12 @@ class PublicityController extends Controller
             $image_folder = 'img/publicities/';
             $image->move(public_path($image_folder), $image_name); // moviendo imagen a images folder
 
+            if($publicity->process->type_process_id == 3)
+                $publicity->process->status = 0;
+
             $publicity->photo = $image_name;
             $publicity->save();
+            $publicity->process->save();
 
             return response()->json(['message' => 'Se guardo la imagen'], 200);
         } else {

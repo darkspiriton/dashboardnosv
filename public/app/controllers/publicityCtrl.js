@@ -32,6 +32,12 @@ angular.module('App')
             'fail': ['Next Process','btn-primary',false]
         };
 
+        var s4 = {
+            0: ['Espera','bgm-purple',false],
+            1: ['Aprobado','bgm-green',false],
+            2: ['Rechazado','bgm-red',false]
+        };
+
         $scope.tableConfig 	= 	{
             columns :	[
                 {"title": "Fecha", "bSortable" : true, 'width': '110px'},
@@ -40,6 +46,7 @@ angular.module('App')
                 {"title": "Color" , "bSearchable": true, 'width': '1px'},
                 {"title": "Foto" , "bSearchable": true,'bSortable':false, 'width': '1px'},
                 {"title": "Proceso" , "bSearchable": true,'bSortable':false, 'width': '1px'},
+                {"title": "Estado" , "bSearchable": true,'bSortable':false, 'width': '1px'},
                 {"title": "Vista" , "bSearchable": true,'bSortable':false, 'width': '1px'},
                 {"title": "Redes" , "bSearchable": true,'bSortable':false, 'width': '1px'},
                 {"title": "Detalle" , "bSearchable": true,'bSortable':false, 'width': '1px'},
@@ -52,7 +59,21 @@ angular.module('App')
                         list:  [
                             { name: 'process', column: 'process.type_process_id', render : s1},
                             { name: 'view', column: 'process.type_process_id', render : s2},
-                            { name: 'nextProcess', column: 'process.type_process_id', render: s3}
+                            { name: 'nextProcess', column: 'process.type_process_id', render: s3},
+                            { name: 'status', render: s4 , call_me: function (row) {
+                                if(row.process.type_process_id == 3){
+                                    if(row.process.status == 1){
+                                        if(row.status == 0){
+                                            return 2;
+                                        } else if(row.status == 1) {
+                                            return 1;
+                                        }
+                                    } else {
+                                        return 0;
+                                    }
+                                }
+                                return -1;
+                            }}
                         ]
                     },
                     {
@@ -68,7 +89,7 @@ angular.module('App')
                         ]
                     }
                 ],
-            data  	: 	['date','product.name','product.provider.name','product.color.name','photo','process','view','socials_list','detail','nextProcess'],
+            data  	: 	['date','product.name','product.provider.name','product.color.name','photo','process','status','view','socials_list','detail','nextProcess'],
         };
 
         var alertConfig = {

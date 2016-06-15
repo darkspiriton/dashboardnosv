@@ -73,26 +73,20 @@ class PublicityJVEController extends Controller
             return $query->with('type')->orderBy('id','desc')->take(1);
         }])->where('id','=',$request->input('id'))->first();
 
-        if($publicity->process->type_process_id == 4)
-            return response(['message' => 'Ya se genero una respuesta'],401);
-
-        $process = new Process();
-        $process->date = Carbon::now()->toDateTimeString();
-        $process->type_process_id = 4;
+        if($publicity->process->type_process_id != 3)
+            return response(['message' => 'No se puedo determinar el estado de la publicidad'],401);
 
         $message = '';
         if($request->input('opc') == 0){
-            $process->status = 0;
+            $publicity->status = 0;
             $message = "La imagen fue rechazada";
         } else if($request->input('opc') == 1){
-            $process->status = 1;
             $publicity->status = 1;
             $message = "La imagen fue aprovada";
         }
 
         $publicity->process->status = 1;
         $publicity->push();
-        $publicity->processes()->save($process);
 
         return response()->json(['message' => $message], 200);
     }

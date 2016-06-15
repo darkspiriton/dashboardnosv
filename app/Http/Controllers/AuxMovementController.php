@@ -35,8 +35,8 @@ class AuxMovementController extends Controller
                 ->join('sizes AS s','s.id','=','p.size_id')
                 ->leftJoin('settlements AS d','d.product_id','=','p.id')
                 ->where('p.status','=',1)
-                ->groupby('p.name','s.name','c.name')
-                ->orderby('p.id','asc')
+                ->groupBy('p.name','s.name','c.name')
+                ->orderBy('p.id','asc')
                 ->get();
 
             if($products != null){
@@ -45,7 +45,7 @@ class AuxMovementController extends Controller
                 return response()->json(['message' => 'No hay productos en existencia'],401);
             }
 
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             return \Response::json(['message' => 'No se pudo listar los productos =('], 500);
         }
     }

@@ -30,8 +30,8 @@ class UpdatePublicitiesTable extends Migration
         Schema::create('processes',function(Blueprint $table){
             $table->increments('id');
             $table->integer('publicity_id')->unsigned();
-            $table->dateTime('date');
-            $table->dateTime('date_finish');
+            $table->timestamp('date');
+            $table->timestamp('date_finish');
             $table->integer('type_process_id')->unsigned();
             $table->boolean('status');
             
@@ -46,7 +46,8 @@ class UpdatePublicitiesTable extends Migration
 
         Schema::create('auxsocials',function(Blueprint $table){
             $table->increments('id');
-            $table->dateTime('date');
+            $table->date('date');
+            $table->timestamp('date');
             $table->integer('publicity_id')->unsigned();
             $table->integer('type_social_id')->unsigned();
 

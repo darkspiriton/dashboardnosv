@@ -5,7 +5,6 @@ namespace Dashboard\Models\Publicity;
 use Dashboard\Models\Experimental\Product;
 use Illuminate\Database\Eloquent\Model;
 
-
 class Publicity extends Model
 {
     protected $table='publicities';
@@ -23,4 +22,9 @@ class Publicity extends Model
     public function product(){
         return $this->belongsTo(Product::class);
     }
+
+    public function process(){
+        return $this->hasOne(Process::class);
+    }
+
 }

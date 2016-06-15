@@ -18,6 +18,9 @@
         <li id="movimientos_outfit2">
             <a href="#" ui-sref="Retorno Out Fit"><i class="md md-shop-two"></i>Generar Retorno - Venta de OutFit</a>
         </li>
+        <li id="publicity">
+            <a href="#" ui-sref="Publicidad Ventas"><i class="md md-shop-two"></i>Gestionar publicidad</a>
+        </li>
     </ul>
 @stop
 
@@ -28,4 +31,5 @@
     <script src="app/controllers/auxStockCtrl.js"></script>
     <script src="app/controllers/auxMovementOutFitCtrl.js"></script>
     <script src="app/controllers/auxMovementOutFit2Ctrl.js"></script>
+    <script src="app/controllers/publicityJVECtrl.js"></script>
 @stop

@@ -22,8 +22,8 @@ class AuxProductController extends Controller
     
     public function __construct()
     {
-        $this->middleware('auth:GOD,ADM,JVE');
-        $this->middleware('auth:GOD,ADM', ['except' => ['stockProd','stockProdType']]);
+        $this->middleware('auth:GOD,ADM,JVE,PUB');
+        $this->middleware('auth:GOD,ADM,JVE', ['except' => ['UniqueProduct','CodesLists']]);
     }
 
     /**
@@ -470,7 +470,6 @@ class AuxProductController extends Controller
     public function getColors(){
         $colors = Color::orderBy('name','asc')->get();
         return response()->json(['colors' => $colors],200);
-
     }
 
     public function alarm(){

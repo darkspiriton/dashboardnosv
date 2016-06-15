@@ -5314,7 +5314,7 @@
 	}
 	
 
-	DataTable = function( options )
+	DataTable = function( optionsoptions )
 	{
 		/**
 		 * Perform a jQuery selector action on the table's TR elements (from the tbody) and
@@ -9509,7 +9509,7 @@
 		 * Title of the column - what is seen in the TH element (nTh).
 		 *  @type string
 		 */
-		"sTitle": null,
+		"title": null,
 	
 		/**
 		 * Column sorting and filtering type

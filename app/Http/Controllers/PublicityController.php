@@ -25,26 +25,40 @@ class PublicityController extends Controller
      */
     public function index(Request $request)
     {
-        $date=Carbon::parse($request->input('date'));
+        if($request->has('date')) {
+            $date = Carbon::parse($request->input('date'));
+        } else {
+            $date = Carbon::now()->hour(0)->minute(0)->second(0);
+        }
+
         $date->timezone('America/Lima');
-        $date2=$date->addDay();
+        $date2 = $date->copy()->addDay();
 
-
-        $publicities=DB::table('auxproducts as p')
-            ->select('pu.id as publicity_id','p.id as product_id','pu.date','p.name','c.name as color','tp.id as type_process_id','pr.status','pr.id as process_id')
-            ->join('publicities as pu','pu.product_id','=','p.id')
-            ->join('auxsocials as auxs','auxs.publicity_id','=','pu.id')
-            ->join('processes as pr','pr.publicity_id','=','p.id')
-            ->join('types_processes as tp','tp.id','=','pr.type_process_id')
-            ->join('colors as c','c.id','=','p.color_id')
-            ->join('sizes as s','s.id','=','p.size_id')
-            ->where('pu.date','>=',$date)
-            ->where('pu.date','<',$date2)
-//           ->groupby('p.name','p.color_id','p.size_id')
-            ->orderby('name','asc')
+        $publicities = Publicity::with(['process' => function($query){
+            return $query->with('type')->orderBy('id','desc');
+        },'product' => function($query){
+            return $query->with('color','provider');
+        },'socials' => function($query){
+            $query->with('type');
+        }])->where('date','>=',$date->toDateTimeString())
+            ->where('date','<',$date2->toDateTimeString())
             ->get();
 
-        return response()->json(['publicity',$publicities],200);
+        $socials = array();
+        foreach ($publicities as $publicity){
+            $socials = array();
+            foreach ($publicity->socials as $social){
+                $socials[] = $social->type->name;
+            }
+            $publicity->socials_list = implode(' ', $socials);
+
+            if($publicity->photo)
+                $publicity->photo = url('/img/publicities/'.$publicity->photo);
+            else
+                $publicity->photo = url('/img/publicities/default.png');
+        }
+
+        return response()->json(['publicities' => $publicities],200);
     }
 
     /**
@@ -72,7 +86,7 @@ class PublicityController extends Controller
             $date = Carbon::now(new DateTimeZone('America/Lima'));
 
             $publicity= new Publicity();
-            $publicity->date=$date;
+            $publicity->date=$date->toDateTimeString();
             $publicity->product_id=$request->input('product_id');
             $publicity->status=0;
             $publicity->save();
@@ -81,20 +95,8 @@ class PublicityController extends Controller
             $process->publicity_id=$publicity->id;
             $process->date=$date;
             $process->type_process_id=1;
-            $process->status=1;
+            $process->status=0;
             $process->save();
-
-            $foto= new Process();
-            $foto->publicity_id=$publicity->id;
-            $foto->type_process_id=2;
-            $foto->status=0;
-            $foto->save();
-
-            $envio= new Process();
-            $envio->publicity_id=$publicity->id;
-            $envio->type_process_id=3;
-            $envio->status=0;
-            $envio->save();
 
             return \Response::json(['message' => 'Se agrego el registro de publicidad'], 200);
         } catch (\Exception $e) {
@@ -111,7 +113,14 @@ class PublicityController extends Controller
      */
     public function show($id)
     {
-        //
+        $publicity = Publicity::find($id);
+
+        if($publicity->photo)
+            $publicity->photo = url('/img/publicities/'.$publicity->photo);
+        else
+            $publicity->photo = url('/img/publicities/default.png');
+
+        return response()->json(['publicity' => $publicity],200);
     }
 
     /**
@@ -123,49 +132,28 @@ class PublicityController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $rules = [
-            'process_old_id' => 'required|integer|exists:processes,id',
-            'process_new_id' => 'required|integer|exists:processes,id',
-            'type_process_id' => 'required|integer|exists:types_processes,id',
-        ];
+        $publicity = Publicity::find($id);
 
-        $validator=\Validator::make($request->all(),$rules);
-        if($validator->fails()){
-            return reponse()->json(['message'=>'No posee todo los campos necesario para crear una registro de actualizar proceso']);
-        }
+        if(is_null($publicity))
+            return response()->json(['message' => 'La publicidad no existe'], 404);
 
-        $publicity=Publicity::find($id);
+        $process = Process::where('publicity_id','=',$publicity->id)->orderBy('id','desc')->first();
 
-        if($publicity==null){
+        if($process->type_process_id > 2)
+            return response()->json(['message' => 'Acción no autorizada'], 401);
 
-            $processes=$publicity->processes;
-            foreach ($processes as $process){
+        $process->status = 1;
 
-                if($request->input('type_process_id')==3){
-                    $publicity->status=1;
-                    $publicity->save();
-                    $date_finish=Carbon::now(new DateTimeZone('America/Lima'));
-                    $process->date_finish=$date_finish;
-                    $process->status=0;
-                    $process->save();
-                }else{
-                    if($process->id==$request->input('process_new_id')){
-                        $date=Carbon::now(new DateTimeZone('America/Lima'));
-                        $process->date=$date;
-                        $process->status=1;
-                        $process->save();
-                    }
-                    if($process->id==$request->input('process_old_id')){
-                        $date_finish=Carbon::now(new DateTimeZone('America/Lima'));
-                        $process->date_finish=$date_finish;
-                        $process->status=0;
-                        $process->save();
-                    }
-                }
-            }
-        }else{
-            return response()->json(['message'=>'No se encuentra registrado ninguna publicidad con ese id']);
-        }
+        $publicity_process = new Process();
+        $publicity_process->publicity_id = $publicity->id;
+        $publicity_process->date = Carbon::now()->toDateTimeString();
+        $publicity_process->type_process_id = $process->type_process_id +1;
+        $publicity_process->status = 0;
+
+        $process->save();
+        $publicity_process->save();
+
+        return response()->json(['message' => 'Se registro avance de publicidad'], 200);
     }
 
     /**
@@ -179,51 +167,65 @@ class PublicityController extends Controller
         //
     }
 
+    public function upload_image(Request $request, $id){
+        $publicity = Publicity::find($id);
+
+        if(is_null($publicity))
+            return response()->json(['message' => 'La publicidad no existe'], 404);
+
+        if($publicity->status == 1)
+            return response()->json(['message' => 'La imagen ya fue aprobada no puede ser modificada'], 401);
+
+        if($request->hasFile('img')){
+            $image = $request->file('img'); // referencia a la imagen
+            $image_name = str_random(4).'_'.$image->getClientOriginalName();
+            $image_folder = 'img/publicities/';
+            $image->move(public_path($image_folder), $image_name); // moviendo imagen a images folder
+
+            $publicity->photo = $image_name;
+            $publicity->save();
+
+            return response()->json(['message' => 'Se guardo la imagen'], 200);
+        } else {
+            return response()->json(['message' => 'No se recibio ninguna imagen'], 401);
+        }
+    }
+
     public function relation($id){
 
-        $relations=DB::table('auxproducts as p')
-                    ->select('o.name')
-                    ->join('products_outfits as po','po.product_id','=','p.id')
-                    ->join('outfits as o','o.id','=','po.outfit_id')
-                    ->where('p.id','=',$id)
-                    ->where('p.status','<>',2)
-                    ->get();
+        $relations = DB::table('auxproducts as p')
+                        ->select('o.name')
+                        ->join('products_outfits as po','po.product_id','=','p.id')
+                        ->join('outfits as o','o.id','=','po.outfit_id')
+                        ->where('p.id','=',$id)
+                        ->where('p.status','<>',2)
+                        ->lists('name');
 
-        $product=Product::find($id);
+        $product = Product::find($id);
 
-        $relations2=DB::table('auxproducts as p')
-                    ->select('p.cod')
-                    ->join('settlements as s','s.product_id','=','p.id')
-                    ->where('p.name','=',$product->name)
-                    ->where('p.color_id','=',$product->color_id)
-                    ->where('p.size_id','=',$product->size_id)
-                    ->where('p.status','<>',2)
-                    ->get();
+        $relations2 = DB::table('auxproducts as p')
+                        ->select('p.cod')
+                        ->join('settlements as s','s.product_id','=','p.id')
+                        ->where('p.name','=',$product->name)
+                        ->where('p.color_id','=',$product->color_id)
+                        ->where('p.size_id','=',$product->size_id)
+                        ->where('p.status','<>',2)
+                        ->lists('cod');
 
-        if($relations==null){
-            $outfit=false;
-        }elseif(count($relations)==1){
-            $outfit=$relations[0]->name;
-        }else{
-            $j=0;
-            foreach($relations as $item){
-                $outfit[$j]=$item->name;
-                $j++;
-            }
+        $outfit = $liquidation = '';
+        if ( $relations == null){
+            $outfit = 'No';
+        } else {
+            $outfit = implode(' | ',$relations);
         }
 
-
-        if($relations2==null){
-            $liquidation=false;
-        }elseif(count($relations2)==1){
-            $liquidation=true;
-        }else{
-            $i=0;
-            foreach ($relations2 as $item) {
-                $liquidation['codigo'.$i]=$item->cod;
-                $i++;
-            }
+        if($relations2 == null){
+            $liquidation = 'No';
+        } else {
+            $liquidation = 'Si';
+            $liquidation .= ' - Codigos: '.implode(' | ',$relations2);
         }
+
         return response()->json(['outfits'=>$outfit,'liquidation'=>$liquidation]);
     }
 

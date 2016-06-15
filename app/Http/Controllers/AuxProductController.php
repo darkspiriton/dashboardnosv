@@ -62,11 +62,11 @@ class AuxProductController extends Controller
             'provider_id'   => 'required|integer|exists:providers,id',
             'color_id'      => 'required|integer|exists:colors,id',
             'size_id'       => 'required|integer|exists:sizes,id',
-            'name'          => 'required|max:25|unique:employees|alpha',
+            'name'          => 'required|max:100',
             'types'         => 'required|array',
             'types.*.id'    => 'required|integer',
-            'day'           => 'required|integer',
-            'count'         => 'required|integer',
+            'alarm.day'           => 'required|integer',
+            'alarm.count'         => 'required|integer',
             'cant'          => 'required|integer',
             'cost'          => 'required|numeric',
             'uti'          => 'required|numeric',
@@ -96,6 +96,10 @@ class AuxProductController extends Controller
                 $data['cod'] = $request->input('cod');
                 $data['cost']=$request->input('cost');
                 $data['uti']=$request->input('uti');
+                $data['day']=$request->input('alarm.day');
+                $data['count']=$request->input('alarm.count');
+
+
 
                 $types = $request->input('types');
 
@@ -151,8 +155,8 @@ class AuxProductController extends Controller
     {
         try{
 
-            $product = Product::with('types')
-                            ->select(array('id','cod','provider_id','color_id','size_id','name','cost_provider as cost','utility as uti'))
+            $product = Product::with('types','alarm')
+                            ->select(array('id','cod','provider_id','color_id','size_id','name','cost_provider as cost','utility as uti','cost_provider as cost','utility as uti','alarm_id'))
                             ->find($id);
 
             if($product !== null)
@@ -181,20 +185,23 @@ class AuxProductController extends Controller
             'provider_id'   => 'required|integer|exists:providers,id',
             'color_id'      => 'required|integer|exists:colors,id',
             'size_id'       => 'required|integer|exists:sizes,id',
-            'name'          => 'required|max:25|unique:employees|alpha',
+            'name'          => 'required|max:100',
             'types'         => 'required|array',
             'types.*.id'    => 'required|integer',
             'cost'          => 'required|numeric',
             'uti'          => 'required|numeric',
+            'alarm'         => 'required|array',
+            'alarm.day'           => 'required|integer',
+            'alarm.count'         => 'required|integer',
         ];
 
         try {
             $validator = \Validator::make($request->all(), $rules);
             if ($validator->fails())
-                return response()->json(['message' => 'No posee todo los campos necesario para crear un producto y/o el codigo de producto ya existe'], 401);
+                return response()->json(['message' => 'No posee todo los campos necesarios para crear un producto y/o el codigo de producto ya existe'], 401);
 
             if (Product::select(DB::raw('count(*)'))->where('cod','=',$request->input('cod'))->where('id','<>',$request->input('id'))->count() > 0)
-                return response()->json(['message' => 'El codigo ya esta en uso'],401);
+                return response()->json(['message' => 'El código ya esta en uso'],401);
 
             $product = Product::find($id);
 
@@ -210,6 +217,12 @@ class AuxProductController extends Controller
             $product->utility = $request->input('uti');
             $product->save();
 
+//            $products_ids = Product::where('name','=',$product->name)->where('color_id','=',$product->color_id)
+//                ->where('size_id','=',$product->size_id)->get()->lists('alarm_id');
+
+
+            Alarm::where('id',$product->alarm_id)->update(['day' => $request->input('alarm.day'), 'count' => $request->input('alarm.count')]);
+
             $types = Array();
             foreach ($request->input('types') as $i => $type){
                 $types[$i] = $type["id"];
@@ -217,10 +230,10 @@ class AuxProductController extends Controller
 
             $product->types()->sync($types);
 
-            return response()->json(['message' => 'Prodcuto editado']);
+            return response()->json(['message' => 'Producto editado correctamente']);
 
         } catch (Exception $e) {
-            return \Response::json(['message' => 'Ocurrio un error al agregar producto'], 500);
+            return \Response::json(['message' => 'Ocurrio un error al editar producto'], 500);
         }
 
     }
@@ -445,7 +458,7 @@ class AuxProductController extends Controller
     }   
     
     public function getProviders(){
-        $providers = Provider::all();
+        $providers = Provider::orderBy('name','asc')->get();
         return response()->json(['providers' => $providers ],200);
     }
 

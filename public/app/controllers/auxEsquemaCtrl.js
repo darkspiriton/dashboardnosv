@@ -7,9 +7,20 @@ angular.module('App')
                 controller : 'auxEsquemasCtrl'
             });
     })
-    .controller('auxEsquemasCtrl', function($scope, $compile, $state, $log, util, petition, toastr){
+    .controller('auxEsquemasCtrl', function($scope, $compile, $state, $log, util, petition, toastr,$filter){
 
         util.liPage('esquemas');
+
+        var s1 = {
+            1: ['Proceso','btn-danger',false],
+            2: ['Retoque','bgm-teal',false],
+            3: ['Enviado','bgm-indigo',false]
+        };
+        var s2 = {
+            0: ['En Proceso','btn-danger',false],
+            1: ['Completado','bgm-green',false]
+        };
+
 
         $scope.tableConfig 	= 	{
             columns :	[
@@ -19,23 +30,19 @@ angular.module('App')
                 {"sTitle": "Hora Inicio", "bSortable" : true},
                 {"sTitle": "Hora Fin", "bSortable" : true},
                 {"sTitle": "Estatus" , "bSearchable": true},
-                {"sTitle": "Estado" , "bSearchable": true},
-                {"sTitle": "Duración" , "bSearchable": true},
+                {"sTitle": "Duración (min)" , "bSearchable": true},
             ],
-            actions	:   	[
-                ['status',   {
-                    0 : { txt : 'Sin Completar' , cls : 'btn-danger', dis : false},
-                    1 : { txt : 'Completado' ,  cls : 'btn-success', dis : false}
-                }],
-                ['actions', [
-                    ['eliminar', 'delete' ,'bgm-red'],
-                    ['editar', 'edit' ,'btn-primary']
-                ]
-                ]
-            ],
-            data  	: 	['name','pu','type','date','date_finish','status','aprobado','diff'],
-            configStatus : 'status',
-
+            buttons	:
+                [
+                    {
+                        type: 'status',
+                        list:  [
+                            { name: 'type', column: 'type', render : s1},
+                            { name: 'status', column: 'status', render : s2}
+                        ]
+                    }
+                ],
+            data  	: 	['name','pu','type','date','date_finish','status','diff'],
         };
 
         $scope.list = function() {
@@ -43,7 +50,7 @@ angular.module('App')
             petition.get('api/publicity/relation/esquema/get')
                 .then(function(data){
                     $scope.tableData = data.esquemas;
-                    $('#table').AJQtable('view', $scope, $compile);
+                    $('#table').AJQtable2('view2', $scope, $compile);
                     $scope.updateList = false;
                 }, function(error){
                     console.log(error);
@@ -57,10 +64,10 @@ angular.module('App')
             $scope.dateSave = angular.copy($scope.data);
             $scope.dateSave.date1 = $filter('date')($scope.data.date1, 'yyyy-MM-dd')
             // $scope.dateSave.date2 = $filter('date')($scope.data.date2, 'yyyy-MM-dd')
-            petition.get('api/publicity/relation/esquemadate', { params : $scope.dateSave })
+            petition.get('api/publicity/relation/esquemadate/get', { params : $scope.dateSave })
                 .then(function(data){
                     $scope.tableData = data.esquemas;
-                    $('#table').AJQtable('view', $scope, $compile);
+                    $('#table').AJQtable2('view2', $scope, $compile);
                     $scope.updateList = false;
                     // if ( data.movements.length > 0){
                     //     chart.drawColummn(data.draw,data.days);

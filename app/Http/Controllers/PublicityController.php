@@ -243,25 +243,22 @@ class PublicityController extends Controller
     public function esquema()
     {
         $date=Carbon::now(new DateTimeZone('America/Lima'));
-
         $esquemas=$this->getEsquemas($date);
-
         $this->formatEsquemas($esquemas);
         if($esquemas == null){
-            return response()->json(['message'=>'No hay registros de publicidad hasta el momento'],404);
+            return response()->json(['message'=>'No hay registros de publicidad el '.$date->toFormattedDateString()],404);
         }
         return response()->json(['esquemas'=>$esquemas],200);
     }
 
-    public function esquemaDate(Request $request){
-        $date=Carbon::now($request->input('dateSave.date1'));
-        $date->setTimezone('America/Latina');
-
+    public function esquemaDate(Request $request)
+    {
+        $date=Carbon::parse($request->input('date1'));
+        $date->setTimezone('America/Lima');
         $esquemas=$this->getEsquemas($date);
         $this->formatEsquemas($esquemas);
-
         if($esquemas == null){
-            return response()->json(['message'=>'No hay registros de publicidad hasta el momento'],404);
+            return response()->json(['message'=>'No hay registros de publicidad el '.$date->toFormattedDateString()],404);
         }
         return response()->json(['esquemas'=>$esquemas],200);
     }
@@ -275,8 +272,8 @@ class PublicityController extends Controller
             ->join('processes as pr','pr.publicity_id','=','pu.id')
 //            ->where('pr.type_process_id',3)
 //            ->where('pu.status',1)
-//            ->where('pu.date','>=',$date)
-//            ->where('pu.date','<',$date2)
+            ->where('pu.date','>=',$date)
+            ->where('pu.date','<',$date2)
             ->get();
 
         return $esquemas;

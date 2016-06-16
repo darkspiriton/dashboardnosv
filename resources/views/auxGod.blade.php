@@ -49,7 +49,7 @@
                 <li id="publicity">
                     <a ui-sref="Publicidad"> Cuadro de publicidad - PUBLICIDAD</a>
                 </li>
-                <li id="publicity">
+                <li id="publicityJVE">
                     <a href="#" ui-sref="Publicidad Ventas"> Gestionar publicidad - COORDINADOR DE VENTAS</a>
                 </li>
             </ul>

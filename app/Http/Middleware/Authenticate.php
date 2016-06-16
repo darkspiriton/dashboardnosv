@@ -2,6 +2,7 @@
 
 namespace Dashboard\Http\Middleware;
 
+use Firebase\JWT\ExpiredException;
 use Firebase\JWT\JWT;
 use Config;
 use Closure;
@@ -38,16 +39,11 @@ class Authenticate {
      */
     public function handle($request, Closure $next)
     {
-        $role = array();
-        $args = func_get_args();
-        foreach ($args as $key => $arg){
-            if($key>1)
-                $role[] = $arg;
-        }
+        $role = $this->arguments(func_get_args());
 
-        if ($request->header('Authorization')) {
+        if ($request->hasHeader('Authorization')) {
             return $this->Authorization(explode(' ', $request->header('Authorization'))[1],$request,$next,$role);
-        } elseif ($request->input('Authorization')) {
+        } elseif ($request->has('Authorization')) {
             return $this->Authorization($request->input('Authorization'),$request,$next,$role);
         } else {
             return response()->json(['message' => 'Por favor verifique que la solicitud tenga un campo de autorización valido'], 401);
@@ -57,9 +53,6 @@ class Authenticate {
     private function Authorization($token,$request,Closure $next,$role){
         try{
             $payload = (array) JWT::decode($token, Config::get('app.jwt_token'), array('HS256'));
-
-            if ($payload['exp'] < time())
-                return response()->json(['message' => 'El tiempo de autorizacion Expiro'],404);
 
             if($payload == null)
                 return response()->json(['message' => 'El Token Alterado'],401);
@@ -72,10 +65,26 @@ class Authenticate {
 
             $request['user'] = $payload;
             return $next($request);
+
         }catch( DomainException $e){
             return response()->json(['message' => 'El formato de autorizacion no es valido'], 401);
         }catch( ErrorException $e){
             return response()->json(['message' => 'El formato de la cabecera de autorizacion no es valido'], 401);
+        }catch (ExpiredException $e){
+            return response()->json(['message' => 'El tiempo de autorizacion Expiro'],401);
+        }catch (\InvalidArgumentException $e){
+            return response()->json(['message' => 'Argumento invalido'],401);
+        }catch (\UnexpectedValueException $e){
+            return response()->json(['message' => 'Valor inesperado'],401);
         }
+    }
+
+    private function arguments($args = []){
+        $roles = array();
+        foreach ($args as $key => $arg){
+            if($key>1)
+                $roles[] = $arg;
+        }
+        return $roles;
     }
 }

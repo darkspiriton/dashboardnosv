@@ -9,7 +9,7 @@ angular.module('App')
     })
     .controller('publicityJVECtrl', function($scope, $compile, $state, util, petition, toastr){
 
-        util.liPage('publicity');
+        util.liPage('publicityJVE');
 
         var s1 = {
             1: ['Proceso','btn-danger',false],

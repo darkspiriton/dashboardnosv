@@ -43,14 +43,14 @@
         <li class="sub-menu">
             <a href="#"><i class="md md-now-widgets"></i> Vista publicidad </a>
             <ul>
-                <li id="esquemas">
-                    <a ui-sref="Esquemas">Esquema de pico de envio</a>
-                </li>
                 <li id="publicity">
                     <a ui-sref="Publicidad"> Cuadro de publicidad - PUBLICIDAD</a>
                 </li>
                 <li id="publicityJVE">
                     <a href="#" ui-sref="Publicidad Ventas"> Gestionar publicidad - COORDINADOR DE VENTAS</a>
+                </li>
+                <li id="esquemas">
+                    <a ui-sref="Esquemas">Esquema de pico de envio</a>
                 </li>
             </ul>
         </li>

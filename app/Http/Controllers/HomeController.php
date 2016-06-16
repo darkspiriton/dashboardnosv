@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function validate(Request $request){
+    public function validar(Request $request){
         try{
             $token = explode(' ', $request->header('Authorization'))[1];
 

@@ -55,7 +55,7 @@ class PublicityController extends Controller
             if($publicity->photo)
                 $publicity->photo = url('/img/publicities/'.$publicity->photo);
             else
-                $publicity->photo = url('/img/publicities/default.png');
+                $publicity->photo = url('/img/publicities/default.jpg');
         }
 
         return response()->json(['publicities' => $publicities],200);

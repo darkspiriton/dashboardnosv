@@ -43,7 +43,7 @@
         <li class="sub-menu">
             <a href="#"><i class="md md-now-widgets"></i> Vista publicidad </a>
             <ul>
-                <li id="stock">
+                <li id="esquemas">
                     <a ui-sref="Esquemas">Esquema de pico de envio</a>
                 </li>
                 <li id="publicity">

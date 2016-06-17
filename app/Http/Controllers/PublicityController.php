@@ -157,7 +157,7 @@ class PublicityController extends Controller
         $publicity_process->type_process_id = $id +1;
         $publicity_process->status = 0;
 
-        return response()->json(['process' => $process, 'publi' => $publicity_process],200);
+//        return response()->json(['process' => $process, 'publi' => $publicity_process],200);
         $process->save();
         $publicity_process->save();
 

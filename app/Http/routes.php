@@ -72,8 +72,7 @@ Route::group(['prefix' => 'api'], function(){
     Route::resource('user','UserController',
         ['only'=>['index','store','update','destroy','show']]);
 
-    Route::resource('/product','ProductController',
-        ['only'=>['index','store','update','destroy','show']]);
+    Route::get('user/get/roles','UserController@roles');
 
     /*
      * VALIDATE KEY AUTH

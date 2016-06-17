@@ -2,6 +2,7 @@
 
 namespace Dashboard\Http\Controllers;
 
+use Dashboard\Role;
 use Dashboard\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -174,6 +175,12 @@ class UserController extends Controller
         }catch (ErrorException $e){
             return \Response::json(['message' => 'Ocurrio un error'], 500);
         }
+    }
+
+    public function roles(){
+        $roles = Role::select(array('id','name'))->get();
+
+        return response()->json(['roles' => $roles],200);
     }
 
 }

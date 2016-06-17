@@ -99,6 +99,15 @@ angular.module('App')
                 });
         };
 
+        $scope.ListRoles = function(){
+            petition.get('api/user/get/roles')
+                .then(function(data){
+                    $scope.roles = data.roles;
+                }, function(error){
+                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                });
+        };
+
         $scope.edit = function( ind ){
             var id = $scope.tableData[ind].id;
             petition.get('api/user/' + id)
@@ -166,14 +175,7 @@ angular.module('App')
         angular.element(document).ready(function(){
             util.resetTable($scope,$compile);
             $scope.empleado = angular.copy($scope.empleadoClear);
-
-            $scope.roles = [
-                                {id : 2 , name : 'Administrador'},
-                                {id : 4 , name : 'Jefe de ventas'},
-                                {id : 3 , name : 'Vendedor'},
-                                {id : 5 , name : 'Motorizado'}
-                            ];
-
             $scope.list();
+            $scope.ListRoles();
         });
     });

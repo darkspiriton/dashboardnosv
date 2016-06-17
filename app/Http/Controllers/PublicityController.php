@@ -142,7 +142,10 @@ class PublicityController extends Controller
         if($process->type_process_id > 2)
             return response()->json(['message' => 'Acción no autorizada'], 401);
 
+        $date_finish=Carbon::now(new DateTimeZone('America/Lima'));
+
         $process->status = 1;
+        $process->date_finish=$date_finish;
 
         $publicity_process = new Process();
         $publicity_process->publicity_id = $publicity->id;
@@ -208,6 +211,7 @@ class PublicityController extends Controller
                         ->lists('name');
 
         $product = Product::find($id);
+
 
         $relations2 = DB::table('auxproducts as p')
                         ->select('p.cod')
@@ -292,10 +296,10 @@ class PublicityController extends Controller
             $date2=Carbon::parse($esquema->date_finish);
             if($date1>$date2){
                 $esquema->date=$date1->toTimeString();
-                $esquema->date_finish=$date1->toTimeString();
-                $esquema->diff=0;
+                $esquema->date_finish="En Proceso";
+                $esquema->diff="En Proceso";
             }else{
-                $min=$date1->diffInMinutes($date2);
+                $min=$date1->diffInMinutes($date2,false);
                 $esquema->diff=$min;
                 $esquema->date=$date1->toTimeString();
                 $esquema->date_finish=$date2->toTimeString();

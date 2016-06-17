@@ -87,6 +87,7 @@ class PublicityController extends Controller
 
             $publicity= new Publicity();
             $publicity->date=$date->toDateTimeString();
+            $publicity->date_finish="0000-00-00 00:00:00";
             $publicity->product_id=$request->input('product_id');
             $publicity->status=0;
             $publicity->save();
@@ -94,6 +95,7 @@ class PublicityController extends Controller
             $process= new Process();
             $process->publicity_id=$publicity->id;
             $process->date=$date->toDateTimeString();
+            $process->date_finish="0000-00-00 00:00:00";
             $process->type_process_id=1;
             $process->status=0;
             $process->save();

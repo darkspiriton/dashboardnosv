@@ -92,11 +92,16 @@ class PublicityController extends Controller
             $publicity->save();
 
             $process= new Process();
+            echo 1;
             $process->publicity_id=$publicity->id;
-            $process->date=$date->toDateTimeString();
+            echo 2;
+            $process->date=$date;
+
             $process->type_process_id=1;
             $process->status=0;
+            echo 3;
             $process->save();
+            echo 4;
 
             return \Response::json(['message' => 'Se agrego el registro de publicidad'], 200);
         } catch (\Exception $e) {

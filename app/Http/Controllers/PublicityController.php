@@ -149,15 +149,16 @@ class PublicityController extends Controller
         $process->status = 1;
         $process->date_finish=$date_finish->copy()->toDateTimeString();
 
+        $id = $process->type_process_id;
         $publicity_process = new Process();
         $publicity_process->publicity_id = $publicity->id;
         $publicity_process->date = $date_finish->toDateTimeString();
         $publicity_process->date_finish="0000-00-00 00:00:00";
-        $publicity_process->type_process_id = $process->type_process_id->replicate() +1;
+        $publicity_process->type_process_id = $id +1;
         $publicity_process->status = 0;
 
+        return response()->json(['process' => $process, 'publi' => $publicity_process],200);
         $process->save();
-
         $publicity_process->save();
 
         return response()->json(['message' => 'Se registro avance de publicidad'], 200);

@@ -151,7 +151,7 @@ class PublicityController extends Controller
 
         $publicity_process = new Process();
         $publicity_process->publicity_id = $publicity->id;
-        $publicity_process->date = Carbon::now()->toDateTimeString();
+        $publicity_process->date = Carbon::now(new DateTimeZone('America/Lima'))->toDateTimeString();
         $publicity_process->date_finish="0000-00-00 00:00:00";
         $publicity_process->type_process_id = $process->type_process_id +1;
         $publicity_process->status = 0;

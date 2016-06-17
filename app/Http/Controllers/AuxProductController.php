@@ -31,9 +31,9 @@ class AuxProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = DB::table('auxproducts as p')
+               $query = DB::table('auxproducts as p')
                         ->select('p.status',DB::raw('DATE_FORMAT(p.created_at,\'%d-%m-%Y\') as date'),'p.id','p.cod','p.name','s.name as size','c.name as color','pv.name as provider',DB::raw('GROUP_CONCAT(t.name ORDER BY t.name ASC SEPARATOR \' - \') as types'),'p.cost_provider','p.utility',DB::raw('p.cost_provider + p.utility as precio'))
                         ->join('types_auxproducts as tp','tp.product_id','=','p.id')
                         ->join('types as t','t.id','=','tp.type_id')
@@ -41,7 +41,12 @@ class AuxProductController extends Controller
                         ->join('sizes as s','s.id','=','p.size_id')
                         ->join('providers as pv','pv.id','=','p.provider_id')
                         ->groupBy('cod')
-                        ->get();
+                        ->orderBy('id','desc');
+
+                        if($request->has('search'))
+                            $query->where('p.name','like', '%'.$request->input('search').'%');
+
+                        $products = $query->take(-50)->get();
 
 //        $products=Product::with('size','color','provider');
 

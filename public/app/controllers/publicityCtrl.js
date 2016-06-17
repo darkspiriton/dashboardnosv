@@ -104,9 +104,12 @@ angular.module('App')
             closeOnConfirm: true
         };
 
-        $scope.list = function() {
+        $scope.list = function(d) {
             $scope.updateList = true;
-            petition.get('api/publicity')
+            var obj = { params: {}};
+            if(typeof d !== 'undefined')
+                obj.params.date = d;
+            petition.get('api/publicity', obj)
                 .then(function(data){
                     $scope.tableData = data.publicities;
                     $('#table').AJQtable2('view2', $scope, $compile);

@@ -16,15 +16,26 @@ class PublicityJVEController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        if($request->has('date')) {
+            $date = Carbon::parse($request->input('date'));
+        } else {
+            $date = Carbon::now()->hour(0)->minute(0)->second(0);
+        }
+
+        $date->timezone('America/Lima');
+        $date2 = $date->copy()->addDay();
+
         $publicities = Publicity::with(['process' => function($query){
             return $query->with('type')->orderBy('id','desc');
         },'product' => function($query){
             return $query->with('color','provider');
         },'socials' => function($query){
             $query->with('type');
-        }])->get();
+        }])->where('date','>=',$date->toDateTimeString())
+            ->where('date','<',$date2->toDateTimeString())
+            ->get();
 
         $socials = array();
         foreach ($publicities as $publicity){

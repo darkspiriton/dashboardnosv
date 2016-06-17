@@ -13,18 +13,18 @@ angular.module('App')
 
         $scope.tableConfig 	= 	{
             columns :	[
-                {"sTitle": "Fecha", "bSortable" : true, 'sWidth': '80px'},
+                {"sTitle": "Fecha", "bSortable" : true, 'sWidth': '90px'},
                 {"sTitle": "Codigo", "bSortable" : true, 'sWidth': '1px'},
-                {"sTitle": "Nombre", "bSortable" : true},
+                {"sTitle": "Nombre", "bSortable" : true, 'sWidth': '250px'},
                 {"sTitle": "Proveedor", "bSortable" : true},
                 {"sTitle": "Talla", "bSortable" : true},
                 {"sTitle": "Color" , "bSearchable": true},
                 {"sTitle": "Tipos" , "bSearchable": true},
-                {"sTitle": "Precio Proveedor (S/.)" , "bSearchable": true},
+                {"sTitle": "P. Proveedor (S/.)" , "bSearchable": true},
                 {"sTitle": "Utilidad (S/.)" , "bSearchable": true},
                 {"sTitle": "Precio (S/.)" , "bSearchable": true},
                 {"sTitle": "Status" , "bSearchable": true},
-                {"sTitle": "Accion" , "bSearchable": true}
+                {"sTitle": "Accion" , "bSearchable": true ,'sWidth': '190px'}
             ],
             actions	:   	[
                 ['status',   {
@@ -84,9 +84,12 @@ angular.module('App')
             name: '>>---> (Nuevo Tipo) <---<<'
         };
 
-        $scope.list = function() {
+        $scope.list = function(s) {
             $scope.updateList = true;
-            petition.get('api/auxproduct')
+            var obj = { params: {}};
+            if(typeof s !== 'undefined')
+                obj.params.search = s;
+            petition.get('api/auxproduct', obj)
                 .then(function(data){
                     $scope.tableData = data.products;
                     $('#table').AJQtable('view', $scope, $compile);

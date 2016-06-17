@@ -37,7 +37,7 @@ angular.module('App')
 
         $scope.tableConfig 	= 	{
             columns :	[
-                {"title": "Fecha", "bSortable" : true, 'width': '80px'},
+                {"title": "Fecha", "bSortable" : true, 'width': '110px'},
                 {"title": "Nombre", "bSortable" : true},
                 {"title": "Proveedor", "bSortable" : true, 'width': '1px'},
                 {"title": "Color" , "bSearchable": true, 'width': '1px'},
@@ -57,7 +57,6 @@ angular.module('App')
                             { name: 'approve', column: 'process.type_process_id', render : s2},
                             { name: 'addSocials', column: 'process.type_process_id', render: a1},
                             { name: 'status', render: s4 , call_me: function (row) {
-                                console.log(row);
                                 if(row.process.type_process_id == 3){
                                     if(row.process.status == 1){
                                         if(row.status == 0){
@@ -83,9 +82,12 @@ angular.module('App')
             data  	: 	['date','product.name','product.provider.name','product.color.name','photo','process','status','approve','socials_list','addSocials']
         };
 
-        $scope.list = function() {
+        $scope.list = function(d) {
             $scope.updateList = true;
-            petition.get('api/sales/publicity')
+            var obj = { params: {}};
+            if(typeof d !== 'undefined')
+                obj.params.date = d;
+            petition.get('api/sales/publicity', obj)
                 .then(function(data){
                     $scope.tableData = data.publicities;
                     $('#table').AJQtable2('view2', $scope, $compile);
@@ -99,12 +101,6 @@ angular.module('App')
 
         $scope.approve = function (i) {
             $scope.publicity = angular.copy($scope.tableData[i]);
-            if($scope.publicity.process.type_process_id != 4) {
-                $scope.status = false;
-            }else{
-                $scope.status = true;
-            }
-
             util.modal();
         };
 
@@ -150,7 +146,6 @@ angular.module('App')
 
         angular.element(document).ready(function(){
             util.resetTable($scope,$compile);
-            $scope.status = true;
             $scope.social = {};
             $scope.list();
             $scope.listSocials();

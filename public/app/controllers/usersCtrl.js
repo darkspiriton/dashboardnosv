@@ -171,7 +171,9 @@ angular.module('App')
                                 {id : 2 , name : 'Administrador'},
                                 {id : 4 , name : 'Jefe de ventas'},
                                 {id : 3 , name : 'Vendedor'},
-                                {id : 5 , name : 'Motorizado'}
+                                {id : 5 , name : 'Motorizado'},
+                                {id : 6 , name : 'Empleado'},
+                                {id : 7 , name : 'Publicidad'}
                             ];
 
             $scope.list();

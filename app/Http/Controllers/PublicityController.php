@@ -299,11 +299,12 @@ class PublicityController extends Controller
                 $esquema->date_finish="En Proceso";
                 $esquema->diff="En Proceso";
             }else{
-                $min=$date1->diffInMinutes($date2,false);
+                $min=$date1->diffInMinutes($date2);
                 $esquema->diff=$min;
                 $esquema->date=$date1->toTimeString();
                 $esquema->date_finish=$date2->toTimeString();
             }
+            
         }
     }
 

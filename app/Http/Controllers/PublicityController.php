@@ -93,7 +93,7 @@ class PublicityController extends Controller
 
             $process= new Process();
             $process->publicity_id=$publicity->id;
-            $process->date=$date;
+            $process->date=$date->toDateTimeString();
             $process->type_process_id=1;
             $process->status=0;
             $process->save();

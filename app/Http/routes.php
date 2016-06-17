@@ -78,7 +78,7 @@ Route::group(['prefix' => 'api'], function(){
     /*
      * VALIDATE KEY AUTH
      */
-    Route::get('validate-key','HomeController@validate');
+    Route::get('validate-key','HomeController@validar');
 
     /*
      * AUX PRODUCTS - TYPE PRODUCT

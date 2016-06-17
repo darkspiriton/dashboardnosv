@@ -248,12 +248,12 @@ class PublicityController extends Controller
     
     public function esquema()
     {
-        $date=Carbon::now(new DateTimeZone('America/Lima'));
+        $date=Carbon::today(new DateTimeZone('America/Lima'));
         $esquemas=$this->getEsquemas($date);
-        $this->formatEsquemas($esquemas);
         if($esquemas == null){
-            return response()->json(['message'=>'No hay registros de publicidad el '.$date->toFormattedDateString()],404);
+            return response()->json(['message'=>'No hay registros de publicidad'],404);
         }
+        $this->formatEsquemas($esquemas);
         return response()->json(['esquemas'=>$esquemas],200);
     }
 
@@ -262,15 +262,15 @@ class PublicityController extends Controller
         $date=Carbon::parse($request->input('date1'));
         $date->setTimezone('America/Lima');
         $esquemas=$this->getEsquemas($date);
-        $this->formatEsquemas($esquemas);
         if($esquemas == null){
-            return response()->json(['message'=>'No hay registros de publicidad el '.$date->toFormattedDateString()],404);
+            return response()->json(['message'=>'No hay registros de publicidad'],404);
         }
+        $this->formatEsquemas($esquemas);
         return response()->json(['esquemas'=>$esquemas],200);
     }
 
     private function getEsquemas($date){
-        $date2=$date->addDay();
+        $date2=$date->copy()->addDay();
 
         $esquemas=DB::table('auxproducts as p')
             ->select('p.name','pu.id as pu','pr.type_process_id as type','pr.date','pr.date_finish','pr.status','pu.status as aprobado')
@@ -278,8 +278,9 @@ class PublicityController extends Controller
             ->join('processes as pr','pr.publicity_id','=','pu.id')
 //            ->where('pr.type_process_id',3)
 //            ->where('pu.status',1)
-            ->where('pu.date','>=',$date)
-            ->where('pu.date','<',$date2)
+            ->where('pu.date','>=',$date->toDateTimeString())
+            ->where('pu.date','<',$date2->toDateTimeString())
+            ->orderby('pu.date','desc')
             ->get();
 
         return $esquemas;
@@ -289,10 +290,16 @@ class PublicityController extends Controller
         foreach ($esquemas as $esquema){
             $date1=Carbon::parse($esquema->date);
             $date2=Carbon::parse($esquema->date_finish);
-            $min=$date1->diffInMinutes($date2);
-            $esquema->diff=$min;
-            $esquema->date=$date1->toTimeString();
-            $esquema->date_finish=$date2->toTimeString();
+            if($date1>$date2){
+                $esquema->date=$date1->toTimeString();
+                $esquema->date_finish=$date1->toTimeString();
+                $esquema->diff=0;
+            }else{
+                $min=$date1->diffInMinutes($date2);
+                $esquema->diff=$min;
+                $esquema->date=$date1->toTimeString();
+                $esquema->date_finish=$date2->toTimeString();
+            }
         }
     }
 

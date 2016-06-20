@@ -15,21 +15,21 @@ angular.module('App')
             1: ['Proceso','btn-danger',false],
             2: ['Retoque','bgm-teal',false],
             3: ['Enviado','bgm-indigo',false],
-            4: ['aprobado','bgm-green',false]
+            4: ['Aprobado','bgm-green',false]
         };
 
         var s2 = {
-            2: ['ver / subir','btn-info'],
-            3: ['ver / subir','btn-info'],
-            4: ['ver','btn-info'],
-            'fail': ['ver / subir','btn-info',false]
+            2: ['Ver / Subir Imagen','btn-info'],
+            3: ['Ver / Subir Imagen','btn-info'],
+            4: ['Ver','btn-info'],
+            'fail': ['Ver / Subir Imagen','btn-info',false]
         };
 
         var s3 = {
-            1: ['Next Process','btn-primary'],
-            2: ['Next Process','btn-primary'],
-            3: ['Next Process','btn-primary',false],
-            'fail': ['Next Process','btn-primary',false]
+            1: ['Siguiente','btn-primary'],
+            2: ['Siguiente','btn-primary'],
+            3: ['Siguiente','btn-primary',false],
+            'fail': ['Siguiente','btn-primary',false]
         };
 
         var s4 = {
@@ -133,7 +133,7 @@ angular.module('App')
         };
 
         $scope.detail = function (i) {
-            petition.get('api/publicity/relation/' + $scope.tableData[i].id)
+            petition.get('api/publicity/relation/' + $scope.tableData[i].product_id)
                 .then(function(data){
                     $scope.detailProduct.outfits = data.outfits;
                     $scope.detailProduct.liquidation = data.liquidation;

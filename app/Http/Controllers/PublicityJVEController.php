@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Dashboard\Models\Publicity\Process;
 use Dashboard\Models\Publicity\Publicity;
 use Illuminate\Http\Request;
+use DateTimeZone;
 
 use Dashboard\Http\Requests;
 
@@ -98,6 +99,7 @@ class PublicityJVEController extends Controller
         }
 
         $publicity->process->status = 1;
+        $publicity->process->date_finish=Carbon::now(new DateTimeZone('America/Lima'));
         $publicity->push();
 
         return response()->json(['message' => $message], 200);

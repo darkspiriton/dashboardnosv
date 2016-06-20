@@ -48,7 +48,8 @@ angular.module('App')
             confirmButtonText: "SI",
             cancelButtonColor: "#212121",
             cancelButtonText: "CANCELAR",
-            closeOnConfirm: true
+            closeOnConfirm: true,
+            html:true
         };
 
         $scope.list = function() {
@@ -105,6 +106,31 @@ angular.module('App')
 
         $scope.submit = function () {
             alertConfig.title = '¿Todo es correcto?';
+            alertConfig.text=`<table class="table table-bordered w-100 table-attr text-center">
+                                        <thead>
+                                        <tr>
+                                            <th>Producto</th>
+                                            <th>Código</th>
+                                            <th>Precio</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>${$scope.product}</td>
+                                            <td>${( function(){
+                                                var code = "";
+                                                for(i in $scope.codes){
+                                                    if($scope.codes[i].id==$scope.liquidation.id){
+                                                        code += $scope.codes[i].name+"<br>"    
+                                                    }                                                   
+                                                }
+                                                return code; })()}
+                                            </td>                                      
+                                            <td>${$scope.liquidation.price}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>`;
             swal(alertConfig ,
                 function() {
                     $scope.formSubmit=true;

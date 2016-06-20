@@ -48,7 +48,8 @@ angular.module('App')
             confirmButtonText: "SI",
             cancelButtonColor: "#212121",
             cancelButtonText: "CANCELAR",
-            closeOnConfirm: true
+            closeOnConfirm: true,
+            html: true
         };
 
         $scope.productClear = {
@@ -94,11 +95,37 @@ angular.module('App')
 
         $scope.prdReturn = function(i){
             $scope.product.id = $scope.tableData[i].product_id;
+            // $scope.product.cod = $scope.tableData[i].;
+            // $scope.product.name = $scope.tableData[i].;
+            // $scope.product.size = $scope.tableData[i].;
+            // $scope.product.color = $scope.tableData[i].;
             $scope.product.situation = null;
             util.modal();
         };
 
         $scope.submit = function () {
+            alertConfig.title = '¿Todo es correcto?';
+            alertConfig.text=`<table class="table table-bordered w-100 table-attr text-center">
+                                        <thead>
+                                        <tr>
+                                            <th>Cod</th>
+                                            <th>Producto</th>
+                                            <th>Talla</th>
+                                            <th>Color</th>
+                                            <th>Motivo</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <th>${$scope.product.cod}</th>
+                                            <th>${$scope.product.name}</th>
+                                            <td>${$scope.product.size}</td>
+                                            <td>${$scope.product.color}</td>                                      
+                                            <td>${$scope.product.situation}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>`;
             swal(alertConfig,
                 function () {
                     petition.post('api/auxmovement', $scope.product)

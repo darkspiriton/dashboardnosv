@@ -253,14 +253,20 @@ class AuxProductController extends Controller
     {
         $auxproduct= Product::find($id);
         if($auxproduct->exists){
-            $resultado = $auxproduct->movements;
+            $movements = $auxproduct->movements;
+            $publicity = $auxproduct->publicities;
+            $liquidation = $auxproduct->settlement;
 
-            if($resultado->count() == 0){
+            if($movements->count() > 0){
+                return response()->json(['message'=>'No se puede eliminar este producto porque posee movimiento asociados'], 401);
+            }else if($publicity->count() > 0){
+                return response()->json(['message'=>'No se puede eliminar este producto tiene publicidad asociada'], 401);
+            }else if($liquidation !== null){
+                return response()->json(['message'=>'No se puede eliminar este producto esta en liquidacion'], 401);
+            }else{
                 $auxproduct->types()->detach();
                 $auxproduct->delete();
                 return response()->json(['message'=>'Se elimino el producto correctamente'],200);
-            }else{
-                return response()->json(['message'=>'No se puede eliminar este producto porque posee movimiento asociados'], 404);
             }
         }else{
             return response()->json(['message'=>'No existe este producto']);

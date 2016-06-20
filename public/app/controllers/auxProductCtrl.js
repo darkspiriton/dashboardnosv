@@ -52,7 +52,8 @@ angular.module('App')
             confirmButtonText: "SI",
             cancelButtonColor: "#212121",
             cancelButtonText: "CANCELAR",
-            closeOnConfirm: true
+            closeOnConfirm: true,
+            html: true
         };
 
         $scope.productClear = {
@@ -130,7 +131,26 @@ angular.module('App')
         }
 
         $scope.delete = function (i) {
-            alertConfig.title = "¿El producto se eliminara sin medio de retorno, esta seguro?";
+            alertConfig.title = "¿Desea eliminar?";
+            alertConfig.text = `<table class="table table-bordered w-100 table-attr text-center">
+                                        <thead>
+                                        <tr>
+                                            <th>Codigo</th>
+                                            <th>Nombre</th>
+                                            <th>Talla</th>
+                                            <th>Color</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>${$scope.tableData[i].cod}</td>
+                                            <td>${$scope.tableData[i].name}</td>
+                                            <td>${$scope.tableData[i].size}</td>
+                                            <td>${$scope.tableData[i].color}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>`;
             sweetAlert(alertConfig, function () {
                 petition.delete('api/auxproduct/' + $scope.tableData[i].id)
                     .then(function (data) {

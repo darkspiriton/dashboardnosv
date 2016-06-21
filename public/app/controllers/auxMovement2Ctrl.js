@@ -95,10 +95,10 @@ angular.module('App')
 
         $scope.prdReturn = function(i){
             $scope.product.id = $scope.tableData[i].product_id;
-            // $scope.product.cod = $scope.tableData[i].;
-            // $scope.product.name = $scope.tableData[i].;
-            // $scope.product.size = $scope.tableData[i].;
-            // $scope.product.color = $scope.tableData[i].;
+            $scope.product.cod = $scope.tableData[i].cod;
+            $scope.product.name = $scope.tableData[i].name;
+            $scope.product.size = $scope.tableData[i].size;
+            $scope.product.color = $scope.tableData[i].color;
             $scope.product.situation = null;
             util.modal();
         };
@@ -120,8 +120,25 @@ angular.module('App')
                                             <th>${$scope.product.cod}</th>
                                             <th>${$scope.product.name}</th>
                                             <td>${$scope.product.size}</td>
-                                            <td>${$scope.product.color}</td>                                      
-                                            <td>${$scope.product.situation}</td>
+                                            <td>${$scope.product.color}</td>
+                                            <td>${( function(){
+                                                var situation = "";                                                
+                                                switch ($scope.product.situation){
+                                                    case 1:
+                                                        situation="No le gusto";
+                                                        break;
+                                                    case 2:
+                                                        situation="La foto no es igual al producto";
+                                                        break;
+                                                    case 3:
+                                                        situation="Producto dañado";
+                                                        break;
+                                                    case 4:
+                                                        situation="No se encontro cliente";
+                                                        break;                                                        
+                                                }
+                                                return situation; })()}
+                                            </td>
                                         </tr>
                                         </tbody>
                                     </table>

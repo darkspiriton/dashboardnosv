@@ -46,7 +46,8 @@ angular.module('App')
             confirmButtonText: "SI",
             cancelButtonColor: "#212121",
             cancelButtonText: "CANCELAR",
-            closeOnConfirm: true
+            closeOnConfirm: true,
+            html:true
         };
 
         $scope.movementClear = {
@@ -59,7 +60,8 @@ angular.module('App')
             {id: 1, name:'No le gusto' },
             {id: 2, name:'La foto no es igual al producto' },
             {id: 3, name:'Producto dañado' },
-            {id: 4, name:'No se encontro cliente' }
+            {id: 4, name:'No se encontro cliente' },
+            {id: 5, name:'No es la talla' }
         ];
 
         $scope.list = function() {
@@ -105,12 +107,32 @@ angular.module('App')
 
         $scope.outfitReturn = function(i){
             $scope.movement.id = $scope.tableData[i].id;
+            $scope.movement.cod = $scope.tableData[i].outfit.cod;
+            $scope.movement.name = $scope.tableData[i].outfit.name;
+            $scope.movement.price = $scope.tableData[i].outfit.price;
             $scope.movement.situation = null;
             $scope.movement.case = 2;
             util.modal();
         };
 
         $scope.submit = function () {
+            alertConfig.title = '¿Todo es correcto?';
+            alertConfig.text=`<table class="table table-bordered w-100 table-attr text-center">
+                                        <thead>
+                                        <tr>                                            
+                                            <th>Cod</th>                                            
+                                            <th>Outfit</th>
+                                            <th>Price</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>${$scope.movement.cod}</td>                                                                          
+                                            <td>${$scope.movement.name}</td>
+                                            <td>${$scope.movement.price}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>`;
             var id = $scope.movement.id;
             swal(alertConfig,
                 function () {

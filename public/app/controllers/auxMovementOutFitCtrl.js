@@ -38,7 +38,8 @@ angular.module('App')
             confirmButtonText: "SI",
             cancelButtonColor: "#212121",
             cancelButtonText: "CANCELAR",
-            closeOnConfirm: true
+            closeOnConfirm: true,
+            html:true
         };
 
         $scope.movementClear = {
@@ -109,6 +110,23 @@ angular.module('App')
         };
 
         $scope.submit = function () {
+            alertConfig.title = '¿Todo es correcto?';
+            alertConfig.text=`<table class="table table-bordered w-100 table-attr text-center">
+                                        <thead>
+                                        <tr>                                            
+                                            <th>Producto</th>                                            
+                                            <th>Precio</th>
+                                            <th>Fecha</th>    
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>${$scope.OutFitList}</td>                                                                          
+                                            <td>${$scope.OutFitPrice}</td>
+                                            <td>${$scope.movement.date}</td>                                            
+                                        </tr>
+                                        </tbody>
+                                    </table>`;
             if($scope.movement.products.length != $scope.products.length)return toastr.error('Debe seleccionar un codigo por cada producto');
             alertConfig.title = '¿Todo es correcto?';
             swal(alertConfig ,

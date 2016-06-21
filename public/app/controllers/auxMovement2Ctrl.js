@@ -21,7 +21,7 @@ angular.module('App')
                 {"sTitle": "Precio Final (S/.)", "bSortable" : true},
                 {"sTitle": "Descuento (S/.)", "bSortable" : true},
                 {"sTitle": "Precio", "bSortable" : true, "sWidth": "80px"},
-                {"sTitle": "Acción" , "bSearchable": false , "sWidth": "190px"}
+                {"sTitle": "Acción" , "bSearchable": false , "sWidth": "270px"}
             ],
             actions	:  	[
                 ['status',   {
@@ -31,7 +31,8 @@ angular.module('App')
                 ],
                 ['actions', [
                     ['Retornado', 'prdReturn' ,'bgm-teal'],
-                    ['Vendido', 'prdSale' ,'bgm-blue']
+                    ['Vendido', 'prdSale' ,'bgm-blue'],
+                    ['Eliminar', 'prdDelete' ,'bgm-red']
                 ]
                 ]
             ],
@@ -48,7 +49,8 @@ angular.module('App')
             confirmButtonText: "SI",
             cancelButtonColor: "#212121",
             cancelButtonText: "CANCELAR",
-            closeOnConfirm: true
+            closeOnConfirm: true,
+            html: true
         };
 
         $scope.productClear = {
@@ -60,8 +62,47 @@ angular.module('App')
             {id: 1, name:'No le gusto' },
             {id: 2, name:'La foto no es igual al producto' },
             {id: 3, name:'Producto dañado' },
-            {id: 4, name:'No se encontro cliente' }
+            {id: 4, name:'No se encontro al cliente' },
+            {id: 5, name:'No es la talla' }
         ];
+        $scope.prdDelete = function(i){
+            alertConfig.title = '¿Todo es correcto?';
+            alertConfig.text=`<table class="table table-bordered w-100 table-attr text-center">
+                                        <thead>
+                                        <tr>
+                                            <th>Cod</th>
+                                            <th>Producto</th>
+                                            <th>Talla</th>
+                                            <th>Color</th>
+                                            <th>P. Final</th>
+                                            <th>Descuento</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <th>${$scope.tableData[i].cod}</th>
+                                            <th>${$scope.tableData[i].name}</th>
+                                            <td>${$scope.tableData[i].size}</td>
+                                            <td>${$scope.tableData[i].color}</td>
+                                            <td>${$scope.tableData[i].price}</td>
+                                            <td>${$scope.tableData[i].discount}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>`;
+            swal(alertConfig,
+                function () {
+                    petition.delete('api/auxmovement/' +  $scope.tableData[i].movement_id)
+                        .then(function (data) {
+                            toastr.success(data.message);
+                            $scope.formSubmit = false;
+                            $scope.list();
+                        }, function (error) {
+                            toastr.error('Uyuyuy dice: ' + error.data.message);
+                            $scope.formSubmit = false;
+                        });
+                });
+        };
 
         $scope.list = function() {
             $scope.updateList = true;
@@ -94,11 +135,57 @@ angular.module('App')
 
         $scope.prdReturn = function(i){
             $scope.product.id = $scope.tableData[i].product_id;
+            $scope.product.cod = $scope.tableData[i].cod;
+            $scope.product.name = $scope.tableData[i].name;
+            $scope.product.size = $scope.tableData[i].size;
+            $scope.product.color = $scope.tableData[i].color;
             $scope.product.situation = null;
             util.modal();
         };
 
         $scope.submit = function () {
+            alertConfig.title = '¿Todo es correcto?';
+            alertConfig.text=`<table class="table table-bordered w-100 table-attr text-center">
+                                        <thead>
+                                        <tr>
+                                            <th>Cod</th>
+                                            <th>Producto</th>
+                                            <th>Talla</th>
+                                            <th>Color</th>
+                                            <th>Motivo</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <th>${$scope.product.cod}</th>
+                                            <th>${$scope.product.name}</th>
+                                            <td>${$scope.product.size}</td>
+                                            <td>${$scope.product.color}</td>
+                                            <td>${( function(){
+                                                var situation = "";                                                
+                                                switch ($scope.product.situation){
+                                                    case 1:
+                                                        situation="No le gusto";
+                                                        break;
+                                                    case 2:
+                                                        situation="La foto no es igual al producto";
+                                                        break;
+                                                    case 3:
+                                                        situation="Producto dañado";
+                                                        break;
+                                                    case 4:
+                                                        situation="No se encontro cliente";
+                                                        break;
+                                                    case 5:
+                                                        situation="No es la talla";
+                                                        break;
+                                                }
+                                                return situation; })()}
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>`;
             swal(alertConfig,
                 function () {
                     petition.post('api/auxmovement', $scope.product)

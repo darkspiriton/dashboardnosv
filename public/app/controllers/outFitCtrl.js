@@ -43,7 +43,8 @@ angular.module('App')
             confirmButtonText: "SI",
             cancelButtonColor: "#212121",
             cancelButtonText: "CANCELAR",
-            closeOnConfirm: true
+            closeOnConfirm: true,
+            html:true
         };
 
         $scope.outfitClear = {
@@ -125,8 +126,36 @@ angular.module('App')
         };
 
         $scope.submit = function () {
+            console.log($scope.outfit.products);
             if($scope.outfit.products.length < 2)return toastr.error('El outfit debe tener al menos 2 productos');
             alertConfig.title = '¿Todo es correcto?';
+            alertConfig.text = `<table class="table table-bordered w-100 table-attr text-center">
+                                        <thead>
+                                        <tr>
+                                            <th>Descripción</th>
+                                            <th>Código</th>
+                                            <th>Productos</th>
+                                            <th>Status</th>
+                                            <th>Precio Venta</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>${$scope.outfit.description}</td>
+                                            <td>${$scope.outfit.code}</td>
+                                            <td>${( function(){
+                                                var prd = ""; 
+                                                for(i in $scope.outfit.products){
+                                                    prd += $scope.outfit.products[i].name+"<br>"
+                                                }
+                                                return prd; })()}
+                                            </td>
+                                            <td>${$scope.outfit.status}</td>
+                                            <td>${$scope.outfit.price}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>`;
             swal(alertConfig ,
                 function() {
                     var method = ( $scope.outfit.id ) ? 'PUT' : 'POST';

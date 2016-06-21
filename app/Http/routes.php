@@ -114,7 +114,7 @@ Route::group(['prefix' => 'api'], function(){
      * MOVEMENTS
      */
     Route::resource('auxmovement','AuxMovementController',
-        ['only'=>['index','store','update','show']]);
+        ['only'=>['index','store','update','show','destroy']]);
     Route::post('auxmovement/out', 'AuxMovementController@product_out');
     Route::post('auxmovement/set/sale','AuxMovementController@sale');
 

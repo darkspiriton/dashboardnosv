@@ -46,7 +46,8 @@ angular.module('App')
             confirmButtonText: "SI",
             cancelButtonColor: "#212121",
             cancelButtonText: "CANCELAR",
-            closeOnConfirm: true
+            closeOnConfirm: true,
+            html: true
         };
 
         $scope.productsClear = [];
@@ -82,6 +83,57 @@ angular.module('App')
         $scope.submit = function() {
             valid_product_date($scope.dataProducts, function() {
                 alertConfig.title = '¿Todo es correcto?';
+                alertConfig.text=`<table class="table table-bordered w-100 table-attr text-center">
+                                        <thead>
+                                        <tr>
+                                            <th>Cod</th>
+                                            <th>Nombre</th>
+                                            <th>P. Venta</th>
+                                            <th>Descuento</th>
+                                            <th>preciofinal</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>                                            
+                                            <td>${( function(){
+                                                var cod = "";
+                                                for(i in $scope.products){                                                    
+                                                    cod += $scope.products[i].cod+"<br>"                                                    
+                                                }
+                                                return cod; })()}
+                                            </td>                                            
+                                            <td>${( function(){
+                                                var cod = "";
+                                                for(i in $scope.products){
+                                                    cod += "-"+$scope.products[i].name+"<br>"
+                                                }
+                                                return cod; })()}
+                                            </td>
+                                            <td>${( function(){
+                                                var cod = "";
+                                                for(i in $scope.products){
+                                                    cod += $scope.products[i].price+"<br>"
+                                                }
+                                                return cod; })()}
+                                            </td>
+                                            <td>${( function(){
+                                                var cod = "";
+                                                for(i in $scope.dataProducts){
+                                                    cod += $scope.dataProducts[i].discount+"<br>"
+                                                }
+                                                return cod; })()}
+                                            </td>
+                                            <td>${( function(){
+                                                var cod = "";
+                                                for(i in $scope.products){
+                                                    cod += $scope.products[i].preciofinal+"<br>"
+                                                }
+                                                return cod; })()}
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>`;
                 swal(alertConfig,
                     function () {
                         petition.post('api/auxmovement/out', {products: $scope.dataProducts}).then(function (data) {

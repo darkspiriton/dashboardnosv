@@ -9,15 +9,23 @@
         <li id="outs">
             <a ui-sref="outs"><i class="md md-shop-two"></i> Productos en stock-salida-ventas de hoy</a>
         </li>
-        <li id="products">
-            <a href="#" ui-sref="Productos"><i class="md md-shop-two"></i> Gestionar Productos</a>
+
+        <li class="sub-menu">
+            <a href="#"><i class="md md-now-widgets"></i> Ventas </a>
+            <ul>
+                <li id="products">
+                    <a href="#" ui-sref="Productos"><i class="md md-shop-two"></i>Kardex</a>
+                </li>
+                <li id="out_fit">
+                    <a href="#" ui-sref="out_fit"><i class="md md-shop-two"></i> Gestionar Out Fit</a>
+                </li>
+                <li id="liquidation">
+                    <a href="#" ui-sref="Liquidacion"><i class="md md-shop-two"></i> Gestionar Promociones</a>
+                </li>
+            </ul>
         </li>
-        <li id="out_fit">
-            <a href="#" ui-sref="out_fit"><i class="md md-shop-two"></i> Gestionar Out Fit</a>
-        </li>
-        <li id="liquidation">
-            <a href="#" ui-sref="Liquidacion"><i class="md md-shop-two"></i> Gestionar Liquidaciones</a>
-        </li>
+
+
 
         <li class="sub-menu">
             <a href="#"><i class="md md-now-widgets"></i> Vista Coordinador </a>
@@ -56,7 +64,7 @@
         </li>
 
         <li class="sub-menu">
-            <a href="#"><i class="md md-now-widgets"></i> Inidcadores </a>
+            <a href="#"><i class="md md-now-widgets"></i> Indicadores </a>
             <ul>
                 <li id="indicator1"><a ui-sref="Indicator1"> Stock General  </a></li>
                 <li id="indicator2"><a ui-sref="Indicator2"> Stock Por Talla  </a></li>

@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use Faker\Factory as Faker;
 
-class UserSystem extends Seeder
+class UsersSystemTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -12,7 +12,6 @@ class UserSystem extends Seeder
      */
     public function run()
     {
-
         $faker = Faker::create();
         DB::table('users')->insert([
             [
@@ -29,6 +28,5 @@ class UserSystem extends Seeder
                 'password'  =>  bcrypt('12345678pw'),
             ]
         ]);
-        
     }
 }

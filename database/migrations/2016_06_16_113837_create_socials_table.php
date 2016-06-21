@@ -1,17 +1,17 @@
 <?php
-//
-//use Illuminate\Database\Schema\Blueprint;
-//use Illuminate\Database\Migrations\Migration;
-//
-//class CreateSocialsTable extends Migration
-//{
-//    /**
-//     * Run the migrations.
-//     *
-//     * @return void
-//     */
-//    public function up()
-//    {
+
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateSocialsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
 //        Schema::create('scopes',function(Blueprint $table){
 //            $table->increments('id');
 //            $table->integer('social_id')->unsigned();
@@ -37,17 +37,17 @@
 //
 //            $table->foreign('social_id')->references('id')->on('socials');
 //        });
-//    }
-//
-//    /**
-//     * Reverse the migrations.
-//     *
-//     * @return void
-//     */
-//    public function down()
-//    {
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
 //        Schema::dropIfExists('scopes');
 //        Schema::dropIfExists('comments');
 //        Schema::dropIfExists('likes');
-//    }
-//}
+    }
+}

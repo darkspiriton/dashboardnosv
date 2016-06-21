@@ -193,7 +193,7 @@ Route::group(['prefix' => 'api'], function(){
      * SOCIALS
      */
 
-    Route::resource('/socials','AuxSocialController',['only' => ['index','store']]);
+    Route::resource('/socials','AuxSocialController',['only' => ['index','store','update']]);
 
     //Rutas de creacion de producto y cliente
     Route::resource('auxqcustomer','AuxQCustomer',['only'=>['index','store','update','show','destroy']]);

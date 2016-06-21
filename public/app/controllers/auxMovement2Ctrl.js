@@ -21,7 +21,7 @@ angular.module('App')
                 {"sTitle": "Precio Final (S/.)", "bSortable" : true},
                 {"sTitle": "Descuento (S/.)", "bSortable" : true},
                 {"sTitle": "Precio", "bSortable" : true, "sWidth": "80px"},
-                {"sTitle": "Acción" , "bSearchable": false , "sWidth": "190px"}
+                {"sTitle": "Acción" , "bSearchable": false , "sWidth": "270px"}
             ],
             actions	:  	[
                 ['status',   {
@@ -31,7 +31,8 @@ angular.module('App')
                 ],
                 ['actions', [
                     ['Retornado', 'prdReturn' ,'bgm-teal'],
-                    ['Vendido', 'prdSale' ,'bgm-blue']
+                    ['Vendido', 'prdSale' ,'bgm-blue'],
+                    ['Eliminar', 'prdDelete' ,'bgm-red']
                 ]
                 ]
             ],
@@ -61,8 +62,47 @@ angular.module('App')
             {id: 1, name:'No le gusto' },
             {id: 2, name:'La foto no es igual al producto' },
             {id: 3, name:'Producto dañado' },
-            {id: 4, name:'No se encontro cliente' }
+            {id: 4, name:'No se encontro al cliente' },
+            {id: 5, name:'No es la talla' }
         ];
+        $scope.prdDelete = function(i){
+            alertConfig.title = '¿Todo es correcto?';
+            alertConfig.text=`<table class="table table-bordered w-100 table-attr text-center">
+                                        <thead>
+                                        <tr>
+                                            <th>Cod</th>
+                                            <th>Producto</th>
+                                            <th>Talla</th>
+                                            <th>Color</th>
+                                            <th>P. Final</th>
+                                            <th>Descuento</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <th>${$scope.tableData[i].cod}</th>
+                                            <th>${$scope.tableData[i].name}</th>
+                                            <td>${$scope.tableData[i].size}</td>
+                                            <td>${$scope.tableData[i].color}</td>
+                                            <td>${$scope.tableData[i].price}</td>
+                                            <td>${$scope.tableData[i].discount}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>`;
+            swal(alertConfig,
+                function () {
+                    petition.delete('api/auxmovement/' +  $scope.tableData[i].movement_id)
+                        .then(function (data) {
+                            toastr.success(data.message);
+                            $scope.formSubmit = false;
+                            $scope.list();
+                        }, function (error) {
+                            toastr.error('Uyuyuy dice: ' + error.data.message);
+                            $scope.formSubmit = false;
+                        });
+                });
+        };
 
         $scope.list = function() {
             $scope.updateList = true;
@@ -135,7 +175,10 @@ angular.module('App')
                                                         break;
                                                     case 4:
                                                         situation="No se encontro cliente";
-                                                        break;                                                        
+                                                        break;
+                                                    case 5:
+                                                        situation="No es la talla";
+                                                        break;
                                                 }
                                                 return situation; })()}
                                             </td>

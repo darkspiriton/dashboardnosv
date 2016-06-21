@@ -4,6 +4,7 @@ namespace Dashboard\Http\Controllers;
 
 use Dashboard\Models\Experimental\Movement;
 use Dashboard\Models\Experimental\Product;
+
 use Illuminate\Http\Request;
 use DB;
 use Carbon\Carbon;
@@ -47,6 +48,25 @@ class AuxMovementController extends Controller
 
         } catch (\Exception $e) {
             return \Response::json(['message' => 'No se pudo listar los productos =('], 500);
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id){
+        try{
+            $movement = Movement::find($id);
+            if ($movement != null){
+                $movement->delete();
+                return response()->json(['message' => 'Se elimino correctamente el movimiento'],200);
+            }
+            return \Response::json(['message' => 'No existe ese movimiento'], 404);
+        }catch (\ErrorException $e){
+            return \Response::json(['message' => 'Ocurrio un error'], 500);
         }
     }
 
@@ -242,7 +262,22 @@ class AuxMovementController extends Controller
         $date1 = Carbon::today();
         $date2 = $date1->copy()->addDay(21);
 
-        $movements = $this->entrefechas($date1,$date2);
+        $status = 'salida';
+
+//        $movements = $this->entrefechas($date1,$date2);
+
+        $movements=DB::table('auxproducts as p')
+            ->select('m.date_shipment as fecha','p.cod as codigo','p.name as product','c.name as color','s.name as talla','m.status')
+            ->join('auxmovements as m','p.id','=','m.product_id')
+            ->join('colors as c','c.id','=','p.color_id')
+            ->join('sizes as s','s.id','=','p.size_id')
+            ->where('m.status','like','%'.$status.'%')
+            ->where(DB::raw('DATE(m.date_shipment)'),'>=',$date1->toDateString())
+            ->where(DB::raw('DATE(m.date_shipment)'),'<',$date2->toDateString())
+            ->orderby('p.name','c.name','s.name')
+            ->get();
+
+        return $movements;
 
 
         return response()->json(['movements' => $movements],200);

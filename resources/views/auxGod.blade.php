@@ -64,7 +64,7 @@
         </li>
 
         <li class="sub-menu">
-            <a href="#"><i class="md md-now-widgets"></i> Inidcadores </a>
+            <a href="#"><i class="md md-now-widgets"></i> Indicadores </a>
             <ul>
                 <li id="indicator1"><a ui-sref="Indicator1"> Stock General  </a></li>
                 <li id="indicator2"><a ui-sref="Indicator2"> Stock Por Talla  </a></li>

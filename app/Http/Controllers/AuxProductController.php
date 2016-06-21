@@ -46,10 +46,9 @@ class AuxProductController extends Controller
                         if($request->has('search'))
                             $query->where('p.name','like', '%'.$request->input('search').'%');
 
-                        $products = $query->take(50)->get();
+                        $products = $query->get();
 
 //        $products=Product::with('size','color','provider');
-
         return response()->json(['products' => $products],200);
     }
 

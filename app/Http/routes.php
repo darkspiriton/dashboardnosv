@@ -209,6 +209,7 @@ Route::group(['prefix' => 'api'], function(){
     Route::resource('publicity','PublicityController',
         ['only'=>['index','store','update','show']]);
     Route::post('publicity/{id}/upload','PublicityController@upload_image');
+    Route::get('publicity/get/facebook','PublicityController@ByFacebook');
 
 
     Route::group(['prefix'=>'publicity'],function(){

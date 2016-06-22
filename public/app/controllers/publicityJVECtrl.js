@@ -30,7 +30,7 @@ angular.module('App')
         };
 
         var a2 = {
-            null: ['Publicar Facebook','btn-primary'],
+            1: ['Publicar Facebook','btn-primary'],
             'fail': ['Publicar Facebook','btn-primary',false]
         };
 
@@ -51,6 +51,17 @@ angular.module('App')
                 } else {
                     return 0;
                 }
+            }
+            return -1;
+        };
+        
+        var fb_publish = function (row) {
+            if(row.process.type_process_id == 3){
+                if(row.process.status == 1){
+                    if(row.status == 1 && row.facebookID == null) {
+                        return 1;
+                    } else return -1;
+                } else return -1;
             }
             return -1;
         };
@@ -77,7 +88,7 @@ angular.module('App')
                             { name: 'process', column: 'process.type_process_id', render: s1},
                             { name: 'approve', column: 'process.type_process_id', render: s2},
                             { name: 'addSocials', render: a1,  call_me: call_me},
-                            { name: 'publish_fb', column: 'facebookID',  render: a2},
+                            { name: 'publish_fb', render: a2, call_me: fb_publish},
                             { name: 'status', render: s4 , call_me: call_me}
                         ]
                     },
@@ -162,8 +173,9 @@ angular.module('App')
         $scope.listAlbums_FB = function () {
             $fb.albums().then(function (response) {
                 $scope.albums = response.data;
-            }, function (error) {
-                toastr.error('Facebook dice: '+ error.message);
+                util.modal('FacebookModal');
+            }, function (message) {
+                toastr.error('Facebook dice: '+ message);
             });
         };
 
@@ -174,8 +186,8 @@ angular.module('App')
                 $scope.listAlbums_FB();
                 albumClear();
                 publishClear();
-            },function (error) {
-                toastr.error('Facebook dice: '+ error.message);
+            },function (message) {
+                toastr.error('Facebook dice: '+ message);
                 $scope.albumButton = false;
             });
         };
@@ -188,14 +200,13 @@ angular.module('App')
 
             $fb.publish(album_id, data).then(function (response) {
                 console.log(response);
-                util.modalClose('Facebook');
+                util.modalClose('FacebookModal');
                 toastr.success('Se publico la foto');
                 publishClear();
-                petition.put('api/socials/' + $scope.tableData[i].id, { fb_id: response.id});
+                petition.put('api/socials/' + $scope.tableData[i].id, { fb_id: response.post_id});
                 $scope.list();
-            }, function (error) {
-                console.log(error);
-                toastr.error('Facebook dice: '+ error.message);
+            }, function (message) {
+                toastr.error('Facebook dice: '+ message);
                 $scope.publishButton = false;
             });
         };
@@ -206,10 +217,11 @@ angular.module('App')
         };
 
         $scope.publish_fb = function (i) {
+            +console.log('1');
             publishClear();
             $scope.index = i;
             $scope.listAlbums_FB();
-            util.modal('Facebook');
+            console.log('2');
         };
         
         $scope.facebook.me = function () {

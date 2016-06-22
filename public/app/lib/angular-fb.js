@@ -61,20 +61,24 @@ angular.module('angular-fb', [])
             function (service, helper) {
                 var $fb = {};
 
-                $fb.createAlbum = function (name) {
-                    return helper.run(service.createAlbum, arguments, []);
+                $fb.me = function () {
+                    return helper.run(service.me);
                 };
 
                 $fb.albums = function () {
                     return helper.run(service.albums);
                 };
 
+                $fb.createAlbum = function (name) {
+                    return helper.run(service.createAlbum, arguments, []);
+                };
+
                 $fb.publish = function (album_id, data) {
                     return helper.run(service.publish, arguments, []);
                 };
 
-                $fb.me = function () {
-                    return helper.run(service.me);
+                $fb.collection = function (url, data) {
+                    return helper.run(service.collection, arguments, []);
                 };
 
                 return $fb;
@@ -87,7 +91,7 @@ angular.module('angular-fb', [])
             var defer = $q.defer();
             FB.api('me', function (response) {
                 if (!response || response.error) {
-                    defer.reject(response.error);
+                    defer.reject(response.error.message, response);
                 } else {
                     defer.resolve(response);
                 }
@@ -99,7 +103,7 @@ angular.module('angular-fb', [])
             var defer = $q.defer();
             FB.api('me/albums', { fields: 'name'}, function (response) {
                 if (!response || response.error) {
-                    defer.reject(response.error);
+                    defer.reject(response.error.message, response);
                 } else {
                     defer.resolve(response);
                 }
@@ -111,7 +115,7 @@ angular.module('angular-fb', [])
             var defer = $q.defer();
             FB.api('me/albums','POST',args[0], function (response) {
                 if (!response || response.error) {
-                    defer.reject(response.error);
+                    defer.reject(response.error.message, response);
                 } else {
                     defer.resolve(response);
                 }
@@ -123,7 +127,19 @@ angular.module('angular-fb', [])
             var defer = $q.defer();
             FB.api(args[0] + '/photos', 'POST', args[1], function (response) {
                 if (!response || response.error) {
-                    defer.reject(response.error);
+                    defer.reject(response.error.message, response);
+                } else {
+                    defer.resolve(response);
+                }
+            });
+            return defer.promise;
+        };
+
+        service.collection = function (args) {
+            var defer = $q.defer();
+            FB.api(args[0], args[1], function (response) {
+                if (!response || response.error) {
+                    defer.reject(response.error.message, response);
                 } else {
                     defer.resolve(response);
                 }
@@ -138,16 +154,16 @@ angular.module('angular-fb', [])
         var helper = {};
 
         helper.run = function (callback, args, perms) {
-            // console.log(callback);
-            console.log("Inicio");
-            console.log("-------------");
-            console.log(this.getLoginStatus(), this.hasPermissions(perms));
-            console.log("-------------");
             if(this.getLoginStatus() && this.hasPermissions(perms)){
-                console.log("User logid and permissions");
                 return callback(args);
             } else {
-                return this.login();
+                var defer = $q.defer();
+                this.login().then(function () {
+                    defer.resolve(callback(args));
+                }, function (error) {
+                    defer.reject(error);
+                });
+                return defer.promise;
             }
         };
 
@@ -160,7 +176,6 @@ angular.module('angular-fb', [])
         };
 
         helper.login = function () {
-            console.log("Login inicio");
             var defer = $q.defer();
             FB.login(function (response) {
                 if (response.status == 'connected') {
@@ -173,10 +188,8 @@ angular.module('angular-fb', [])
                         }
                     });
                     defer.resolve(response.status);
-                    console.log("login success");
                 } else {
-                    defer.reject(response.status);
-                    console.log("user denied login");
+                    defer.reject('Usuario no se logueo', response);
                 }
             }, {scope: privilege.extendPermissions});
 

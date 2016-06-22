@@ -363,4 +363,14 @@ class PublicityController extends Controller
         $publicities[3]=["name"=>"Completado","cant"=>$complete[0]->cant];
         return $publicities;
     }
+
+    public function ByFacebook(Request $request){
+        $publicities = Publicity::with(['product' => function($query){
+            return $query->with('color','provider');
+        }])->where('facebookID','<>',null)->get();
+
+        $ids = $publicities->implode('facebookID',',');
+
+        return response()->json(['publicities' => $publicities, 'ids' => $ids],200);
+    }
 }

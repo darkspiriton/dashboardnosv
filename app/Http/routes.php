@@ -223,15 +223,15 @@ Route::group(['prefix' => 'api'], function(){
 
 Route::get('/test', function(\Illuminate\Http\Request $request){
 
-    $outfits = \DB::table('products_outfits as po')
-        ->select(array('o.name'))
-        ->join('outfits as o','o.id','=','po.outfit_id')
-        ->where('po.product_id','=',3)
-        ->where('o.status','=',1)
-        ->lists('name');
+    $publicity = \Dashboard\Models\Publicity\Publicity::select('product_id')->find(108);
+    $product = \Dashboard\Models\Experimental\Product::find($publicity->product_id);
 
-    $list = $outfits;
-    return response()->json(implode(' | ',$list),200);
+    $count = \Dashboard\Models\Experimental\Product::where('name','=',$product->name)
+                    ->where('color_id','=',$product->color_id)
+                    ->where('size_id','=',$product->size_id)
+                    ->where('status','=',2)->count();
+
+    return response()->json(['product'=> $product, 'count' => $count],200);
 });
 
 /*

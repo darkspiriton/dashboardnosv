@@ -32,6 +32,7 @@ angular.module('App')
                 {"title": "Foto" , "bSearchable": true,'bSortable':false, 'width': '1px'},
                 {"title": "likes" , "bSearchable": true,'bSortable':false, 'width': '1px'},
                 {"title": "comentarios" , "bSearchable": true,'bSortable':false, 'width': '1px'},
+                {"title": "Ventas" , "bSearchable": true,'bSortable':false, 'width': '1px'},
                 {"title": "Link" , "bSearchable": true,'bSortable':false, 'width': '1px'}
             ],
             buttons	:
@@ -44,7 +45,7 @@ angular.module('App')
                         ]
                     }
                 ],
-            data  	: 	['date','product.name','product.provider.name','product.color.name','photo','likes','comments','link']
+            data  	: 	['date','product.name','product.provider.name','product.color.name','photo','likes','comments','sales','link']
         };
 
 
@@ -53,7 +54,7 @@ angular.module('App')
             $scope.updateList = true;
             petition.get('api/publicity/get/facebook')
                 .then(function(data){
-                    if(data.publicities) {
+                    if(data.publicities != "") {
                         $scope.publicities = data.publicities;
                         $scope.listFacebook(data.ids);
                     }

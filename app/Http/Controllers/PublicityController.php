@@ -376,6 +376,13 @@ class PublicityController extends Controller
 
         $ids = $publicities->implode('facebookID',',');
 
+        foreach ($publicities as $publicity){
+            $publicity->sales = Product::where('name','=', $publicity->product->name)
+                ->where('color_id','=',$publicity->product->color_id)
+                ->where('size_id','=',$publicity->product->size_id)
+                ->where('status','=',2)->count();
+        }
+
         return response()->json(['publicities' => $publicities, 'ids' => $ids],200);
     }
 }

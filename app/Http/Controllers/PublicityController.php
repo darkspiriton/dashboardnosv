@@ -205,7 +205,7 @@ class PublicityController extends Controller
                 return response()->json(['message' => 'No se recibio ninguna imagen'], 401);
             }
         }catch (\Exception $e){
-            return response()->json(['error' => $e],200);
+            return response()->json(['error' => $e->getMessage()],500);
         }
 
     }

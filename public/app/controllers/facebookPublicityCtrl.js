@@ -32,8 +32,7 @@ angular.module('App')
                 {"title": "Foto" , "bSearchable": true,'bSortable':false, 'width': '1px'},
                 {"title": "likes" , "bSearchable": true,'bSortable':false, 'width': '1px'},
                 {"title": "comentarios" , "bSearchable": true,'bSortable':false, 'width': '1px'},
-                {"title": "copartido" , "bSearchable": true,'bSortable':false, 'width': '1px'},
-                {"title": "Link" , "bSearchable": true,'bSortable':false, 'width': '1px'},
+                {"title": "Link" , "bSearchable": true,'bSortable':false, 'width': '1px'}
             ],
             buttons	:
                 [
@@ -45,7 +44,7 @@ angular.module('App')
                         ]
                     }
                 ],
-            data  	: 	['date','product.name','product.provider.name','product.color.name','photo','likes','comments','shares','link']
+            data  	: 	['date','product.name','product.provider.name','product.color.name','photo','likes','comments','link']
         };
 
 
@@ -68,7 +67,7 @@ angular.module('App')
         $scope.listFacebook = function(ids){
             var data = {};
             data.ids = ids;
-            data.fields = "link,picture,source,shares,likes.summary(true){id},comments.summary(true){id}";
+            data.fields = "link,picture,source,likes.summary(true){id},comments.summary(true){id}";
             $fb.collection('/', data).then(function (response) {
                 $scope.facebookData = response;
                 mergeInfo($scope.publicities, $scope.facebookData);
@@ -86,7 +85,6 @@ angular.module('App')
                 var face = facebook[data.facebookID];
                 obj.likes = face.likes?face.likes.summary.total_count:0;
                 obj.comments = face.comments?face.comments.summary.total_count:0;
-                obj.shares = face.shares?face.shares.count:0;
                 obj.link = face.link;
                 obj.picture = face.picture;
                 rows.push(obj);

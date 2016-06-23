@@ -203,7 +203,7 @@ angular.module('App')
                 util.modalClose('FacebookModal');
                 toastr.success('Se publico la foto');
                 publishClear();
-                petition.put('api/socials/' + $scope.tableData[i].id, { fb_id: response.post_id});
+                petition.put('api/socials/' + $scope.tableData[i].id, { fb_id: response.id});
                 $scope.list();
             }, function (message) {
                 toastr.error('Facebook dice: '+ message);

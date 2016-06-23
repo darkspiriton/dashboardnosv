@@ -54,7 +54,6 @@ angular.module('App')
             $scope.updateList = true;
             petition.get('api/publicity/get/facebook')
                 .then(function(data){
-                    console.log(data);
                     $scope.publicities = data.publicities;
                     $scope.listFacebook(data.ids);
                 }, function(error){
@@ -74,12 +73,12 @@ angular.module('App')
             }, function (message, error) {
                 console.log(arguments);
                 toastr.error('Facebook dice: ' + message);
+                $scope.updateList = false;
             });
         };
         
         function mergeInfo(server, facebook) {
             var rows = [];
-            console.log(facebook);
             $.each(server, function (i, data) {
                 var obj = data;
                 var face = facebook[data.facebookID];

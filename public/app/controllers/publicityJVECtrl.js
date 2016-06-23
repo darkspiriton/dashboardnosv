@@ -217,11 +217,9 @@ angular.module('App')
         };
 
         $scope.publish_fb = function (i) {
-            +console.log('1');
             publishClear();
             $scope.index = i;
             $scope.listAlbums_FB();
-            console.log('2');
         };
         
         $scope.facebook.me = function () {

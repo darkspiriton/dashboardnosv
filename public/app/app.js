@@ -4,7 +4,7 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
         $authProvider.tokenPrefix = "DB_NV";
 
         $fbProvider.appId = 1148473048525783;
-        $fbProvider.extendPermissions = 'publish_stream,user_photos';
+        $fbProvider.extendPermissions = 'publish_actions,,user_photos';
 
         $stateProvider
             .state('Home', {

@@ -57,6 +57,9 @@ angular.module('App')
                     if(data.publicities != "") {
                         $scope.publicities = data.publicities;
                         $scope.listFacebook(data.ids);
+                    }else{
+                        toastr.error('No hay productos para mostrar');
+                        $scope.updateList = false;
                     }
                 }, function(error){
                     console.log(error);

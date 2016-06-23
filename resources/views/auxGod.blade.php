@@ -163,5 +163,5 @@
     <script src="app/controllers/publicityJVECtrl.js"></script>
     <script src="app/controllers/publicityCtrl.js"></script>
 
-    <script src="app/controllers/FacebookPublicityCtrl.js"></script>
+    <script src="app/controllers/facebookPublicityCtrl.js"></script>
 @stop

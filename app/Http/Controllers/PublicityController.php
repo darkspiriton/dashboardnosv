@@ -176,33 +176,38 @@ class PublicityController extends Controller
     }
 
     public function upload_image(Request $request, $id){
-        $publicity = Publicity::with(['process' => function($query){
-            return $query->with('type')->orderBy('id','desc');
-        }])->find($id);
+        try{
+            $publicity = Publicity::with(['process' => function($query){
+                return $query->with('type')->orderBy('id','desc');
+            }])->find($id);
 
-        if(is_null($publicity))
-            return response()->json(['message' => 'La publicidad no existe'], 404);
+            if(is_null($publicity))
+                return response()->json(['message' => 'La publicidad no existe'], 404);
 
-        if($publicity->status == 1)
-            return response()->json(['message' => 'La imagen ya fue aprobada no puede ser modificada'], 401);
+            if($publicity->status == 1)
+                return response()->json(['message' => 'La imagen ya fue aprobada no puede ser modificada'], 401);
 
-        if($request->hasFile('img')){
-            $image = $request->file('img'); // referencia a la imagen
-            $image_name = str_random(4).'_'.$image->getClientOriginalName();
-            $image_folder = 'img/publicities/';
-            $image->move(public_path($image_folder), $image_name); // moviendo imagen a images folder
+            if($request->hasFile('img')){
+                $image = $request->file('img'); // referencia a la imagen
+                $image_name = str_random(4).'_'.$image->getClientOriginalName();
+                $image_folder = 'img/publicities/';
+                $image->move(public_path($image_folder), $image_name); // moviendo imagen a images folder
 
-            if($publicity->process->type_process_id == 3)
-                $publicity->process->status = 0;
+                if($publicity->process->type_process_id == 3)
+                    $publicity->process->status = 0;
 
-            $publicity->photo = $image_name;
-            $publicity->save();
-            $publicity->process->save();
+                $publicity->photo = $image_name;
+                $publicity->save();
+                $publicity->process->save();
 
-            return response()->json(['message' => 'Se guardo la imagen'], 200);
-        } else {
-            return response()->json(['message' => 'No se recibio ninguna imagen'], 401);
+                return response()->json(['message' => 'Se guardo la imagen'], 200);
+            } else {
+                return response()->json(['message' => 'No se recibio ninguna imagen'], 401);
+            }
+        }catch (\Exception $e){
+            return response()->json(['error' => $e],200);
         }
+
     }
 
     public function relation($id){

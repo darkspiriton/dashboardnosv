@@ -104,6 +104,10 @@ class AuxSocialController extends Controller
 
         Publicity::where('id','=',$id)->update(['facebookID' => $request->input('fb_id')]);
 
+        $request['publicity_id'] = $id;
+        $request['social_id'] = 1;
+
+        return $this->store($request);
     }
 
     /**

@@ -54,8 +54,10 @@ angular.module('App')
             $scope.updateList = true;
             petition.get('api/publicity/get/facebook')
                 .then(function(data){
-                    $scope.publicities = data.publicities;
-                    $scope.listFacebook(data.ids);
+                    if(data.publicities) {
+                        $scope.publicities = data.publicities;
+                        $scope.listFacebook(data.ids);
+                    }
                 }, function(error){
                     console.log(error);
                     toastr.error('Ups ocurrio un problema: ' + error.data.message);

@@ -11,21 +11,37 @@ angular.module('App')
 
         util.liPage('movimientos_outfit');
 
+        var s1 = {
+            1 : ['OutFit','bgm-teal',false],
+            2 : ['Pack','bgm-green',false]
+        };
+
         $scope.tableConfig 	= 	{
             columns :	[
                 {"sTitle": "Codigo", "bSortable" : true, "sWidth": '80px'},
                 {"sTitle": "Descripción", "bSortable" : true},
-                {"sTitle": "Precio", "bSortable" : true},
+                {"sTitle": "Precio S/.", "bSortable" : true},
+                {"sTitle": "Tipo", "bSortable" : true},
                 {"sTitle": "Acción" , "bSearchable": true, "sWidth": '190px'}
             ],
-            actions	:     	[
-                ['actions', [
-                    ['generar', 'new' ,'bgm-teal'],
-                    ['detalle', 'detail' ,'btn-info']
-                ]
-                ]
-            ],
-            data  	: 	['cod','name','price','actions'],
+
+            buttons	:
+                [
+                    {
+                        type: 'status',
+                        list:  [
+                            { name: 'type', column: 'type', render : s1},
+                        ]
+                    },
+                    {
+                        type: 'actions',
+                        list:  [
+                            { name: 'actions', render: [['Generar','new','bgm-green'],['Detalle','detail','btn-info']]}
+                        ]
+                    }
+                ],
+
+            data  	: 	['cod','name','price','type','actions'],
             configStatus: 'status'
         };
 
@@ -53,7 +69,7 @@ angular.module('App')
             petition.get('api/outfit/get/actives')
                 .then(function(data){
                     $scope.tableData = data.outfits;
-                    $('#table').AJQtable('view', $scope, $compile);
+                    $('#table').AJQtable2('view2', $scope, $compile);
                     $scope.updateList = false;
                 }, function(error){
                     console.log(error);
@@ -165,7 +181,12 @@ angular.module('App')
         $scope.new = function(i){
             products(i);
             clear();
-            $scope.OutFitPrice = $scope.tableData[i].price;
+            $scope.OutFitPrice = $scope.tableData[i].price;             
+            if($scope.tableData[i].type==1){
+                $scope.OutFitType = "OutFit";
+            }else if($scope.tableData[i].type==2){
+                $scope.OutFitType = "Pack";
+            }
             $scope.movement.outfit_id = $scope.tableData[i].id;
             util.muestraformulario();
         };
@@ -177,6 +198,7 @@ angular.module('App')
             $scope.codes = [];
             $scope.OutFitList = '';
             $scope.OutFitPrice = '';
+            $scope.OutFitType= '';
         }
 
         function products(ind) {

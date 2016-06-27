@@ -11,26 +11,42 @@ angular.module('App')
 
         util.liPage('out_fit');
 
+        var s1 = {
+            1 : ['OutFit','bgm-teal',false],
+            2 : ['Pack','bgm-green',false]
+        };
+        var s2 = {
+            0 : ['Inactivo','bgm-red',false],
+            1 : ['Activo','bgm-green',false]
+        };
+
         $scope.tableConfig 	= 	{
             columns :	[
                 {"sTitle": "Descripción", "bSortable" : true},
-                {"sTitle": "Codigo", "bSortable" : true},
-                {"sTitle": "Precio", "bSortable" : true},
+                {"sTitle": "Código", "bSortable" : true},
+                {"sTitle": "Precio S/.", "bSortable" : true},
+                {"sTitle": "Tipo", "bSortable" : true},
                 {"sTitle": "Estado", "bSortable" : false, "sWidth": '80px'},
                 {"sTitle": "Acción" , "bSearchable": true, "sWidth": '80px'}
             ],
-            actions	:     	[
-                ['status',   {
-                    0 : { txt : 'inactivo' , cls : 'btn-danger'},
-                    1 : { txt : 'activo' ,  cls : 'btn-success'}
-                }
+            buttons	:
+                [
+                    {
+                        type: 'status',
+                        list:  [
+                            { name: 'type', column: 'type', render : s1},
+                            { name: 'status', column: 'status', render : s2}
+                        ]
+                    },
+                    {
+                        type: 'actions',
+                        list:  [
+                            { name: 'actions', render: [['Detalle','detail','btn-info']]}
+                        ]
+                    }
                 ],
-                ['actions', [
-                    ['detalle', 'detail' ,'btn-info']
-                ]
-                ]
-            ],
-            data  	: 	['name','cod','price','status','actions'],
+
+            data  	: 	['name','cod','price','type','status','actions'],
             configStatus: 'status'
         };
 
@@ -51,16 +67,21 @@ angular.module('App')
             description: null,
             code: null,
             price: null,
-            status: false,
+            status: 0,
             products: []
         };
+
+        $scope.types = [
+            {id: 1, name:'OutFit' },
+            {id: 2, name:'Pack' },           
+        ];
 
         $scope.list = function() {
             $scope.updateList = true;
             petition.get('api/outfit')
                 .then(function(data){
                     $scope.tableData = data.outfits;
-                    $('#table').AJQtable('view', $scope, $compile);
+                    $('#table').AJQtable2('view2', $scope, $compile);
                     $scope.updateList = false;
                 }, function(error){
                     console.log(error);
@@ -135,8 +156,8 @@ angular.module('App')
                                             <th>Descripción</th>
                                             <th>Código</th>
                                             <th>Productos</th>
-                                            <th>Status</th>
                                             <th>Precio Venta</th>
+                                            <th>Tipo</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -150,8 +171,18 @@ angular.module('App')
                                                 }
                                                 return prd; })()}
                                             </td>
-                                            <td>${$scope.outfit.status}</td>
                                             <td>${$scope.outfit.price}</td>
+                                            <td>${( function(){
+                                                var type = "";
+
+                                                for(i in $scope.types){
+                                                    if($scope.types[i].id == $scope.outfit.type){
+                                                        type += $scope.types[i].name
+                                                    }                                                  
+                                                }                                                
+                                                
+                                                return type; })()}
+                                            </td>
                                         </tr>
                                         </tbody>
                                     </table>

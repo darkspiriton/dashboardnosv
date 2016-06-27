@@ -1,6 +1,6 @@
 <div class="card" >
     <div class="card-header bgm-blue">
-        <h2>Gestionar Out Fit</h2>
+        <h2>Gestionar Salida de Combinaciones</h2>
         <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="list()"
                 data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
                 title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
@@ -15,7 +15,7 @@
 
 <div class="card" id="formulariohide">
     <div class="card-header bgm-blue">
-        <h2>Movimiento de Out Fit</h2>
+        <h2>Movimiento de Combinaciones</h2>
     </div>
 
     <div class="card-body card-padding" >
@@ -35,11 +35,14 @@
                     </div>
                 </div>
 
-                <label class="col-xs-2 col-sm-2 control-label">Out Fit</label>
+                <label class="col-xs-2 col-sm-2 control-label">Productos</label>
                 <label class="col-xs-10 col-sm-4 control-label" style="text-align: left; font-weight: 600" ng-bind-html="OutFitList"></label>
             </div>
 
             <div class="form-group">
+                <label class="col-xs-2 col-sm-2 control-label">Tipo:</label>
+                <label class="col-xs-10 col-sm-4 control-label" style="text-align: left; font-weight: 600" ng-bind-html="OutFitType"></label>
+
                 <label class="col-xs-2 col-sm-2 control-label">Precio</label>
                 <div class="col-xs-10 col-sm-4">
                     <div class="input-group">

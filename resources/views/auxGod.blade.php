@@ -17,10 +17,14 @@
                     <a href="#" ui-sref="Productos"><i class="md md-shop-two"></i>Kardex</a>
                 </li>
                 <li id="out_fit">
-                    <a href="#" ui-sref="out_fit"><i class="md md-shop-two"></i> Gestionar Out Fit</a>
+                    <a href="#" ui-sref="out_fit"><i class="md md-shop-two"></i> Gestionar Combinaciones</a>
                 </li>
                 <li id="liquidation">
                     <a href="#" ui-sref="Liquidacion"><i class="md md-shop-two"></i> Gestionar Promociones</a>
+                </li>
+
+                <li id="liquidation">
+                    <a href="#" ui-sref="MovementDay"><i class="md md-shop-two"></i> Movimientos Diarios</a>
                 </li>
             </ul>
         </li>
@@ -40,10 +44,10 @@
                     <a href="#" ui-sref="Movimientos2">Generar Retorno - Venta</a>
                 </li>
                 <li id="movimientos_outfit">
-                    <a href="#" ui-sref="Movimientos Out Fit">Generar Salida Out Fit</a>
+                    <a href="#" ui-sref="Movimientos Out Fit">Generar Salida de Combinaciones</a>
                 </li>
                 <li id="movimientos_outfit2">
-                    <a href="#" ui-sref="Retorno Out Fit">Generar Retorno - Venta de OutFit</a>
+                    <a href="#" ui-sref="Retorno Out Fit">Generar Retorno - Venta de Combinaciones</a>
                 </li>
             </ul>
         </li>
@@ -118,6 +122,9 @@
         <li id="comments">
             <a href="#" ui-sref="Comentarios"><i class="md md-messenger"></i> Gestionar comentarios</a>
         </li>
+        <li id="sub-menu">
+            <a href="#" ui-sref="Provider"><i class="md md-messenger"></i> Proveedores</a>
+        </li>
     </ul>
 @stop
 
@@ -155,8 +162,14 @@
     <script src="app/controllers/auxMovementOutFitCtrl.js"></script>
     <script src="app/controllers/auxMovementOutFit2Ctrl.js"></script>
 
+
     <script src="app/controllers/auxEsquemaCtrl.js"></script>
+
+    <script src="app/controllers/auxMovementDayCtrl.js"></script>
 
     <script src="app/controllers/publicityJVECtrl.js"></script>
     <script src="app/controllers/publicityCtrl.js"></script>
+
+
+    <script src="app/controllers/auxProviderProductCtrl.js"></script>
 @stop

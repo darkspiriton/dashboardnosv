@@ -567,4 +567,71 @@ class AuxProductController extends Controller
             return \Response::json(['message' => 'Ocurrio un error al agregar producto'], 500);
         }
     }
+
+    public function productProvider(Request $request, $id){
+
+        if($request->has('date1')){
+            try {
+                $date1 = Carbon::createFromFormat('Y-m-d', $request->input('date1'));
+            } catch(\InvalidArgumentException $e) {
+                return response()->json(['message' => 'Fechas no validas, formato aceptado: Y-m-d'],401);
+            }
+        }else{
+            $date1 = Carbon::today();
+        }
+//
+        $date2 = $date1->copy()->addDay();
+        $movements=$this->movementsGet($date1,$date2,$id);
+        return response()->json(['movements' => $movements],200);
+    }
+
+    public function productProviderMoth(Request $request, $id){
+
+        if($request->has('date1')){
+            try {
+                $date1 = Carbon::createFromFormat('Y-m-d', $request->input('date1'));
+            } catch(\InvalidArgumentException $e) {
+                return response()->json(['message' => 'Fechas no validas, formato aceptado: Y-m-d'],401);
+            }
+        }else{
+            $date1 = Carbon::today();
+        }
+//
+        $date2 = $date1->copy()->addDay();
+        $movements=$this->movementsGet($date1,$date2,$id);
+        return response()->json(['movements' => $movements],200);
+    }
+
+    private function movementsGet($date1,$date2,$id){
+        $status = 'vendido';
+        $movements=DB::table('auxproducts as p')
+            ->select('m.date_shipment as fecha','p.cod as codigo','p.name as product','c.name as color',
+                DB::raw('case when d.price then d.price else p.cost_provider + p.utility end as price'),'s.name as talla','m.status','m.discount',
+                DB::raw('case when d.price then d.price-m.discount else p.cost_provider + p.utility -m.discount end as pricefinal'),
+                DB::raw('case when d.price then 1 else 0 end as liquidacion'))
+            ->join('auxmovements as m','p.id','=','m.product_id')
+            ->join('colors as c','c.id','=','p.color_id')
+            ->join('sizes as s','s.id','=','p.size_id')
+            ->leftJoin('settlements AS d','d.product_id','=','p.id')
+            ->where('m.status','like','%'.$status.'%')
+//            ->where('m.situation',null)
+//            ->where('p.provider_id',$id)
+            ->where(DB::raw('DATE(m.date_shipment)'),'>=',$date1->toDateString())
+            ->where(DB::raw('DATE(m.date_shipment)'),'<',$date2->toDateString())
+            ->orderby('p.name','c.name','s.name')
+            ->get();
+
+        return $movements;
+    }
+
+//    public function movementOtherDay(Request $request){
+//        try {
+//            $date1 = Carbon::createFromFormat('Y-m-d', $request->input('date1'));
+//        } catch(\InvalidArgumentException $e) {
+//            return response()->json(['message' => 'Fechas no validas, formato aceptado: Y-m-d'],401);
+//        }
+//        $date2 = $date1->copy()->addDay();
+//        $movements=$this->movementsGet($date1,$date2);
+//        return response()->json(['movements' => $movements],200);
+//    }
 }

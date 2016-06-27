@@ -20,7 +20,7 @@ angular.module('App')
                 {"sTitle": "Color", "bSortable" : true},
                 {"sTitle": "Precio Final (S/.)", "bSortable" : true},
                 {"sTitle": "Descuento (S/.)", "bSortable" : true},
-                {"sTitle": "Precio", "bSortable" : true, "sWidth": "80px"},
+                {"sTitle": "Tipo", "bSortable" : true, "sWidth": "80px"},
                 {"sTitle": "Acción" , "bSearchable": false , "sWidth": "270px"}
             ],
             actions	:  	[
@@ -119,6 +119,30 @@ angular.module('App')
         };
 
         $scope.prdSale = function(i){
+            alertConfig.title = '¿Todo es correcto?';
+            alertConfig.text=`<table class="table table-bordered w-100 table-attr text-center">
+                                        <thead>
+                                        <tr>
+                                            <th>Cod</th>
+                                            <th>Producto</th>
+                                            <th>Talla</th>
+                                            <th>Color</th>
+                                            <th>P. Final</th>
+                                            <th>Descuento</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <th>${$scope.tableData[i].cod}</th>
+                                            <th>${$scope.tableData[i].name}</th>
+                                            <td>${$scope.tableData[i].size}</td>
+                                            <td>${$scope.tableData[i].color}</td>
+                                            <td>${$scope.tableData[i].price}</td>
+                                            <td>${$scope.tableData[i].discount}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>`;
             swal(alertConfig,
                 function () {
                     petition.post('api/auxmovement/set/sale', {id: $scope.tableData[i].product_id})

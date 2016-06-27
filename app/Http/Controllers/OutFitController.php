@@ -50,7 +50,8 @@ class OutFitController extends Controller
             'description'   =>  'required|string|max:255',
             'code'          =>  'required|integer|unique:outfits,cod',
             'price'         =>  'required|numeric',
-            'status'        =>  'required|integer|between:0,1'
+            'status'        =>  'required|integer|between:0,1',
+            'type'          =>  'required|integer|between:1,2'
         ];
 
         if(\Validator::make($request->all(),$rules)->fails())
@@ -60,6 +61,7 @@ class OutFitController extends Controller
         $outfit->name = $request->input('description');
         $outfit->cod = $request->input('code');
         $outfit->price = $request->input('price');
+        $outfit->type = $request->input('type');
         $outfit->status = $request->input('status');
         $outfit->save();
 

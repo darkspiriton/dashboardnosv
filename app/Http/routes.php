@@ -23,8 +23,8 @@
 */
 
 
-/*
- *  Nuevas rutas -- middleware se hubican en sus controladores
+/**
+ *  Nuevas rutas -- middleware se ubican en sus controladores
  */
 
 Route::get('/',['middleware'=>'web', function () {
@@ -43,7 +43,7 @@ Route::group(['prefix'=>'dashboard'],function(){
 
 Route::group(['prefix' => 'api'], function(){
 
-    /*
+    /**
      *  PAYROLL - EMPLOYEES
      */
     Route::resource('employee','EmployeeController',
@@ -66,7 +66,7 @@ Route::group(['prefix' => 'api'], function(){
         Route::get('employee/assists/by/god', 'ReportPayRollController@get_assists_for_month_by_god');
     });
 
-    /*
+    /**
      * USERS
      */
     Route::resource('user','UserController',
@@ -74,12 +74,12 @@ Route::group(['prefix' => 'api'], function(){
 
     Route::get('user/get/roles','UserController@roles');
 
-    /*
+    /**
      * VALIDATE KEY AUTH
      */
     Route::get('validate-key','HomeController@validar');
 
-    /*
+    /**
      * AUX PRODUCTS - TYPE PRODUCT
      */
     Route::resource('auxproduct','AuxProductController',
@@ -110,7 +110,7 @@ Route::group(['prefix' => 'api'], function(){
         Route::get('/get/uniques/{name}/codes','AuxProductController@CodesLists');
     });
 
-    /*
+    /**
      * MOVEMENTS
      */
     Route::resource('auxmovement','AuxMovementController',
@@ -130,14 +130,14 @@ Route::group(['prefix' => 'api'], function(){
         Route::get('/get/movementDay/provider','AuxMovementController@providertest');
     });
 
-    /*
+    /**
      * PROVIDERS - SIZE -COLORS
      */
     Route::get('auxproviders', 'AuxProductController@getProviders');
     Route::get('sizes', 'AuxProductController@getSizes');
     Route::get('colors', 'AuxProductController@getColors');
 
-    /*
+    /**
      * QUESTIONNAIRES
      */
 
@@ -163,7 +163,7 @@ Route::group(['prefix' => 'api'], function(){
     Route::post('indicator/questionnaire/for/products', 'q_IndicatorController@showProducts');
     Route::post('indicator/questionnaire/for/customers', 'q_IndicatorController@showCustomers');
 
-    /*
+    /**
      * OUTFIT
      */
 
@@ -171,25 +171,25 @@ Route::group(['prefix' => 'api'], function(){
     Route::get('outfit/get/actives','OutFitController@actives');
     Route::get('outfit/get/products/{name}','OutFitController@codes_by_product');
 
-    /*
+    /**
      * OUTFIT MOVEMENTS
      */
 
     Route::resource('auxmovements-outfit','AuxMovementOutFitController',['only' => ['index','show','store','update']]);
 
-    /*
+    /**
      * LIQUIDATION
      */
 
     Route::resource('liquidation','liquidationController',['only' => ['index','store','destroy']]);
 
-    /*
+    /**
      * PUBLICITIES - JVE
      */
 
     Route::resource('/sales/publicity','PublicityJVEController',['only' => ['index','store','destroy']]);
 
-    /*
+    /**
      * SOCIALS
      */
 
@@ -203,7 +203,7 @@ Route::group(['prefix' => 'api'], function(){
        Route::get('mostrar/{id}','AuxQProduct@mostrar');
     });
 
-    /*
+    /**
      * PUBLICITY
      */    
     Route::resource('publicity','PublicityController',
@@ -219,6 +219,12 @@ Route::group(['prefix' => 'api'], function(){
         Route::get('relation/esquemadate/get','PublicityController@esquemaDate');
     });
 
+    /**
+     * PARTNER
+     */
+
+    Route::get('partner/get/top/sales','PartnerController@TopSales');
+    Route::get('partner/get/top/less-sold','PartnerController@TopLessSold');
 });
 
 Route::get('/test', function(\Illuminate\Http\Request $request){
@@ -234,7 +240,7 @@ Route::get('/test', function(\Illuminate\Http\Request $request){
     return response()->json(['product'=> $product, 'count' => $count],200);
 });
 
-/*
+/**
  * BACK UP
  */
 //Route::get('/',['middleware'=>'web', function () {

@@ -9,13 +9,12 @@
         var rows, data, options, rowCompiler, cols, buttons, acc = {};
 
         // Datos de configuracion
-        var config = {};
         var oTable;
         cols 	= $scope.tableConfig.columns || [];
-        buttons 	= $scope.tableConfig.buttons || [];
+        buttons = $scope.tableConfig.buttons || [];
         data 	= $scope.tableConfig.data || [];
-        config.configStatus  = ($scope.tableConfig.configStatus)?$scope.tableConfig.configStatus: 'status';
-        rows = $scope.tableData || [];
+        rows    = $scope.tableData || [];
+        options = $scope.tableConfig.options || {};
 
         // Conpilar en angular las filas
         rowCompiler = function(nRow, aData, iDataIndex) {
@@ -94,10 +93,10 @@
         });
 
         // Opciones de la tabla
-        options = {
+        options =  Object.assign(options, {
             fnCreatedRow: rowCompiler, 		// Al crear tabla conpilarla en angular
             aoColumns: cols                 // Columnas de tabla
-        };
+        });
 
         // Inicializar la tabla
         if ( ! $.fn.DataTable.isDataTable( this[0] ) )

@@ -14,13 +14,13 @@
             <a href="#"><i class="md md-now-widgets"></i> Ventas </a>
             <ul>
                 <li id="products">
-                    <a href="#" ui-sref="Productos"><i class="md md-shop-two"></i>Kardex</a>
+                    <a href="#" ui-sref="Productos"> Kardex</a>
                 </li>
                 <li id="out_fit">
-                    <a href="#" ui-sref="out_fit"><i class="md md-shop-two"></i> Gestionar Out Fit</a>
+                    <a href="#" ui-sref="out_fit"> Gestionar Out Fit</a>
                 </li>
                 <li id="liquidation">
-                    <a href="#" ui-sref="Liquidacion"><i class="md md-shop-two"></i> Gestionar Promociones</a>
+                    <a href="#" ui-sref="Liquidacion"> Gestionar Promociones</a>
                 </li>
             </ul>
         </li>
@@ -121,6 +121,9 @@
         <li id="comments">
             <a href="#" ui-sref="Comentarios"><i class="md md-messenger"></i> Gestionar comentarios</a>
         </li>
+        <li id="partners">
+            <a href="#" ui-sref="Socios"><i class="md md-messenger"></i> Vista socios</a>
+        </li>
     </ul>
 @stop
 
@@ -152,16 +155,13 @@
     <script src="app/controllers/q_customersCtrl.js"></script>
     <script src="app/controllers/outFitCtrl.js"></script>
     <script src="app/controllers/liquidationCtrl.js"></script>
-
     <script src="app/controllers/auxMovementCtrl.js"></script>
     <script src="app/controllers/auxMovement2Ctrl.js"></script>
     <script src="app/controllers/auxMovementOutFitCtrl.js"></script>
     <script src="app/controllers/auxMovementOutFit2Ctrl.js"></script>
-
     <script src="app/controllers/auxEsquemaCtrl.js"></script>
-
     <script src="app/controllers/publicityJVECtrl.js"></script>
     <script src="app/controllers/publicityCtrl.js"></script>
-
     <script src="app/controllers/facebookPublicityCtrl.js"></script>
+    <script src="app/controllers/PartnerCtrl.js"></script>
 @stop

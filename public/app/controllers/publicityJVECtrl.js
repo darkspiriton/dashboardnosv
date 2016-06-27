@@ -192,13 +192,13 @@ angular.module('App')
             });
         };
 
-        $scope.publish = function (i, album_id, desc) {
+        $scope.publish = function (i, fb_id, desc) {
             $scope.publishButton = true;
             var data = {};
             data.name = desc;
             data.url = $scope.tableData[i].photo;
 
-            $fb.publish(album_id, data).then(function (response) {
+            $fb.publish(fb_id, data, true).then(function (response) {
                 console.log(response);
                 util.modalClose('FacebookModal');
                 toastr.success('Se publico la foto');

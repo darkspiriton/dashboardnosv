@@ -12688,7 +12688,7 @@ input:focus {
 .table > thead > tr > td:first-child,
 .table > tbody > tr > td:first-child,
 .table > tfoot > tr > td:first-child {
-  /*padding-left: 30px;*/
+  padding-left: 30px;
 }
 
 .table > thead > tr > th:last-child,
@@ -12697,7 +12697,7 @@ input:focus {
 .table > thead > tr > td:last-child,
 .table > tbody > tr > td:last-child,
 .table > tfoot > tr > td:last-child {
-  /*padding-right: 30px;*/
+  padding-right: 30px;
 }
 
 .table > tbody > tr.active > td,
@@ -16170,7 +16170,7 @@ body.login-content:before {
   width: 100%;
   padding-left: 0;
   list-style: none;
-  margin-left: -5px;
+  /*margin-left: -5px;*/
   margin-top: 8px;
 }
 

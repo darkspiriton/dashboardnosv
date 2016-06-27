@@ -62,6 +62,9 @@ class AuxMovementController extends Controller
         try{
             $movement = Movement::find($id);
             if ($movement != null){
+                $product = Product::find($movement->product_id);
+                $product->status=1;
+                $product->save();
                 $movement->delete();
                 return response()->json(['message' => 'Se elimino correctamente el movimiento'],200);
             }
@@ -101,16 +104,21 @@ class AuxMovementController extends Controller
             }
 
             $move = $product->movements->first();
+
             $situations = [ 1 => 'No le gusto',
                             2 => 'La foto no es igual al producto',
                             3 => 'Producto dañado',
-                            4 => 'No se encontro cliente'
+                            4 => 'No se encontro cliente',
+                            5 => 'No es la talla'
                         ];
 
             if($move->status != 'vendido'){
+                $move->situation = $situations[$request->input('situation')];
+                $move->save();
                 $movement = new Movement();
                 $movement->situation = $situations[$request->input('situation')];
                 $movement->date_shipment = $move->date_shipment;
+                $movement->discount=$move->discount;
                 $movement->status = 'Retornado';
 
                 $product->movements()->save($movement);
@@ -220,16 +228,19 @@ class AuxMovementController extends Controller
             }
 
             $move = $product->movements->first();
+            $move->situation="Vendido";
 
-            if($move->status != 'vendido'){
+            if($move->status != 'Vendido'){
                 $movement = new Movement();
                 $movement->date_shipment = $move->date_shipment;
+                $movement->discount=$move->discount;
+                $movement->situation ="Vendido";
                 $movement->status = 'Vendido';
 
                 $product->movements()->save($movement);
 
                 $product->status = 2;
-                $product->save();
+                $product->push();
             } else {
                 return response()->json(['message' => 'Este producto tiene un estado de: VENDIDO'],401);
             }
@@ -261,27 +272,40 @@ class AuxMovementController extends Controller
 
     public function movementDay(){
         $date1 = Carbon::today();
-        $date2 = $date1->copy()->addDay(21);
+        $date2 = $date1->copy()->addDay();
+        $movements=$this->movementsGet($date1,$date2);
+        return response()->json(['movements' => $movements],200);
+    }
+    public function movementOtherDay(Request $request){
+        try {
+            $date1 = Carbon::createFromFormat('Y-m-d', $request->input('date1'));            
+        } catch(\InvalidArgumentException $e) {
+            return response()->json(['message' => 'Fechas no validas, formato aceptado: Y-m-d'],401);
+        }        
+        $date2 = $date1->copy()->addDay();        
+        $movements=$this->movementsGet($date1,$date2);
+        return response()->json(['movements' => $movements],200);
+    }
 
+    private function movementsGet($date1,$date2){
         $status = 'salida';
-
-//        $movements = $this->entrefechas($date1,$date2);
-
         $movements=DB::table('auxproducts as p')
-            ->select('m.date_shipment as fecha','p.cod as codigo','p.name as product','c.name as color','s.name as talla','m.status')
+            ->select('m.date_shipment as fecha','p.cod as codigo','p.name as product','c.name as color',
+                DB::raw('case when d.price then d.price else p.cost_provider + p.utility end as price'),'s.name as talla','m.status','m.discount',
+                DB::raw('case when d.price then d.price-m.discount else p.cost_provider + p.utility -m.discount end as pricefinal'))
             ->join('auxmovements as m','p.id','=','m.product_id')
             ->join('colors as c','c.id','=','p.color_id')
             ->join('sizes as s','s.id','=','p.size_id')
-            ->where('m.status','like','%'.$status.'%')
+            ->leftJoin('settlements AS d','d.product_id','=','p.id')
+//            ->where('m.status','<>','%'.$status.'%')
+//            ->where('m.situation',null)
+            ->where('m.status','<>',$status)
             ->where(DB::raw('DATE(m.date_shipment)'),'>=',$date1->toDateString())
             ->where(DB::raw('DATE(m.date_shipment)'),'<',$date2->toDateString())
             ->orderby('p.name','c.name','s.name')
             ->get();
 
         return $movements;
-
-
-        return response()->json(['movements' => $movements],200);
     }
 
     public function movementDays (Request $request){

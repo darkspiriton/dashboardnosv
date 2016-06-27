@@ -11,29 +11,52 @@ angular.module('App')
 
         util.liPage('movimientos_outfit2');
 
+        var s1 = {
+            1 : ['OutFit','bgm-teal',false],
+            2 : ['Pack','bgm-green',false]
+        };
+
+        var s2 = {
+            'salida' : ['Salida','bgm-teal',false],
+            'retornado' : ['Retornado','bgm-green',false],
+            'vendido' : ['Vendido','bgm-green',false]
+        };
+
         $scope.tableConfig 	= 	{
             columns :	[
                 {"sTitle": "Fecha de salida", "bSortable" : true, "sWidth": "90px"},
                 {"sTitle": "Codigo", "bSortable" : true, "sWidth": "80px"},
                 {"sTitle": "Out Fit", "bSortable" : true},
-                {"sTitle": "Precio", "bSortable" : true},
+                {"sTitle": "Precio S/.", "bSortable" : true},
+                {"sTitle": "Tipo", "bSortable" : true},
                 {"sTitle": "Estado", "bSortable" : true, "sWidth": "80px"},
                 {"sTitle": "Acción" , "bSearchable": false , "sWidth": "270px"}
             ],
-            actions	:  	[
-                ['status',   {
-                    salida : { txt : 'salida' , cls : 'btn-danger', dis : false },
-                    retornado : { txt : 'retornado' ,  cls : 'btn-success',dis: false}
-                }
+
+            buttons	:
+                [
+                    {
+                        type: 'status',
+                        list:  [
+                            { name: 'outfit.type', column: 'outfit.type', render : s1},
+                            { name: 'status', column: 'status', render : s2}
+                        ]
+                    },
+                    {
+                        type: 'actions',
+                        list:  [
+                            { name: 'actions', render:
+                                [
+                                    ['Detalle','detail','bgm-teal'],
+                                    ['Retornado','outfitReturn','btn-info'],
+                                    ['Vendido', 'outfitSale' ,'bgm-green']
+                                ]
+                            }
+                        ]
+                    }
                 ],
-                ['actions', [
-                    ['Detalle', 'detail' ,'btn-info'],
-                    ['Retornado', 'outfitReturn' ,'bgm-teal'],
-                    ['Vendido', 'outfitSale' ,'bgm-blue']
-                ]
-                ]
-            ],
-            data  	: 	['date_shipment','outfit.cod','outfit.name','outfit.price', 'status','actions'],
+
+            data  	: 	['date_shipment','outfit.cod','outfit.name','outfit.price','outfit.type','status','actions'],
             configStatus : 'status'
         };
 
@@ -69,7 +92,7 @@ angular.module('App')
             petition.get('api/auxmovements-outfit')
                 .then(function(data){
                     $scope.tableData = data.outfits;
-                    $('#table').AJQtable('view', $scope, $compile);
+                    $('#table').AJQtable2('view2', $scope, $compile);
                     $scope.updateList = false;
                 }, function(error){
                     console.log(error);

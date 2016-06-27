@@ -129,8 +129,7 @@ angular.module('App')
                                             <td>${$scope.liquidation.price}</td>
                                         </tr>
                                         </tbody>
-                                    </table>
-                                </div>`;
+                                    </table>`;
             swal(alertConfig ,
                 function() {
                     $scope.formSubmit=true;

@@ -66,7 +66,6 @@ angular.module('App')
             if(typeof data !== 'object')return [];
             var length = data.length;
             for(var i = 0; i < 5 - length;i++ ){
-                console.log(i, data.length,  5 - data.length);
                 data.push({name:'-',quantity: '-'})
             }
             return data

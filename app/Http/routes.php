@@ -108,6 +108,8 @@ Route::group(['prefix' => 'api'], function(){
 
         Route::get('/get/uniques','AuxProductController@UniqueProduct');
         Route::get('/get/uniques/{name}/codes','AuxProductController@CodesLists');
+        
+        Route::get('/get/products/provider/{id}','AuxProductController@productProvider');
     });
 
     /**
@@ -118,10 +120,12 @@ Route::group(['prefix' => 'api'], function(){
     Route::post('auxmovement/out', 'AuxMovementController@product_out');
     Route::post('auxmovement/set/sale','AuxMovementController@sale');
 
+
     Route::group(['prefix'=>'auxmovement/'],function(){
         Route::get('/get/movement','AuxMovementController@movementPending');
         Route::get('/get/movementDay','AuxMovementController@movementDay');
         Route::get('/get/movementDays','AuxMovementController@movementDays');
+        Route::get('/get/movementDay/get/','AuxMovementController@movementOtherDay');
         Route::post('/get/movementDays/download','AuxMovementController@movementDaysDownload');
         Route::get('/get/movement/day','AuxMovementController@move_day');
         Route::get('/get/codes','AuxMovementController@get_cod_prod');

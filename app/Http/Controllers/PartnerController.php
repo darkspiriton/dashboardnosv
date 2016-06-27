@@ -28,7 +28,7 @@ class PartnerController extends Controller
                         ->where('status','=',2)
                         ->groupBy('name')
                         ->orderBy('quantity','desc')
-                        ->get();
+                        ->take(5)->get();
 
         return response()->json(['TopSales' => $top],200);
     }
@@ -41,7 +41,7 @@ class PartnerController extends Controller
             ->where('status','<>',2)
             ->groupBy('name')
             ->orderBy('quantity','desc')
-            ->get();
+            ->take(5)->get();
 
         return response()->json(['TopLessSold' => $top],200);
     }

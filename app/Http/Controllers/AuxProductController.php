@@ -122,7 +122,7 @@ class AuxProductController extends Controller
                     $product->color_id= $data['color_id'];
                     $product->size_id= $data['size_id'];
                     $product->alarm_id= $alarm->id;
-                    $product->name= $data['name'];
+                    $product->name= strtoupper($data['name']);
                     $product->status= 1;
                     $product->cost_provider=$data['cost'];
                     $product->utility=$data['uti'];
@@ -293,7 +293,7 @@ class AuxProductController extends Controller
                 $types = json_decode($request->input('types'), true);
 
                 $proveedor = new Provider();
-                $proveedor->name = $request->input('name');
+                $proveedor->name = ucwords($request->input('name'));
                 $proveedor->save();
                 return response()->json(['message' => 'El nuevo proveedor se agrego correctamente'],200);
 
@@ -327,7 +327,7 @@ class AuxProductController extends Controller
             if(!$color){
                 
                 $c = new Color();
-                $c->name = $request->input('name');
+                $c->name = ucwords($request->input('name'));
                 $c->save();
                 return response()->json(['message' => 'El nuevo color se agrego correctamente'],200);
 

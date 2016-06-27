@@ -56,13 +56,16 @@
             <a href="#"><i class="md md-now-widgets"></i> Vista publicidad </a>
             <ul>
                 <li id="publicity">
-                    <a ui-sref="Publicidad"> Cuadro de publicidad - PUBLICIDAD</a>
+                    <a ui-sref="Publicidad"> Cuadro de publicidad</a>
                 </li>
                 <li id="publicityJVE">
-                    <a href="#" ui-sref="Publicidad Ventas"> Gestionar publicidad - COORDINADOR DE VENTAS</a>
+                    <a href="#" ui-sref="Publicidad Ventas"> Gestionar publicidad</a>
                 </li>
                 <li id="esquemas">
                     <a ui-sref="Esquemas">Esquema de pico de envio</a>
+                </li>
+                <li id="Facebook">
+                    <a ui-sref="Facebook">Facebook publicidades</a>
                 </li>
             </ul>
         </li>
@@ -170,6 +173,8 @@
     <script src="app/controllers/publicityJVECtrl.js"></script>
     <script src="app/controllers/publicityCtrl.js"></script>
 
-
     <script src="app/controllers/auxProviderProductCtrl.js"></script>
+
+    <script src="app/controllers/facebookPublicityCtrl.js"></script>
+
 @stop

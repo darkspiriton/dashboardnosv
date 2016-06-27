@@ -142,6 +142,7 @@
 <script src="app/lib/angular/angular-sanitize.js"></script>
 <script src="app/lib/angular/angular-ui-router.js"></script>
 <script src="app/lib/angular/angular-toastr.tpls.js"></script>
+<script src="app/lib/angular-fb.js"></script>
 <script src="app/lib/satellizer.min.js"></script>
 <script src="app/lib/AJQtable.js"></script>
 <script src="app/lib/AJQtable2.js"></script>

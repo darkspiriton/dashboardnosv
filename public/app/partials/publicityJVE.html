@@ -26,6 +26,8 @@
             <table id="table" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
         </div><br>
     </div><br>
+
+
 </div>
 
 <!-- Modal -->
@@ -88,6 +90,84 @@
                             </div>
                         </div>
                     </div>
+                </form>
+
+                <div class="modal-footer">
+                    <a class="btn btn-danger" data-dismiss="modal">Cerrar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="FacebookModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bgm-teal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title c-white">Publicar foto en facebook</h3>
+            </div>
+            <div class="modal-body card-padding">
+                <form name="form" class="form-horizontal" autocomplete="off">
+                    <div class="form-group" ng-form="publish_photo">
+                        <div class="row">
+                            <label class="col-xs-12 col-sm-3 control-label">Albunes</label>
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="md md-list"></i></span>
+                                    <div class="fg-line select">
+                                        <select class="form-control" ng-options="album.id as album.name for album in albums" ng-model="album" required>
+                                            <option value="" disabled="disabled" select="true">Seleccione</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-3"></div>
+                        </div>
+
+                        <div class="row m-t-10">
+                            <div class="col-xs-12 col-sm-3"></div>
+                            <div class="col-xs-12 col-sm-6">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="md md-insert-comment"></i></span>
+                                    <div class="fg-line">
+                                        <input ng-model="publishName" type="text" class="form-control" required>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-3">
+                                <div class="input-group">
+                                    <button ng-disabled="!publish_photo.$valid || publishButton" ng-click="publish(index, album, publishName)" type="button" class="btn btn-primary btn-sm m-t-5 waves-effect">Publicar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group" ng-form="newAlbunForm">
+                        <div class="col-xs-12 col-sm-3">
+                            <div class="input-group w-100 text-right">
+                                <button ng-show="newAlbum" ng-click="activeNewAlbum()" type="button" class="btn btn-primary btn-sm m-t-5 waves-effect">Nuevo album</button>
+                                <button ng-hide="newAlbum" ng-click="activeNewAlbum()" type="button" class="btn bgm-red btn-sm m-t-5 waves-effect">Cancelar</button>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-6" ng-hide="newAlbum">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="md md-photo-library"></i></span>
+                                <div class="fg-line">
+                                    <input ng-model="AlbumName" type="text" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-3" ng-hide="newAlbum">
+                            <div class="input-group">
+                                <button ng-disabled="!newAlbunForm.$valid || albumButton" ng-click="createAlbums_FB(AlbumName)" type="button" class="btn btn-primary btn-sm m-t-5 waves-effect">Crear</button>
+                            </div>
+                        </div>
+                    </div>
+
                 </form>
 
                 <div class="modal-footer">

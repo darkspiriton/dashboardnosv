@@ -95,7 +95,19 @@ class AuxSocialController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $rules = [
+            'fb_id' =>  'required',
+        ];
+
+        if(\Validator::make($request->all(), $rules)->fails())
+            return response()->json(['message' => 'Parametros invalidos'],401);
+
+        Publicity::where('id','=',$id)->update(['facebookID' => $request->input('fb_id')]);
+
+        $request['publicity_id'] = $id;
+        $request['social_id'] = 1;
+
+        return $this->store($request);
     }
 
     /**

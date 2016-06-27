@@ -7,7 +7,7 @@ use Dashboard\Http\Requests;
 
 class SocialController extends Controller
 {
-    public function index(){s
+    public function index(){
         $socials=DB::table('channels')->get();
         if($socials !== null){
             return response()->json([

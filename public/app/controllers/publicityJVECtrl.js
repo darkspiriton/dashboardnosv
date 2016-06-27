@@ -7,7 +7,7 @@ angular.module('App')
                 controller : 'publicityJVECtrl'
             });
     })
-    .controller('publicityJVECtrl', function($scope, $compile, $state, util, petition, toastr){
+    .controller('publicityJVECtrl', function($scope, $compile, $state, util, petition, toastr, $fb){
 
         util.liPage('publicityJVE');
 
@@ -25,14 +25,45 @@ angular.module('App')
         };
 
         var a1 = {
-            4: ['R. sociales','btn-info'],
+            1: ['R. sociales','btn-info'],
             'fail': ['R. sociales','btn-info',false]
+        };
+
+        var a2 = {
+            1: ['Publicar Facebook','btn-primary'],
+            'fail': ['Publicar Facebook','btn-primary',false]
         };
 
         var s4 = {
             0: ['Espera','bgm-purple',false],
             1: ['Aprobado','bgm-green',false],
             2: ['Rechazado','bgm-red',false]
+        };
+
+        call_me = function (row) {
+            if(row.process.type_process_id == 3){
+                if(row.process.status == 1){
+                    if(row.status == 0){
+                        return 2;
+                    } else if(row.status == 1) {
+                        return 1;
+                    }
+                } else {
+                    return 0;
+                }
+            }
+            return -1;
+        };
+        
+        var fb_publish = function (row) {
+            if(row.process.type_process_id == 3){
+                if(row.process.status == 1){
+                    if(row.status == 1 && row.facebookID == null) {
+                        return 1;
+                    } else return -1;
+                } else return -1;
+            }
+            return -1;
         };
 
         $scope.tableConfig 	= 	{
@@ -46,30 +77,19 @@ angular.module('App')
                 {"title": "Estado" , "bSearchable": true,'bSortable':false, 'width': '1px'},
                 {"title": "Aprobar" , "bSearchable": true,'bSortable':false, 'width': '1px'},
                 {"title": "Redes" , "bSearchable": true,'bSortable':false, 'width': '1px'},
-                {"title": "Acción" , "bSearchable": true,'bSortable':false, "width": '80px'}
+                {"title": "Agregar" , "bSearchable": true,'bSortable':false, "width": '80px'},
+                {"title": "Facebook" , "bSearchable": true,'bSortable':false, "width": '80px'}
             ],
             buttons	:
                 [
                     {
                         type: 'status',
                         list:  [
-                            { name: 'process', column: 'process.type_process_id', render : s1},
-                            { name: 'approve', column: 'process.type_process_id', render : s2},
-                            { name: 'addSocials', column: 'process.type_process_id', render: a1},
-                            { name: 'status', render: s4 , call_me: function (row) {
-                                if(row.process.type_process_id == 3){
-                                    if(row.process.status == 1){
-                                        if(row.status == 0){
-                                            return 2;
-                                        } else if(row.status == 1) {
-                                            return 1;
-                                        }
-                                    } else {
-                                        return 0;
-                                    }
-                                }
-                                return -1;
-                            }}
+                            { name: 'process', column: 'process.type_process_id', render: s1},
+                            { name: 'approve', column: 'process.type_process_id', render: s2},
+                            { name: 'addSocials', render: a1,  call_me: call_me},
+                            { name: 'publish_fb', render: a2, call_me: fb_publish},
+                            { name: 'status', render: s4 , call_me: call_me}
                         ]
                     },
                     {
@@ -79,8 +99,10 @@ angular.module('App')
                         ]
                     }
                 ],
-            data  	: 	['date','product.name','product.provider.name','product.color.name','photo','process','status','approve','socials_list','addSocials']
+            data  	: 	['date','product.name','product.provider.name','product.color.name','photo','process','status','approve','socials_list','addSocials','publish_fb']
         };
+
+        $scope.facebook = {};
 
         $scope.list = function(d) {
             $scope.updateList = true;
@@ -144,8 +166,89 @@ angular.module('App')
                 });
         };
 
+        /*
+         *  Facebook events
+         */
+
+        $scope.listAlbums_FB = function () {
+            $fb.albums().then(function (response) {
+                $scope.albums = response.data;
+                util.modal('FacebookModal');
+            }, function (message) {
+                toastr.error('Facebook dice: '+ message);
+            });
+        };
+
+        $scope.createAlbums_FB = function (name) {
+            $scope.albumButton = true;
+            $fb.createAlbum({name: name}).then(function (response) {
+                toastr.success('Se agrego el album a Facebook');
+                $scope.listAlbums_FB();
+                albumClear();
+                publishClear();
+            },function (message) {
+                toastr.error('Facebook dice: '+ message);
+                $scope.albumButton = false;
+            });
+        };
+
+        $scope.publish = function (i, album_id, desc) {
+            $scope.publishButton = true;
+            var data = {};
+            data.name = desc;
+            data.url = $scope.tableData[i].photo;
+
+            $fb.publish(album_id, data).then(function (response) {
+                console.log(response);
+                util.modalClose('FacebookModal');
+                toastr.success('Se publico la foto');
+                publishClear();
+                petition.put('api/socials/' + $scope.tableData[i].id, { fb_id: response.id});
+                $scope.list();
+            }, function (message) {
+                toastr.error('Facebook dice: '+ message);
+                $scope.publishButton = false;
+            });
+        };
+
+        $scope.activeNewAlbum = function () {
+            $scope.newAlbum = !$scope.newAlbum;
+            $scope.AlbumName = null;
+        };
+
+        $scope.publish_fb = function (i) {
+            publishClear();
+            $scope.index = i;
+            $scope.listAlbums_FB();
+        };
+        
+        $scope.facebook.me = function () {
+            $fb.me().then(function (data) {
+                console.log(data);
+            }, function (error) {
+                console.log(error);
+            })
+        };
+
+        /*
+         * End events
+         */
+
+        function publishClear(){
+            $scope.album = null;
+            $scope.publishName = null;
+            $scope.publishButton = false;
+        }
+
+        function albumClear(){
+            $scope.newAlbum = true;
+            $scope.AlbumName = null;
+            $scope.albumButton = false;
+        }
+
         angular.element(document).ready(function(){
             util.resetTable($scope,$compile);
+            $scope.newAlbum = true;
             $scope.social = {};
             $scope.list();
             $scope.listSocials();

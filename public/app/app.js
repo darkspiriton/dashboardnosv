@@ -1,7 +1,10 @@
-angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 'toastr', 'ui.router', 'satellizer'])
-    .config(function ($stateProvider, $urlRouterProvider, $authProvider) {
+angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 'toastr', 'ui.router', 'satellizer','angular-fb'])
+    .config(function ($stateProvider, $urlRouterProvider, $authProvider, $fbProvider) {
         $authProvider.tokenName = "token";
         $authProvider.tokenPrefix = "DB_NV";
+
+        $fbProvider.appId = 1148473048525783;
+        $fbProvider.extendPermissions = 'publish_actions,,user_photos';
 
         $stateProvider
             .state('Home', {

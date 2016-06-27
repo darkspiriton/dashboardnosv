@@ -27,7 +27,7 @@
 @section('dashCtrls')
     <script src="app/controllers/homeCtrl.js"></script>
     <script src="app/controllers/auxMovementCtrl.js"></script>
-    <script src="app/controllers/auxMovement2Ctrl.js"></script>
+    <script src="app/controllers/auxMovement2_JVECtrl.js"></script>
     <script src="app/controllers/auxStockCtrl.js"></script>
     <script src="app/controllers/auxMovementOutFitCtrl.js"></script>
     <script src="app/controllers/auxMovementOutFit2Ctrl.js"></script>

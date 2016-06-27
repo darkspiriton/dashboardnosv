@@ -4,7 +4,7 @@
         <div class="card-header">
             <h2>Ranking de Ventas <small>top 5 productos mas vendidos del mes actual</small></h2>
 
-            <ul class="actions">
+            <ul class="actions pointer">
                 <li class="dropdown">
                     <a data-toggle="dropdown">
                         <i class="md md-more-vert"></i>
@@ -12,16 +12,16 @@
 
                     <ul class="dropdown-menu dropdown-menu-right">
                         <li>
-                            <a href="#">1ra Quincena</a>
+                            <a ng-click="listTopSales(1)">1ra Quincena</a>
                         </li>
                         <li>
-                            <a href="#">2da Quincena</a>
+                            <a ng-click="listTopSales(2)">2da Quincena</a>
                         </li>
                         <li>
-                            <a href="#">Semana actual</a>
+                            <a ng-click="listTopSales(3)">Semana actual</a>
                         </li>
                         <li>
-                            <a href="#">Mes actual</a>
+                            <a ng-click="listTopSales(4)">Mes actual</a>
                         </li>
                     </ul>
                 </li>
@@ -39,29 +39,6 @@
     <div class="card">
         <div class="card-header">
             <h2>Ranking Mayor Stock <small>Top 5 productos con mayor stock en almacen</small></h2>
-
-            <ul class="actions">
-                <li class="dropdown">
-                    <a data-toggle="dropdown">
-                        <i class="md md-more-vert"></i>
-                    </a>
-
-                    <ul class="dropdown-menu dropdown-menu-right">
-                        <li>
-                            <a href="#">1ra Quincena</a>
-                        </li>
-                        <li>
-                            <a href="#">2da Quincena</a>
-                        </li>
-                        <li>
-                            <a href="#">Semana actual</a>
-                        </li>
-                        <li>
-                            <a href="#">Mes actual</a>
-                        </li>
-                    </ul>
-                </li>
-            </ul>
         </div>
 
         <div class="card-body m-t-0">

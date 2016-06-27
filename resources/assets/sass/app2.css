@@ -1500,3 +1500,7 @@ div.fc-row {
 .ng-binding {
   display: inline-block;
 }
+
+.pointer li a{
+  cursor: pointer;
+}

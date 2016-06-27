@@ -36,9 +36,9 @@ angular.module('App')
         ];
 
 
-        $scope.listTopSales = function() {
+        $scope.listTopSales = function(option) {
             $scope.updateList = true;
-            petition.get('api/partner/get/top/sales')
+            petition.get('api/partner/get/top/sales', {params:{filter:option}})
                 .then(function(data){
                     $scope.tableData = RowCount(data.TopSales);
                     $('#table').AJQtable2('view2', $scope, $compile);

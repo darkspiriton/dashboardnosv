@@ -37,28 +37,33 @@ angular.module('App')
 
 
         $scope.listTopSales = function(option) {
-            $scope.updateList = true;
             petition.get('api/partner/get/top/sales', {params:{filter:option}})
                 .then(function(data){
                     $scope.tableData = RowCount(data.TopSales);
                     $('#table').AJQtable2('view2', $scope, $compile);
-                    $scope.updateList = false;
                 }, function(error){
                     toastr.error('Ups ocurrio un problema: ' + error.data.message);
-                    $scope.updateList = false;
                 });
         };
 
         $scope.listLessSold = function() {
-            $scope.updateList = true;
             petition.get('api/partner/get/top/less-sold')
                 .then(function(data){
                     $scope.tableData = RowCount(data.TopLessSold);
                     $('#table-2').AJQtable2('view2', $scope, $compile);
-                    $scope.updateList = false;
                 }, function(error){
                     toastr.error('Ups ocurrio un problema: ' + error.data.message);
-                    $scope.updateList = false;
+                });
+        };
+
+        $scope.productSales = function() {
+            petition.get('api/partner/get/products/sales')
+                .then(function(data){
+                    data || (data = []);
+                    $('#product-sales').AJQtable2('view2', $scope, $compile, data.products);
+                    chart.draw(data.products, {data: 'quantity', label: 'name'})
+                }, function(error){
+                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
                 });
         };
         
@@ -75,5 +80,6 @@ angular.module('App')
         angular.element(document).ready(function(){
             $scope.listTopSales();
             $scope.listLessSold();
+            $scope.productSales();
         });
     });

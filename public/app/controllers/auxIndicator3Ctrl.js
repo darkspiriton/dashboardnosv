@@ -50,7 +50,7 @@ angular.module('App')
                     $scope.tableData = data.products;
                     $('#table').AJQtable('view', $scope, $compile);
                     $scope.updateList = false;
-                    chart.draw($scope.tableData, {data: 'cant', label: 'name'})
+                    chart.draw($scope.tableData, {data: 'cant', label: 'name'});
                 }, function(error){
                     console.log(error);
                     toastr.error('Ups ocurrio un problema: ' + error.data.message);

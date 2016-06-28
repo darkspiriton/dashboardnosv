@@ -20,8 +20,8 @@ class PartnerController extends Controller
      * Top 5 sales products
      */
 
-    public function TopSales(Request $request){
-
+    public function TopSales(Request $request)
+    {
         if(\Validator::make($request->all(), ['filter' => 'integer|between:1,4'])->fails())
             return response()->json(['message' => 'parametros no validos']);
         
@@ -53,6 +53,33 @@ class PartnerController extends Controller
             ->take(5)->get();
 
         return response()->json(['TopLessSold' => $top],200);
+    }
+
+    public function ProductStatusForSales(Request $request){
+        if(\Validator::make($request->all(), ['filter' => 'integer|between:1,4'])->fails())
+            return response()->json(['message' => 'parametros no validos']);
+        
+        $dates = $this->getDate($request->input('filter'));
+
+        $products = DB::table('auxproducts')->select(array('name'))->where('provider_id','=',3)->groupBy('name')->lists('name');
+
+        $top = DB::table('auxmovements as m')->select('p.name', DB::raw('count(`p`.`name`) as quantity'))
+                        ->join('auxproducts as p','p.id','=','m.product_id')
+                        ->whereIn('p.name',$products)
+                        ->where('m.status','=','Vendido')
+                        ->where('m.date_shipment','>',$dates['start'])
+                        ->where('m.date_shipment','<',$dates['end'])
+                        ->groupBy('p.name')
+                        ->orderBy('quantity','desc')
+                        ->get();
+
+        $data = array();
+        $data['days'] = Carbon::now()->day;
+        $data['very good'] = round($data['days'] / 1.5);
+        $data['good'] = round($data['days'] / 3);
+        $data['bad'] = 0;
+
+        return response()->json(['products' => $top,$data],200);
     }
 
     private function getDate($option){

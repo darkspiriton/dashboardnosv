@@ -229,6 +229,7 @@ Route::group(['prefix' => 'api'], function(){
 
     Route::get('partner/get/top/sales','PartnerController@TopSales');
     Route::get('partner/get/top/less-sold','PartnerController@TopLessSold');
+    Route::get('partner/get/products/sales','PartnerController@ProductStatusForSales');
 });
 
 Route::get('/test', function(\Illuminate\Http\Request $request){

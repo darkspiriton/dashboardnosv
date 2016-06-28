@@ -1173,4 +1173,7 @@ div.fc-row {
 .pointer li a {
   cursor: pointer; }
 
+.box-s {
+  box-shadow: none; }
+
 /*# sourceMappingURL=app.min.2.css.map */

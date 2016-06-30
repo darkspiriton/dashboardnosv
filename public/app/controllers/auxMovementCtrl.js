@@ -207,7 +207,7 @@ angular.module('App')
 
             if (count == 0 && $scope.anadir){
                 toastr.success('se añadio');
-                $scope.dataProducts.push({id: $scope.codes[ind].id});
+                $scope.dataProducts.push({id: $scope.codes[ind].id, discount:0});
                 $scope.products.push(angular.copy($scope.prdTemp));
             }
 

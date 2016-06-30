@@ -50,19 +50,25 @@
     </div><br>
 
     <div class="card-header bgm-blue">
-
         <form name="formproduct" id="form" class="form-horizontal" autocomplete="off">
-
             <div class="form-group">
-                <label class="col-xs-2 col-sm-2 control-label">Precio</label>
+                <label class="col-xs-2 col-sm-2 control-label" style="color: white;font-size: 15px;">Ingresos Acumulados</label>
                 <div class="col-xs-10 col-sm-4">
                     <div class="input-group">
-                        <span class="input-group-addon"><i class="md md-local-parking"></i></span>
-                        <label class="control-label m-l-10" style="text-align: left" ng-bind-html="monto | currency:'S/ ':2"></label>
+                        <label class="control-label m-l-10" style="color: white;text-align: left;font-size: 20px;" ng-bind-html="monto | currency:'S/ ':2"></label>
                     </div>
                 </div>
             </div>
         </form>
     </div>
+
+    
+
+    <div class="card-body card-padding table-responsive">
+        <div class="col-sm-12" style="display: block;width: 1000px;height: 1000px;">
+            <canvas id="lineChart" ></canvas>
+        </div><br>
+    </div><br>
+
 </div>
 

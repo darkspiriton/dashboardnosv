@@ -18,6 +18,7 @@ class AuxMovementController extends Controller
     {
         $this->middleware('auth:GOD,ADM,JVE');
         $this->middleware('auth:GOD' , ['only' => ['movementDay','movementDays','movementDaysDownload']]);
+        $this->middleware('auth:GOD,ADM', ['only' => 'destroy']);
     }
 
     /**

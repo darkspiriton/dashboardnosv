@@ -1,0 +1,165 @@
+<div class="row">
+    <div class="col-sm-6">
+        <!-- Recent Items -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Ranking de Ventas <small>top 5 productos mas vendidos del mes actual</small></h2>
+
+                <ul class="actions pointer">
+                    <li class="dropdown">
+                        <a data-toggle="dropdown">
+                            <i class="md md-more-vert"></i>
+                        </a>
+
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li>
+                                <a ng-click="listTopSales(1)">1ra Quincena</a>
+                            </li>
+                            <li>
+                                <a ng-click="listTopSales(2)">2da Quincena</a>
+                            </li>
+                            <li>
+                                <a ng-click="listTopSales(3)">Semana actual</a>
+                            </li>
+                            <li>
+                                <a ng-click="listTopSales(4)">Mes actual</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card-body m-t-0">
+                <table id="table" class="table table-inner table-vmiddle"></table>
+            </div>
+            <div id="recent-items-chart-1" class="flot-chart recent-items-chart"></div>
+        </div>
+    </div>
+
+    <div class="col-sm-6">
+        <!-- Recent Items -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Ranking Mayor Stock <small>Top 5 productos con mayor stock en almacen</small></h2>
+            </div>
+
+            <div class="card-body m-t-0">
+                <table id="table-2" class="table table-inner table-vmiddle"></table>
+            </div>
+            <div id="recent-items-chart-2" class="flot-chart recent-items-chart"></div>
+        </div>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-sm-6">
+                <!-- Recent Items -->
+                <div class="card box-s">
+                    <div class="card-header">
+                        <h2>Grafica Donuts de Estado de Ventas<small>La grafica muestra el estado de ventas del produto en proporcion a a ventas por día</small></h2>
+                    </div>
+
+                    <div class="card-body">
+                        <div id="pie-chart" class="flot-chart-pie"></div>
+                        <div class="flc-pie p-l-30 p-r-30 p-t-10 p-b-10"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6">
+                <!-- Recent Items -->
+                <div class="card box-s">
+                    <div class="card-header">
+                        <h2>Listado de Productos - Ventas <small>Listado de productos con la cantidad de ventas</small></h2>
+                    </div>
+
+                    <div class="card-body m-t-0">
+                        <table id="product-sales" class="table table-inner table-vmiddle"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    (function(){
+
+        var data = [];
+        var totalPoints = 50;
+
+        function getRandomData() {
+            if (data.length > 0)
+                data = data.slice(1);
+
+            while (data.length < totalPoints) {
+
+                var prev = data.length > 0 ? data[data.length - 1] : 50,
+                        y = prev + Math.random() * 10 - 5;
+                if (y < 0) {
+                    y = 0;
+                } else if (y > 90) {
+                    y = 90;
+                }
+
+                data.push(y);
+            }
+
+            var res = [];
+            for (var i = 0; i < data.length; ++i) {
+                res.push([i, data[i]])
+            }
+
+            return res;
+        }
+
+        var options = {
+            series: {
+                shadowSize: 0,
+                lines: {
+                    show: false,
+                    lineWidth: 0
+                }
+            },
+            grid: {
+                borderWidth: 0,
+                labelMargin:10,
+                hoverable: true,
+                clickable: true,
+                mouseActiveRadius:6
+
+            },
+            xaxis: {
+                tickDecimals: 0,
+                ticks: false
+            },
+
+            yaxis: {
+                tickDecimals: 0,
+                ticks: false
+            },
+
+            legend: {
+                show: false
+            }
+        };
+        var styles = {
+            width: 'calc(100% + 19px)',
+            height: '150px',
+            margin: '-20px -10px 0',
+            bottom: '-10px'
+        };
+
+        $(".recent-items-chart").css(styles);
+
+        $.plot($("#recent-items-chart-1"), [
+            {data: getRandomData(), lines: { show: true, fill: 0.8 }, label: 'Items', stack: true, color: '#00BCD4' },
+        ], options);
+
+        $.plot($("#recent-items-chart-2"), [
+            {data: getRandomData(), lines: { show: true, fill: 0.8 }, label: 'Items', stack: true, color: '#00BCD4' },
+        ], options);
+    })();
+</script>

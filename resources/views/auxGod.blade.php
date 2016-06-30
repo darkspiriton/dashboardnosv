@@ -14,22 +14,20 @@
             <a href="#"><i class="md md-now-widgets"></i> Ventas </a>
             <ul>
                 <li id="products">
-                    <a href="#" ui-sref="Productos"><i class="md md-shop-two"></i>Kardex</a>
+                    <a href="#" ui-sref="Productos"> Kardex</a>
                 </li>
                 <li id="out_fit">
-                    <a href="#" ui-sref="out_fit"><i class="md md-shop-two"></i> Gestionar Combinaciones</a>
+                    <a href="#" ui-sref="out_fit"> Gestionar Combinaciones</a>
                 </li>
                 <li id="liquidation">
-                    <a href="#" ui-sref="Liquidacion"><i class="md md-shop-two"></i> Gestionar Promociones</a>
+                    <a href="#" ui-sref="Liquidacion"> Gestionar Promociones</a>
                 </li>
 
                 <li id="liquidation">
-                    <a href="#" ui-sref="MovementDay"><i class="md md-shop-two"></i> Movimientos Diarios</a>
+                    <a href="#" ui-sref="MovementDay"> Movimientos Diarios</a>
                 </li>
             </ul>
         </li>
-
-
 
         <li class="sub-menu">
             <a href="#"><i class="md md-now-widgets"></i> Vista Coordinador </a>
@@ -103,28 +101,31 @@
             <a href="#"><i class="md md-now-widgets"></i> Gestión de Cuestionarios </a>
             <ul>
                 <li id="categories">
-                    <a ui-sref="categories"><i class="md md-security"></i> Categorías de cuestionarios</a>
+                    <a ui-sref="categories"> Categorías de cuestionarios</a>
                 </li>
                 <li id="questions">
-                    <a ui-sref="questions"><i class="md md-security"></i> Crear preguntas </a>
+                    <a ui-sref="questions"> Crear preguntas </a>
                 </li>
                 <li id="questionnaires">
-                    <a ui-sref="questionnaires"><i class="md md-security"></i> Crear cuestionario</a>
+                    <a ui-sref="questionnaires"> Crear cuestionario</a>
                 </li>
                 <li id="q_products">
-                    <a ui-sref="q_products"><i class="md md-security"></i> Crear cuestionario de producto</a>
+                    <a ui-sref="q_products"> Crear cuestionario de producto</a>
                 </li>
                 <li id="q_customers">
-                    <a ui-sref="q_customers"><i class="md md-security"></i> Crear cuestionario de cliente</a>
+                    <a ui-sref="q_customers"> Crear cuestionario de cliente</a>
                 </li>
                 <li id="q_AnswerIndicator">
-                    <a ui-sref="q_AnswerIndicator"><i class="md md-security"></i> Indicador de coincidencias</a>
+                    <a ui-sref="q_AnswerIndicator"> Indicador de coincidencias</a>
                 </li>
             </ul>
         </li>
         <li id="comments">
             <a href="#" ui-sref="Comentarios"><i class="md md-messenger"></i> Gestionar comentarios</a>
         </li>
+
+        <li id="partners">
+            <a href="#" ui-sref="Socios"><i class="md md-messenger"></i> Vista socios</a>
         <li id="sub-menu">
             <a href="#" ui-sref="Provider"><i class="md md-messenger"></i> Proveedores</a>
         </li>
@@ -159,22 +160,18 @@
     <script src="app/controllers/q_customersCtrl.js"></script>
     <script src="app/controllers/outFitCtrl.js"></script>
     <script src="app/controllers/liquidationCtrl.js"></script>
-
     <script src="app/controllers/auxMovementCtrl.js"></script>
     <script src="app/controllers/auxMovement2Ctrl.js"></script>
     <script src="app/controllers/auxMovementOutFitCtrl.js"></script>
     <script src="app/controllers/auxMovementOutFit2Ctrl.js"></script>
 
-
     <script src="app/controllers/auxEsquemaCtrl.js"></script>
-
-    <script src="app/controllers/auxMovementDayCtrl.js"></script>
-
     <script src="app/controllers/publicityJVECtrl.js"></script>
     <script src="app/controllers/publicityCtrl.js"></script>
-
-    <script src="app/controllers/auxProviderProductCtrl.js"></script>
-
     <script src="app/controllers/facebookPublicityCtrl.js"></script>
+    <script src="app/controllers/PartnerCtrl.js"></script>
+
+    <script src="app/controllers/auxMovementDayCtrl.js"></script>
+    <script src="app/controllers/auxProviderProductCtrl.js"></script>
 
 @stop

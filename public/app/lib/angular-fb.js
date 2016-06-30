@@ -73,7 +73,7 @@ angular.module('angular-fb', [])
                     return helper.run(service.createAlbum, arguments, []);
                 };
 
-                $fb.publish = function (album_id, data) {
+                $fb.publish = function (fb_id, data, r) {
                     return helper.run(service.publish, arguments, []);
                 };
 

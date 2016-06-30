@@ -4,18 +4,18 @@
 "use strict";
 (function( $ ){
     var AJQactions2 = {};
-    var view2 = function ($scope , $compile) {
+    var view2 = function ($scope , $compile, tableData, tableConfig) {
+        tableConfig || (tableConfig = {});
 
-        var rows, data, options, rowCompiler, cols, buttons, acc = {};
+        var rowCompiler, oTable, acc = {};
+        var App = {};
 
         // Datos de configuracion
-        var config = {};
-        var oTable;
-        cols 	= $scope.tableConfig.columns || [];
-        buttons 	= $scope.tableConfig.buttons || [];
-        data 	= $scope.tableConfig.data || [];
-        config.configStatus  = ($scope.tableConfig.configStatus)?$scope.tableConfig.configStatus: 'status';
-        rows = $scope.tableData || [];
+        App.columns = tableConfig.columns || $scope.tableConfig.columns || [];
+        App.buttons = tableConfig.buttons ||$scope.tableConfig.buttons || [];
+        App.data    = tableConfig.data ||$scope.tableConfig.data || [];
+        App.rows    = tableData || $scope.tableData || [];
+        App.options = tableConfig.options || $scope.tableConfig.options || {};
 
         // Conpilar en angular las filas
         rowCompiler = function(nRow, aData, iDataIndex) {
@@ -38,7 +38,7 @@
             return obj[prop];
         }
 
-        $.each(buttons, function(i , obj){
+        $.each(App.buttons, function(i , obj){
             if(obj.type == 'status'){
                 $.each(obj.list, function(l , button){
                     AJQactions2[button.name] = {};
@@ -48,13 +48,13 @@
                     if(button.call_me) {
                         AJQactions2[button.name]['call_me'] = button.call_me;
                         AJQactions2[button.name]['run'] = function (i) {
-                            var est = this.call_me(rows[i]);
+                            var est = this.call_me(App.rows[i]);
                             if (!this.render.hasOwnProperty(est)) if (this.render.hasOwnProperty('fail')) est = 'fail'; else return '';
                             return `<a class="btn btn-xs ${this.render[est][1]}" ng-click="${this.event}(${i},$event)" style="min-width: 82px;" ${((this.render[est][2] === false) ? 'disabled="disabled"' : '')}>${this.render[est][0]}</a>`;
                         }
                     } else {
                         AJQactions2[button.name]['run'] = function (i) {
-                            var est = searchObject(rows[i], this.column);
+                            var est = searchObject(App.rows[i], this.column);
                             if (!this.render.hasOwnProperty(est)) if (this.render.hasOwnProperty('fail')) est = 'fail'; else return '';
                             return `<a class="btn btn-xs ${this.render[est][1]}" ng-click="${this.event}(${i},$event)" style="min-width: 82px;" ${((this.render[est][2] === false) ? 'disabled="disabled"' : '')}>${this.render[est][0]}</a>`;
                         }
@@ -84,7 +84,7 @@
                     AJQactions2[button.name]['run'] = function (i) {
                         var template = this.render;
                         for(var y in this.column){
-                            template = template.replace(`{${y}}`, searchObject(rows[i], this.column[y]));
+                            template = template.replace(`{${y}}`, searchObject(App.rows[i], this.column[y]));
                         }
                         return template;
                     }
@@ -94,14 +94,14 @@
         });
 
         // Opciones de la tabla
-        options = {
+        App.options = Object.assign(App.options, {
             fnCreatedRow: rowCompiler, 		// Al crear tabla conpilarla en angular
-            aoColumns: cols                 // Columnas de tabla
-        };
+            aoColumns: App.columns                 // Columnas de tabla
+        });
 
         // Inicializar la tabla
         if ( ! $.fn.DataTable.isDataTable( this[0] ) )
-            oTable = $(this[0]).dataTable(options);
+            oTable = $(this[0]).dataTable(App.options);
         else
             oTable = $( this[0] ).dataTable();
 
@@ -110,9 +110,9 @@
 
         // Llenar de registros la tabla
         if (Object.keys(AJQactions2).length > 0){
-            $.each($scope.tableData, function(i , obj){
+            $.each(App.rows, function(i , obj){
                 var temp = [];
-                $.each( data , function(x, val){
+                $.each( App.data , function(x, val){
                     if (AJQactions2.hasOwnProperty(val)){
                         temp[x] = AJQactions2[val].run(i);
                     } else {
@@ -125,9 +125,9 @@
                 oTable.fnAddData(temp);
             });
         } else {
-            $.each($scope.tableData, function(i , obj){
+            $.each(App.rows, function(i , obj){
                 var temp = [];
-                $.each( data , function(x, val){
+                $.each( App.data , function(x, val){
                     if ( val.constructor === Array)
                         temp[x] = (searchObject(obj,val[0])).substr(0, val[1]) + ' ...';
                     else

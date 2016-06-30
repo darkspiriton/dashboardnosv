@@ -7,7 +7,7 @@ angular.module('App')
                 controller : 'PartnerCtrl'
             });
     })
-    .controller('PartnerCtrl', function($scope, $compile, $log, util, petition, toastr, $filter, chart){
+    .controller('PartnerCtrl', function($scope, $compile, $log, util, petition, toastr, $filter, charts){
 
         util.liPage('partners');
 
@@ -35,7 +35,6 @@ angular.module('App')
             {name: 'LG G3', quantity: '15'}
         ];
 
-
         $scope.listTopSales = function(option) {
             petition.get('api/partner/get/top/sales', {params:{filter:option}})
                 .then(function(data){
@@ -58,14 +57,27 @@ angular.module('App')
 
         $scope.productSales = function() {
             petition.get('api/partner/get/products/sales')
-                .then(function(data){
-                    data || (data = []);
-                    $('#product-sales').AJQtable2('view2', $scope, $compile, data.products);
-                    chart.draw(data.products, {data: 'quantity', label: 'name'})
+                .then(function(response){
+                    response || (response = []);
+                    $('#product-sales').AJQtable2('view2', $scope, $compile, response.products);
+                    chartDraw(response.chart);
                 }, function(error){
                     toastr.error('Ups ocurrio un problema: ' + error.data.message);
                 });
         };
+
+        function chartDraw(data){
+            var ChartData = {
+                labels: data.labels,
+                datasets: [
+                    {
+                        data: data.data,
+                        backgroundColor: data.colors,
+                    }
+                ]
+            };
+            charts.make("SalesChart", "pie", ChartData);
+        }
         
         function RowCount(data) {
             if(typeof data !== 'object')return [];
@@ -76,7 +88,8 @@ angular.module('App')
             return data
         }
 
-
+        // Any of the following formats may be used
+        
         angular.element(document).ready(function(){
             $scope.listTopSales();
             $scope.listLessSold();

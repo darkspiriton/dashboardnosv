@@ -189,6 +189,24 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
             drawColummn: column
         };
     }])
+    .factory('charts', function(){
+        var chart, element;
+
+        function make(element, type, data, options){
+            element = document.getElementById(element);
+            chart = new Chart(element, {
+                type: type || "line",
+                data: data || {},
+                options: options || {}
+            });
+
+            return chart
+        }            
+
+        return {
+            make: make
+        }           
+    })
     .factory('toformData', function () {
         dataFile = function (data) {
             if (undefined === data) return data;

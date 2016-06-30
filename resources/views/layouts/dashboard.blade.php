@@ -128,6 +128,7 @@
 <script src="vendors/bower_components/sweetalert/dist/sweetalert.min.js"></script>
 <script src="vendors/datatables/jquery.dataTables.min.js" type="text/javascript"></script>
 <script src="vendors/datatables/dataTables.bootstrap.min.js" type="text/javascript"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.6/Chart.min.js"></script>
 
 <script src="js/functions.js"></script>
 

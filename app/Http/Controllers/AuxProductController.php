@@ -579,36 +579,81 @@ class AuxProductController extends Controller
         }else{
             $date1 = Carbon::today();
         }
-//
+
         $date2 = $date1->copy()->addDay();
         $movements=$this->movementsGet($date1,$date2,$id);
         return response()->json(['movements' => $movements],200);
     }
 
-    public function productProviderMoth(Request $request, $id){
+    public function productProviderMonth(Request $request, $id){
 
-        if($request->has('date1')){
-            try {
-                $date1 = Carbon::createFromFormat('Y-m-d', $request->input('date1'));
-            } catch(\InvalidArgumentException $e) {
-                return response()->json(['message' => 'Fechas no validas, formato aceptado: Y-m-d'],401);
-            }
-        }else{
-            $date1 = Carbon::today();
+        $rules = [
+            'year' => 'required|integer',
+            'month' => 'required|integer'
+        ];
+
+        $validator = \Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json(['message' => 'No posee todo los campos necesarios para consultar proveedores por meses'],401);
         }
-//
-        $date2 = $date1->copy()->addDay();
+
+        $year=$request->input('year');
+        $month=$request->input('month');
+
+        $date1=Carbon::create($year, $month, 1, 0, 0, 0, 'America/Lima');
+        $date2 = $date1->copy()->addMonth();
+
         $movements=$this->movementsGet($date1,$date2,$id);
         return response()->json(['movements' => $movements],200);
     }
 
-    private function movementsGet($date1,$date2,$id){
+    public function productProviderDate(Request $request, $id){
+
+        try {
+            $date1 = Carbon::createFromFormat('Y-m-d', $request->input('dateaux1'));
+            $dateaux2 = Carbon::createFromFormat('Y-m-d', $request->input('dateaux2'));
+        } catch(\InvalidArgumentException $e) {
+            return response()->json(['message' => 'Fechas no validas, formato aceptado: Y-m-d'],401);
+        }
+
+        $date2 = $dateaux2->copy()->addDay();
+        $movements=$this->movementsGet($date1,$date2,$id);
+        return response()->json(['movements' => $movements],200);
+    }
+
+    public function productProviderTotalMonth(Request $request, $id){
+
+        $rules =[
+            'year' => 'required|integer',
+            'month' => 'required|integer'
+        ];
+
+        $validator = \Validator::make($request->all(), $rules);
+        if($validator->fails()){
+            return response()->json(['message','No posee todo los campos necesarios para consultar ventas de proveedores']);
+        }
+
+        $sales = $this->saleMonth($request->input('year'),$request->input('month'),$id);
+
+        return $sales;
+    }
+
+    public function productProviderTotalMonthNow($id){
+        $date1=Carbon::today();
+        $sales = $this->saleMonth($date1->year,$date1->month,$id);
+
+        return $sales;
+    }
+
+    private function saleMonth($year,$month,$id){
+
+        $date1=Carbon::create($year, $month, 1, 0, 0, 0, 'America/Lima');
+        $date2 = $date1->copy()->addMonth();
+
+
         $status = 'vendido';
         $movements=DB::table('auxproducts as p')
-            ->select('m.date_shipment as fecha','p.cod as codigo','p.name as product','c.name as color',
-                DB::raw('case when d.price then d.price else p.cost_provider + p.utility end as price'),'s.name as talla','m.status','m.discount',
-                DB::raw('case when d.price then d.price-m.discount else p.cost_provider + p.utility -m.discount end as pricefinal'),
-                DB::raw('case when d.price then 1 else 0 end as liquidacion'))
+            ->select('m.date_shipment as fecha',DB::raw('count(p.name) as cantidad'))
             ->join('auxmovements as m','p.id','=','m.product_id')
             ->join('colors as c','c.id','=','p.color_id')
             ->join('sizes as s','s.id','=','p.size_id')
@@ -618,11 +663,69 @@ class AuxProductController extends Controller
 //            ->where('p.provider_id',$id)
             ->where(DB::raw('DATE(m.date_shipment)'),'>=',$date1->toDateString())
             ->where(DB::raw('DATE(m.date_shipment)'),'<',$date2->toDateString())
+            ->groupby('fecha')
+            ->orderby('fecha','asc')
+            ->get();
+
+        $days=$date1->daysInMonth;
+
+        $init=1;
+
+        $days_list = array();
+        $data_list = array();
+        for($x=1;$x<=$days;$x++){
+            array_push($days_list, $x);
+        }
+
+        foreach($movements as $movement){
+            $date1 = Carbon::createFromFormat('Y-m-d', $movement->fecha);
+            $date1->day;
+//            array_push($days_list, $init);
+            for($i=$init;$i<=$days;$i++){
+                if($date1->day==$i){
+                    array_push($data_list, $movement->cantidad);
+//                    $prueba[$i]=$movement->cantidad;
+                    break;
+                }else{
+                    array_push($data_list, 0);
+//                    $prueba[$i]= 0;
+                }
+
+            }
+            $init=$date1->day+1;
+        }
+
+        //falta crear vector con los dias y sus cantidades respectivamente. y devolverlas al proveedor y se muestren en el grafico
+
+        return response()->json(['days_lists' => $days_list, 'data_lists' => $data_list]);
+
+    }
+
+
+
+
+    private function movementsGet($date1,$date2,$id){
+        $status = 'vendido';
+        $movements=DB::table('auxproducts as p')
+            ->select('m.date_shipment as fecha','p.cod as codigo','p.name as product','c.name as color',
+                DB::raw('case when d.price then d.price else p.cost_provider + p.utility end as price'),'s.name as talla','m.status','m.discount',
+                DB::raw('case when d.price then d.price-m.discount else p.cost_provider + p.utility -m.discount end as pricefinal'),
+                DB::raw('case when d.price then 1 else 0 end as liquidacion'),'p.cost_provider as cost')
+            ->join('auxmovements as m','p.id','=','m.product_id')
+            ->join('colors as c','c.id','=','p.color_id')
+            ->join('sizes as s','s.id','=','p.size_id')
+            ->leftJoin('settlements AS d','d.product_id','=','p.id')
+            ->where('m.status','like','%'.$status.'%')
+//            ->where('m.situation',null)
+            ->where('p.provider_id',$id)
+            ->where(DB::raw('DATE(m.date_shipment)'),'>=',$date1->toDateString())
+            ->where(DB::raw('DATE(m.date_shipment)'),'<',$date2->toDateString())
             ->orderby('p.name','c.name','s.name')
             ->get();
 
         return $movements;
     }
+
 
 //    public function movementOtherDay(Request $request){
 //        try {

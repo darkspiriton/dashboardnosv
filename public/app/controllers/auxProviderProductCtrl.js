@@ -55,7 +55,7 @@ angular.module('App')
 
         $scope.list = function() {
             $scope.updateList = true;
-            petition.get('api/auxproduct/get/products/provider/'+1)
+            petition.get('api/auxproduct/get/products/provider/'+3)
                 .then(function(data){
                     $scope.tableData = data.movements;
                     $scope.monto=0;
@@ -77,7 +77,7 @@ angular.module('App')
             $scope.updateList = true;
             $scope.dateSave = angular.copy($scope.data);
             $scope.dateSave.date1 = $filter('date')($scope.data.date1, 'yyyy-MM-dd')
-            petition.get('api/auxproduct/get/products/provider/'+1, { params : $scope.dateSave })
+            petition.get('api/auxproduct/get/products/provider/'+3, { params : $scope.dateSave })
                 .then(function(data){
                     $scope.tableData = data.movements;
                     $scope.monto=0;
@@ -101,7 +101,7 @@ angular.module('App')
 
             // $scope.dateSave.date1 = new Date($scope.data2.year+'-'+$scope.data2.month.id);
 
-            petition.get('api/auxproduct/get/products/provider/month/'+1, { params : $scope.dateSave })
+            petition.get('api/auxproduct/get/products/provider/month/'+3, { params : $scope.dateSave })
                 .then(function(data){
                     $scope.tableData = data.movements;
                     $scope.monto=0;
@@ -125,7 +125,7 @@ angular.module('App')
             $scope.dateSave = angular.copy($scope.data3);
             $scope.dateSave.dateaux1 = $filter('date')($scope.data3.dateaux1, 'yyyy-MM-dd')
             $scope.dateSave.dateaux2 = $filter('date')($scope.data3.dateaux2, 'yyyy-MM-dd')
-            petition.get('api/auxproduct/get/products/provider/date/'+1, { params : $scope.dateSave })
+            petition.get('api/auxproduct/get/products/provider/date/'+3, { params : $scope.dateSave })
                 .then(function(data){
                     $scope.tableData = data.movements;
                     $scope.monto=0;
@@ -186,7 +186,7 @@ angular.module('App')
 
         $scope.salesNow = function() {
             $scope.updateList = true;
-            petition.get('api/auxproduct/get/products/provider/sale/now/'+1)
+            petition.get('api/auxproduct/get/products/provider/sale/now/'+3)
                 .then(function(data){
                     $scope.daysData = data.days_lists;
                     $scope.dataData = data.data_lists;
@@ -204,7 +204,7 @@ angular.module('App')
         $scope.salesDate = function() {
             $scope.updateList = true;
             $scope.dateSave = angular.copy($scope.data2);
-            petition.get('api/auxproduct/get/products/provider/sale/'+1, { params : $scope.dateSave })
+            petition.get('api/auxproduct/get/products/provider/sale/'+3, { params : $scope.dateSave })
                 .then(function(data){
                     $scope.daysData = data.days_lists;
                     $scope.dataData = data.data_lists;

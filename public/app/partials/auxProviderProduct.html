@@ -9,8 +9,8 @@
     <div class="card-header bgm-blue">
         <div ng-form="dates" class="row report-date">
             <h2 class="col-xs-12 col-sm-1 text-right">Diario</h2>
-            <input type="date" class="btn btn-default col-sm-2" ng-model="data.date1" required>
-            <input type="button" ng-disabled="!dates.$valid" ng-click="perDay()" class="btn bgm-indigo m-l-20 col-sm-1" value="buscar">
+            <input type="date" class="btn btn-default col-sm-2" ng-change="dateChange(day.today)" ng-model="day.today" required>
+            <input type="button" ng-disabled="!dates.$valid" ng-click="list()" class="btn bgm-indigo m-l-20 col-sm-1" value="buscar">
         </div>
     </div>
 
@@ -18,17 +18,14 @@
         <div ng-form="month" class="row report-date">
 
             <h2 class="col-xs-12 col-sm-1 text-right">Año</h2>
-            <select class="col-sm-1" ng-options="year as year for year in years" ng-model="data2.year" required>
+            <select class="col-sm-1" ng-options="year as year for year in years" ng-change="dateChange(mtn.year)" ng-model="mth.year" required>
                 <option value="" disabled="disabled" selected="selected">Seleccione</option>
             </select>
-
             <h2 class="col-xs-12 col-sm-1 text-right">Mensual</h2>
-            <select class="btn btn-default col-sm-1" ng-options="month.id as month.name for month in months" ng-model="data2.month" required>
+            <select class="btn btn-default col-sm-1" ng-options="month.id as month.name for month in months" ng-change="dateChange(mtn.month)" ng-model="mtn.month" required>
                 <option value="" disabled="disabled" select="true">Seleccione</option>
             </select>
-
-            <input type="button" ng-disabled="!month.$valid" ng-click="perMonth()" class="btn bgm-indigo m-l-20 col-sm-1" value="buscar">
-
+            <input type="button" ng-disabled="!month.$valid" ng-click="list()" class="btn bgm-indigo m-l-20 col-sm-1" value="buscar">
         </div>
     </div>
 
@@ -36,10 +33,10 @@
     <div class="card-header bgm-blue">
         <div ng-form="datesaux" class="row report-date">
             <h2 class="col-xs-12 col-sm-1 text-right">Inicio</h2>
-            <input type="date" class="btn btn-default col-sm-2" ng-model="data3.dateaux1" required>
+            <input type="date" class="btn btn-default col-sm-2" ng-change="dateChange(range.start)" ng-model="range.start" required>
             <h2 class="col-xs-12 col-sm-1 text-right">Fin</h2>
-            <input type="date" class="btn btn-default col-sm-2" ng-model="data3.dateaux2" required>
-            <input type="button" ng-disabled="!datesaux.$valid" ng-click="perDate()" class="btn bgm-indigo m-l-20 col-sm-1" value="buscar">
+            <input type="date" class="btn btn-default col-sm-2" ng-change="dateChange(range.end)" ng-model="range.end" required>
+            <input type="button" ng-disabled="!datesaux.$valid" ng-click="list()" class="btn bgm-indigo m-l-20 col-sm-1" value="buscar">
         </div>
     </div>
 
@@ -62,10 +59,8 @@
         </form>
     </div>
 
-    
-
     <div class="card-body card-padding table-responsive">
-        <div class="col-sm-12" style="display: block;width: 1000px;height: 1000px;">
+        <div class="col-sm-12" style="display: block;width: 100%; height: 1000px;">
             <canvas id="lineChart" ></canvas>
         </div><br>
     </div><br>

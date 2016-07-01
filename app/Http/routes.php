@@ -110,12 +110,12 @@ Route::group(['prefix' => 'api'], function(){
         Route::get('/get/uniques','AuxProductController@UniqueProduct');
         Route::get('/get/uniques/{name}/codes','AuxProductController@CodesLists');
         
-        Route::get('/get/products/provider/{id}','AuxProductController@productProvider');
-        Route::get('/get/products/provider/month/{id}','AuxProductController@productProviderMonth');
-        Route::get('/get/products/provider/date/{id}','AuxProductController@productProviderDate');
+        // Route::get('/get/products/provider/{id}','AuxProductController@productProvider');
+        // Route::get('/get/products/provider/month/{id}','AuxProductController@productProviderMonth');
+        // Route::get('/get/products/provider/date/{id}','AuxProductController@productProviderDate');
 
-        Route::get('/get/products/provider/sale/{id}','AuxProductController@productProviderTotalMonth');
-        Route::get('/get/products/provider/sale/now/{id}','AuxProductController@productProviderTotalMonthNow');
+        // Route::get('/get/products/provider/sale/{id}','AuxProductController@productProviderTotalMonth');
+        // Route::get('/get/products/provider/sale/now/{id}','AuxProductController@productProviderTotalMonthNow');
     });
 
     /**
@@ -236,6 +236,10 @@ Route::group(['prefix' => 'api'], function(){
     Route::get('partner/get/top/sales','PartnerController@TopSales');
     Route::get('partner/get/top/less-sold','PartnerController@TopLessSold');
     Route::get('partner/get/products/sales','PartnerController@ProductStatusForSales');
+
+    Route::get('partner/get/products/movements','PartnerController@movementsGet');
+
+    Route::get('partner/get/products/provider/sale','PartnerController@saleMonth');
 });
 
 Route::get('/test', function(\Illuminate\Http\Request $request){

@@ -11,11 +11,20 @@
         var App = {};
 
         // Datos de configuracion
-        App.columns = tableConfig.columns || $scope.tableConfig.columns || [];
-        App.buttons = tableConfig.buttons ||$scope.tableConfig.buttons || [];
-        App.data    = tableConfig.data ||$scope.tableConfig.data || [];
+        if(Object.keys(tableConfig).length > 1){
+            App.columns = tableConfig.columns || [];
+            App.buttons = tableConfig.buttons || [];
+            App.data    = tableConfig.data || [];
+            App.options = tableConfig.options || {};
+        } else {
+            App.columns = $scope.tableConfig.columns || [];
+            App.buttons = $scope.tableConfig.buttons || [];
+            App.data    = $scope.tableConfig.data || [];
+            App.options = $scope.tableConfig.options || {};
+        }
+
         App.rows    = tableData || $scope.tableData || [];
-        App.options = tableConfig.options || $scope.tableConfig.options || {};
+
 
         // Conpilar en angular las filas
         rowCompiler = function(nRow, aData, iDataIndex) {

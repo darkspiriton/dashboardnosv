@@ -1,32 +1,78 @@
+<div class="card" >
+    <div class="card-header bgm-blue">
+        <h2>Productos Vendidos</h2>
+        <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="list()"
+                data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
+                title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
+    </div>
+
+    <div class="card-header bgm-blue">
+        <div ng-form="dates" class="row report-date">
+            <h2 class="col-xs-12 col-sm-1 text-right">Diario</h2>
+            <input type="date" class="btn btn-default col-sm-2" ng-change="dateChange(d)" ng-model="d.day" required>
+            <input type="button" ng-disabled="!dates.$valid" ng-click="list()" class="btn bgm-indigo m-l-20 col-sm-1" value="buscar">
+        </div>
+    </div>
+
+    <div class="card-header bgm-blue">
+        <div ng-form="month" class="row report-date">
+
+            <h2 class="col-xs-12 col-sm-1 text-right">Año</h2>
+            <select class="col-sm-1" ng-options="year as year for year in years" ng-change="dateChange(mtn)" ng-model="mtn.year" required>
+                <option value="" disabled="disabled" selected="selected">Seleccione</option>
+            </select>
+            <h2 class="col-xs-12 col-sm-1 text-right">Mensual</h2>
+            <select class="btn btn-default col-sm-1" ng-options="month.id as month.name for month in months" ng-change="dateChange(mtn)" ng-model="mtn.month" required>
+                <option value="" disabled="disabled" select="true">Seleccione</option>
+            </select>
+            <input type="button" ng-disabled="!month.$valid" ng-click="list()" class="btn bgm-indigo m-l-20 col-sm-1" value="buscar">
+        </div>
+    </div>
+
+    <div class="card-header bgm-blue">
+        <div ng-form="datesaux" class="row report-date">
+            <h2 class="col-xs-12 col-sm-1 text-right">Inicio</h2>
+            <input type="date" class="btn btn-default col-sm-2" ng-change="dateChange(range)" ng-model="range.start" required>
+            <h2 class="col-xs-12 col-sm-1 text-right">Fin</h2>
+            <input type="date" class="btn btn-default col-sm-2" ng-change="dateChange(range)" ng-model="range.end" required>
+            <input type="button" ng-disabled="!datesaux.$valid" ng-click="list()" class="btn bgm-indigo m-l-20 col-sm-1" value="buscar">
+        </div>
+    </div>
+
+    <div class="card-body card-padding table-responsive">
+        <div class="col-sm-12">
+            <table id="ProductMovements" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
+        </div><br>
+    </div><br>
+
+    <div class="card-header bgm-blue">
+        <form name="formproduct" id="form" class="form-horizontal" autocomplete="off">
+            <div class="form-group">
+                <label class="col-xs-2 col-sm-2 control-label" style="color: white;font-size: 15px;">Ingresos Acumulados</label>
+                <div class="col-xs-10 col-sm-4">
+                    <div class="input-group">
+                        <label class="control-label m-l-10" style="color: white;text-align: left;font-size: 20px;" ng-bind-html="monto | currency:'S/ ':2"></label>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="card-body card-padding table-responsive">
+        <div class="col-sm-12" style="display: block;width: 100%;">
+            <canvas id="lineChart"></canvas>
+        </div><br>
+    </div><br>
+
+</div>
+
+
 <div class="row">
     <div class="col-sm-6">
         <!-- Recent Items -->
         <div class="card">
             <div class="card-header">
                 <h2>TOP 5+ <small>top 5 productos mas vendidos del mes actual</small></h2>
-
-                <ul class="actions pointer">
-                    <li class="dropdown">
-                        <a data-toggle="dropdown">
-                            <i class="md md-more-vert"></i>
-                        </a>
-
-                        <ul class="dropdown-menu dropdown-menu-right">
-                            <li>
-                                <a ng-click="listTopSales(1)">1ra Quincena</a>
-                            </li>
-                            <li>
-                                <a ng-click="listTopSales(2)">2da Quincena</a>
-                            </li>
-                            <li>
-                                <a ng-click="listTopSales(3)">Semana actual</a>
-                            </li>
-                            <li>
-                                <a ng-click="listTopSales(4)">Mes actual</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
             </div>
 
             <div class="card-body m-t-0">

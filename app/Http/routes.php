@@ -93,6 +93,8 @@ Route::group(['prefix' => 'api'], function(){
         Route::post('/set/color','AuxProductController@setColor');
         Route::post('/set/provider','AuxProductController@setProvider');
         Route::get('/get/code','AuxProductController@getCod');
+        
+        Route::get('/get/provider/id','AuxProductController@getIdProvider');
 
         Route::get('/get/cantPro','AuxProductController@cantPro');
         Route::get('/get/stockProd','AuxProductController@stockProd');

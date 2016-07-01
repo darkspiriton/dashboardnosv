@@ -158,7 +158,7 @@ angular.module('App')
                     labels:  $scope.daysData,
                     datasets: [
                         {
-                            label: "Ventas Mensuales",
+                            label: "Ventas",
                             fill: false,
                             lineTension: 0.1,
                             backgroundColor: "rgba(75,192,192,0.4)",

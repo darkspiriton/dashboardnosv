@@ -57,7 +57,7 @@ angular.module('App')
             photo:'',
             role_id: '',
             password: '',
-            status: false
+            status: true
         };
 
         $scope.list = function() {

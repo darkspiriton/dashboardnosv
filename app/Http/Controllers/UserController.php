@@ -2,6 +2,7 @@
 
 namespace Dashboard\Http\Controllers;
 
+use Dashboard\Models\Experimental\Provider;
 use Dashboard\Role;
 use Dashboard\User;
 use Illuminate\Http\Request;
@@ -60,7 +61,7 @@ class UserController extends Controller
             // con los errores
             $validator = \Validator::make($request->all(), $rules);
             if ($validator->fails()) {
-                return response()->json(['message' => 'No posee todo los campos necesario para crear un usuario'],401);
+                return response()->json(['message' => 'No posee todos los campos necesarios para crear un usuario'],401);
             }
 
             // Si el validador pasa, almacenamos el comentario
@@ -76,10 +77,18 @@ class UserController extends Controller
                 $user->sex= $request->input('sex');
                 $user->role_id= $request->input('role_id');
                 //$user->user= $request->input('user');
+
                 $user->password= bcrypt($request->input('password'));
                 $user->save();
+
+                if ($request->input('role_id')== 8){
+                    $provider=new Provider();
+                    $provider->name=$user->first_name;
+                    $provider->idUser=$user->id;
+                    $provider->save();
+                }
                 
-                return response()->json(['message' => 'Se usuario se agrego correctamente'],200);
+                return response()->json(['message' => 'El usuario se agrego correctamente'],200);
             }
 
                 return response()->json(['message' => 'El usuario ya esta registrado'],400);

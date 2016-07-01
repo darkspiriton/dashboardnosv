@@ -37,7 +37,7 @@ class ReportPayRollController extends Controller
 
 
         try {
-            if ($request->input('year') && $request->input('year')){
+            if ($request->input('year') && $request->input('month')){
                 $date = Carbon::createFromDate($request->input('year'), $request->input('month'), 1, 'America/Lima');
             }else{
                 $date = Carbon::now();

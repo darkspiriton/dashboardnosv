@@ -8,22 +8,24 @@ use Dashboard\Models\Experimental\Color;
 use Dashboard\Models\Experimental\Provider;
 use Dashboard\Models\Experimental\Size;
 use Dashboard\Models\Experimental\Type;
+use Faker\Test\Provider\ProviderOverrideTest;
 use Illuminate\Support\Facades\Event;
 use Dashboard\Models\Experimental\Product;
 use Illuminate\Http\Request;
 use \DB;
 use \Exception;
 use Dashboard\Models\Experimental\Alarm;
+use Dashboard\User;
 
 use Dashboard\Http\Requests;
 
 class AuxProductController extends Controller
 {
-    
+
     public function __construct()
     {
-        $this->middleware('auth:GOD,ADM,JVE,PUB');
-        $this->middleware('auth:GOD,ADM,JVE', ['except' => ['UniqueProduct','CodesLists']]);
+        $this->middleware('auth:GOD,ADM,JVE,PUB,PRO');
+        //$this->middleware('auth:GOD,ADM,JVE', ['except' => ['UniqueProduct','CodesLists']]);
     }
 
     /**
@@ -292,8 +294,22 @@ class AuxProductController extends Controller
 
                 $types = json_decode($request->input('types'), true);
 
+                $user = new User();
+                $user->first_name= $request->input('name');
+                $user->last_name= 'Proveedor';
+                $user->email= strtolower($request->input('name')).'@nosvenden.com';
+//                $user->phone= $request->input('phone');
+//                $user->address= $request->input('address');
+//                $user->sex= $request->input('sex');
+                $user->role_id= 8;
+                $user->status= true;
+                //$user->user= $request->input('user');
+                $user->password= bcrypt(strtolower($request->input('name')));
+                $user->save();
+
                 $proveedor = new Provider();
                 $proveedor->name = ucwords($request->input('name'));
+                $proveedor->idUser= $user->id;
                 $proveedor->save();
                 return response()->json(['message' => 'El nuevo proveedor se agrego correctamente'],200);
 
@@ -724,6 +740,19 @@ class AuxProductController extends Controller
             ->get();
 
         return $movements;
+    }
+    
+    public function getIdProvider(Request $request){
+        $user = $request->input('user')['sub'];
+        $proveedor =  Provider::where('idUser',$user)->first();
+
+        if($proveedor != null){
+            $id=$proveedor->id;
+            return response()->json(['provider_id'=>$id]);
+        }else{
+            return response()->json(['message'=>'Proveedor invalido']);
+        }
+
     }
 
 

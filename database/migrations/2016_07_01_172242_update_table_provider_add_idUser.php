@@ -24,8 +24,8 @@ class UpdateTableProviderAddIdUser extends Migration
      */
     public function down()
     {
-        Schema::table('providers', function(Blueprint $table) {
+        Schema::table('providers', function (Blueprint $table) {
             $table->dropColumn('idUser');
-        }
+        });
     }
 }

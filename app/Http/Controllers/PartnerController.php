@@ -20,22 +20,22 @@ class PartnerController extends Controller
     private $message;
     private $provider_id;
 
-    public function __construct(Carbon $carbon, Request $request)
+    public function __construct(Request $request, Carbon $carbon)
     {
         $this->middleware('auth:all');
         $this->carbon = $carbon;
         $this->request = $request;
         $this->failed = false;
         $this->message = "";
-        $this->getIdProvider();
     }
 
     /**
      * Top 5+ sales products
      * @return Collection
      */
-    public function TopSales()
+    public function TopSales(Request $request)
     {
+        $this->getIdProvider($request);
         if (\Validator::make($this->request->all(), ['filter' => 'integer|between:1,4'])->fails()) {
             return response()->json(['message' => 'parametros no validos']);
         }
@@ -44,7 +44,7 @@ class PartnerController extends Controller
             return response()->json(["message" => $this->message], 401);
         }
 
-        $products = DB::table('auxproducts')->select(array('name'))->where('provider_id', '=', $this->provider)->groupBy('name')->lists('name');
+        $products = DB::table('auxproducts')->select(array('name'))->where('provider_id', '=', $this->provider_id)->groupBy('name')->lists('name');
 
         $top = DB::table('auxmovements as m')->select('p.name', DB::raw('count(`p`.`name`) as quantity'))
                         ->join('auxproducts as p', 'p.id', '=', 'm.product_id')
@@ -63,9 +63,10 @@ class PartnerController extends Controller
      *  Top 5- stock in store
      *  @return Collection 
      */
-    public function TopLessSold()
+    public function TopLessSold(Request $request)
     {
-        $products = DB::table('auxproducts')->select(array('name'))->where('provider_id', '=', $this->provider)->groupBy('name')->lists('name');
+        $this->getIdProvider($request);
+        $products = DB::table('auxproducts')->select(array('name'))->where('provider_id', '=', $this->provider_id)->groupBy('name')->lists('name');
 
         $top = DB::table('auxproducts')->select('name', DB::raw('count(`name`) as quantity'))
             ->whereIn('name', $products)
@@ -81,8 +82,9 @@ class PartnerController extends Controller
      *  Status sales product for provider 
      *  @return Collection, ChartData
      */
-    public function ProductStatusForSales()
+    public function ProductStatusForSales(Request $request)
     {
+        $this->getIdProvider($request);
         if (\Validator::make($this->request->all(), ['filter' => 'integer|between:1,4'])->fails()) {
             return response()->json(['message' => 'parametros no validos']);
         }
@@ -91,7 +93,7 @@ class PartnerController extends Controller
             return response()->json(["message" => $this->message], 401);
         }
 
-        $products = DB::table('auxproducts')->select(array('name'))->where('provider_id', '=', $this->provider)->groupBy('name')->lists('name');
+        $products = DB::table('auxproducts')->select(array('name'))->where('provider_id', '=', $this->provider_id)->groupBy('name')->lists('name');
 
         $top = DB::table('auxmovements as m')->select('p.name', DB::raw('count(`p`.`name`) as quantity'))
                         ->join('auxproducts as p', 'p.id', '=', 'm.product_id')
@@ -125,8 +127,9 @@ class PartnerController extends Controller
         return response()->json(['products' => $top, 'chart' => $chart], 200);
     }
 
-    public function saleMonth()
+    public function saleMonth(Request $request)
     {
+        $this->getIdProvider($request);
         if ($this->getDates("Month")->failed) {
             return response()->json(["message" => $this->message], 401);
         }
@@ -140,7 +143,7 @@ class PartnerController extends Controller
             ->leftJoin('settlements AS d', 'd.product_id', '=', 'p.id')
             ->where('m.status', 'like', '%'.$status.'%')
 //            ->where('m.situation',null)
-           ->where('p.provider_id', $this->provider)
+           ->where('p.provider_id', $this->provider_id)
             ->where(DB::raw('DATE(m.date_shipment)'), '>=', $this->start)
             ->where(DB::raw('DATE(m.date_shipment)'), '<', $this->end)
             ->groupby('fecha')
@@ -176,8 +179,9 @@ class PartnerController extends Controller
         return response()->json(['days_lists' => $days_list, 'data_lists' => $data_list]);
     }
 
-    public function movementsGet()
+    public function movementsGet(Request $request)
     {
+        $this->getIdProvider($request);
         if ($this->getDates()->failed) {
             return response()->json(["message" => $this->message], 401);
         }
@@ -194,7 +198,7 @@ class PartnerController extends Controller
             ->leftJoin('settlements AS d', 'd.product_id', '=', 'p.id')
             ->where('m.status', 'like', '%'.$status.'%')
 //            ->where('m.situation',null)
-            ->where('p.provider_id', $this->provider)
+            ->where('p.provider_id', $this->provider_id)
             ->where(DB::raw('DATE(m.date_shipment)'), '>=', $this->start)
             ->where(DB::raw('DATE(m.date_shipment)'), '<', $this->end)
             ->orderby('p.name', 'c.name', 's.name')
@@ -285,13 +289,14 @@ class PartnerController extends Controller
         }
     }
 
-    public function getIdProvider()
+    public function getIdProvider($request)
     {
-        $user_id = $this->request->input('user')['sub'];
+        $user_id = $request->input('user')['sub'];
         $proveedor = Provider::where('idUser', $user_id)->first();
 
         if ($proveedor != null) {
-            $this->provider = $proveedor->id;
+            $this->provider_id = $proveedor->id;
         }
+//        dd($request->input('user'),$this->provider_id);
     }
 }

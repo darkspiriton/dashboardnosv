@@ -502,15 +502,15 @@ class AuxMovementController extends Controller
     public function consolidado(){
         $date1 = Carbon::today();
         $date2 = $date1->copy()->addDay();
-        $status = "salida";
+        $status = "Vendido";
 
         $movements = DB::table('auxproducts AS p')
             ->select(DB::raw('count(p.id) as cant'),DB::raw('case when sum(p.utility-m.discount) then sum(p.utility-m.discount) else 0 end as uti')
                 ,DB::raw('case when sum(p.cost_provider+p.utility-m.discount) then sum(p.cost_provider+p.utility-m.discount) else 0 end as price')
                 ,DB::raw('case when sum(m.discount) then sum(m.discount) else 0 end as desct'))
             ->join('auxmovements AS m','m.product_id','=','p.id')
-            ->where('p.status','=',0)
-            ->where('m.situation','=',null)
+            ->where('p.status','=',2)
+            // ->where('m.situation','=',null)
             ->where('m.status','like','%'.$status.'%')
             ->where(DB::raw('DATE(m.date_shipment)'),'>=',$date1->toDateString())
             ->where(DB::raw('DATE(m.date_shipment)'),'<',$date2->toDateString())

@@ -129,6 +129,7 @@ class PartnerController extends Controller
 
     public function saleMonth(Request $request)
     {
+
         $this->getIdProvider($request);
         if ($this->getDates("Month")->failed) {
             return response()->json(["message" => $this->message], 401);
@@ -185,7 +186,7 @@ class PartnerController extends Controller
         if ($this->getDates()->failed) {
             return response()->json(["message" => $this->message], 401);
         }
-       
+
         $status = 'vendido';
         $movements=DB::table('auxproducts as p')
             ->select('m.date_shipment as fecha', 'p.cod as codigo', 'p.name as product', 'c.name as color',

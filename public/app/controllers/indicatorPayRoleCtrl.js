@@ -76,6 +76,7 @@ angular.module('App')
         };
 
         $scope.listEmployee = function() {
+            $scope.employees = [];
             petition.get('api/employee')
                 .then(function(data){
                     $scope.employees = data.employees;
@@ -86,6 +87,7 @@ angular.module('App')
         };
 
         $scope.listAreas = function() {
+            $scope.areas = [];
             petition.get('api/employee/get/roles')
                 .then(function(data){
                     $scope.areas = data.areas;

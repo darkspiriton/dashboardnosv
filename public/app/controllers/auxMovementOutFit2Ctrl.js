@@ -102,6 +102,7 @@ angular.module('App')
         };
 
         $scope.detail = function( ind ){
+            $scope.outfitDetail = {};
             var id = $scope.tableData[ind].id;
             petition.get('api/auxmovements-outfit/' + id )
                 .then(function(data){

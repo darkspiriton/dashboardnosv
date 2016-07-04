@@ -104,6 +104,7 @@ angular.module('App')
 
         $scope.ListCodes = function(name) {
             if(name == undefined)return;
+            $scope.codes = [];
             petition.get('api/outfit/get/products/'+ name)
                 .then(function(data){
                     $scope.codes = data.codes;
@@ -115,6 +116,7 @@ angular.module('App')
         };
 
         $scope.detail = function( ind ){
+            $scope.outfitDetail = {};
             var id = $scope.tableData[ind].id;
             petition.get('api/outfit/' + id )
                 .then(function(data){

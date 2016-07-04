@@ -82,6 +82,7 @@ angular.module('App')
         };
 
         $scope.view = function( ind ){
+            $scope.customerDetail = {};
             var id = $scope.tableData[ind].id;
             petition.get('api/customer/' + id)
                 .then(function(data){

@@ -115,6 +115,7 @@ angular.module('App')
         };
 
         $scope.listProduct = function() {
+            $scope.products = [];
             petition.get('api/auxproduct/get/uniques')
                 .then(function(data){
                     $scope.products = data.products;
@@ -126,6 +127,7 @@ angular.module('App')
 
         $scope.detail = function( ind ){
             var id = $scope.tableData[ind].id;
+            $scope.outfitDetail = {};
             petition.get('api/outfit/' + id )
                 .then(function(data){
                     $scope.outfitDetail = data.outfit;

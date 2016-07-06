@@ -123,12 +123,6 @@
         <li id="comments">
             <a href="#" ui-sref="Comentarios"><i class="md md-messenger"></i> Gestionar comentarios</a>
         </li>
-
-        <li id="partners">
-            <a href="#" ui-sref="Socios"><i class="md md-messenger"></i> Vista socios</a>
-        <li id="sub-menu">
-            <a href="#" ui-sref="Provider"><i class="md md-messenger"></i> Proveedores</a>
-        </li>
     </ul>
 @stop
 

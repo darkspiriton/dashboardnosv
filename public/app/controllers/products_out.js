@@ -51,6 +51,7 @@ angular.module('App')
                         $scope.updateList = false;
                     });
             };
+        
             $scope.list();
             $scope.list2();
             $scope.list3();

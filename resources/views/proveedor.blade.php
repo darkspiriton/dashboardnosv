@@ -2,13 +2,11 @@
 
 @section('dashMenu')
     <ul class="main-menu">
-        <li class="active"><a href="#/"><i class="md md-home"></i> Inicio</a></li>
+        <li class="active"><a href="#/"><i class="md md-home"></i> Inicio </a></li>
     </ul>
-
-    <li class="sub-menu">
-        <a ui-sref="Socios"><i class="md md-now-widgets"></i> Ventas Proveedor </a>
-    </li>
-
+    <ul class="main-menu">
+       <li><a ui-sref="Socios"><i class="md md-now-widgets"></i> Ventas Proveedor </a></li>
+    </ul>
 @stop
 
 @section('dashCtrls')

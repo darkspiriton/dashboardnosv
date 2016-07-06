@@ -123,6 +123,8 @@
         <li id="comments">
             <a href="#" ui-sref="Comentarios"><i class="md md-messenger"></i> Gestionar comentarios</a>
         </li>
+
+        <li><a ui-sref="SociosPanel"><i class="md md-now-widgets"></i> Vista Proveedor</a></li>
     </ul>
 @stop
 
@@ -167,5 +169,7 @@
 
     <script src="app/controllers/auxMovementDayCtrl.js"></script>
     <script src="app/controllers/auxProviderProductCtrl.js"></script>
+
+    <script src="app/controllers/PartnerPanelCtrl.js"></script>
 
 @stop

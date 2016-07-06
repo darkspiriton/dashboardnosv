@@ -7,45 +7,61 @@
     </div>
 
     <div class="card-header bgm-blue">
-        <div ng-form="dates" class="row report-date">
-            <h2 class="col-xs-6 col-sm-1 text-right">Proveedor</h2>
-                <select class="btn btn-default col-sm-2" ng-options="provider.id as provider.name for provider in providers" ng-model="mtn.provider_id" required>
+        <div class="row report-date p-l-15 p-r-15">
+            <div class="col-xs-12 col-sm-3 btn-group p-0 box-s">
+                <button type="button" class="btn btn-block dropdown-toggle bgm-white c-black" data-toggle="dropdown">
+                    Filtro
+                    <span class="caret"></span>
+                </button>
+                <ul class="dropdown-menu pointer w-100" style="text-align: center;" role="menu">
+                    <li><a ng-click="searchView = 1;mtn={};range={};">Por día</a></li>
+                    <li><a ng-click="searchView = 2;d={};range={};">Por mes</a></li>
+                    <li><a ng-click="searchView = 3;d={};mtn={};">Entre fechas</a></li>
+                    <li><a ng-click="searchView = 0;d={};mtn={};range={};">Ninguno</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+    <div ng-form="filterDates" ng-show="searchView > 0" class="card-header bgm-blue p-t-0">
+
+        <div   ng-show="(searchView > 0)" class="row report-date p-l-15 p-r-15">
+            <h2 class="col-xs-6 col-sm-2 text-right m-t-5">Proveedor</h2>
+            <select class="btn btn-default col-sm-2" ng-options="provider.id as provider.name for provider in providers" ng-change="providerChange()" ng-model="p.provider_id" required>
                 <option value="" disabled="disabled" select="true">Seleccione</option>
             </select>
         </div>
-    </div>
 
-    <div class="card-header bgm-blue">
-        <div ng-form="dates" class="row report-date">
-            <h2 class="col-xs-6 col-sm-1 text-right">Diario</h2>
-            <input type="date" class="btn btn-default col-sm-2" ng-change="dateChange(d)" ng-model="d.day" required>
-            <input type="button" ng-disabled="!dates.$valid" ng-click="list()" class="btn bgm-indigo m-l-20 col-sm-1" value="buscar">
+        <div ng-show="(searchView == 1)" class="row report-date p-l-15 p-r-15">
+            <h2 class="col-xs-6 col-sm-2 text-right m-t-5">Diario</h2>
+            <input type="date" class="col-xs-7 col-sm-2 btn btn-default m-t-5" ng-change="dateChange(d)" ng-model="d.day" ng-required="(searchView == 1)">
         </div>
-    </div>
 
-    <div class="card-header bgm-blue">
-        <div ng-form="month" class="row report-date">
-
-            <h2 class="col-xs-12 col-sm-1 text-right">Año</h2>
-            <select class="col-sm-1" ng-options="year as year for year in years" ng-change="dateChange(mtn)" ng-model="mtn.year" required>
+        <div ng-show="searchView == 2" class="row report-date p-l-15 p-r-15">
+            <h2 class="col-xs-5 col-sm-2 text-right m-t-5">Año</h2>
+            <select class="col-xs-7 col-sm-2 btn btn-default m-t-5" ng-options="year as year for year in years" ng-change="dateChange(mtn)" ng-model="mtn.year" ng-required="(searchView == 2)">
                 <option value="" disabled="disabled" selected="selected">Seleccione</option>
             </select>
-            <h2 class="col-xs-12 col-sm-1 text-right">Mensual</h2>
-            <select class="btn btn-default col-sm-1" ng-options="month.id as month.name for month in months" ng-change="dateChange(mtn)" ng-model="mtn.month" required>
+            <h2 class="col-xs-5 col-sm-2 text-right m-t-5">Mensual</h2>
+            <select class="col-xs-7 col-sm-2 btn btn-default m-t-5" ng-options="month.id as month.name for month in months" ng-change="dateChange(mtn)" ng-model="mtn.month" ng-required="(searchView == 2)">
                 <option value="" disabled="disabled" select="true">Seleccione</option>
             </select>
-            <input type="button" ng-disabled="!month.$valid" ng-click="list()" class="btn bgm-indigo m-l-20 col-sm-1" value="buscar">
         </div>
-    </div>
 
-    <div class="card-header bgm-blue">
-        <div ng-form="datesaux" class="row report-date">
-            <h2 class="col-xs-12 col-sm-1 text-right">Inicio</h2>
-            <input type="date" class="btn btn-default col-sm-2" ng-change="dateChange(range)" ng-model="range.start" required>
-            <h2 class="col-xs-12 col-sm-1 text-right">Fin</h2>
-            <input type="date" class="btn btn-default col-sm-2" ng-change="dateChange(range)" ng-model="range.end" required>
-            <input type="button" ng-disabled="!datesaux.$valid" ng-click="list()" class="btn bgm-indigo m-l-20 col-sm-1" value="buscar">
+        <div ng-show="searchView == 3" class="row report-date p-l-15 p-r-15">
+            <h2 class="col-xs-5 col-sm-2 text-right m-t-5">Inicio</h2>
+            <input type="date" class="col-xs-7 col-sm-2 btn btn-default m-t-5" ng-change="dateChange(range)" ng-model="range.start" ng-required="(searchView == 3)">
+            <h2 class="col-xs-5 col-sm-2 text-right m-t-5">Fin</h2>
+            <input type="date" class="col-xs-7 col-sm-2 btn btn-default m-t-5" ng-change="dateChange(range)" ng-model="range.end" ng-required="(searchView == 3)">
         </div>
+
+        <div class="row m-t-15 p-15">
+            <div class="col-xs-12 col-sm-3 p-0 box-s">
+                <input type="button" ng-disabled="!filterDates.$valid" ng-click="list()" class="btn btn-block bgm-indigo m-t-5" value="buscar">
+            </div>
+        </div>
+
     </div>
 
     <div class="card-body card-padding table-responsive">

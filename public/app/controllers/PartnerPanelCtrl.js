@@ -2,7 +2,7 @@ angular.module('App')
     .config(function($stateProvider) {
         $stateProvider
             .state('SociosPanel', {
-                url: '/Reporte-de-productividad-socios',
+                url: '/Reporte-de-productividad-socios-admin',
                 templateUrl: 'app/partials/PartnerPanel.html',
                 controller : 'PartnerPanelCtrl'
             });
@@ -92,9 +92,15 @@ angular.module('App')
 
         $scope.dateChange = function(date){
             $scope.date = angular.copy(date);
+            $scope.date.provider_id = $scope.p.provider_id;
+        }
+
+        $scope.providerChange = function(){            
+            $scope.date.provider_id = $scope.p.provider_id;
         }
 
         $scope.list = function(){
+            // console.log($scope.date.provider_id);
             $scope.listTopSales();
             $scope.listLessSold();
             $scope.productSales();
@@ -127,6 +133,8 @@ angular.module('App')
             {id:11, name:'Noviembre'},
             {id:12, name:'Diciembre'},
         ];
+
+        // $scope.date.provider_id=1;
 
         $scope.years = [2016,2017];
 

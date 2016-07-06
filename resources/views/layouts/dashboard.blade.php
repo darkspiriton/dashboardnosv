@@ -98,9 +98,9 @@
     <ul class="f-menu">
         <li><a href="#">Home</a></li>
         <li><a href="#">Dashboard</a></li>
-        <li><a href="#">Reports</a></li>
-        <li><a href="#">Support</a></li>
-        <li><a href="#">Contact</a></li>
+        <li><a href="#">Reportar</a></li>
+        <li><a href="#">Soporte</a></li>
+        <li><a href="#">Contacto</a></li>
     </ul>
 </footer>
 

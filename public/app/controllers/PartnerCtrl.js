@@ -136,7 +136,7 @@ angular.module('App')
                 {"sTitle": "Producto", "bSortable" : true, 'sWidth': '1px'},
                 {"sTitle": "Código", "bSortable" : true},
                 {"sTitle": "Costo Unitario S/.", "bSortable" : true},
-                {"sTitle": "Tipo", "bSortable" : true}
+                {"sTitle": "Venta", "bSortable" : true}
             ],
             buttons:
                 [
@@ -230,5 +230,6 @@ angular.module('App')
         angular.element(document).ready(function(){
             $scope.list();
             $scope.day = $scope.mtn = $scope.range = {};
+            $scope.searchView = 0;
         });
     });

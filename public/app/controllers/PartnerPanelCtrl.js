@@ -1,13 +1,13 @@
 angular.module('App')
     .config(function($stateProvider) {
         $stateProvider
-            .state('Socios', {
+            .state('SociosPanel', {
                 url: '/Reporte-de-productividad-socios',
-                templateUrl: 'app/partials/Partner.html',
-                controller : 'PartnerCtrl'
+                templateUrl: 'app/partials/PartnerPanel.html',
+                controller : 'PartnerPanelCtrl'
             });
     })
-    .controller('PartnerCtrl', function($scope, $compile, $log, util, petition, toastr, $filter, charts){
+    .controller('PartnerPanelCtrl', function($scope, $compile, $log, util, petition, toastr, $filter, charts){
 
         util.liPage('partners');
 
@@ -152,6 +152,7 @@ angular.module('App')
 
         $scope.listProductMovements = function(){
             $scope.updateList = true;
+            
             petition.get('api/partner/get/products/movements' , { params : $scope.date })
                 .then(function(data){
                     $scope.tableData = data.movements;
@@ -209,7 +210,7 @@ angular.module('App')
                         }
                     ]
                 }});
-        };    
+        };
 
         $scope.salesDate = function() {
             $scope.updateList = true;
@@ -226,10 +227,21 @@ angular.module('App')
                     $scope.updateList = false;
                 });
         };
+
+        $scope.listProviders = function() {
+            petition.get('api/auxproviders')
+                .then(function(data){
+                    $scope.providers = data.providers;
+                    // $scope.providers.push(newProvider);
+                }, function(error){
+                    console.log(error);
+                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                });
+        };
              
         angular.element(document).ready(function(){
             $scope.list();
-            
+            $scope.listProviders();
             $scope.day = $scope.mtn = $scope.range = {};
         });
     });

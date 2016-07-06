@@ -90,6 +90,7 @@ angular.module('App')
         };
 
         $scope.listAreas = function() {
+            $scope.areas = [];
             petition.get('api/employee/get/roles')
                 .then(function(data){
                     $scope.areas = data.areas;
@@ -100,6 +101,7 @@ angular.module('App')
         };
 
         $scope.view = function( ind ){
+            $scope.employeeDetail = {};
             var id = $scope.tableData[ind].id;
             petition.get('api/employee/' + id)
                 .then(function(data){
@@ -120,6 +122,8 @@ angular.module('App')
 
         $scope.CostsView = function(date){
             date || (date = new Date());
+            $scope.costoxmin = "";
+            $scope.costoxhor = "";
             petition.get('api/employee/get/indicator', {params: {employee_id: $scope.employeeDetail.id, date:date}})
                 .then(function(data){
                     $scope.costoxmin = data.costoMinuto;

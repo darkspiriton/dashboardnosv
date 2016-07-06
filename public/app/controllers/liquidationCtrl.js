@@ -67,6 +67,7 @@ angular.module('App')
         };
 
         $scope.listProduct = function() {
+            $scope.products = [];
             petition.get('api/auxproduct/get/uniques')
                 .then(function(data){
                     $scope.products = data.products;
@@ -78,6 +79,7 @@ angular.module('App')
 
         $scope.ListCodes = function(name) {
             if(name == undefined)return;
+            $scope.codes = [];
             petition.get('api/auxproduct/get/uniques/'+ name +'/codes')
                 .then(function(data){
                     $scope.codes = data.codes;

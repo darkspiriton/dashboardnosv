@@ -59,6 +59,7 @@ angular.module('App')
         };
 
         $scope.view = function( ind ){
+            $scope.kardexAttributes = [];
             var id = $scope.tableData[ind].group_attribute_id;
             petition.get('api/attribute/' + id)
                 .then(function(data){

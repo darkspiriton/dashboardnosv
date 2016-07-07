@@ -124,7 +124,15 @@
             <a href="#" ui-sref="Comentarios"><i class="md md-messenger"></i> Gestionar comentarios</a>
         </li>
 
-        <li><a ui-sref="SociosPanel"><i class="md md-now-widgets"></i> Vista Proveedor</a></li>
+
+
+        <li class="sub-menu">
+            <a href="#"><i class="md md-now-widgets"></i>Vista Proveedor</a>
+            <ul>
+                <li><a ui-sref="SociosPanel"><i class="md md-now-widgets"></i> Ventas Proveedores</a></li>
+                <li><a ui-sref="#"><i class="md md-now-widgets"></i> Pago a Proveedores</a></li>
+            </ul>
+        </li>
     </ul>
 @stop
 

@@ -12,9 +12,9 @@ class UpdateTableProviderAddIdUser extends Migration
      */
     public function up()
     {
-        Schema::table('providers', function(Blueprint $table){
-            $table->integer('idUser')->unsigned();
-        });
+//        Schema::table('providers', function(Blueprint $table){
+//            $table->integer('idUser')->unsigned();
+//        });
     }
 
     /**
@@ -24,8 +24,8 @@ class UpdateTableProviderAddIdUser extends Migration
      */
     public function down()
     {
-        Schema::table('providers', function (Blueprint $table) {
-            $table->dropColumn('idUser');
-        });
+//        Schema::table('providers', function (Blueprint $table) {
+//            $table->dropColumn('idUser');
+//        });
     }
 }

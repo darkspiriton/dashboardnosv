@@ -130,7 +130,7 @@
             <a href="#"><i class="md md-now-widgets"></i>Vista Proveedor</a>
             <ul>
                 <li><a ui-sref="SociosPanel"><i class="md md-now-widgets"></i> Ventas Proveedores</a></li>
-                <li><a ui-sref="#"><i class="md md-now-widgets"></i> Pago a Proveedores</a></li>
+                <li><a ui-sref="pagos"><i class="md md-now-widgets"></i> Pago a Proveedores</a></li>
             </ul>
         </li>
     </ul>
@@ -179,5 +179,7 @@
     <script src="app/controllers/auxProviderProductCtrl.js"></script>
 
     <script src="app/controllers/PartnerPanelCtrl.js"></script>
+
+    <script src="app/controllers/PaymentCtrl.js"></script>
 
 @stop

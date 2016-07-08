@@ -26,7 +26,7 @@
 
     <div ng-form="filterDates" ng-show="searchView > 0" class="card-header bgm-blue p-t-0">
 
-        <div   ng-show="(searchView > 0)" class="row report-date p-l-15 p-r-15">
+        <div  class="row report-date p-l-15 p-r-15">
             <h2 class="col-xs-6 col-sm-2 text-right m-t-5">Proveedor</h2>
             <select class="btn btn-default col-sm-2" ng-options="provider.id as provider.name for provider in providers" ng-change="providerChange()" ng-model="p.provider_id" required>
                 <option value="" disabled="disabled" select="true">Seleccione</option>

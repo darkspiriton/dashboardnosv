@@ -62,7 +62,8 @@ angular.module('App')
             {id: 2, name:'La foto no es igual al producto' },
             {id: 3, name:'Producto dañado' },
             {id: 4, name:'No se encontro al cliente' },
-            {id: 5, name:'No es la talla' }
+            {id: 5, name:'No es la talla' },
+            {id: 6, name:'Reprogramado' }
         ];
 
         $scope.list = function() {

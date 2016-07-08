@@ -242,6 +242,8 @@ Route::group(['prefix' => 'api'], function(){
     Route::get('partner/get/products/movements','PartnerController@movementsGet');
 
     Route::get('partner/get/products/provider/sale','PartnerController@saleMonth');
+
+    Route::get('partner/get/payments','PartnerController@infoPayment');
 });
 
 Route::get('/test', function(\Illuminate\Http\Request $request){

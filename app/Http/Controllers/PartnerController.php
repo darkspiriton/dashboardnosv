@@ -4,7 +4,9 @@ namespace Dashboard\Http\Controllers;
 
 use Carbon\Carbon;
 use DB;
+use Dashboard\Http\Controllers\Util\Oxigeno;
 use Dashboard\Http\Requests;
+use Dashboard\Models\Experimental\Movement;
 use Dashboard\Models\Experimental\Product;
 use Dashboard\Models\Experimental\Provider;
 use Illuminate\Http\Request;
@@ -129,7 +131,6 @@ class PartnerController extends Controller
 
     public function saleMonth(Request $request)
     {
-
         $this->getIdProvider($request);
         if ($this->getDates("Month")->failed) {
             return response()->json(["message" => $this->message], 401);
@@ -298,6 +299,35 @@ class PartnerController extends Controller
         if ($proveedor != null) {
             $this->provider_id = $proveedor->id;
         }
-//        dd($request->input('user'),$this->provider_id);
+    }
+
+    public function infoPayment()
+    {
+        $dt = Oxigeno::generate();
+        // return $dt->all();
+        // return $dt->getMonth(1)->start;
+        $data = array();
+
+        for ($i=1; $i <= $dt->currentMonth(); $i++) {
+            $interval = $dt->getMonth($i);
+            $movements=DB::table('auxproducts as p')
+                ->select('m.date_shipment as fecha', 'p.cod as codigo','p.cost_provider as cost')
+                ->join('auxmovements as m', 'p.id', '=', 'm.product_id')
+                ->where('m.status', "Vendido")
+                ->where('p.provider_id', 3)
+                ->where('m.date_shipment', '>=', $interval->start)
+                ->where('m.date_shipment', '<=', $interval->end)
+                ->orderby('p.name', 'c.name', 's.name')
+                ->get();
+
+            $temp["month"] = $interval->name;
+            $temp["start"] = $interval->start;
+            $temp["end"] = $interval->end;
+            $temp["data"] = $movements;
+
+            array_push($data, $temp);
+        }
+
+        return response()->json(["movements" => $data, "other" => null]);
     }
 }

@@ -19,21 +19,21 @@ class PayProviderController extends Controller
      */
     public function index(Request $request)
     {
-        $rules = [
-            'id'    => 'required|integer|exists:providers,id'
-        ];
+//        $rules = [
+//            'id'    => 'required|integer|exists:providers,id'
+//        ];
 
         try{
-            $validator = \Validator::make($request->all(),$rules);
-            if($validator->fails()){
-                return response()->json(['message' => 'No posee todo los campos necesario para la consulta de pagos'],401);
-            }
+//            $validator = \Validator::make($request->all(),$rules);
+//            if($validator->fails()){
+//                return response()->json(['message' => 'No posee todo los campos necesario para la consulta de pagos'],401);
+//            }
             $status = 'vendido';
             $products=DB::table('auxproducts as p')
-                ->select('m.date_shipment as fecha', 'p.cod as codigo', 'p.name as product', 'c.name as color',
-                    DB::raw('case when d.price then d.price else p.cost_provider + p.utility end as price'), 's.name as talla', 'm.status', 'm.discount',
+                ->select('m.date_shipment as fecha', 'p.cod as codigo', 'p.name as name', 'c.name as color',
+                    DB::raw('case when d.price then d.price else p.cost_provider + p.utility end as price'), 's.name as talla', 'm.status as estado', 'm.discount',
                     DB::raw('case when d.price then d.price-m.discount else p.cost_provider + p.utility -m.discount end as pricefinal'),
-                    DB::raw('case when d.price then 1 else 0 end as liquidacion'), 'p.cost_provider as cost','p.payment_status as statusPayment')
+                    DB::raw('case when d.price then 1 else 0 end as liquidacion'), 'p.cost_provider as cost','p.payment_status as status')
                 ->join('auxmovements as m', 'p.id', '=', 'm.product_id')
                 ->join('colors as c', 'c.id', '=', 'p.color_id')
                 ->join('sizes as s', 's.id', '=', 'p.size_id')

@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class UpdateTableProviderAddIdUser extends Migration
+class UpdateTableProductAdd extends Migration
 {
     /**
      * Run the migrations.
@@ -12,9 +12,9 @@ class UpdateTableProviderAddIdUser extends Migration
      */
     public function up()
     {
-//        Schema::table('providers', function(Blueprint $table){
-//            $table->integer('idUser')->unsigned();
-//        });
+        Schema::table('auxproducts',function(Blueprint $table){
+           $table->boolean('payment_status') ;
+        });
     }
 
     /**
@@ -24,8 +24,8 @@ class UpdateTableProviderAddIdUser extends Migration
      */
     public function down()
     {
-//        Schema::table('providers', function (Blueprint $table) {
-//            $table->dropColumn('idUser');
-//        });
+        Schema::table('auxproducts', function(Blueprint $table){
+           $table->dropColumn('payment_status'); 
+        });
     }
 }

@@ -1,13 +1,13 @@
 angular.module('App')
     .config(function($stateProvider) {
         $stateProvider
-            .state('Socios', {
-                url: '/Reporte-de-productividad-socios',
-                templateUrl: 'app/partials/Partner.html',
-                controller : 'PartnerCtrl'
+            .state('SociosPanel', {
+                url: '/Reporte-de-productividad-socios-admin',
+                templateUrl: 'app/partials/PartnerPanel.html',
+                controller : 'PartnerPanelCtrl'
             });
     })
-    .controller('PartnerCtrl', function($scope, $compile, $log, util, petition, toastr, $filter, charts){
+    .controller('PartnerPanelCtrl', function($scope, $compile, $log, util, petition, toastr, $filter, charts){
 
         util.liPage('partners');
 
@@ -92,9 +92,15 @@ angular.module('App')
 
         $scope.dateChange = function(date){
             $scope.date = angular.copy(date);
+            $scope.date.provider_id = $scope.p.provider_id;
+        }
+
+        $scope.providerChange = function(){            
+            $scope.date.provider_id = $scope.p.provider_id;
         }
 
         $scope.list = function(){
+            // console.log($scope.date.provider_id);
             $scope.listTopSales();
             $scope.listLessSold();
             $scope.productSales();
@@ -128,6 +134,8 @@ angular.module('App')
             {id:12, name:'Diciembre'},
         ];
 
+        // $scope.date.provider_id=1;
+
         $scope.years = [2016,2017];
 
         var C_tableConfig  =   {
@@ -136,7 +144,7 @@ angular.module('App')
                 {"sTitle": "Producto", "bSortable" : true, 'sWidth': '1px'},
                 {"sTitle": "Código", "bSortable" : true},
                 {"sTitle": "Costo Unitario S/.", "bSortable" : true},
-                {"sTitle": "Venta", "bSortable" : true}
+                {"sTitle": "Tipo", "bSortable" : true}
             ],
             buttons:
                 [
@@ -152,6 +160,7 @@ angular.module('App')
 
         $scope.listProductMovements = function(){
             $scope.updateList = true;
+            
             petition.get('api/partner/get/products/movements' , { params : $scope.date })
                 .then(function(data){
                     $scope.tableData = data.movements;
@@ -209,7 +218,7 @@ angular.module('App')
                         }
                     ]
                 }});
-        };    
+        };
 
         $scope.salesDate = function() {
             $scope.updateList = true;
@@ -226,11 +235,21 @@ angular.module('App')
                     $scope.updateList = false;
                 });
         };
+
+        $scope.listProviders = function() {
+            petition.get('api/auxproviders')
+                .then(function(data){
+                    $scope.providers = data.providers;
+                    // $scope.providers.push(newProvider);
+                }, function(error){
+                    console.log(error);
+                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                });
+        };
              
         angular.element(document).ready(function(){
             $scope.list();
-            
+            $scope.listProviders();
             $scope.day = $scope.mtn = $scope.range = {};
-            $scope.searchView = 0;
         });
     });

@@ -223,7 +223,12 @@ Route::group(['prefix' => 'api'], function(){
     Route::post('publicity/{id}/upload','PublicityController@upload_image');
     Route::get('publicity/get/facebook','PublicityController@ByFacebook');
 
-
+    /**
+     * PAYMENTS PROVIDERS
+     */    
+    Route::resource('payment','PayProviderController',
+        ['only' => ['index','store','update','destroy']]);
+    
     Route::group(['prefix'=>'publicity'],function(){
         Route::get('relation/{id}','PublicityController@relation');
         Route::get('relation/indicator/get','PublicityController@indicator');

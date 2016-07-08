@@ -21,6 +21,7 @@ class CreatePayProviderTable extends Migration
             $table->increments('id');
             $table->integer('provider_id')->unsigned();
             $table->integer('type_discount_id')->unsigned();
+            $table->string('name_bank');
             $table->dateTime('date');
             $table->float('amount');
             $table->string('reason');

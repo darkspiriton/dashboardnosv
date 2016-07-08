@@ -1,6 +1,9 @@
 <div class="card" >
     <div class="card-header bgm-blue">
         <h2>Productos Vendidos</h2>
+        <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="list()"
+                data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
+                title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
     </div>
 
     <div class="card-header bgm-blue">
@@ -22,26 +25,34 @@
 
 
     <div ng-form="filterDates" ng-show="searchView > 0" class="card-header bgm-blue p-t-0">
+
+        <div   ng-show="(searchView > 0)" class="row report-date p-l-15 p-r-15">
+            <h2 class="col-xs-6 col-sm-2 text-right m-t-5">Proveedor</h2>
+            <select class="btn btn-default col-sm-2" ng-options="provider.id as provider.name for provider in providers" ng-change="providerChange()" ng-model="p.provider_id" required>
+                <option value="" disabled="disabled" select="true">Seleccione</option>
+            </select>
+        </div>
+
         <div ng-show="(searchView == 1)" class="row report-date p-l-15 p-r-15">
-            <h2 class="col-xs-5 col-sm-1 text-right m-t-5">Diario</h2>
+            <h2 class="col-xs-6 col-sm-2 text-right m-t-5">Diario</h2>
             <input type="date" class="col-xs-7 col-sm-2 btn btn-default m-t-5" ng-change="dateChange(d)" ng-model="d.day" ng-required="(searchView == 1)">
         </div>
 
         <div ng-show="searchView == 2" class="row report-date p-l-15 p-r-15">
-            <h2 class="col-xs-5 col-sm-1 text-right m-t-5">Año</h2>
-            <select class="col-xs-7 col-sm-1 btn btn-default m-t-5" ng-options="year as year for year in years" ng-change="dateChange(mtn)" ng-model="mtn.year" ng-required="(searchView == 2)">
+            <h2 class="col-xs-5 col-sm-2 text-right m-t-5">Año</h2>
+            <select class="col-xs-7 col-sm-2 btn btn-default m-t-5" ng-options="year as year for year in years" ng-change="dateChange(mtn)" ng-model="mtn.year" ng-required="(searchView == 2)">
                 <option value="" disabled="disabled" selected="selected">Seleccione</option>
             </select>
-            <h2 class="col-xs-5 col-sm-1 text-right m-t-5">Mensual</h2>
-            <select class="col-xs-7 col-sm-1 btn btn-default m-t-5" ng-options="month.id as month.name for month in months" ng-change="dateChange(mtn)" ng-model="mtn.month" ng-required="(searchView == 2)">
+            <h2 class="col-xs-5 col-sm-2 text-right m-t-5">Mensual</h2>
+            <select class="col-xs-7 col-sm-2 btn btn-default m-t-5" ng-options="month.id as month.name for month in months" ng-change="dateChange(mtn)" ng-model="mtn.month" ng-required="(searchView == 2)">
                 <option value="" disabled="disabled" select="true">Seleccione</option>
             </select>
         </div>
 
         <div ng-show="searchView == 3" class="row report-date p-l-15 p-r-15">
-            <h2 class="col-xs-5 col-sm-1 text-right m-t-5">Inicio</h2>
+            <h2 class="col-xs-5 col-sm-2 text-right m-t-5">Inicio</h2>
             <input type="date" class="col-xs-7 col-sm-2 btn btn-default m-t-5" ng-change="dateChange(range)" ng-model="range.start" ng-required="(searchView == 3)">
-            <h2 class="col-xs-5 col-sm-1 text-right m-t-5">Fin</h2>
+            <h2 class="col-xs-5 col-sm-2 text-right m-t-5">Fin</h2>
             <input type="date" class="col-xs-7 col-sm-2 btn btn-default m-t-5" ng-change="dateChange(range)" ng-model="range.end" ng-required="(searchView == 3)">
         </div>
 
@@ -50,7 +61,7 @@
                 <input type="button" ng-disabled="!filterDates.$valid" ng-click="list()" class="btn btn-block bgm-indigo m-t-5" value="buscar">
             </div>
         </div>
-        
+
     </div>
 
     <div class="card-body card-padding table-responsive">
@@ -60,8 +71,8 @@
     </div><br>
 
     <div class="card-header bgm-blue">
-        <form name="formproduct" id="form" class="form-horizontal m-0" autocomplete="off">
-            <div class="form-group m-t-0 m-b-0">
+        <form name="formproduct" id="form" class="form-horizontal" autocomplete="off">
+            <div class="form-group">
                 <label class="col-xs-2 col-sm-2 control-label" style="color: white;font-size: 15px;">Ingresos Acumulados</label>
                 <div class="col-xs-10 col-sm-4">
                     <div class="input-group">
@@ -86,7 +97,7 @@
         <!-- Recent Items -->
         <div class="card">
             <div class="card-header">
-                <h2>TOP 5+ <small>top 5 productos mas vendidos del mes</small></h2>
+                <h2>TOP 5+ <small>top 5 productos mas vendidos del mes actual</small></h2>
             </div>
 
             <div class="card-body m-t-0">

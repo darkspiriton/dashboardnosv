@@ -1174,6 +1174,10 @@ div.fc-row {
   cursor: pointer; }
 
 .box-s {
-  box-shadow: none; }
+  box-shadow: none !important; }
+
+@media (max-width: 768px) {
+  body.sw-toggled #footer {
+    padding: 0; } }
 
 /*# sourceMappingURL=app.min.2.css.map */

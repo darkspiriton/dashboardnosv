@@ -292,12 +292,14 @@ class PartnerController extends Controller
 
     public function getIdProvider($request)
     {
-        $user_id = $request->input('user')['sub'];
-        $proveedor = Provider::where('idUser', $user_id)->first();
-
-        if ($proveedor != null) {
-            $this->provider_id = $proveedor->id;
+        if ($request->has("provider_id")){
+            $this->provider_id = $request->input("provider_id");
+        }else{
+            $user_id = $request->input('user')['sub'];
+            $proveedor = Provider::where('idUser', $user_id)->first();
+            if ($proveedor != null) {
+                $this->provider_id = $proveedor->id;
+            }
         }
-//        dd($request->input('user'),$this->provider_id);
     }
 }

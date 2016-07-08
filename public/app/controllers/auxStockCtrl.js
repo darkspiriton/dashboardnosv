@@ -67,6 +67,7 @@ angular.module('App')
         };
 
         $scope.view = function(i){
+            $scope.types = [];
             petition.get('api/auxproduct/get/stockProd/type/'+ $scope.tableData[i].id)
                 .then(function(data){
                     $scope.types = data.types;

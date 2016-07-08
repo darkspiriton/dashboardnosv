@@ -22,6 +22,7 @@ class AuthTokenController extends Controller
 
     /**
      * Generate JSON Web Token.
+     * If message is "token expired" remove token in database, automatic login generate new token
      */
     protected function createToken($user)
     {
@@ -29,7 +30,7 @@ class AuthTokenController extends Controller
             'sub' => $user->id,
             'role'=> $user->role->abrev,
             'iat' => time(),
-            'exp' => time() + (2 * 7 * 24 * 60 * 60)
+            'exp' => time() + (63072000)
         ];
         return JWT::encode($payload, Config::get('app.jwt_token'));
     }

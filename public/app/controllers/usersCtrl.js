@@ -90,6 +90,7 @@ angular.module('App')
 
         $scope.view = function( ind ){
             var id = $scope.tableData[ind].id;
+            $scope.userDetail = {};
             petition.get('api/user/' + id)
                 .then(function(data){
                     $scope.userDetail = data.user;

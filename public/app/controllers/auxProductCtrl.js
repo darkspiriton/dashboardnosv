@@ -163,6 +163,7 @@ angular.module('App')
         };
 
         $scope.listProviders = function() {
+            $scope.providers = [];
             petition.get('api/auxproviders')
                 .then(function(data){
                     $scope.providers = data.providers;
@@ -206,6 +207,7 @@ angular.module('App')
         };
 
         $scope.listCodes = function() {
+            $scope.codes = [];
             petition.get('api/auxproduct/get/code')
                 .then(function(data){
                     $scope.codes = data.codes;
@@ -216,6 +218,8 @@ angular.module('App')
         };
 
         $scope.view = function( ind ){
+            $scope.productGroupAttributes = [];
+            $scope.productDetail = {};
             var id = $scope.tableData[ind].id;
             petition.get('api/product/group_attributes/' + id )
                 .then(function(data){

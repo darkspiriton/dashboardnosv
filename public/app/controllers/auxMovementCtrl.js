@@ -67,17 +67,19 @@ angular.module('App')
         };
 
         $scope.otherProduct = function (i) {
-            if ($scope.anadir)
-            petition.get('api/auxmovement/get/codes' , {params: {id: $scope.tableData[i].id}})
-                .then(function(data){
-                    $scope.codes = data.codes;
-                    $scope.prdTemp = angular.copy($scope.tableData[i]);
-                    util.modal('codes');
-                }, function(error){
-                    console.log(error);
-                    toastr.error('Uyuyuy dice: ' + error.data.message);
-                    $scope.updateList = false;
-                });
+            if ($scope.anadir){
+                $scope.codes = [];
+                petition.get('api/auxmovement/get/codes' , {params: {id: $scope.tableData[i].id}})
+                    .then(function(data){
+                        $scope.codes = data.codes;
+                        $scope.prdTemp = angular.copy($scope.tableData[i]);
+                        util.modal('codes');
+                    }, function(error){
+                        console.log(error);
+                        toastr.error('Uyuyuy dice: ' + error.data.message);
+                        $scope.updateList = false;
+                    });
+            }
         };
 
         $scope.submit = function() {

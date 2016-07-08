@@ -1506,5 +1506,11 @@ div.fc-row {
 }
 
 .box-s {
-  box-shadow: none;
+  box-shadow: none !important;
+}
+
+@media (max-width: 768px) {
+  body.sw-toggled #footer {
+    padding: 0;
+  }
 }

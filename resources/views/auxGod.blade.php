@@ -23,7 +23,7 @@
                     <a href="#" ui-sref="Liquidacion"> Gestionar Promociones</a>
                 </li>
 
-                <li id="liquidation">
+                <li id="movementday">
                     <a href="#" ui-sref="MovementDay"> Movimientos Diarios</a>
                 </li>
             </ul>

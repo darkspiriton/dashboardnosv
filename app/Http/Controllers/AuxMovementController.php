@@ -109,8 +109,7 @@ class AuxMovementController extends Controller
                             2 => 'La foto no es igual al producto',
                             3 => 'Producto dañado',
                             4 => 'No se encontro cliente',
-                            5 => 'No es la talla',
-                            6 => 'Reprogramado'
+                            5 => 'No es la talla'
                         ];
 
             if($move->status != 'vendido'){
@@ -158,6 +157,7 @@ class AuxMovementController extends Controller
             $products = $request->input('products');
 
             $response = array();
+            $movementsRes = array();
 
             foreach($products as $product){
                 $prd = Product::find($product['id']);
@@ -172,10 +172,11 @@ class AuxMovementController extends Controller
 
                 };
                 $response[] = $prd;
+                $movementsRes[] = $movement;
             }
 
             return response()->json(['message' => 'Se genero la salida de los productos correctamente',
-                                        'products' => $response],200);
+                                        'products' => $response, 'movements' => $movementsRes, 'request' => $products],200);
 
         } catch (\Exception $e) {
             // Si algo sale mal devolvemos un error.
@@ -204,7 +205,18 @@ class AuxMovementController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if(\Validator::make($request->all(), ['date' => 'date'])->fails())
+            return response()->json(['message' => 'Fecha invalida'], 401);
+
+        $movement = Movement::find($id);
+
+        if($movement == null)
+            return response()->json(['message' => 'El movimiento no existe'], 404);
+
+        $movement->date_shipment = $request->input('date');
+        $movement->save();
+
+        return response()->json(['message' => 'Se reprogramo la salida', 'movement' => $movement]);
     }
 
     public function sale(Request $request){

@@ -1,0 +1,167 @@
+<div class="card" >
+    <div class="card-header bgm-blue">
+        <h2>Gestion de pagos a proveedores</h2>
+        <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="list()"
+                data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
+                title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
+
+        <div class="card-header bgm-blue">
+            <div ng-form="provider" class="form-group">
+                <h2 class="col-xs-2 col-sm-1 text-right m-t-5">Proveedor</h2>
+                <div class="col-xs-10 col-sm-3">
+                    <div class="input-group w-100">
+                        <div class="fg-line report-date">
+                            <select class="btn btn-block" ng-options="provider.id as provider.name for provider in providers" ng-change="providerChange()" ng-model="p.provider_id" required>
+                                <option value="" disabled="disabled" select="true">Seleccione</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <input type="button" ng-disabled="!provider.$valid" ng-click="list()" class="btn bgm-indigo col-sm-1" value="buscar">
+            </div>
+        </div>
+
+
+    </div>
+
+    <div class="card-body card-padding table-responsive">
+        <div class="col-sm-12">
+            <table id="table" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
+        </div><br>
+        <div class="card-footer">
+            <input  class="btn bgm-green waves-effect" type='submit' value='Nuevo Pago' ng-click="new();">
+        </div>
+    </div><br>
+</div>
+
+<div class="card" id="formulariohide">
+    <div ng-form="payment" class="card-header bgm-blue">
+        <h2>Crear nuevo Pago</h2>
+        <div  class="row report-date">
+            <h2 class="col-xs-6 col-sm-2 text-right m-t-5">Fecha de Pago</h2>
+            <!--<select class="btn btn-default col-sm-2" ng-options="provider.id as provider.name for provider in providers" ng-change="providerChange()" ng-model="p.provider_id" required>-->
+                <!--<option value="" disabled="disabled" select="true">Seleccione</option>-->
+            <!--</select>-->
+            <input type="date" class="col-sm-2 btn btn-default" ng-change="dateChange(range)" ng-model="range.end" ng-required="(searchView == 3)">
+            <h2 class="col-xs-6 col-sm-1 text-right m-t-5">Tipo Pagos</h2>
+            <select class="btn btn-default col-sm-2" ng-options="provider.id as provider.name for provider in providers" ng-change="providerChange()" ng-model="p.provider_id" required>
+                <option value="" disabled="disabled" select="true">Seleccione</option>
+            </select>
+            <h2 class="col-xs-6 col-sm-1 text-right m-t-5">BANCO</h2>
+            <input ng-model="product.name" type="text" class="btn btn-default col-sm-2" required>
+        </div>
+
+        <div class="row report-date">
+            <h2 class="col-xs-6 col-sm-2 text-right m-t-5">Tipo de Descuento</h2>
+            <select class="btn btn-default col-sm-2" ng-options="provider.id as provider.name for provider in providers" ng-change="providerChange()" ng-model="p.provider_id" required>
+                <option value="" disabled="disabled" select="true">Seleccione</option>
+            </select>
+            <h2 class="col-xs-6 col-sm-1 text-right m-t-5">Monto Total</h2>
+            <label class="control-label m-l-10" style="color: white;text-align: left;font-size: 20px;" ng-bind-html="monto | currency:'S/ ':2"></label>
+        </div>
+
+        <!--<label class="col-xs-2 col-sm-2 control-label" style="color: white;font-size: 15px;">Ingresos Acumulados</label>-->
+        <!--<div class="col-xs-10 col-sm-4">-->
+            <!--<div class="input-group">-->
+                <!--<label class="control-label m-l-10" style="color: white;text-align: left;font-size: 20px;" ng-bind-html="monto | currency:'S/ ':2"></label>-->
+            <!--</div>-->
+        <!--</div>-->
+
+        <div class="row report-date">
+            <h2 class="col-xs-6 col-sm-2 text-right m-t-5">Motivo</h2>
+            <input ng-model="product.name" type="text" class="btn btn-default col-sm-2" required>
+        </div>
+
+        <div class="row report-date">
+            <h2 class="col-xs-6 col-sm-2 text-right m-t-5">Monto Descuento</h2>
+            <input ng-model="product.name" type="number" class="btn btn-default col-sm-2" required>
+        </div>
+    </div>
+
+    <div class="card-body card-padding" >
+        <div class="card-header">
+            <h2>Productos a pagar</h2>
+        </div>
+
+        <div class="row">
+            <div class="attr-group col-xs-12">
+                <table class="table table-bordered w-100 table-attr text-center">
+                    <thead>
+                    <tr>
+                        <th>Codigo</th>
+                        <th>Nombre</th>
+                        <th>Talla</th>
+                        <th>Color</th>
+                        <th>Precio Venta</th>
+                        <!--<th>Descuento</th>-->
+                        <!--<th>Precio Final</th>-->
+                        <!--<th>F. Salida</th>-->
+                        <th>Accion</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="product in products">
+                        <td style="display: table-cell;">{{ product.codigo }}</td>
+                        <td style="display: table-cell;">{{ product.name }}</td>
+                        <td style="display: table-cell;">{{ product.talla }}</td>
+                        <td style="display: table-cell;">{{ product.color }}</td>
+                        <td style="display: table-cell;">{{ product.cost }}</td>
+                        <!--<td style="display: table-cell; width: 160px">-->
+                            <!--<input class="form-control input-sm" type="number"  ng-change="preciofinal($index)" ng-model="product.discount" required>-->
+                        <!--</td>-->
+                        <!--<td style="display: table-cell;">{{ product.preciofinal }}</td>-->
+                        <!--<td style="display: table-cell; width: 160px">-->
+                            <!--<input class="form-control input-sm" type="date" ng-model="dataProducts[$index].date" required>-->
+                        <!--</td>-->
+                        <td style="width: 80px"><button ng-click="removeProduct($index)" class="btn btn-danger btn-sm waves-effect">Eliminar</button></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <form class="form-horizontal">
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button ng-disabled="products.length == 0" ng-disabled="formSubmit"  ng-click="submit()" type="button" class="btn btn-primary btn-sm waves-effect">Guardar Pago</button>
+                    <a ng-click="cancel()" class="btn btn-danger btn-sm waves-effect">Cancelar</a>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="codes" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bgm-teal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title c-white">codigos disponibles</h3>
+            </div>
+            <div class="modal-body card-padding">
+                <form name="default" class="form-horizontal" autocomplete="off">
+                    <div class="form-group m-b-0">
+                        <label class="col-xs-2 col-sm-4 control-label">Seleccione codigo</label>
+                        <div class="col-xs-10 col-sm-4">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="md md-list"></i></span>
+                                <div class="fg-line select">
+                                    <select class="form-control" ng-options="$index as ('codigo: ' + code.cod) for ($index, code) in codes" ng-model="otherCod" required>
+                                        <option value="" disabled="disabled" select="true">Seleccione</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <a class="btn btn-primary m-t-5 col-xs-12 col-sm-3" ng-disabled="!default.$valid" ng-click="addProduct2(otherCod)">agregar</a>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

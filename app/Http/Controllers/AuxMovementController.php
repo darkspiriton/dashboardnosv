@@ -109,7 +109,8 @@ class AuxMovementController extends Controller
                             2 => 'La foto no es igual al producto',
                             3 => 'Producto dañado',
                             4 => 'No se encontro cliente',
-                            5 => 'No es la talla'
+                            5 => 'No es la talla',
+                            6 => 'Reprogramado'
                         ];
 
             if($move->status != 'vendido'){

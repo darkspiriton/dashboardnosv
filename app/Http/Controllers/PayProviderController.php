@@ -2,6 +2,7 @@
 
 namespace Dashboard\Http\Controllers;
 
+use Dashboard\Models\Experimental\Product;
 use Dashboard\Models\PaymentProvider\Detail;
 use Dashboard\Models\PaymentProvider\Payment;
 use Illuminate\Http\Request;
@@ -18,21 +19,21 @@ class PayProviderController extends Controller
      */
     public function index(Request $request)
     {
-        $rules = [
-            'id'    => 'required|integer|exists:providers,id'
-        ];
+//        $rules = [
+//            'id'    => 'required|integer|exists:providers,id'
+//        ];
 
         try{
-            $validator = \Validator::make($request->all(),$rules);
-            if($validator->fails()){
-                return response()->json(['message' => 'No posee todo los campos necesario para la consulta de pagos'],401);
-            }
+//            $validator = \Validator::make($request->all(),$rules);
+//            if($validator->fails()){
+//                return response()->json(['message' => 'No posee todo los campos necesario para la consulta de pagos'],401);
+//            }
             $status = 'vendido';
             $products=DB::table('auxproducts as p')
-                ->select('m.date_shipment as fecha', 'p.cod as codigo', 'p.name as product', 'c.name as color',
-                    DB::raw('case when d.price then d.price else p.cost_provider + p.utility end as price'), 's.name as talla', 'm.status', 'm.discount',
+                ->select('m.date_shipment as fecha', 'p.cod as codigo', 'p.name as name', 'c.name as color',
+                    DB::raw('case when d.price then d.price else p.cost_provider + p.utility end as price'), 's.name as talla', 'm.status as estado', 'm.discount',
                     DB::raw('case when d.price then d.price-m.discount else p.cost_provider + p.utility -m.discount end as pricefinal'),
-                    DB::raw('case when d.price then 1 else 0 end as liquidacion'), 'p.cost_provider as cost','p.payment_status as statusPayment')
+                    DB::raw('case when d.price then 1 else 0 end as liquidacion'), 'p.cost_provider as cost','p.payment_status as status')
                 ->join('auxmovements as m', 'p.id', '=', 'm.product_id')
                 ->join('colors as c', 'c.id', '=', 'p.color_id')
                 ->join('sizes as s', 's.id', '=', 'p.size_id')
@@ -100,6 +101,10 @@ class PayProviderController extends Controller
                 $detail->payment_id = $payment->id;
                 $detail->product_id = $product['id'];
                 $detail->save();
+
+                $auxProduct = Product::find($detail->product_id);
+                $auxProduct->payment_status = 1;
+                $auxProduct->save();
             }    
 
             return response()->json(['message' => 'Los pagos se registraron correctamente'],200);
@@ -119,6 +124,60 @@ class PayProviderController extends Controller
     public function update(Request $request, $id)
     {
         //actualizar datos de pago de producto en conjunto
+        $rules = [
+            'provider_id'   => 'required|integer|exists:providers,id',
+            'products' => 'required|array',
+            'products.*.id' =>  'required|integer|exists:auxproducts,id',
+            'date' =>   'required|date',
+            'type_payment'  =>  'required|numeric',
+            'amount'    => 'required|numeric',
+            'discount'  => 'required|numeric',
+            'reason'    => 'required'
+        ];
+
+        try{
+            $validator= \Validator::make($request->all(),$rules);
+            if($validator->fails()){
+                return response()->json(['message' => 'No posee todos los campos para actualizar el producto'],401);
+            }
+
+            $products = $request->input('products');
+
+            $payment = Payment::find($id);
+            $payment->provider_id = $request->input('provider_id');
+            $payment->type_discount_id = 1;
+            $payment->name_bank = "Interbank";
+            $payment->date = $request->input('date');
+            $payment->amount = $request->input('amount');
+            $payment->discount = $request->input('discount');
+            $payment->reason = $request->input('reason');
+            $payment->save();
+
+            $details = $payment->details();
+
+            $existe=false;
+            foreach ($details as $detail){
+                foreach ($products as $product){
+                    if($product['id']==$detail->product_id){
+                        $existe=true;
+                       break;
+                    }
+                }
+                if ($existe==false){
+                    $auxProduct= Product::find($detail->product_id);
+                    $auxProduct->provider_status=0;
+                    $auxProduct->save();
+                }else {
+                    $existe = false;
+                }
+            }
+
+
+
+        }catch(\Exception $e){
+            return response()->json(['message' => 'Ocurrio un error al actualizar los datos en el servidor' ],200);
+        }
+
     }
 
     /**
@@ -130,7 +189,22 @@ class PayProviderController extends Controller
     public function destroy($id)
     {
         try{
+
             //eliminar el pago en conjunto de producto
+            $payment = Payment::find($id);
+
+            $details=$payment->details();
+
+            foreach($details as $detail){
+                $product=Product::find($detail->product_id);
+                $product->provider_status=0;
+                $product->save();
+                $detail->delete();
+            }
+            $payment->delete();
+
+            return response()->json(['message'=>'Se elimino correctamente'],200);
+
         }catch(\ErrorException $e){
             return response()->json(['message' => 'Ocurrio un error al eliminar'],500);
         }

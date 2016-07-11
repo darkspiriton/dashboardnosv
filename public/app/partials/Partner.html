@@ -80,6 +80,36 @@
 
 </div>
 
+<div class="row">
+    <div class="col-sm-6">
+        <!-- Recent Items -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Ventas totales del {{ dateNow | date:'yyyy'}}<small>Se muestra las ventas totales de sus produtos y los montos totatles de pago por mes</small></h2>
+            </div>
+
+            <div class="card-body m-t-0">
+                <table id="sales" class="table table-inner table-vmiddle"></table>
+            </div>
+            <div id="recent-items-chart-1" class="flot-chart recent-items-chart"></div>
+        </div>
+    </div>
+
+    <div class="col-sm-6">
+        <!-- Recent Items -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Montos de pago del {{ dateNow | date:'yyyy'}}<small>Se muestra los pagos y descuentos por mes.</small>
+                <small>Leyenda: RAN: residuo del mes anterior, MM: Monto total a pagar por ventas de sus productos, D: descuentos, MD: monto total por descuentos, P: cantidad de pagos, MP: monto total de pago sin descuento, MT: Monto total de pago adicionando descuento, RAC: residuo para el mes siguiente</small></h2>
+            </div>
+
+            <div class="card-body m-t-0 table-responsive">
+                <table id="payments" class="table table-inner table-vmiddle"></table>
+            </div>
+            <div id="recent-items-chart-2" class="flot-chart recent-items-chart"></div>
+        </div>
+    </div>
+</div>
 
 <div class="row">
     <div class="col-sm-6">
@@ -92,7 +122,7 @@
             <div class="card-body m-t-0">
                 <table id="table" class="table table-inner table-vmiddle"></table>
             </div>
-            <div id="recent-items-chart-1" class="flot-chart recent-items-chart"></div>
+            <div id="recent-items-chart-3" class="flot-chart recent-items-chart"></div>
         </div>
     </div>
 
@@ -106,7 +136,7 @@
             <div class="card-body m-t-0">
                 <table id="table-2" class="table table-inner table-vmiddle"></table>
             </div>
-            <div id="recent-items-chart-2" class="flot-chart recent-items-chart"></div>
+            <div id="recent-items-chart-4" class="flot-chart recent-items-chart"></div>
         </div>
     </div>
 </div>
@@ -138,6 +168,66 @@
                         <table id="product-sales" class="table table-inner table-vmiddle"></table>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="salesPaymentsDetail" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bgm-teal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title c-white">Detalle de pago de {{ salesPaymentsDetail.month }}</h3>
+            </div>
+            <div class="modal-body card-padding">
+                <form class="form-horizontal" autocomplete="off" submit="return false;">
+                    <div class="form-group form-pad-top">
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Mes: </label>
+                        <label class="col-xs-6 col-sm-9 control-label" style="text-align: left" ng-bind="salesPaymentsDetail.month"></label>
+
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Inicio: </label>
+                        <label class="col-xs-6 col-sm-9 control-label" style="text-align: left" ng-bind="salesPaymentsDetail.start"></label>
+
+                         <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Fin: </label>
+                        <label class="col-xs-6 col-sm-9 control-label" style="text-align: left" ng-bind="salesPaymentsDetail.end"></label>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <div class="row">
+                                <div class="attr-group col-xs-12">
+                                    <table class="table table-bordered w-100 table-attr text-center">
+                                        <thead>
+                                        <tr>
+                                            <th>Fecha</th>
+                                            <th>Banco</th>
+                                            <th>Razon</th>
+                                            <th>Descuento</th>
+                                            <th>Motivo</th>
+                                            <th>Pago</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="payment in salesPaymentsDetail.data.payments.data">
+                                            <td style="display: table-cell;">{{ payment.date.substr(0,10) }}</td>
+                                            <td style="display: table-cell;">{{ payment.name_bank }}</td>
+                                            <td style="display: table-cell;">{{ payment.reason }}</td>
+                                            <td style="display: table-cell;">{{ payment.amount_discount }}</td>
+                                            <td style="display: table-cell;">{{ payment.type_discount.type }}</td>
+                                            <td style="display: table-cell;">{{ payment.amount }}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>
@@ -214,10 +304,18 @@
         $(".recent-items-chart").css(styles);
 
         $.plot($("#recent-items-chart-1"), [
-            {data: getRandomData(), lines: { show: true, fill: 0.8 }, label: 'Items', stack: true, color: '#00BCD4' },
+            {data: getRandomData(), lines: { show: true, fill: 0.8 }, label: 'Items', stack: true, color: '#3F51B5' },
         ], options);
 
         $.plot($("#recent-items-chart-2"), [
+            {data: getRandomData(), lines: { show: true, fill: 0.8 }, label: 'Items', stack: true, color: '#3F51B5' },
+        ], options);
+
+        $.plot($("#recent-items-chart-3"), [
+            {data: getRandomData(), lines: { show: true, fill: 0.8 }, label: 'Items', stack: true, color: '#00BCD4' },
+        ], options);
+
+        $.plot($("#recent-items-chart-4"), [
             {data: getRandomData(), lines: { show: true, fill: 0.8 }, label: 'Items', stack: true, color: '#00BCD4' },
         ], options);
     })();

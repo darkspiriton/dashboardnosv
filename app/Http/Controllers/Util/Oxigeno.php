@@ -7,7 +7,7 @@ use Carbon\Carbon;
 class Oxigeno
 {
 	private $dates = array();
-	private $months = ["","enero","febrero","marzo","mayo","abril","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+	private $months = ["","Enero","Febrero","Marzo","Mayo","Abril","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
 	private $month;
 
 	public function __construct($year)

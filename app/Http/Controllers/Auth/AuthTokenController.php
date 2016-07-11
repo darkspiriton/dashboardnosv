@@ -50,8 +50,7 @@ class AuthTokenController extends Controller
             return response()->json(['message' => 'El usuario y/o contraseña no son validos'], 401);
         }
 
-        if (Hash::check($password, $user->password)) {
-
+        if (Hash::check($password, $user->password) && $user->status == 1) {
             if(!$user->token){
                 unset($user->password);
                 $token = $this->createToken($user);

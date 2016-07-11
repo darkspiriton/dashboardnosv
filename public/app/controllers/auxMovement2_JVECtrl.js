@@ -21,7 +21,7 @@ angular.module('App')
                 {"sTitle": "Precio Final (S/.)", "bSortable" : true},
                 {"sTitle": "Descuento (S/.)", "bSortable" : true},
                 {"sTitle": "Precio", "bSortable" : true, "sWidth": "80px"},
-                {"sTitle": "Acción" , "bSearchable": false , "sWidth": "190px"}
+                {"sTitle": "Acción" , "bSearchable": false , "sWidth": "270px"}
             ],
             actions	:  	[
                 ['status',   {
@@ -31,7 +31,8 @@ angular.module('App')
                 ],
                 ['actions', [
                     ['Retornado', 'prdReturn' ,'bgm-teal'],
-                    ['Vendido', 'prdSale' ,'bgm-blue']
+                    ['Vendido', 'prdSale' ,'bgm-blue'],
+                    ['reprogramar', 'reprogramar' ,'bgm-purple']
                 ]
                 ]
             ],
@@ -165,6 +166,63 @@ angular.module('App')
 
         $scope.cancel = function(){
           util.modalClose();
+        };
+
+                /**
+         *  Reprogramar salida de producto
+         *  @return movement
+         */
+
+        $scope.prdProgram = function(){
+            alertConfig.title = '¿Todo es correcto?';
+            alertConfig.text=`<table class="table table-bordered w-100 table-attr text-center">
+                                        <thead>
+                                        <tr>
+                                            <th>Cod</th>
+                                            <th>Producto</th>
+                                            <th>Talla</th>
+                                            <th>Color</th>
+                                            <th>Fecha salida</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th>${$scope.tableData[$scope.index].cod}</th>
+                                                <th>${$scope.tableData[$scope.index].name}</th>
+                                                <td>${$scope.tableData[$scope.index].size}</td>
+                                                <td>${$scope.tableData[$scope.index].color}</td>
+                                                <td>${(function(){ 
+                                                    var day = $scope.programDate.getDate();
+                                                    var month = ($scope.programDate.getMonth().toString().length == 1)?
+                                                                '0'.concat($scope.programDate.getMonth().toString()):
+                                                                $scope.programDate.getMonth().toString();
+                                                    var year = $scope.programDate.getFullYear();
+                                                    var date = '';
+                                                    return date.concat(day,'-',month,'-',year)})()}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>`;
+            swal(alertConfig,
+                function () {
+                    var movement_id = $scope.tableData[$scope.index].movement_id;
+                    petition.put('api/auxmovement/' + movement_id, { date:$scope.programDate})
+                        .then(function (data) {
+                            toastr.success(data.message);
+                            $scope.formSubmit = false;
+                            $scope.list();
+                            util.modalClose('reProgram');
+                        }, function (error) {
+                            toastr.error('Uyuyuy dice: ' + error.data.message);
+                            $scope.formSubmit = false;
+                        });
+                });
+        };
+        
+        $scope.reprogramar = function (i){
+            $scope.index = i;
+            $scope.programDate = null;
+            util.modal("reProgram");
         };
 
         angular.element(document).ready(function(){

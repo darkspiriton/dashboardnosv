@@ -54,7 +54,7 @@
                     AJQactions2[button.name]['render'] = button.render;
                     AJQactions2[button.name]['event'] = button.name;
                     AJQactions2[button.name]['column'] = button.column;
-                    if(button.call_me) {
+                    if(typeof button.call_me == 'function') {
                         AJQactions2[button.name]['call_me'] = button.call_me;
                         AJQactions2[button.name]['run'] = function (i) {
                             var est = this.call_me(App.rows[i]);
@@ -90,12 +90,19 @@
                     AJQactions2[button.name] = {};
                     AJQactions2[button.name]['render'] = button.template;
                     AJQactions2[button.name]['column'] = button.column;
+                    if(typeof button.call_me == 'function') {
+                        AJQactions2[button.name]['call_me'] = button.call_me;
+                        AJQactions2[button.name]['run'] = function(i){
+                            return this.call_me(App.rows[i], i, App.rows);
+                        }
+                    } else {
                     AJQactions2[button.name]['run'] = function (i) {
                         var template = this.render;
                         for(var y in this.column){
-                            template = template.replace(`{${y}}`, searchObject(App.rows[i], this.column[y]));
-                        }
-                        return template;
+                                template = template.replace(`{${y}}`, searchObject(App.rows[i], this.column[y]));
+                            }
+                            return template;
+                        }   
                     }
                 });
             }

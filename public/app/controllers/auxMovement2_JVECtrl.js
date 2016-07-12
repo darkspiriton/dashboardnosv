@@ -85,6 +85,30 @@ angular.module('App')
         };
 
         $scope.prdSale = function(i){
+            alertConfig.title = '¿Todo es correcto?';
+            alertConfig.text=`<table class="table table-bordered w-100 table-attr text-center">
+                                        <thead>
+                                        <tr>
+                                            <th>Cod</th>
+                                            <th>Producto</th>
+                                            <th>Talla</th>
+                                            <th>Color</th>
+                                            <th>P. Final</th>
+                                            <th>Descuento</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <th>${$scope.tableData[i].cod}</th>
+                                            <th>${$scope.tableData[i].name}</th>
+                                            <td>${$scope.tableData[i].size.name}</td>
+                                            <td>${$scope.tableData[i].color.name}</td>
+                                            <td>${$scope.tableData[i].price}</td>
+                                            <td>${$scope.tableData[i].movement.discount}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>`;
             swal(alertConfig,
                 function () {
                     petition.post('api/auxmovement/set/sale', {id: $scope.tableData[i].product_id})
@@ -192,8 +216,8 @@ angular.module('App')
                                             <tr>
                                                 <th>${$scope.tableData[$scope.index].cod}</th>
                                                 <th>${$scope.tableData[$scope.index].name}</th>
-                                                <td>${$scope.tableData[$scope.index].size}</td>
-                                                <td>${$scope.tableData[$scope.index].color}</td>
+                                                <td>${$scope.tableData[$scope.index].size.name}</td>
+                                                <td>${$scope.tableData[$scope.index].color.name}</td>
                                                 <td>${(function(){ 
                                                     var day = $scope.programDate.getDate();
                                                     var month = ($scope.programDate.getMonth().toString().length == 1)?

@@ -32,11 +32,8 @@ class Product extends Model
         return $this->hasMany(Movement::class)->select('id','situation','status','date_shipment','discount')->orderby('created_at','desc');
     }
 
-    public function movement(){
-        return $this->hasOne(Movement::class)
-                ->select("id","product_id","date_shipment","situation","status","discount")
-                ->orderby('created_at','desc')
-                ->take(1);
+    public function bymovements(){
+        return $this->hasMany(Movement::class)->orderby('created_at','desc');
     }
 
     public function types(){

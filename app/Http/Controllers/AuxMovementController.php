@@ -169,10 +169,9 @@ class AuxMovementController extends Controller
                     $prd->movements()->save($movement);
                     $prd->status = 0;
                     $prd->save();
-
+                    $movementsRes[] = $movement;
                 };
                 $response[] = $prd;
-                $movementsRes[] = $movement;
             }
 
             return response()->json(['message' => 'Se genero la salida de los productos correctamente',

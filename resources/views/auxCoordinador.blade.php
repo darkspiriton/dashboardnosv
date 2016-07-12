@@ -31,6 +31,7 @@
 @stop
 
 @section('dashCtrls')
+    <script src="app/lib/filesave.js"></script>
     <script src="app/controllers/homeCtrl.js"></script>
     <script src="app/controllers/auxMovementCtrl.js"></script>
     <script src="app/controllers/auxMovement2_JVECtrl.js"></script>

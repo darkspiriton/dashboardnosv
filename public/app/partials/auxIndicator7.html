@@ -7,9 +7,9 @@
         </div>
         <div class="card-header bgm-blue">
            <div ng-form="dates" class="row report-date">
-                <h2 class="col-xs-12 col-sm-1 text-right">Fecha Inicio</h2>
+                <h2 class="col-xs-12 col-sm-1 text-right">Inicio</h2>
                 <input type="date" class="btn btn-default col-sm-2" ng-model="data.date1" required>
-                <h2 class="col-xs-12 col-sm-1 text-right">Fecha Final</h2>
+                <h2 class="col-xs-12 col-sm-1 text-right">Final</h2>
                 <input type="date" class="btn btn-default col-sm-2" ng-model="data.date2" required>
                <h2 class="col-xs-12 col-sm-1 text-right">Estado</h2>
                 <select class="col-sm-2" ng-model="data.status">
@@ -19,7 +19,7 @@
                 </select>
                <h2 class="col-xs-12 col-sm-1 text-right">Proveedor</h2>
                 <select class="col-sm-2" ng-change="noProduct()" ng-options="provider.id as provider.name for provider in providers" ng-model="data.provider">
-                   <option value="" disabled="disabled" selected="selected">Seleccione</option>
+                   <option value="" selected="selected">Seleccione</option>
                 </select>
                <h2 class="col-xs-12 col-sm-1 m-t-20 text-right">Producto</h2>
                 <select class="col-sm-2 m-t-20" ng-change="listProducts('s')" ng-options="product.name as product.name for product in products" ng-model="data.name">
@@ -48,7 +48,7 @@
     <div class="col-md-12">
         <div ng-show="drawShow" class="card">
             <div class="card-header">
-                <h2>Vista grafica</h2>
+                <h2>Vista grafica <small>{{ infoMonth.name + ' ' + infoMonth.start + ' - ' + infoMonth.end }}</small></h2>
             </div>
 
             <div class="card-body card-padding-sm">

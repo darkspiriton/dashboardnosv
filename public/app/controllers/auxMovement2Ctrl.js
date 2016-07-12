@@ -18,8 +18,9 @@ angular.module('App')
                 {"sTitle": "Producto", "bSortable" : true},
                 {"sTitle": "Talla", "bSortable" : true},
                 {"sTitle": "Color", "bSortable" : true},
-                {"sTitle": "Precio Final (S/.)", "bSortable" : true},
-                {"sTitle": "Descuento (S/.)", "bSortable" : true},
+                {"sTitle": "Precio  (S/)", "bSortable" : true},
+                {"sTitle": "Descuento (S/)", "bSortable" : true},
+                {"sTitle": "Precio Final (S/)", "bSortable" : true},
                 {"sTitle": "Tipo", "bSortable" : true, "sWidth": "80px"},
                 {"sTitle": "Acción" , "bSearchable": false , "sWidth": "360px"}
             ],
@@ -27,8 +28,7 @@ angular.module('App')
                 ['status',   {
                     0 : { txt : 'regular' , cls : 'bgm-green', dis : false },
                     1 : { txt : 'liquidacion' ,  cls : 'btn-info',dis: false}
-                }
-                ],
+                }],
                 ['actions', [
                     ['Retornado', 'prdReturn' ,'bgm-teal'],
                     ['Vendido', 'prdSale' ,'bgm-blue'],
@@ -37,8 +37,10 @@ angular.module('App')
                 ]
                 ]
             ],
-            data  	: 	['date_shipment','cod','name','size','color','price','discount','status','actions'],
-            configStatus : 'status'
+            data  	: 	['movement.date_shipment','cod','name','size.name','color.name','price',
+                            'movement.discount','pricefinal','status','actions'
+                        ],
+            configStatus : 'liquidation'
         };
 
         var alertConfig = {

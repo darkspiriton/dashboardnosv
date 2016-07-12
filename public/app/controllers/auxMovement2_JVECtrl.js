@@ -16,12 +16,13 @@ angular.module('App')
                 {"sTitle": "Fecha de salida", "bSortable" : true, "sWidth": "90px"},
                 {"sTitle": "Codigo", "bSortable" : true},
                 {"sTitle": "Producto", "bSortable" : true},
-                {"sTitle": "Talla", "bSortable" : true},
-                {"sTitle": "Color", "bSortable" : true},
-                {"sTitle": "Precio Final (S/.)", "bSortable" : true},
-                {"sTitle": "Descuento (S/.)", "bSortable" : true},
-                {"sTitle": "Precio", "bSortable" : true, "sWidth": "80px"},
-                {"sTitle": "Acción" , "bSearchable": false , "sWidth": "270px"}
+                {"sTitle": "Talla", "bSortable" : false},
+                {"sTitle": "Color", "bSortable" : false},
+                {"sTitle": "Precio  (S/)", "bSortable" : false},
+                {"sTitle": "Descuento (S/)", "bSortable" : false},
+                {"sTitle": "Precio Final (S/)", "bSortable" : false},
+                {"sTitle": "Tipo", "bSortable" : false, "sWidth": "80px"},
+                {"sTitle": "Acción" , "bSortable" : false, "bSearchable": false , "sWidth": "420px"}
             ],
             actions	:  	[
                 ['status',   {
@@ -36,8 +37,10 @@ angular.module('App')
                 ]
                 ]
             ],
-            data  	: 	['date_shipment','cod','name','size','color','price','discount','status','actions'],
-            configStatus : 'status'
+            data    :   ['movement.date_shipment','cod','name','size.name','color.name','price',
+                            'movement.discount','pricefinal','status','actions'
+                        ],
+            configStatus : 'liquidation'
         };
 
         var alertConfig = {

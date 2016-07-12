@@ -11,6 +11,7 @@ use Dashboard\Models\PaymentProvider\TypeDiscount;
 use Dashboard\Models\PaymentProvider\TypePayment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 use Dashboard\Http\Requests;
 
@@ -23,15 +24,15 @@ class PayProviderController extends Controller
      */
     public function index(Request $request)
     {
-//        $rules = [
-//            'id'    => 'required|integer|exists:providers,id'
-//        ];
+        $rules = [
+            'id'    => 'required|integer|exists:providers,id'
+        ];
 
         try{
-//            $validator = \Validator::make($request->all(),$rules);
-//            if($validator->fails()){
-//                return response()->json(['message' => 'No posee todo los campos necesario para la consulta de pagos'],401);
-//            }
+            $validator = \Validator::make($request->all(),$rules);
+            if($validator->fails()){
+                return response()->json(['message' => 'No posee todo los campos necesario para la consulta de pagos'],401);
+            }
             $status = 'vendido';
             $products=DB::table('auxproducts as p')
                 ->select('m.date_shipment as fecha', 'p.cod as codigo', 'p.name as name', 'c.name as color',
@@ -71,7 +72,6 @@ class PayProviderController extends Controller
      */
     public function store(Request $request)
     {
-//        dd($request->all());
         $rules = [
             'products' => 'required|array',
             'products.*.id' =>  'required|integer|exists:auxproducts,id',
@@ -91,28 +91,35 @@ class PayProviderController extends Controller
             if($validator->fails()){
                 return response()->json(['message'=>'No posee todo los campos necesario para crear un pago'],401);
             }
-            
-            $products= $request->input('products');
 
+            $date = Carbon::parse($request->input('datePayment'));
+            $date->setTimezone('America/Lima');
+
+            $products= $request->input('products');
             $payment= new Payment();
             $payment->provider_id = $request->input('data.provider_id');
+
             if ($request->input('data.bank')!=null){
                 $bank = Bank::find($request->input('data.bank'));
                 $payment->bank_id = $bank->id;
             }else{
-                $payment->bank_id = 1;
+                $payment->bank_id = null;
             }
-            $payment->date = $request->input('data.datePayment');
-            $payment->type_payment_id = $request->input('data.typeP');
 
+            $payment->date = $date;
+            $payment->type_payment_id = $request->input('data.typeP');
             $payment->amount = $request->input('data.amount');
+
             if($request->has('data.typeD') && $request->has('data.discount') && $request->has('data.reason')){
                 $payment->type_discount_id = $request->input('data.typeD');
                 $payment->amount_discount = $request->input('data.discount');
                 $payment->reason = $request->input('data.reason');
             }else{
-                $payment->type_discount_id = 1;
+                $payment->type_discount_id = null;
+                $payment->amount_discount=null;
+                $payment->reason=null;
             }
+
             $payment->save();
             
             foreach($products as $product){
@@ -300,5 +307,5 @@ class PayProviderController extends Controller
         return response()->json(['message','se creo correctamente el tipo'],200);
     }
 
-    
+
 }

@@ -19,7 +19,7 @@ class UpdateTablePaymentAdd extends Migration
         });
 
         Schema::table('payments_providers', function(Blueprint $table){
-           $table->integer('bank_id')->unsigned();
+           $table->integer('bank_id')->unsigned()->nullable();
            $table->foreign('bank_id')->references('id')->on('banks');
         });
     }

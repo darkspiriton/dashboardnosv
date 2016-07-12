@@ -119,14 +119,14 @@
                 <h3 class="modal-title c-white">Reprogramacion de salida</h3>
             </div>
             <div class="modal-body card-padding">
-                <form name="default" class="form-horizontal" autocomplete="off">
+                <form name="reProgramMoviment" class="form-horizontal" autocomplete="off">
                     <div class="form-group m-b-0">
                         <label class="col-xs-12 col-sm-4 control-label">Fecha de salida</label>
                         <div class="col-xs-12 col-sm-4 report-date">
                              <input type="date" class="btn btn-block btn-default m-t-5" ng-model="programDate" required>
                         </div>
                         <div class="col-xs-12 col-sm-4">
-                            <a class="btn btn-block btn-primary m-t-5" ng-disabled="!default.$valid" ng-click="prdProgram()">guardar</a>
+                            <a class="btn btn-block btn-primary m-t-5" ng-disabled="!reProgramMoviment.$valid" ng-click="prdProgram()">guardar</a>
                         </div>
                     </div>
                 </form>

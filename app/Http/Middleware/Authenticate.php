@@ -75,7 +75,7 @@ class Authenticate {
         }catch (\InvalidArgumentException $e){
             return response()->json(['message' => 'Argumento invalido'],401);
         }catch (\UnexpectedValueException $e){
-            return response()->json(['message' => 'Valor inesperado'],401);
+            return response()->json(['message' => 'Valor inesperado', "error" => $e->getMessage()],401);
         }
     }
 

@@ -266,14 +266,21 @@ class AuxMovementController extends Controller
     }
 
     public function movementPending(){
-        $products = Product::with(['movement' => function($query){
-            return $query->where('status','salida');
-        },'settlement','color','size'])
-            ->select(array('id','cod','id as product_id','name','color_id','size_id'))
+        $products = Product::with(['bymovements','settlement','color','size'])
+            ->select(array('id','cod','id as product_id','name','color_id','size_id','cost_provider','utility'))
             ->where('status',0)
             ->get();
 
-        return \Response::json(['products' => $products], 200);
+        foreach ($products as $product) {
+            $product->movement =  $product->bymovements[0];
+            unset($product->bymovements);
+        }
+
+        // var_dump($products);
+        // return $products;
+        // dd($products->all());
+        // return json_encode($products);
+        return response()->json(['products' => $products], 200);
     }
     
 

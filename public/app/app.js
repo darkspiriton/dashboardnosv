@@ -172,7 +172,7 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
                             var x = item.datapoint[0].toFixed(0),
                                 y = item.datapoint[1].toFixed(0);
                             //$(".flot-tooltip").html(item.series.label + " para el dia " + x + " tienes " + y + " ventas").css({top: item.pageY+5, left: item.pageX+5}).show();
-                            $(".flot-tooltip").html(item.series.label+ " - " + y + " venta(s)").css({top: item.pageY+5, left: item.pageX+5}).show();
+                            $(".flot-tooltip").html(item.series.label+ " - " + y + " movimiento(s)").css({top: item.pageY+5, left: item.pageX+5}).show();
                         }
                         else {
                             $(".flot-tooltip").hide();

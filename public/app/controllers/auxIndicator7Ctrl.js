@@ -13,6 +13,7 @@ angular.module('App')
 
         $scope.tableConfig 	= 	{
             columns :	[
+                {"sTitle": "Creacion", "bSortable" : true, "sWidth" : '160px'},
                 {"sTitle": "Fecha", "bSortable" : true, "sWidth" : '80px'},
                 {"sTitle": "Codigo", "bSortable" : true, "sWidth" : '1px'},
                 {"sTitle": "Producto", "bSortable" : true},
@@ -20,13 +21,13 @@ angular.module('App')
                 {"sTitle": "Talla", "bSortable" : true},
                 {"sTitle": "Estado", "bSortable" : true}
             ],
-            data  	: 	['fecha', 'codigo','product','color','talla','status']
+            data  	: 	['created_at','fecha', 'codigo','product','color','talla','status']
         };
 
         $scope.data = {
             date1 : null,
             date2: null,
-            status: 'Vendido'
+            status: null
         };
 
         $scope.list = function() {

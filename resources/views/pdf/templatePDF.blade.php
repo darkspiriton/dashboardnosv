@@ -39,6 +39,7 @@
         <h3>{{ $tittle }}</h3>
     </div>
 </div>
+<hr>
 <table class="w-100">
     <thead>
     <tr role="row">

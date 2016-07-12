@@ -1,4 +1,4 @@
-<div class="card">
+    <div class="card">
         <div class="card-header bgm-blue">
             <h2>Reporte de movimientos entre fechas</h2>
             <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="list()"
@@ -11,8 +11,9 @@
                 <input type="date" class="btn btn-default col-sm-2" ng-model="data.date1" required>
                 <h2 class="col-xs-12 col-sm-1 text-right">Final</h2>
                 <input type="date" class="btn btn-default col-sm-2" ng-model="data.date2" required>
-               <h2 class="col-xs-12 col-sm-1 text-right">Estado</h2>
+                <h2 class="col-xs-12 col-sm-1 text-right">Estado</h2>
                 <select class="col-sm-2" ng-model="data.status">
+                   <option value="" selected="selected">Seleccione</option>
                    <option value="Vendido">Vendido</option>
                    <option value="Retornado">Retornado</option>
                    <option value="salida">Salida</option>

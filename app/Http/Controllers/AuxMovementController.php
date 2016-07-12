@@ -180,7 +180,7 @@ class AuxMovementController extends Controller
 
         } catch (\Exception $e) {
             // Si algo sale mal devolvemos un error.
-            return \Response::json(['message' => 'Ocurrio un error al agregar producto'], 500);
+            return \Response::json(['message' => 'Ocurrio un error al agregar producto', "error" => $e->getMessage()], 500);
         }
     }
 
@@ -276,10 +276,6 @@ class AuxMovementController extends Controller
             unset($product->bymovements);
         }
 
-        // var_dump($products);
-        // return $products;
-        // dd($products->all());
-        // return json_encode($products);
         return response()->json(['products' => $products], 200);
     }
     

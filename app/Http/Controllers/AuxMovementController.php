@@ -163,7 +163,7 @@ class AuxMovementController extends Controller
                 $prd = Product::find($product['id']);
                 if($prd->status == 1){
                     $movement = new Movement();
-                    $movement->date_shipment = $product['date'];
+                    $movement->date_shipment =substr($product['date'],0,10);
                     $movement->discount = $product['discount'];
                     $movement->status = 'salida';
                     $prd->movements()->save($movement);

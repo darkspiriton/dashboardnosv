@@ -40,7 +40,7 @@ angular.module('App')
                     $scope.drawShow=false;
                 }, function(error){
                     console.log(error);
-                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                    toastr.error('Huy huy dice: ' + error.data.message);
                     $scope.updateList = false;
                 });
         };
@@ -68,7 +68,7 @@ angular.module('App')
                     $scope.updateList = false;
                 }, function(error){
                     console.log(error);
-                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                    toastr.error('Huy huy dice: ' + error.data.message);
                     $scope.updateList = false;
                 });
         };
@@ -79,7 +79,7 @@ angular.module('App')
                     $scope.providers = data.providers;
                 }, function(error){
                     console.log(error);
-                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                    toastr.error('Huy huy dice: ' + error.data.message);
                 });
         };
 
@@ -92,6 +92,7 @@ angular.module('App')
                 .then(function(data){
                     $scope.reportDownload = true;
                     $scope.tableData = data.movements;
+                    $scope.infoMonth = data.month;
                     $('#table').AJQtable('view', $scope, $compile);
                     $scope.updateList = false;
                     if ( data.movements.length > 0){
@@ -102,7 +103,7 @@ angular.module('App')
                     }
                 }, function(error){
                     console.log(error);
-                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                    toastr.error('Huy huy dice: ' + error.data.message);
                     $scope.updateList = false;
                 });
         };

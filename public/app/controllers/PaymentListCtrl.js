@@ -1,15 +1,15 @@
 angular.module('App')
     .config(function($stateProvider) {
         $stateProvider
-            .state('pagos', {
+            .state('listapagos', {
                 url: '/Generar-pagos-proveedores',
-                templateUrl: 'app/partials/Payment.html',
-                controller : 'paymentCtrl'
+                templateUrl: 'app/partials/PaymentList.html',
+                controller : 'paymentListCtrl'
             });
     })
-    .controller('paymentCtrl', function($scope, $compile, $state, $log, $filter, util, petition, toformData, toastr){
+    .controller('paymentListCtrl', function($scope, $compile, $state, $log, $filter, util, petition, toformData, toastr){
 
-        util.liPage('pagos');
+        util.liPage('listapagos');
 
         $scope.tableConfig 	= 	{
             columns :	[

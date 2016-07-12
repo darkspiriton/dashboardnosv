@@ -131,6 +131,7 @@
             <ul>
                 <li><a ui-sref="SociosPanel"><i class="md md-now-widgets"></i> Ventas Proveedores</a></li>
                 <li><a ui-sref="pagos"><i class="md md-now-widgets"></i> Pago a Proveedores</a></li>
+                <li><a ui-sref="listapagos"><i class="md md-now-widgets"></i> Gestion de Pagos Realizados</a></li>
             </ul>
         </li>
     </ul>
@@ -181,5 +182,6 @@
     <script src="app/controllers/PartnerPanelCtrl.js"></script>
 
     <script src="app/controllers/PaymentCtrl.js"></script>
+    <script src="app/controllers/PaymentListCtrl.js"></script>
 
 @stop

@@ -255,9 +255,9 @@ class AuxMovementController extends Controller
 
     public function movementPending(){
         $products = DB::table('auxproducts AS p')
-            ->select('p.cod',DB::raw('max(m.date_shipment) as date_shipment'),'p.id as product_id',
+            ->select('p.cod','m.date_shipment','p.id as product_id',
             'p.name','s.name as size','c.name as color','m.id as movement_id',
-                DB::raw('max(m.created_at) as date'),
+                DB::raw('m.created_at as date'),
                 DB::raw('case when d.price then d.price else p.cost_provider + p.utility end as price'),
                 DB::raw('case when d.price then 1 else 0 end as status'),'m.discount as discount')
             ->join('auxmovements AS m','m.product_id','=','p.id')
@@ -266,7 +266,8 @@ class AuxMovementController extends Controller
             ->leftJoin('settlements AS d','d.product_id','=','p.id')
             ->where('p.status','=',0)
             ->where('m.status','=','salida')
-            ->groupBy('p.id')->get();
+            ->get();
+//            ->groupBy('p.id')->get();
         return \Response::json(['products' => $products], 200);
     }
     

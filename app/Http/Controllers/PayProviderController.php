@@ -3,8 +3,12 @@
 namespace Dashboard\Http\Controllers;
 
 use Dashboard\Models\Experimental\Product;
+use Dashboard\Models\PaymentProvider\Bank;
 use Dashboard\Models\PaymentProvider\Detail;
 use Dashboard\Models\PaymentProvider\Payment;
+use Dashboard\Models\PaymentProvider\Type;
+use Dashboard\Models\PaymentProvider\TypeDiscount;
+use Dashboard\Models\PaymentProvider\TypePayment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -33,7 +37,7 @@ class PayProviderController extends Controller
                 ->select('m.date_shipment as fecha', 'p.cod as codigo', 'p.name as name', 'c.name as color',
                     DB::raw('case when d.price then d.price else p.cost_provider + p.utility end as price'), 's.name as talla', 'm.status as estado', 'm.discount',
                     DB::raw('case when d.price then d.price-m.discount else p.cost_provider + p.utility -m.discount end as pricefinal'),
-                    DB::raw('case when d.price then 1 else 0 end as liquidacion'), 'p.cost_provider as cost','p.payment_status as status')
+                    DB::raw('case when d.price then 1 else 0 end as liquidacion'), 'p.cost_provider as cost','p.payment_status as status','p.id')
                 ->join('auxmovements as m', 'p.id', '=', 'm.product_id')
                 ->join('colors as c', 'c.id', '=', 'p.color_id')
                 ->join('sizes as s', 's.id', '=', 'p.size_id')
@@ -67,15 +71,19 @@ class PayProviderController extends Controller
      */
     public function store(Request $request)
     {
+//        dd($request->all());
         $rules = [
-            'provider_id'   => 'required|integer|exists:providers,id',
             'products' => 'required|array',
             'products.*.id' =>  'required|integer|exists:auxproducts,id',
-            'date' =>   'required|date',
-            'type_payment'  =>  'required|numeric',
-            'amount'    => 'required|numeric',
-            'discount'  => 'required|numeric',
-            'reason'    => 'required'
+            'data' => 'required|array',
+            'data.provider_id'   => 'required|integer|exists:providers,id',
+            'data.datePayment' =>   'required|date',
+            'data.typeP'  =>  'required|numeric',
+            'data.amount'    => 'required|numeric',
+            'data.typeD' => 'numeric',
+            'data.amount'    => 'numeric',
+            'data.discount'  => 'numeric',
+            'data.reason'    => 'string'
         ];
 
         try{
@@ -85,15 +93,26 @@ class PayProviderController extends Controller
             }
             
             $products= $request->input('products');
-            
+
             $payment= new Payment();
-            $payment->provider_id = $request->input('provider_id');
-            $payment->type_discount_id = 1;
-            $payment->name_bank = "Interbank";
-            $payment->date = $request->input('date');
-            $payment->amount = $request->input('amount');
-            $payment->discount = $request->input('discount');
-            $payment->reason = $request->input('reason');
+            $payment->provider_id = $request->input('data.provider_id');
+            if ($request->input('data.bank')!=null){
+                $bank = Bank::find($request->input('data.bank'));
+                $payment->bank_id = $bank->id;
+            }else{
+                $payment->bank_id = 1;
+            }
+            $payment->date = $request->input('data.datePayment');
+            $payment->type_payment_id = $request->input('data.typeP');
+
+            $payment->amount = $request->input('data.amount');
+            if($request->has('data.typeD') && $request->has('data.discount') && $request->has('data.reason')){
+                $payment->type_discount_id = $request->input('data.typeD');
+                $payment->amount_discount = $request->input('data.discount');
+                $payment->reason = $request->input('data.reason');
+            }else{
+                $payment->type_discount_id = 1;
+            }
             $payment->save();
             
             foreach($products as $product){
@@ -209,4 +228,77 @@ class PayProviderController extends Controller
             return response()->json(['message' => 'Ocurrio un error al eliminar'],500);
         }
     }
+    
+    public function getBank(){       
+        
+        $banks= Bank::all();
+        return response()->json(['banks' => $banks],200);
+    }
+
+    public function setBank(Request $request){
+        $rules = [
+          'name' => 'required|string'
+        ];
+
+        $validator = \Validator::make($request->all(),$rules);
+
+        if ($validator->fails()){
+            return response()->json(['message','No se cuenta con todos los paramentros'],401);
+        }
+
+        $bank= new Bank();
+        $bank->name=$request->input('name');
+        $bank->save();
+
+        return response()->json(['message','se creo correctamente el banco'],200);
+
+    }
+
+    public function getTypeD(){
+        $types=TypeDiscount::all();
+        return response()->json(['typesD' => $types],200);
+    }
+
+    public function setTypeD(Request $request){
+        $rules = [
+            'type' => 'required|string'
+        ];
+
+        $validator = \Validator::make($request->all(),$rules);
+
+        if($validator->fails()){
+            return response()->json(['message','No se cuenta con todos los paramentros'],401);
+        }
+
+        $type=new TypeDiscount();
+        $type->type= $request->input('type');
+        $type->save();
+        
+        return response()->json(['message','se creo correctamente el tipo'],200);
+    }
+
+    public function getTypeP(){
+        $types=TypePayment::all();
+        return response()->json(['typesP' => $types],200);
+    }
+
+    public function setTypeP(Request $request){
+        $rules = [
+            'type' => 'required|string'
+        ];
+
+        $validator = \Validator::make($request->all(),$rules);
+
+        if($validator->fails()){
+            return response()->json(['message','No se cuenta con todos los paramentros'],401);
+        }
+
+        $type=new TypePayment();
+        $type->name= $request->input('type');
+        $type->save();
+
+        return response()->json(['message','se creo correctamente el tipo'],200);
+    }
+
+    
 }

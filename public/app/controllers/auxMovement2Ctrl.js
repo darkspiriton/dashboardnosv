@@ -270,7 +270,7 @@ angular.module('App')
                                 </div>`;
             swal(alertConfig,
                 function () {
-                    var movement_id = $scope.tableData[$scope.index].movement_id;
+                    var movement_id = $scope.tableData[$scope.index].movement.id;
                     petition.put('api/auxmovement/' + movement_id, { date:$scope.programDate})
                         .then(function (data) {
                             toastr.success(data.message);

@@ -9,6 +9,8 @@ angular.module('App')
     })
     .controller('PartnerCtrl', function($scope, $compile, $log, util, petition, toastr, $filter, charts){
 
+        var lineChart;
+
         util.liPage('partners');
 
         $scope.tableConfig 	= 	{
@@ -27,13 +29,92 @@ angular.module('App')
             }
         };
 
-        var data2 = [
-            {name: 'Samsung Galaxy Mega', quantity: '25'},
-            {name: 'Huawei Ascend P6', quantity: '24'},
-            {name: 'HTC One M8', quantity: '17'},
-            {name: 'Samsung Galaxy Alpha', quantity: '15'},
-            {name: 'LG G3', quantity: '15'}
-        ];
+        var salesConfig = {
+            columns :   [
+                {"sTitle": "Mes", 'class': 'f-500 c-indigo'},
+                {"sTitle": "Ventas"},
+                {"sTitle": "Monto", 'class': 'f-500 c-indigo', 'width': '70px'}
+            ],
+            data    :   ['month', 'data.sales.count','data.sales.cost_total'],
+            options : {
+                "bPaginate": false,
+                "bLengthChange": false,
+                "bFilter": false,
+                "bSort": false,
+                "bInfo": false,
+                "bAutoWidth": false
+            }
+        };
+
+        var paymentsConfig = {
+            columns :   [
+                {"sTitle": "Mes", 'class': 'f-500 c-indigo'},
+                {"sTitle": "RAN", 'class': 'f-500 c-indigo'},
+                {"sTitle": "MM", 'class': 'f-500 c-indigo'},
+                {"sTitle": "D", 'class': 'hidden-xs'},
+                {"sTitle": "MD", 'class': 'f-500 c-indigo'},
+                {"sTitle": "P", 'class': 'hidden-xs'},
+                {"sTitle": "MP", 'class': 'f-500 c-indigo'},
+                {"sTitle": "PT", 'class': 'f-500 c-indigo'},
+                {"sTitle": "RAC", 'class': 'f-500 c-indigo'},
+                {"sTitle": "Detalle", 'class': 'hidden-xs'},
+            ],
+            buttons    :
+                [
+                    {
+                        type: 'actions',
+                        list:  [
+                            { name: 'detail', render: [['Detalle','detail','bgm-teal']]},
+                        ]
+                    },
+                    {
+                        type: 'custom',
+                        list: [
+                            { name: 'residueBefore', call_me: function(row, i, rows){
+                                if(i == 0){
+                                    row.residueBefore = 0;
+                                } else {
+                                    row.residueBefore = rows[i-1].residueAfter;
+                                }
+                                return row.residueBefore;
+                            }},
+                            { name: 'payTotal', call_me: function(row){
+                                row.payMonthTotal = row.data.payments.summ.disc_total + row.data.payments.summ.pay_total;
+                                return row.payMonthTotal;
+                            }},
+                            { name: 'residueAfter', call_me: function(row, i, rows){
+                                if(i == 0){
+                                    row.residueAfter = row.data.sales.cost_total - row.payMonthTotal;
+                                } else {
+                                    row.residueAfter = Math.round((row.data.sales.cost_total - row.payMonthTotal + row.residueBefore) * 100) / 100;
+                                }
+
+                                return row.residueAfter;
+                            }}
+                        ]
+                    }
+                ],
+            data    :   [
+                            'month',
+                            'residueBefore',
+                            'data.sales.cost_total',
+                            'data.payments.summ.disc_count',
+                            'data.payments.summ.disc_total',
+                            'data.payments.summ.pay_count',
+                            'data.payments.summ.pay_total',
+                            'payTotal',
+                            'residueAfter',
+                            'detail',
+                        ],
+            options : {
+                "bPaginate": false,
+                "bLengthChange": false,
+                "bFilter": false,
+                "bSort": false,
+                "bInfo": false,
+                "bAutoWidth": false
+            }
+        };
 
         $scope.listTopSales = function(option) {
             petition.get('api/partner/get/top/sales', {params: $scope.date})
@@ -64,6 +145,22 @@ angular.module('App')
                 }, function(error){
                     toastr.error('Huy Huy dice: ' + error.data.message);
                 });
+        };
+
+        $scope.salesAndPayments = function() {
+            petition.get('api/partner/get/payments')
+                .then(function(response){
+                    $scope.sAndP = response.movements;
+                    $('#sales').AJQtable2('view2', $scope, $compile, response.movements, salesConfig);
+                    $('#payments').AJQtable2('view2', $scope, $compile, response.movements, paymentsConfig);
+                }, function(error){
+                    toastr.error('Huy Huy dice: ' + error.data.message);
+                });
+        };
+
+        $scope.detail = function(i){
+            $scope.salesPaymentsDetail = $scope.sAndP[i];
+            util.modal("salesPaymentsDetail");
         };
 
         function chartDraw(data){
@@ -98,12 +195,13 @@ angular.module('App')
             $scope.listTopSales();
             $scope.listLessSold();
             $scope.productSales();
+            $scope.salesAndPayments();
             $scope.listProductMovements();
             $scope.salesDate();
         }
 
         /**
-         * Controller from cesar
+         * Controller by cesar
          *    
          */
 
@@ -178,8 +276,10 @@ angular.module('App')
         };
 
         $scope.graphy = function(){
-            const CHART = document.getElementById("lineChart");
-            var lineChart = new Chart(CHART, {
+            console.log(lineChart);
+            if(typeof lineChart != 'undefined')lineChart.destroy();
+            chart = document.getElementById("lineChart");
+            lineChart = new Chart(chart, {
                 type: 'line',
                 data: {
                     labels:  $scope.daysData,
@@ -229,8 +329,9 @@ angular.module('App')
              
         angular.element(document).ready(function(){
             $scope.list();
-            
+
             $scope.day = $scope.mtn = $scope.range = {};
             $scope.searchView = 0;
+            $scope.dateNow = new Date();
         });
     });

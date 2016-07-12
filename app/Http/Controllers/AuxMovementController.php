@@ -109,8 +109,7 @@ class AuxMovementController extends Controller
                             2 => 'La foto no es igual al producto',
                             3 => 'Producto dañado',
                             4 => 'No se encontro cliente',
-                            5 => 'No es la talla',
-                            6 => 'Reprogramado'
+                            5 => 'No es la talla'
                         ];
 
             if($move->status != 'vendido'){
@@ -158,6 +157,7 @@ class AuxMovementController extends Controller
             $products = $request->input('products');
 
             $response = array();
+            $movementsRes = array();
 
             foreach($products as $product){
                 $prd = Product::find($product['id']);
@@ -172,10 +172,11 @@ class AuxMovementController extends Controller
 
                 };
                 $response[] = $prd;
+                $movementsRes[] = $movement;
             }
 
             return response()->json(['message' => 'Se genero la salida de los productos correctamente',
-                                        'products' => $response],200);
+                                        'products' => $response, 'movements' => $movementsRes, 'request' => $products],200);
 
         } catch (\Exception $e) {
             // Si algo sale mal devolvemos un error.
@@ -204,7 +205,18 @@ class AuxMovementController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if(\Validator::make($request->all(), ['date' => 'date'])->fails())
+            return response()->json(['message' => 'Fecha invalida'], 401);
+
+        $movement = Movement::find($id);
+
+        if($movement == null)
+            return response()->json(['message' => 'El movimiento no existe'], 404);
+
+        $movement->date_shipment = $request->input('date');
+        $movement->save();
+
+        return response()->json(['message' => 'Se reprogramo la salida', 'movement' => $movement]);
     }
 
     public function sale(Request $request){
@@ -254,20 +266,30 @@ class AuxMovementController extends Controller
     }
 
     public function movementPending(){
-        $products = DB::table('auxproducts AS p')
-            ->select('p.cod','m.date_shipment','p.id as product_id',
-            'p.name','s.name as size','c.name as color','m.id as movement_id',
-                DB::raw('m.created_at as date'),
-                DB::raw('case when d.price then d.price else p.cost_provider + p.utility end as price'),
-                DB::raw('case when d.price then 1 else 0 end as status'),'m.discount as discount')
-            ->join('auxmovements AS m','m.product_id','=','p.id')
-            ->join('colors AS c','c.id','=','p.color_id')
-            ->join('sizes AS s','s.id','=','p.size_id')
-            ->leftJoin('settlements AS d','d.product_id','=','p.id')
-            ->where('p.status','=',0)
-            ->where('m.status','=','salida')
-            ->get();
+
+//        $products = DB::table('auxproducts AS p')
+//            ->select('p.cod','m.date_shipment','p.id as product_id',
+//            'p.name','s.name as size','c.name as color','m.id as movement_id',
+//                DB::raw('m.created_at as date'),
+//                DB::raw('case when d.price then d.price else p.cost_provider + p.utility end as price'),
+//                DB::raw('case when d.price then 1 else 0 end as status'),'m.discount as discount')
+//            ->join('auxmovements AS m','m.product_id','=','p.id')
+//            ->join('colors AS c','c.id','=','p.color_id')
+//            ->join('sizes AS s','s.id','=','p.size_id')
+//            ->leftJoin('settlements AS d','d.product_id','=','p.id')
+//            ->where('p.status','=',0)
+//            ->where('m.status','=','salida')
+//            ->get();
 //            ->groupBy('p.id')->get();
+
+        $products = Product::with(['movement' => function($query){
+            return $query->where('status','salida');
+        },'settlement','color','size'])
+            ->select(array('id','cod','id as product_id','name','color_id','size_id'))
+            ->where('status',0)
+            ->get();
+
+
         return \Response::json(['products' => $products], 200);
     }
     

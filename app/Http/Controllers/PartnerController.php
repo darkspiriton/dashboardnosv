@@ -4,9 +4,12 @@ namespace Dashboard\Http\Controllers;
 
 use Carbon\Carbon;
 use DB;
+use Dashboard\Http\Controllers\Util\Oxigeno;
 use Dashboard\Http\Requests;
+use Dashboard\Models\Experimental\Movement;
 use Dashboard\Models\Experimental\Product;
 use Dashboard\Models\Experimental\Provider;
+use Dashboard\Models\PaymentProvider\Payment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -129,7 +132,6 @@ class PartnerController extends Controller
 
     public function saleMonth(Request $request)
     {
-
         $this->getIdProvider($request);
         if ($this->getDates("Month")->failed) {
             return response()->json(["message" => $this->message], 401);
@@ -292,14 +294,60 @@ class PartnerController extends Controller
 
     public function getIdProvider($request)
     {
-        if ($request->has("provider_id")){
+        if ($request->has("provider_id")) {
             $this->provider_id = $request->input("provider_id");
-        }else{
+        } else {
             $user_id = $request->input('user')['sub'];
             $proveedor = Provider::where('idUser', $user_id)->first();
             if ($proveedor != null) {
                 $this->provider_id = $proveedor->id;
             }
         }
+    }
+
+    public function infoPayment(Request $request)
+    {
+        $this->getIdProvider($request);
+        $dt = Oxigeno::generate();
+        $data = array();
+
+        for ($i=1; $i <= $dt->currentMonth(); $i++) {
+            $interval = $dt->getMonth($i);
+            $sales = DB::table('auxproducts as p')
+                ->select(
+                    DB::raw('count(`p`.`cost_provider`) as count'),
+                    DB::raw('sum(`p`.`cost_provider`) as cost_total'))
+                ->join('auxmovements as m', 'p.id', '=', 'm.product_id')
+                ->where('m.status', "Vendido")
+                ->where('p.provider_id', $this->provider_id)
+                ->where('m.date_shipment', '>=', $interval->start)
+                ->where('m.date_shipment', '<=', $interval->end)
+                ->orderby('p.name', 'c.name', 's.name')
+                ->get();
+
+            $payments = Payment::with("type_discount")
+                        ->select("type_discount_id", "name_bank", "date", "amount", "reason", "amount_discount")
+                        ->where("provider_id", $this->provider_id)
+                        ->where('date', '>=', $interval->start)
+                        ->where('date', '<=', $interval->end)
+                        ->get();
+
+
+            $temp["month"] =    $interval->name;
+            $temp["start"] = $interval->start;
+            $temp["end"] = $interval->end;
+            $temp["data"]["sales"] = $sales[0];
+            $temp["data"]["payments"]["data"] = $payments;
+            $temp["data"]["payments"]["summ"] = array(
+                                                    "disc_count" => $payments->reject(function($v){return $v->amount_discount == 0;})->count(),
+                                                    "disc_total" => $payments->sum("amount_discount"),
+                                                    "pay_count" => $payments->count(),
+                                                    "pay_total" => $payments->sum("amount")
+                                                );
+
+            array_push($data, $temp);
+        }
+
+        return response()->json(["movements" => $data]);
     }
 }

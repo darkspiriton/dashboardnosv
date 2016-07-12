@@ -3,6 +3,7 @@
 namespace Dashboard\Models\PaymentProvider;
 
 use Dashboard\Models\Experimental\Provider;
+use Dashboard\Models\PaymentProvider\Type;
 use Illuminate\Database\Eloquent\Model;
 
 class Payment extends Model

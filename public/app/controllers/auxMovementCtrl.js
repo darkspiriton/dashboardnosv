@@ -60,8 +60,8 @@ angular.module('App')
                     $('#table').AJQtable('view', $scope, $compile);
                     $scope.updateList = false;
                 }, function(error){
-                    console.log(error);
                     toastr.error('Uyuyuy dice: ' + error.data.message);
+                    util.resetTable($scope,$compile);
                     $scope.updateList = false;
                 });
         };
@@ -75,7 +75,6 @@ angular.module('App')
                         $scope.prdTemp = angular.copy($scope.tableData[i]);
                         util.modal('codes');
                     }, function(error){
-                        console.log(error);
                         toastr.error('Uyuyuy dice: ' + error.data.message);
                         $scope.updateList = false;
                     });

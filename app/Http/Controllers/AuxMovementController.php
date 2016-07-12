@@ -169,17 +169,18 @@ class AuxMovementController extends Controller
                     $prd->movements()->save($movement);
                     $prd->status = 0;
                     $prd->save();
+
+                    $response[] = $prd;
                     $movementsRes[] = $movement;
-                };
-                $response[] = $prd;
+                }; 
             }
 
             return response()->json(['message' => 'Se genero la salida de los productos correctamente',
-                                        'products' => $response, 'movements' => $movementsRes, 'request' => $products],200);
+                                        'products' => $response, 'movements' => $movementsRes],200);
 
         } catch (\Exception $e) {
             // Si algo sale mal devolvemos un error.
-            return \Response::json(['message' => 'Ocurrio un error al agregar producto', "error" => $e->getMessage()], 500);
+            return \Response::json(['message' => 'Ocurrio un error al agregar producto'], 500);
         }
     }
 
@@ -272,11 +273,45 @@ class AuxMovementController extends Controller
 
         foreach ($products as $product) {
             $product->movement =  $product->bymovements[0];
+            $product->price = $this->getPriceAttribute($product);
+            $product->pricefinal = $this->getPriceFinalAttribute($product);
+            $product->liquidation = $this->getLiquidationAttribute($product);
             unset($product->bymovements);
         }
 
         return response()->json(['products' => $products], 200);
     }
+
+    /**
+     *  Function helpeer
+     */
+
+    public function getPriceAttribute($product){
+        $price = 0;
+        if ($product->settlement == null){
+            $price = $product->cost_provider + $product->utility;
+        } else{
+            $price = $product->settlement->price;
+        }
+
+        return $price;
+    }
+
+    public function getPriceFinalAttribute($product){
+        return $product->price - $product->movement->discount;
+    }
+
+    public function getLiquidationAttribute($product){
+        if($product->settlement == null){
+            return 0;
+        } else {
+            return 1;
+        }
+    }
+
+    /**
+     * END
+     */
     
 
     public function movementDay(){

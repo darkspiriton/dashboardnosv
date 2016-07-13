@@ -357,7 +357,7 @@ class AuxMovementController extends Controller
 
         try {
             $date1 = Carbon::createFromFormat('Y-m-d', $request->input('date1'))->setTime(0,0,0);
-            $date2 = Carbon::createFromFormat('Y-m-d', $request->input('date2'));
+            $date2 = Carbon::createFromFormat('Y-m-d', $request->input('date2'))->addDay()->setTime(0,0,0);
         } catch(\InvalidArgumentException $e) {
             return response()->json(['message' => 'Fechas no validas, formato aceptado: Y-m-d'],401);
         }
@@ -393,7 +393,7 @@ class AuxMovementController extends Controller
 
         try {
             $date1 = Carbon::createFromFormat('Y-m-d', $request->input('date1'))->setTime(0,0,0);
-            $date2 = Carbon::createFromFormat('Y-m-d', $request->input('date2'))->setTime(23,59,59);
+            $date2 = Carbon::createFromFormat('Y-m-d', $request->input('date2'))->addDay()->setTime(0,0,0);
         } catch(\InvalidArgumentException $e) {
             return response()->json(['message' => 'Fechas no validas, formato aceptado: Y-m-d'],401);
         }
@@ -470,7 +470,7 @@ class AuxMovementController extends Controller
 
     private function find_for_product_draw($date,$status,$name = '',$size = '',$color = ''){
         $ini = $date->copy()->firstOfMonth()->setTime(0,0,0);
-        $fin = $date->copy()->lastOfMonth()->setTime(23,59,59);
+        $fin = $date->copy()->lastOfMonth()->addDay()->setTime(0,0,0);
 
         $draw = array('name' => $name);
         $draw['data'] = DB::table('auxproducts as p')
@@ -514,7 +514,7 @@ class AuxMovementController extends Controller
     private function find_for_provider_draw($date,$status,$provider = ''){
 
         $ini = $date->copy()->firstOfMonth()->setTime(0,0,0);
-        $fin = $date->copy()->lastOfMonth()->setTime(23,59,59);
+        $fin = $date->copy()->lastOfMonth()->addDay()->setTime(0,0,0);
 
         $products = DB::table('auxproducts as p')
             ->select(DB::raw('DISTINCT p.name'))
@@ -558,7 +558,7 @@ class AuxMovementController extends Controller
     private function find_for_dates_draw($date, $status){
 
         $ini = $date->copy()->firstOfMonth()->setTime(0,0,0);
-        $fin = $date->copy()->lastOfMonth()->setTime(23,59,59);
+        $fin = $date->copy()->lastOfMonth()->addDay()->setTime(0,0,0);
 
         $products = DB::table('auxproducts as p')
             ->select(DB::raw('DISTINCT p.name'))

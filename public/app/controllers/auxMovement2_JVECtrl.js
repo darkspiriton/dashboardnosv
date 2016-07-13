@@ -13,6 +13,7 @@ angular.module('App')
 
         $scope.tableConfig 	= 	{
             columns :	[
+                {"sTitle": "Fecha de creación", "bSortable" : true, "sWidth": "90px"},
                 {"sTitle": "Fecha de salida", "bSortable" : true, "sWidth": "90px"},
                 {"sTitle": "Codigo", "bSortable" : true},
                 {"sTitle": "Producto", "bSortable" : true},
@@ -37,7 +38,7 @@ angular.module('App')
                 ]
                 ]
             ],
-            data    :   ['movement.date_shipment','cod','name','size.name','color.name','price',
+            data    :   ['created_at','movement.date_shipment','cod','name','size.name','color.name','price',
                             'movement.discount','pricefinal','status','actions'
                         ],
             configStatus : 'liquidation'

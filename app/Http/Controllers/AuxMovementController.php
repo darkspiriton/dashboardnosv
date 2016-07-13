@@ -17,7 +17,6 @@ class AuxMovementController extends Controller
     public function __construct()
     {
         $this->middleware('auth:GOD,ADM,JVE');
-        // $this->middleware('auth:GOD' , ['only' => ['movementDay','movementDays','movementDaysDownload']]);
         $this->middleware('auth:GOD,ADM', ['only' => 'destroy']);
     }
 
@@ -346,9 +345,8 @@ class AuxMovementController extends Controller
     
 
     public function movementDay(){
-        $date1 = Carbon::today();
-        $date2 = $date1->copy()->addDay();
-        $movements = $this->movementsGet($date1,$date2);
+        $start = Carbon::today()->setTime(0,0,0);
+        $movements = $this->movementsGet($start);
         return response()->json(['movements' => $movements],200);
     }
 
@@ -363,8 +361,7 @@ class AuxMovementController extends Controller
         return response()->json(['movements' => $movements],200);
     }
 
-    private function movementsGet($date1,$date2){
-        $status = 'salida';
+    private function movementsGet($start){
         $movements=DB::table('auxproducts as p')
             ->select('m.created_at','m.date_shipment as fecha','p.cod as codigo','p.name as product','c.name as color',
                 DB::raw('case when d.price then d.price else p.cost_provider + p.utility end as price'),'s.name as talla','m.status','m.discount',
@@ -373,11 +370,8 @@ class AuxMovementController extends Controller
             ->join('colors as c','c.id','=','p.color_id')
             ->join('sizes as s','s.id','=','p.size_id')
             ->leftJoin('settlements AS d','d.product_id','=','p.id')
-//            ->where('m.status','<>','%'.$status.'%')
-//            ->where('m.situation',null)
-            ->where('m.status','<>',$status)
-            ->where(DB::raw('DATE(m.date_shipment)'),'>=',$date1->toDateString())
-            ->where(DB::raw('DATE(m.date_shipment)'),'<',$date2->toDateString())
+            ->where('m.date_shipment','>=',$start->toDateString())
+            ->where('m.date_shipment','<=',$start->toDateString())
             ->orderby('p.name','c.name','s.name')
             ->get();
 
@@ -388,7 +382,7 @@ class AuxMovementController extends Controller
 
         try {
             $date1 = Carbon::createFromFormat('Y-m-d', $request->input('date1'))->setTime(0,0,0);
-            $date2 = Carbon::createFromFormat('Y-m-d', $request->input('date2'))->addDay()->setTime(0,0,0);
+            $date2 = Carbon::createFromFormat('Y-m-d', $request->input('date2'))->setTime(23,59,59);
         } catch(\InvalidArgumentException $e) {
             return response()->json(['message' => 'Fechas no validas, formato aceptado: Y-m-d'],401);
         }
@@ -424,7 +418,7 @@ class AuxMovementController extends Controller
 
         try {
             $date1 = Carbon::createFromFormat('Y-m-d', $request->input('date1'))->setTime(0,0,0);
-            $date2 = Carbon::createFromFormat('Y-m-d', $request->input('date2'))->addDay()->setTime(0,0,0);
+            $date2 = Carbon::createFromFormat('Y-m-d', $request->input('date2'))->setTime(23,59,59);
         } catch(\InvalidArgumentException $e) {
             return response()->json(['message' => 'Fechas no validas, formato aceptado: Y-m-d'],401);
         }

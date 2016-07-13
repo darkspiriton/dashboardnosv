@@ -141,7 +141,8 @@
                 });
                 data.push(temp);
             });
-            oTable.fnAddData(data);
+            if(data.length > 0)
+                oTable.fnAddData(data);
         } else {
             var data = [];
             $.each(App.rows, function(i , obj){
@@ -154,7 +155,8 @@
                 });
                 data.push(temp);
             });
-            oTable.fnAddData(data);
+            if(data.length > 0)
+                oTable.fnAddData(data);
         }
     }
 

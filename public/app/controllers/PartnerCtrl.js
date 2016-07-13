@@ -276,7 +276,6 @@ angular.module('App')
         };
 
         $scope.graphy = function(){
-            console.log(lineChart);
             if(typeof lineChart != 'undefined')lineChart.destroy();
             chart = document.getElementById("lineChart");
             lineChart = new Chart(chart, {

@@ -203,7 +203,13 @@
         <div class="card-header">
             <h2>Disponibilidad</h2>
         </div>
+
         <form class="form-horizontal">
+            <div class="form-group">
+                <div class="col-xs-12 col-sm-offset-2 col-sm-10">
+                    <a ng-click="listCodes()" ng-disabled="btnCods" class="btn btn-success btn-sm waves-effect">Listar Codigos</a>
+                </div>
+            </div>
             <div class="form-group">
                 <label class="col-xs-2 col-sm-2 control-label">Códigos: </label>
                 <div class="col-xs-10 m-t-15"><span ng-repeat="code in codes">{{ code + ',&nbsp;&nbsp;&nbsp;&nbsp;' }}</span>--></div>

@@ -109,7 +109,9 @@ class AuxMovementController extends Controller
                             2 => 'La foto no es igual al producto',
                             3 => 'Producto dañado',
                             4 => 'No se encontro cliente',
-                            5 => 'No es la talla'
+                            5 => 'No es la talla',
+                            6 => 'No se encontro el código',
+                            7 => 'No llegamos al cliente'
                         ];
 
             if($move->status != 'vendido'){
@@ -292,6 +294,7 @@ class AuxMovementController extends Controller
             ->select(array('id','cod','id as product_id','name','color_id','size_id','cost_provider','utility'))
             ->where('status',0)
             ->get();
+
 
         foreach ($products as $product) {
             $product->movement =  $product->bymovements[0];

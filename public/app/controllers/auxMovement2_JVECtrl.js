@@ -170,6 +170,12 @@ angular.module('App')
                                                     case 5:
                                                         situation="No es la talla";
                                                         break;
+                                                    case 6:
+                                                        situation="No se encontro el código";
+                                                        break;
+                                                    case 7:
+                                                        situation="No llegamos al cliente";
+                                                        break;
                                                 }
                                                 return situation; })()}
                                             </td>

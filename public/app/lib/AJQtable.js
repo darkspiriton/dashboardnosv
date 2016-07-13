@@ -74,6 +74,7 @@
 
 		// Llenar de registros la tabla
 		if (actions.length > 0){
+			var dataTemp = [];
 			$.each($scope.tableData, function(i , obj){
 				var temp = [];
 				var est = searchObject(obj,config.configStatus);
@@ -89,9 +90,12 @@
 							temp[x] = searchObject(obj,val);
 					}
 				});
-				oTable.fnAddData(temp);
+				dataTemp.push(temp);
 			});
+			if(dataTemp.length > 0)
+				oTable.fnAddData(dataTemp);
 		} else {
+			var dataTemp = [];
 			$.each($scope.tableData, function(i , obj){
 				var temp = []
 				$.each( data , function(x, val){
@@ -100,8 +104,10 @@
 					else
 						temp[x] = obj[val];
 				});
-				oTable.fnAddData(temp);
+				dataTemp.push(temp);
 			});
+			if(dataTemp.length > 0)
+				oTable.fnAddData(dataTemp);
 		}
 	}
 

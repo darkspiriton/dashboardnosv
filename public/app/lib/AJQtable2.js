@@ -126,6 +126,7 @@
 
         // Llenar de registros la tabla
         if (Object.keys(AJQactions2).length > 0){
+            var data = [];
             $.each(App.rows, function(i , obj){
                 var temp = [];
                 $.each( App.data , function(x, val){
@@ -138,9 +139,12 @@
                             temp[x] = searchObject(obj,val);
                     }
                 });
-                oTable.fnAddData(temp);
+                data.push(temp);
             });
+            if(data.length > 0)
+                oTable.fnAddData(data);
         } else {
+            var data = [];
             $.each(App.rows, function(i , obj){
                 var temp = [];
                 $.each( App.data , function(x, val){
@@ -149,8 +153,10 @@
                     else
                         temp[x] = searchObject(obj,val);
                 });
-                oTable.fnAddData(temp);
+                data.push(temp);
             });
+            if(data.length > 0)
+                oTable.fnAddData(data);
         }
     }
 

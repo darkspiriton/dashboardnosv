@@ -66,7 +66,9 @@ angular.module('App')
             {id: 2, name:'La foto no es igual al producto' },
             {id: 3, name:'Producto dañado' },
             {id: 4, name:'No se encontro al cliente' },
-            {id: 5, name:'No es la talla' }
+            {id: 5, name:'No es la talla' },
+            {id: 6, name:'No se encontro el código' },
+            {id: 7, name:'No llegamos al cliente' }
         ];
         $scope.prdDelete = function(i){
             alertConfig.title = '¿Todo es correcto?';
@@ -165,7 +167,7 @@ angular.module('App')
             $scope.product.cod = $scope.tableData[i].cod;
             $scope.product.name = $scope.tableData[i].name;
             $scope.product.size = $scope.tableData[i].size.name;
-            $scope.product.color = $scope.tableData[i].color;
+            $scope.product.color = $scope.tableData[i].color.name;
             $scope.product.situation = null;
             util.modal();
         };
@@ -205,6 +207,12 @@ angular.module('App')
                                                         break;
                                                     case 5:
                                                         situation="No es la talla";
+                                                        break;
+                                                    case 6:
+                                                        situation="No se encontro el código";
+                                                        break;
+                                                    case 7:
+                                                        situation="No llegamos al cliente";
                                                         break;
                                                 }
                                                 return situation; })()}
@@ -259,8 +267,8 @@ angular.module('App')
                                                 <td>${(function(){ 
                                                     var day = $scope.programDate.getDate();
                                                     var month = ($scope.programDate.getMonth().toString().length == 1)?
-                                                                '0'.concat($scope.programDate.getMonth().toString()):
-                                                                $scope.programDate.getMonth().toString();
+                                                        '0'.concat(($scope.programDate.getMonth() + 1).toString()):
+                                                        ($scope.programDate.getMonth() + 1).toString();
                                                     var year = $scope.programDate.getFullYear();
                                                     var date = '';
                                                     return date.concat(day,'-',month,'-',year)})()}</td>

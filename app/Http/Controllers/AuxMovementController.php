@@ -109,7 +109,9 @@ class AuxMovementController extends Controller
                             2 => 'La foto no es igual al producto',
                             3 => 'Producto dañado',
                             4 => 'No se encontro cliente',
-                            5 => 'No es la talla'
+                            5 => 'No es la talla',
+                            6 => 'No se encontro el código',
+                            7 => 'No llegamos al cliente'
                         ];
 
             if($move->status != 'vendido'){
@@ -266,10 +268,33 @@ class AuxMovementController extends Controller
     }
 
     public function movementPending(){
+
+
+//        $products = DB::table('auxproducts AS p')
+//            ->select('p.cod','m.date_shipment','p.id as product_id',
+//            'p.name','s.name as size','c.name as color','m.id as movement_id',
+//                DB::raw('m.created_at as date'),
+//                DB::raw('case when d.price then d.price else p.cost_provider + p.utility end as price'),
+//                DB::raw('case when d.price then 1 else 0 end as status'),'m.discount as discount')
+//            ->join('auxmovements AS m','m.product_id','=','p.id')
+//            ->join('colors AS c','c.id','=','p.color_id')
+//            ->join('sizes AS s','s.id','=','p.size_id')
+//            ->leftJoin('settlements AS d','d.product_id','=','p.id')
+//            ->where('p.status','=',0)
+//            ->where('m.status','=','salida')
+//            ->get();
+//            ->groupBy('p.id')->get();
+//
+//        $products = Product::with(['movement' => function($query){
+//            return $query->where('status','salida');
+//        },'settlement','color','size'])
+//            ->select(array('id','cod','id as product_id','name','color_id','size_id'))
+
         $products = Product::with(['bymovements','settlement','color','size'])
             ->select(array('id','cod','id as product_id','name','color_id','size_id','cost_provider','utility'))
             ->where('status',0)
             ->get();
+
 
         foreach ($products as $product) {
             $product->movement =  $product->bymovements[0];

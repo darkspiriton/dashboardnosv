@@ -31,7 +31,7 @@ class Product extends Model
     }
 
     public function bymovements(){
-        return $this->hasMany(Movement::class)->orderby('created_at','desc');
+        return $this->hasMany(Movement::class)->where('status','salida')->orderby('created_at','desc');
     }
 
     public function types(){

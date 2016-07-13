@@ -4,13 +4,12 @@ namespace Dashboard\Models\PaymentProvider;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Detail extends Model
+class TypePayment extends Model
 {
-    protected $table="payments_details";
+    protected $table='types_payments_providers';
     protected $id='id';
-    public $timestamps=false;
-
+    
     public function payment(){
-        return $this->belongsTo(Payment::class);
+        return $this->hasMany(Payment::class);
     }
 }

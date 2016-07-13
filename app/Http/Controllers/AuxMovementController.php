@@ -295,7 +295,7 @@ class AuxMovementController extends Controller
             ->where('status',0)
             ->get();
 
-        dd($products);
+        return $products;
 
         foreach ($products as $product) {
             $product->movement =  $product->bymovements[0];

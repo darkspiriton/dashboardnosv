@@ -85,10 +85,10 @@ angular.module('App')
                                         <tr>
                                             <th>${$scope.tableData[i].cod}</th>
                                             <th>${$scope.tableData[i].name}</th>
-                                            <td>${$scope.tableData[i].size}</td>
-                                            <td>${$scope.tableData[i].color}</td>
+                                            <td>${$scope.tableData[i].size.name}</td>
+                                            <td>${$scope.tableData[i].color.name}</td>
                                             <td>${$scope.tableData[i].price}</td>
-                                            <td>${$scope.tableData[i].discount}</td>
+                                            <td>${$scope.tableData[i].movement.discount}</td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -138,10 +138,10 @@ angular.module('App')
                                         <tr>
                                             <th>${$scope.tableData[i].cod}</th>
                                             <th>${$scope.tableData[i].name}</th>
-                                            <td>${$scope.tableData[i].size}</td>
-                                            <td>${$scope.tableData[i].color}</td>
+                                            <td>${$scope.tableData[i].size.name}</td>
+                                            <td>${$scope.tableData[i].color.name}</td>
                                             <td>${$scope.tableData[i].price}</td>
-                                            <td>${$scope.tableData[i].discount}</td>
+                                            <td>${$scope.tableData[i].movement.discount}</td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -164,7 +164,7 @@ angular.module('App')
             $scope.product.id = $scope.tableData[i].product_id;
             $scope.product.cod = $scope.tableData[i].cod;
             $scope.product.name = $scope.tableData[i].name;
-            $scope.product.size = $scope.tableData[i].size;
+            $scope.product.size = $scope.tableData[i].size.name;
             $scope.product.color = $scope.tableData[i].color;
             $scope.product.situation = null;
             util.modal();
@@ -254,8 +254,8 @@ angular.module('App')
                                             <tr>
                                                 <th>${$scope.tableData[$scope.index].cod}</th>
                                                 <th>${$scope.tableData[$scope.index].name}</th>
-                                                <td>${$scope.tableData[$scope.index].size}</td>
-                                                <td>${$scope.tableData[$scope.index].color}</td>
+                                                <td>${$scope.tableData[$scope.index].size.name}</td>
+                                                <td>${$scope.tableData[$scope.index].color.name}</td>
                                                 <td>${(function(){ 
                                                     var day = $scope.programDate.getDate();
                                                     var month = ($scope.programDate.getMonth().toString().length == 1)?
@@ -270,7 +270,7 @@ angular.module('App')
                                 </div>`;
             swal(alertConfig,
                 function () {
-                    var movement_id = $scope.tableData[$scope.index].movement_id;
+                    var movement_id = $scope.tableData[$scope.index].movement.id;
                     petition.put('api/auxmovement/' + movement_id, { date:$scope.programDate})
                         .then(function (data) {
                             toastr.success(data.message);

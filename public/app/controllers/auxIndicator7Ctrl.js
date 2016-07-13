@@ -13,6 +13,7 @@ angular.module('App')
 
         $scope.tableConfig 	= 	{
             columns :	[
+                {"sTitle": "Creacion", "bSortable" : true, "sWidth" : '160px'},
                 {"sTitle": "Fecha", "bSortable" : true, "sWidth" : '80px'},
                 {"sTitle": "Codigo", "bSortable" : true, "sWidth" : '1px'},
                 {"sTitle": "Producto", "bSortable" : true},
@@ -20,13 +21,13 @@ angular.module('App')
                 {"sTitle": "Talla", "bSortable" : true},
                 {"sTitle": "Estado", "bSortable" : true}
             ],
-            data  	: 	['fecha', 'codigo','product','color','talla','status']
+            data  	: 	['created_at','fecha', 'codigo','product','color','talla','status']
         };
 
         $scope.data = {
             date1 : null,
             date2: null,
-            status: 'Vendido'
+            status: null
         };
 
         $scope.list = function() {
@@ -40,7 +41,7 @@ angular.module('App')
                     $scope.drawShow=false;
                 }, function(error){
                     console.log(error);
-                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                    toastr.error('Huy huy dice: ' + error.data.message);
                     $scope.updateList = false;
                 });
         };
@@ -68,7 +69,7 @@ angular.module('App')
                     $scope.updateList = false;
                 }, function(error){
                     console.log(error);
-                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                    toastr.error('Huy huy dice: ' + error.data.message);
                     $scope.updateList = false;
                 });
         };
@@ -79,7 +80,7 @@ angular.module('App')
                     $scope.providers = data.providers;
                 }, function(error){
                     console.log(error);
-                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                    toastr.error('Huy huy dice: ' + error.data.message);
                 });
         };
 
@@ -92,6 +93,7 @@ angular.module('App')
                 .then(function(data){
                     $scope.reportDownload = true;
                     $scope.tableData = data.movements;
+                    $scope.infoMonth = data.month;
                     $('#table').AJQtable('view', $scope, $compile);
                     $scope.updateList = false;
                     if ( data.movements.length > 0){
@@ -102,7 +104,7 @@ angular.module('App')
                     }
                 }, function(error){
                     console.log(error);
-                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                    toastr.error('Huy huy dice: ' + error.data.message);
                     $scope.updateList = false;
                 });
         };

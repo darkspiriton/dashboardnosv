@@ -9,9 +9,7 @@ class Product extends Model
 {
     protected $table = "auxproducts";
     protected $hidden = ['pivot', 'updated_at'];
-
-    protected $appends = ['price','pricefinal','liquidation'];
-    
+   
     public function size(){
         return $this->belongsTo(Size::class);
     }
@@ -32,11 +30,8 @@ class Product extends Model
         return $this->hasMany(Movement::class)->select('id','situation','status','date_shipment','discount')->orderby('created_at','desc');
     }
 
-    public function movement(){
-        return $this->hasOne(Movement::class)
-                ->select("id","product_id","date_shipment","situation","status","discount")
-                ->orderby('created_at','desc')
-                ->take(1);
+    public function bymovements(){
+        return $this->hasMany(Movement::class)->orderby('created_at','desc');
     }
 
     public function types(){
@@ -57,28 +52,5 @@ class Product extends Model
     
     public function publicities(){
         return $this->hasMany(Publicity::class);
-    }
-
-    public function getPriceAttribute(){
-        $price = 0;
-        if ($this->settlement == null){
-            $price = $this->cost_provider + $this->utility;
-        } else{
-            $price = $this->settlement->price;
-        }
-
-        return $price;
-    }
-
-    public function getPriceFinalAttribute(){
-        return $this->price - $this->movement->discount;
-    }
-
-    public function getLiquidationAttribute(){
-        if($this->settlement == null){
-            return 0;
-        } else {
-            return 1;
-        }
     }
 }

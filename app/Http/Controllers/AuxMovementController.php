@@ -291,7 +291,7 @@ class AuxMovementController extends Controller
 //            ->select(array('id','cod','id as product_id','name','color_id','size_id'))
 
         $products = Product::with(['bymovements','settlement','color','size'])
-            ->select(array('id','cod','id as product_id','name','color_id','size_id','cost_provider','utility','created_at'))
+            ->select(array('id','cod','id as product_id','name','color_id','size_id','cost_provider','utility'))
             ->where('status',0)
             ->get();
 

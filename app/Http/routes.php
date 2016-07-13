@@ -230,6 +230,7 @@ Route::group(['prefix' => 'api'], function(){
         ['only' => ['index','store','update','destroy']]);
 
     Route::group(['prefix'=>'payment'],function(){
+        Route::get('get','PayProviderController@getPayment');
         Route::get('bank/get','PayProviderController@getBank');
         Route::get('typeD/get','PayProviderController@getTypeD');
         Route::get('typeP/get','PayProviderController@getTypeP');

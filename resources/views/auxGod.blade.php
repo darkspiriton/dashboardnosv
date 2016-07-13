@@ -180,6 +180,7 @@
     <script src="app/controllers/auxProviderProductCtrl.js"></script>
 
     <script src="app/controllers/PartnerPanelCtrl.js"></script>
+    {{--<script src="app/controllers/PartnerCtrl.js"></script>--}}
 
     <script src="app/controllers/PaymentCtrl.js"></script>
     <script src="app/controllers/PaymentListCtrl.js"></script>

@@ -3,12 +3,12 @@
 namespace Dashboard\Models\PaymentProvider;
 
 use Dashboard\Models\Experimental\Provider;
-use Dashboard\Models\PaymentProvider\Type;
 use Illuminate\Database\Eloquent\Model;
 
 class Payment extends Model
 {
-    protected $table="payments_providers";
+    protected $table='payments_providers';
+    protected $id='id';
     public $timestamps=false;
     
     public function provider(){

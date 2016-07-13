@@ -67,7 +67,8 @@ angular.module('App')
             {id: 3, name:'Producto dañado' },
             {id: 4, name:'No se encontro al cliente' },
             {id: 5, name:'No es la talla' },
-            {id: 6, name:'Reprogramado' }
+            {id: 6, name:'No se encontro el código' },
+            {id: 7, name:'No llegamos al cliente' }
         ];
 
         $scope.list = function() {

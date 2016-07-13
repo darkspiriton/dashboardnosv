@@ -6,7 +6,6 @@ use Dashboard\Models\Experimental\Product;
 use Dashboard\Models\PaymentProvider\Bank;
 use Dashboard\Models\PaymentProvider\Detail;
 use Dashboard\Models\PaymentProvider\Payment;
-use Dashboard\Models\PaymentProvider\Type;
 use Dashboard\Models\PaymentProvider\TypeDiscount;
 use Dashboard\Models\PaymentProvider\TypePayment;
 use Illuminate\Http\Request;
@@ -17,6 +16,11 @@ use Dashboard\Http\Requests;
 
 class PayProviderController extends Controller
 {
+    public function __construct()
+    {
+
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -51,16 +55,42 @@ class PayProviderController extends Controller
                 ->orderby('p.name', 'c.name', 's.name')
                 ->get();
 
+            return \Response::json(['products' => $products]);
+
+        }catch(\Exception $e){
+            return \Response::json(['message' => 'No se pudo listar los pagos del proveedor por error en el servidor'],500);
+        }
+    }
+
+    public function getPayment(Request $request){
+        $rules =[
+          'id' => 'required|integer'  
+        ];
+        
+        $validator = \Validator::make($request->all(),$rules);
+        if($validator->fails()){
+            return response()->json(['message'=>'No posee todo los campos necesario para la consulta de pagos'],401);
+        }
+        
+        try{
             $payments = DB::table('providers as pro')
+                ->select('pp.id','pp.provider_id','pp.type_discount_id','pp.date','pp.amount','pp.bank_id','b.name as bank','tp.name as typeP',
+                    'pp.type_payment_id','td.type as typeD','pp.amount_discount')
                 ->join('payments_providers as pp','pro.id','=','pp.provider_id')
+                ->leftjoin('banks as b','pp.bank_id','=','b.id')
+                ->join('types_payments_providers as tp','pp.type_payment_id','=','tp.id')
+                ->leftjoin('types_discounts_providers as td','pp.type_discount_id','=','td.id')
                 ->where('pro.id',$request->input('id'))
                 ->orderby('pp.date','desc')
                 ->get();
 
-            return \Response::json(['products' => $products,'payments' => $payments]);
+//            $payments = Payment::with(['provider'=>function($query) use($id){
+//                return $query->where('provider_id',$id);
+//            },'details','bank','typeD','typeP']);
 
+            return response()->json(['payments'=>$payments],200);
         }catch(\Exception $e){
-            return \Response::json(['message' => 'No se pudo listar los pagos del proveedor por error en el servidor'],500);
+            return response()->json(['message'=>'No se pudo listar los pagos del proveedor por error en el servidor'],500);
         }
     }
 
@@ -92,8 +122,10 @@ class PayProviderController extends Controller
                 return response()->json(['message'=>'No posee todo los campos necesario para crear un pago'],401);
             }
 
-            $date = Carbon::parse($request->input('datePayment'));
-            $date->setTimezone('America/Lima');
+            $date = Carbon::parse($request->input('data.datePayment'));
+//            $date = Carbon::createFromFormat('Y-m-d', $request->input('datePayment'));
+//            $date->setTimezone('America/Lima');
+
 
             $products= $request->input('products');
             $payment= new Payment();
@@ -216,18 +248,19 @@ class PayProviderController extends Controller
     {
         try{
 
-            //eliminar el pago en conjunto de producto
             $payment = Payment::find($id);
-
-            $details=$payment->details();
+            $details=$payment->details;
 
             foreach($details as $detail){
+
                 $product=Product::find($detail->product_id);
-                $product->provider_status=0;
+                $product->payment_status=0;
                 $product->save();
                 $detail->delete();
             }
+
             $payment->delete();
+
 
             return response()->json(['message'=>'Se elimino correctamente'],200);
 

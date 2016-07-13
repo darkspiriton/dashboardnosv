@@ -213,6 +213,6 @@ angular.module('App')
             $scope.listBanks();
             $scope.listTypesD();
             $scope.listTypesP();
-            $scope.list();
+            // $scope.list();
         });
     });

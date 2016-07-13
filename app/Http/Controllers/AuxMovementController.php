@@ -289,7 +289,6 @@ class AuxMovementController extends Controller
             ->where('status',0)
             ->get();
 
-
         return \Response::json(['products' => $products], 200);
     }
     

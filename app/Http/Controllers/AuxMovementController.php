@@ -111,7 +111,8 @@ class AuxMovementController extends Controller
                             4 => 'No se encontro cliente',
                             5 => 'No es la talla',
                             6 => 'No se encontro el código',
-                            7 => 'No llegamos al cliente'
+                            7 => 'No llegamos al cliente',
+                            8 => 'Cliente cancelo su pedido'
                         ];
 
             if($move->status != 'vendido'){
@@ -297,7 +298,11 @@ class AuxMovementController extends Controller
 
 //        return $products;
 
-        foreach ($products as $product) {
+        foreach ($products as $key => $product) {
+            if(count($product->bymovements) == 0){
+                $products->splice($key,1);
+                continue;
+            }
             $product->movement =  $product->bymovements[0];
             $product->price = $this->getPriceAttribute($product);
             $product->pricefinal = $this->getPriceFinalAttribute($product);

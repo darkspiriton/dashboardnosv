@@ -18,7 +18,7 @@ angular.module('App')
                 {"sTitle": "Nombre", "bSortable" : true, 'sWidth': '250px'},
                 {"sTitle": "Proveedor", "bSortable" : true},
                 {"sTitle": "Talla", "bSortable" : true},
-                {"sTitle": "Color" , "bSearchable": true},
+                {"sTitle": "Color" , "bSearchable": true, 'sWidth': '120px'},
                 {"sTitle": "Tipos" , "bSearchable": true},
                 {"sTitle": "P. Proveedor (S/.)" , "bSearchable": true},
                 {"sTitle": "Utilidad (S/.)" , "bSearchable": true},
@@ -207,11 +207,14 @@ angular.module('App')
         };
 
         $scope.listCodes = function() {
+            $scope.btnCods = true;
             $scope.codes = [];
             petition.get('api/auxproduct/get/code')
                 .then(function(data){
                     $scope.codes = data.codes;
+                     $scope.btnCods = false;
                 }, function(error){
+                     $scope.btnCods = false;
                     console.log(error);
                     toastr.error('Ups ocurrio un problema: ' + error.data.message);
                 });
@@ -346,6 +349,5 @@ angular.module('App')
             $scope.listSizes();
             $scope.listColors();
             $scope.listTypes();
-            $scope.listCodes();
         });
     });

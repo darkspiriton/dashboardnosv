@@ -38,7 +38,7 @@ angular.module('App')
                 ]
                 ]
             ],
-            data    :   ['created_at','movement.date_shipment','cod','name','size.name','color.name','price',
+            data    :   ['movement.created_at','movement.date_shipment','cod','name','size.name','color.name','price',
                             'movement.discount','pricefinal','status','actions'
                         ],
             configStatus : 'liquidation'

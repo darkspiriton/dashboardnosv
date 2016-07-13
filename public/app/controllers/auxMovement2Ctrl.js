@@ -80,8 +80,9 @@ angular.module('App')
                                             <th>Producto</th>
                                             <th>Talla</th>
                                             <th>Color</th>
-                                            <th>P. Final</th>
+                                            <th>Precio</th>
                                             <th>Descuento</th>
+                                            <th>Final</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -92,6 +93,7 @@ angular.module('App')
                                             <td>${$scope.tableData[i].color.name}</td>
                                             <td>${$scope.tableData[i].price}</td>
                                             <td>${$scope.tableData[i].movement.discount}</td>
+                                            <td>${$scope.tableData[i].pricefinal}</td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -133,8 +135,9 @@ angular.module('App')
                                             <th>Producto</th>
                                             <th>Talla</th>
                                             <th>Color</th>
-                                            <th>P. Final</th>
-                                            <th>Descuento</th>
+                                            <th>Precio</th>
+                                            <th>Desc.</th>
+                                            <th>Final</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -145,6 +148,7 @@ angular.module('App')
                                             <td>${$scope.tableData[i].color.name}</td>
                                             <td>${$scope.tableData[i].price}</td>
                                             <td>${$scope.tableData[i].movement.discount}</td>
+                                            <td>${$scope.tableData[i].pricefinal}</td>
                                         </tr>
                                         </tbody>
                                     </table>

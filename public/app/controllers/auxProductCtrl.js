@@ -17,14 +17,14 @@ angular.module('App')
                 {"sTitle": "Codigo", "bSortable" : true, 'sWidth': '1px'},
                 {"sTitle": "Nombre", "bSortable" : true, 'sWidth': '250px'},
                 {"sTitle": "Proveedor", "bSortable" : true},
-                {"sTitle": "Talla", "bSortable" : true},
-                {"sTitle": "Color" , "bSearchable": true, 'sWidth': '120px'},
-                {"sTitle": "Tipos" , "bSearchable": true},
+                {"sTitle": "Talla", "bSortable" : false},
+                {"sTitle": "Color", "bSortable" : false, "bSearchable": true},
+                {"sTitle": "Tipos", "bSortable" : false, "bSearchable": true},
                 {"sTitle": "P. Proveedor (S/.)" , "bSearchable": true},
                 {"sTitle": "Utilidad (S/.)" , "bSearchable": true},
                 {"sTitle": "Precio (S/.)" , "bSearchable": true},
-                {"sTitle": "Status" , "bSearchable": true},
-                {"sTitle": "Accion" , "bSearchable": true ,'sWidth': '190px'}
+                {"sTitle": "Status", "bSortable" : false, "bSearchable": true},
+                {"sTitle": "Accion", "bSortable" : false, "bSearchable": true ,'sWidth': '190px'}
             ],
             actions	:   	[
                 ['status',   {

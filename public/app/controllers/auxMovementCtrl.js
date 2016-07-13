@@ -86,8 +86,6 @@ angular.module('App')
         $scope.addProduct2 = function(ind){
             $scope.prdTemp.id = $scope.codes[ind].id;
             $scope.prdTemp.cod =  $scope.codes[ind].cod;
-
-            // console.log($scope.prdTemp,ind);
             var count = 0;
             for(i in  $scope.products){
                 if(angular.equals($scope.prdTemp,$scope.products[i])){
@@ -96,17 +94,11 @@ angular.module('App')
             }
 
             if (count == 0 && $scope.anadir){
-                toastr.success('se añadios pee');
-                // $scope.dataProducts.push({id: $scope.codes[ind].id, discount:0});
-                // console.log($scope.dataProducts);
-                // console.log($scope.prdTemp);
-                // $scope.prdTemp.discount = 0;
-                // $scope.products.push({discount : 0});
-                // $scope.products.push({preciofinal : angular.copy($scope.prdTemp.price)});
-                // console.log($scope.products);
-                // console.log($scope.prdTemp);
-                // $scope.products.push(angular.copy($scope.prdTemp));
-                // console.log($scope.products);
+                toastr.success('se añadio');
+                $scope.dataProducts.push({id: $scope.codes[ind].id, discount:0});
+                $scope.prdTemp.discount = 0;
+                $scope.prdTemp.preciofinal =$scope.prdTemp.price-$scope.prdTemp.discount;
+                $scope.products.push(angular.copy($scope.prdTemp));
             }
 
             $scope.otherCod = null;
@@ -226,26 +218,6 @@ angular.module('App')
         }
 
 
-        $scope.addProduct2 = function(ind){
-            $scope.prdTemp.id = $scope.codes[ind].id;
-            $scope.prdTemp.cod =  $scope.codes[ind].cod;
-            console.log($scope.prdTemp,ind);
-            var count = 0;
-            for(i in  $scope.products){
-                if(angular.equals($scope.prdTemp,$scope.products[i])){
-                    count++;
-                }
-            }
-
-            if (count == 0 && $scope.anadir){
-                toastr.success('se añadio');
-                $scope.dataProducts.push({id: $scope.codes[ind].id, discount:0});
-                $scope.products.push(angular.copy($scope.prdTemp));
-            }
-
-            $scope.otherCod = null;
-            util.modalClose('codes');
-        };
 
         $scope.removeProduct = function(i){
             $scope.dataProducts.splice(i,1);

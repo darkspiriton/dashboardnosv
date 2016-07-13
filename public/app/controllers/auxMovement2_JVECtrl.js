@@ -13,6 +13,7 @@ angular.module('App')
 
         $scope.tableConfig 	= 	{
             columns :	[
+                {"sTitle": "Fecha de creación", "bSortable" : true, "sWidth": "90px"},
                 {"sTitle": "Fecha de salida", "bSortable" : true, "sWidth": "90px"},
                 {"sTitle": "Codigo", "bSortable" : true},
                 {"sTitle": "Producto", "bSortable" : true},
@@ -37,7 +38,7 @@ angular.module('App')
                 ]
                 ]
             ],
-            data    :   ['movement.date_shipment','cod','name','size.name','color.name','price',
+            data    :   ['created_at','movement.date_shipment','cod','name','size.name','color.name','price',
                             'movement.discount','pricefinal','status','actions'
                         ],
             configStatus : 'liquidation'
@@ -67,7 +68,8 @@ angular.module('App')
             {id: 3, name:'Producto dañado' },
             {id: 4, name:'No se encontro al cliente' },
             {id: 5, name:'No es la talla' },
-            {id: 6, name:'Reprogramado' }
+            {id: 6, name:'No se encontro el código' },
+            {id: 7, name:'No llegamos al cliente' }
         ];
 
         $scope.list = function() {
@@ -168,6 +170,12 @@ angular.module('App')
                                                         break;
                                                     case 5:
                                                         situation="No es la talla";
+                                                        break;
+                                                    case 6:
+                                                        situation="No se encontro el código";
+                                                        break;
+                                                    case 7:
+                                                        situation="No llegamos al cliente";
                                                         break;
                                                 }
                                                 return situation; })()}

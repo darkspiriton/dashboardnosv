@@ -66,6 +66,45 @@ angular.module('App')
                 });
         };
 
+        $scope.addProduct = function(ind){
+            var count = 0;
+            for(i in  $scope.products){
+                if(angular.equals($scope.tableData[ind],$scope.products[i])){
+                    count++;
+                }
+            }
+
+            if (count == 0 && $scope.anadir){
+                toastr.success('se añadio');
+                $scope.dataProducts.push({id: $scope.tableData[ind].id, discount:0});
+                $scope.tableData[ind].discount = 0;
+                $scope.tableData[ind].preciofinal = $scope.tableData[ind].price-$scope.tableData[ind].discount;
+                $scope.products.push(angular.copy($scope.tableData[ind]));
+            }
+        };
+
+        $scope.addProduct2 = function(ind){
+            $scope.prdTemp.id = $scope.codes[ind].id;
+            $scope.prdTemp.cod =  $scope.codes[ind].cod;
+            var count = 0;
+            for(i in  $scope.products){
+                if(angular.equals($scope.prdTemp,$scope.products[i])){
+                    count++;
+                }
+            }
+
+            if (count == 0 && $scope.anadir){
+                toastr.success('se añadio');
+                $scope.dataProducts.push({id: $scope.codes[ind].id, discount:0});
+                $scope.prdTemp.discount = 0;
+                $scope.prdTemp.preciofinal =$scope.prdTemp.price-$scope.prdTemp.discount;
+                $scope.products.push(angular.copy($scope.prdTemp));
+            }
+
+            $scope.otherCod = null;
+            util.modalClose('codes');
+        };
+
         $scope.otherProduct = function (i) {
             if ($scope.anadir){
                 $scope.codes = [];
@@ -178,43 +217,7 @@ angular.module('App')
             return callback();
         }
 
-        $scope.addProduct = function(ind){
-            var count = 0;
-            for(i in  $scope.products){
-                if(angular.equals($scope.tableData[ind],$scope.products[i])){
-                    count++;
-                }
-            }
 
-            if (count == 0 && $scope.anadir){
-                toastr.success('se añadio');
-                $scope.dataProducts.push({id: $scope.tableData[ind].id, discount:0});
-                $scope.tableData[ind].discount = 0;
-                $scope.tableData[ind].preciofinal = $scope.tableData[ind].price-$scope.tableData[ind].discount;
-                $scope.products.push(angular.copy($scope.tableData[ind]));
-            }
-        };
-
-        $scope.addProduct2 = function(ind){
-            $scope.prdTemp.id = $scope.codes[ind].id;
-            $scope.prdTemp.cod =  $scope.codes[ind].cod;
-            console.log($scope.prdTemp,ind);
-            var count = 0;
-            for(i in  $scope.products){
-                if(angular.equals($scope.prdTemp,$scope.products[i])){
-                    count++;
-                }
-            }
-
-            if (count == 0 && $scope.anadir){
-                toastr.success('se añadio');
-                $scope.dataProducts.push({id: $scope.codes[ind].id, discount:0});
-                $scope.products.push(angular.copy($scope.prdTemp));
-            }
-
-            $scope.otherCod = null;
-            util.modalClose('codes');
-        };
 
         $scope.removeProduct = function(i){
             $scope.dataProducts.splice(i,1);

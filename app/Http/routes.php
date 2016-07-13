@@ -228,6 +228,16 @@ Route::group(['prefix' => 'api'], function(){
      */    
     Route::resource('payment','PayProviderController',
         ['only' => ['index','store','update','destroy']]);
+
+    Route::group(['prefix'=>'payment'],function(){
+        Route::get('get','PayProviderController@getPayment');
+        Route::get('bank/get','PayProviderController@getBank');
+        Route::get('typeD/get','PayProviderController@getTypeD');
+        Route::get('typeP/get','PayProviderController@getTypeP');
+        Route::post('bank/set','PayProviderController@setBank');
+        Route::post('typeD/set','PayProviderController@setTypeD');
+        Route::post('typeP/set','PayProviderController@setTypeP');
+    });
     
     Route::group(['prefix'=>'publicity'],function(){
         Route::get('relation/{id}','PublicityController@relation');

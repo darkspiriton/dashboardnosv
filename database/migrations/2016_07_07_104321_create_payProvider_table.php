@@ -20,8 +20,7 @@ class CreatePayProviderTable extends Migration
         Schema::create('payments_providers',function(Blueprint $table){
             $table->increments('id');
             $table->integer('provider_id')->unsigned();
-            $table->integer('type_discount_id')->unsigned();
-            $table->string('name_bank');
+            $table->integer('type_discount_id')->unsigned()->nullable();
             $table->dateTime('date');
             $table->float('amount');
             $table->string('reason');

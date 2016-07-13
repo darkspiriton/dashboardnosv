@@ -1,24 +1,25 @@
 angular.module('App')
     .config(function($stateProvider) {
         $stateProvider
-            .state('pagos', {
+            .state('listapagos', {
                 url: '/Generar-pagos-proveedores',
-                templateUrl: 'app/partials/Payment.html',
-                controller : 'paymentCtrl'
+                templateUrl: 'app/partials/PaymentList.html',
+                controller : 'paymentListCtrl'
             });
     })
-    .controller('paymentCtrl', function($scope, $compile, $state, $log, $filter, util, petition, toformData, toastr){
+    .controller('paymentListCtrl', function($scope, $compile, $state, $log, $filter, util, petition, toformData, toastr){
 
-        util.liPage('pagos');
+        util.liPage('listapagos');
 
         $scope.tableConfig 	= 	{
             columns :	[
-                {"sTitle": "Codigo", "bSortable" : true},
-                {"sTitle": "Nombre", "bSortable" : true},
-                {"sTitle": "Color", "bSortable" : true},
-                {"sTitle": "Talla", "bSortable" : true},
-                {"sTitle": "Costo (S/.)", "bSortable" : true},
-                {"sTitle": "Estado de Pago" , "bSearchable": false , "sWidth": "80px"},
+                {"sTitle": "Fecha", "bSortable" : true},
+                {"sTitle": "Tipo de Pago", "bSortable" : true},
+                {"sTitle": "Banco", "bSortable" : true},
+                {"sTitle": "Monto", "bSortable" : true},
+                {"sTitle": "Tipo de Descuento", "bSortable" : true},
+                {"sTitle": "Descuento", "bSortable" : true},
+                // {"sTitle": "Status" , "bSearchable": false , "sWidth": "80px"},
                 {"sTitle": "Acción" , "bSearchable": false , "sWidth": "190px"}
             ],
             actions	:  	[
@@ -28,11 +29,11 @@ angular.module('App')
                 }
                 ],
                 ['actions', [
-                    ['Agregar', 'addProduct' ,'bgm-teal'],                   
+                    ['Eliminar', 'removePayment' ,'bgm-red'],
                 ]
                 ]
             ],
-            data  	: 	['codigo','name','color','talla','cost','status','actions'],
+            data  	: 	['date','typeP','bank','amount','typeD','amount_discount','actions'],
             configStatus : 'status'
         };
 
@@ -58,13 +59,27 @@ angular.module('App')
 
         $scope.list = function() {
             $scope.updateList = true;
-            petition.get('api/payment' +'?id='+$scope.id)
+            petition.get('api/payment/get'+'?id='+$scope.id)
                 .then(function(data){
-                    $scope.tableData = data.products;
+                    $scope.tableData = data.payments;
                     $('#table').AJQtable('view', $scope, $compile);
                     $scope.updateList = false;
                 }, function(error){
                     console.log(error);
+                    toastr.error('Uyuyuy dice: ' + error.data.message);
+                    $scope.updateList = false;
+                });
+        };
+
+        $scope.removePayment = function(ind){
+            $scope.idPayment=angular.copy($scope.tableData[ind].id);
+            console.log($scope.idPayment);
+            $scope.updateList = true;
+            petition.delete('api/payment/'+$scope.idPayment)
+                .then(function(){
+                    $scope.list();
+                    $scope.updateList = false;
+                }, function(error){
                     toastr.error('Uyuyuy dice: ' + error.data.message);
                     $scope.updateList = false;
                 });

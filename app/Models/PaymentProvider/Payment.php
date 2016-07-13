@@ -3,12 +3,13 @@
 namespace Dashboard\Models\PaymentProvider;
 
 use Dashboard\Models\Experimental\Provider;
-use Dashboard\Models\PaymentProvider\Type;
 use Illuminate\Database\Eloquent\Model;
 
 class Payment extends Model
 {
-    protected $table="payments_providers";
+    protected $table='payments_providers';
+    protected $id='id';
+    public $timestamps=false;
     
     public function provider(){
         return $this->hasOne(Provider::class);
@@ -18,7 +19,16 @@ class Payment extends Model
         return $this->hasMany(Detail::class);
     }   
     
-    public function type_discount(){
-    	return $this->belongsTo(Type::class);
+    public function bank(){
+        return $this->belongsTo(Bank::class);
     }
+    
+    public function typeD(){
+        return $this->belongsTo(TypeDiscount::class);
+    }
+    
+    public function typeP(){
+        return $this->belongsTo(TypePayment::class);
+    }
+    
 }

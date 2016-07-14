@@ -91,6 +91,37 @@
 
 </div>
 
+<div class="row">
+    <div class="col-sm-6">
+        <!-- Recent Items -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Ventas totales del {{ dateNow | date:'yyyy'}}<small>Se muestra las ventas totales de sus produtos y los montos totatles de pago por mes</small></h2>
+            </div>
+
+            <div class="card-body m-t-0">
+                <table id="sales" class="table table-inner table-vmiddle"></table>
+            </div>
+            <div id="recent-items-chart-1" class="flot-chart recent-items-chart"></div>
+        </div>
+    </div>
+
+    <div class="col-sm-6">
+        <!-- Recent Items -->
+        <div class="card">
+            <div class="card-header">
+                <h2>Montos de pago del {{ dateNow | date:'yyyy'}}<small>Se muestra los pagos y descuentos por mes.</small>
+                    <small>Leyenda: RAN: residuo del mes anterior, MM: Monto total a pagar por ventas de sus productos, D: descuentos, MD: monto total por descuentos, P: cantidad de pagos, MP: monto total de pago sin descuento, MT: Monto total de pago adicionando descuento, RAC: residuo para el mes siguiente</small></h2>
+            </div>
+
+            <div class="card-body m-t-0 table-responsive">
+                <table id="payments" class="table table-inner table-vmiddle"></table>
+            </div>
+            <div id="recent-items-chart-2" class="flot-chart recent-items-chart"></div>
+        </div>
+    </div>
+</div>
+
 
 <div class="row">
     <div class="col-sm-6">

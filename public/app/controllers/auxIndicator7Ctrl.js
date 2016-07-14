@@ -26,7 +26,7 @@ angular.module('App')
                 {"sTitle": "Color", "bSortable" : true},
                 {"sTitle": "Talla", "bSortable" : true},
                 {"sTitle": "Estado", "bSortable" : true},
-                {"sTitle": "Estado P.", "bSortable" : true},
+                {"sTitle": "Estado V.", "bSortable" : true},
                 {"sTitle": "P. Real", "bSortable" : true},
                 {"sTitle": "Precio", "bSortable" : true},
                 {"sTitle": "Desc.", "bSortable" : true},

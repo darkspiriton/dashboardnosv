@@ -24,11 +24,11 @@ class Payment extends Model
     }
     
     public function typeD(){
-        return $this->belongsTo(TypeDiscount::class);
+        return $this->belongsTo(TypeDiscount::class,"type_discount_id");
     }
     
     public function typeP(){
-        return $this->belongsTo(TypePayment::class);
+        return $this->belongsTo(TypePayment::class,"type_payment_id");
     }
     
 }

@@ -21,10 +21,9 @@ class PartnerController extends Controller
     private $message;
     private $provider_id;
 
-    public function __construct(Request $request, Carbon $carbon)
+    public function __construct(Request $request)
     {
         $this->middleware('auth:all');
-        $this->carbon = $carbon;
         $this->request = $request;
         $this->failed = false;
         $this->message = "";

@@ -136,8 +136,11 @@ Route::group(['prefix' => 'api'], function(){
         Route::get('/get/movementDay/get/','AuxMovementController@movementOtherDay');
         Route::post('/get/movementDays/download','AuxMovementController@movementDaysDownload');
         Route::get('/get/movement/day','AuxMovementController@move_day');
+//        Route::get('/get/movement/day/today','AuxMovementController@move_day_today');
+        Route::get('/get/movement/outfit/day/','AuxMovementController@move_day_outfit');
         Route::get('/get/codes','AuxMovementController@get_cod_prod');
         Route::get('/get/movementDay/consolidado','AuxMovementController@consolidado');
+        Route::get('/get/movementDay/consolidadoOut','AuxMovementController@consolidadoOut');
 
         Route::get('/get/movementDay/provider','AuxMovementController@providertest');
     });

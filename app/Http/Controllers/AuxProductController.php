@@ -507,8 +507,12 @@ class AuxProductController extends Controller
                 ->join('sizes as s','s.id','=','p.size_id')
                 ->where('m.status','=','vendido')
                 ->groupby('p.name')->get();
+
+//        return $products;
+
         $j=0;
         $alarms = array();
+
         foreach ($products as $product){
             $dateNow=Carbon::now();
             $date=Carbon::createFromFormat('Y-m-d H:i:s', $product->created_at);
@@ -522,7 +526,7 @@ class AuxProductController extends Controller
                 }
             }
         }
-        if(!empty($data)){
+        if(!empty($alarms)){
             return response()->json([ 'alarms' => $alarms ],200);
         }else{
             return response()->json([ 'message' => 'Por el momento no hay alarmas' ],404);

@@ -13,7 +13,6 @@ use Illuminate\Support\Facades\Validator;
 
 class PartnerController extends Controller
 {
-    private $carbon;
     private $start;
     private $end;
     private $request;

@@ -321,15 +321,15 @@ class PartnerController extends Controller
                 ->orderby('p.name', 'c.name', 's.name')
                 ->get();
 
-            $payments = Payment::with("type_discount")
-                        ->select("type_discount_id", "name_bank", "date", "amount", "reason", "amount_discount")
+            $payments = Payment::with("typeD","typeP",'bank')
+                        ->select("type_discount_id", "bank_id","type_payment_id", "date", "amount", "reason", "amount_discount")
                         ->where("provider_id", $this->provider_id)
                         ->where('date', '>=', $interval->start)
                         ->where('date', '<=', $interval->end)
                         ->get();
 
 
-            $temp["month"] =    $interval->name;
+            $temp["month"] = $interval->name;
             $temp["start"] = $interval->start;
             $temp["end"] = $interval->end;
             $temp["data"]["sales"] = $sales[0];

@@ -207,16 +207,18 @@
                                             <th>Descuento</th>
                                             <th>Motivo</th>
                                             <th>Pago</th>
+                                            <th>Tipo Pago</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <tr ng-repeat="payment in salesPaymentsDetail.data.payments.data">
                                             <td style="display: table-cell;">{{ payment.date.substr(0,10) }}</td>
-                                            <td style="display: table-cell;">{{ payment.name_bank }}</td>
+                                            <td style="display: table-cell;">{{ payment.bank.name }}</td>
                                             <td style="display: table-cell;">{{ payment.reason }}</td>
                                             <td style="display: table-cell;">{{ payment.amount_discount }}</td>
-                                            <td style="display: table-cell;">{{ payment.type_discount.type }}</td>
+                                            <td style="display: table-cell;">{{ payment.type_d.type }}</td>
                                             <td style="display: table-cell;">{{ payment.amount }}</td>
+                                            <td style="display: table-cell;">{{ payment.type_p.name }}</td>
                                         </tr>
                                         </tbody>
                                     </table>

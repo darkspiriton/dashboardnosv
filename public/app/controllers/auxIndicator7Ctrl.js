@@ -11,6 +11,12 @@ angular.module('App')
 
         util.liPage('indicator7');
 
+        var s1 = {
+            0: ['Normal','bgm-green',false],
+            1: ['Liquidacion','btn-info',false],
+            'fail': ['otros','bgm-red',false]
+        };
+
         $scope.tableConfig 	= 	{
             columns :	[
                 {"sTitle": "Creacion", "bSortable" : true, "sWidth" : '160px'},
@@ -19,9 +25,23 @@ angular.module('App')
                 {"sTitle": "Producto", "bSortable" : true},
                 {"sTitle": "Color", "bSortable" : true},
                 {"sTitle": "Talla", "bSortable" : true},
-                {"sTitle": "Estado", "bSortable" : true}
+                {"sTitle": "Estado", "bSortable" : true},
+                {"sTitle": "Estado P.", "bSortable" : true},
+                {"sTitle": "P. Real", "bSortable" : true},
+                {"sTitle": "Precio", "bSortable" : true},
+                {"sTitle": "Desc.", "bSortable" : true},
+                {"sTitle": "P. Final", "bSortable" : true}
             ],
-            data  	: 	['created_at','fecha', 'codigo','product','color','talla','status']
+            buttons :
+                [
+                    {
+                        type: 'status',
+                        list:  [
+                            { name: 'status_product', column: 'liquidation', render: s1},
+                        ]
+                    }
+                ],
+            data  	: 	['created_at','fecha', 'codigo','product','color','talla','status','status_product','price_real','price','discount','price_final']
         };
 
         $scope.data = {
@@ -36,7 +56,7 @@ angular.module('App')
             petition.get('api/auxmovement/get/movementDay')
                 .then(function(data){
                     $scope.tableData = data.movements;
-                    $('#table').AJQtable('view', $scope, $compile);
+                    $('#table').AJQtable2('view2', $scope, $compile);
                     $scope.updateList = false;
                     $scope.drawShow=false;
                 }, function(error){
@@ -93,7 +113,7 @@ angular.module('App')
                     $scope.reportDownload = true;
                     $scope.tableData = data.movements;
                     $scope.infoMonth = data.month;
-                    $('#table').AJQtable('view', $scope, $compile);
+                    $('#table').AJQtable2('view2', $scope, $compile);
                     $scope.updateList = false;
                     if ( data.movements.length > 0){
                         chart.drawColummn(data.draw,data.days);

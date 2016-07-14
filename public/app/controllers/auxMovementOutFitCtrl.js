@@ -141,7 +141,15 @@ angular.module('App')
                                         <tr>
                                             <td>${$scope.OutFitList}</td>                                                                          
                                             <td>${$scope.OutFitPrice}</td>
-                                            <td>${$scope.movement.date}</td>                                            
+                                            <td>${(function(){
+                                                var day = $scope.movement.date.getDate();
+                                                var month = ($scope.movement.date.getMonth().toString().length == 1)?
+                                                    '0'.concat(($scope.movement.date.getMonth() + 1).toString()):
+                                                    ($scope.movement.date.getMonth() + 1).toString();
+                                                var year = $scope.movement.date.getFullYear();
+                                                var date = '';
+                                                return date.concat(day,'/',month,'/',year)})()}</td>
+                                                                                    
                                         </tr>
                                         </tbody>
                                     </table>`;
@@ -209,7 +217,7 @@ angular.module('App')
                 .then(function(data){
                     $scope.products = data.outfit.products;
                     for(y in data.outfit.products){
-                        $scope.OutFitList += ' / ' + data.outfit.products[y].name;
+                        $scope.OutFitList += '/' + data.outfit.products[y].name;
                     }
                 }, function(error){
                     toastr.error('Huy Huy dice: ' + error.data.message);

@@ -18,10 +18,10 @@ angular.module('App')
                 {"sTitle": "Nombre", "bSortable" : true, 'sWidth': '250px'},
                 {"sTitle": "Proveedor", "bSortable" : true},
                 {"sTitle": "Talla", "bSortable" : true},
-                {"sTitle": "Color" , "bSearchable": true},
-                {"sTitle": "Tipos" , "bSearchable": true},
-                {"sTitle": "Precio (S/.)" , "bSearchable": true, 'sWidth': '100px'},
-                {"sTitle": "Status" , "bSearchable": true},
+                {"sTitle": "Color", "bSortable" : true, "bSearchable": true},
+                {"sTitle": "Tipos", "bSortable" : true, "bSearchable": true},
+                {"sTitle": "Precio (S/.)" , "bSearchable": false, 'sWidth': '100px'},
+                {"sTitle": "Status", "bSortable" : false, "bSearchable": false},
             ],
             actions	:   	[
                 ['status',   {

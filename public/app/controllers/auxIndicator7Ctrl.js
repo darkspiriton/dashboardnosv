@@ -46,25 +46,24 @@ angular.module('App')
                 });
         };
 
-        $scope.listProducts = function( select ) {
-            if (select == 's'){
-                $scope.data.size = null;
-                $scope.data.color = null;
-            }
+        $scope.listProducts = function(select) {
+            $scope.data.size = null;
+            $scope.data.color = null;
+
+            $scope.data.provider = null;
+
             $scope.updateList = true;
             $scope.reportDownload = false;
+
             petition.get('api/auxproduct/get/report', { params: $scope.data })
                 .then(function(data){
-                    $scope.data.provider = null;
                     if (select == 'p'){
-                        $scope.products = data;
+                        $scope.products = data.products;
                         $scope.sizes = [];
                         $scope.colors = [];
-                    } else if (select == 's'){
-                        $scope.sizes = data;
-                        $scope.colors = [];
-                    } else if (select == 'c'){
-                        $scope.colors = data;
+                    } else {
+                        $scope.sizes = data.sizes;
+                        $scope.colors = data.colors;
                     }
                     $scope.updateList = false;
                 }, function(error){

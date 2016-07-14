@@ -17,6 +17,12 @@ angular.module('App')
             'fail': ['otros','bgm-red',false]
         };
 
+        var s2 = {
+            'Retornado': ['Retornado','bgm-red',false],
+            'Vendido': ['Vendido','bgm-teal',false],
+            'salida': ['Salida','bgm-deeppurple',false]
+        };
+
         $scope.tableConfig 	= 	{
             columns :	[
                 {"sTitle": "Creacion", "bSortable" : true, "sWidth" : '160px'},
@@ -38,10 +44,11 @@ angular.module('App')
                         type: 'status',
                         list:  [
                             { name: 'status_product', column: 'liquidation', render: s1},
+                             { name: 'status_mov', column: 'status', render: s2}
                         ]
                     }
                 ],
-            data  	: 	['created_at','fecha', 'codigo','product','color','talla','status','status_product','price_real','price','discount','price_final']
+            data  	: 	['created_at','fecha', 'codigo','product','color','talla','status_mov','status_product','price_real','price','discount','price_final']
         };
 
         $scope.data = {

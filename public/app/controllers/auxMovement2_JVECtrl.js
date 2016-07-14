@@ -180,6 +180,9 @@ angular.module('App')
                                                     case 7:
                                                         situation="No llegamos al cliente";
                                                         break;
+                                                    case 8:
+                                                        situation="Cliente cancelo su pedido";
+                                                        break;
                                                 }
                                                 return situation; })()}
                                             </td>

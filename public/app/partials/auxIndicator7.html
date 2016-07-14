@@ -23,11 +23,11 @@
                    <option value="" selected="selected">Seleccione</option>
                 </select>
                 <h2 class="col-xs-5 col-sm-1 m-t-20 text-right">Producto</h2>
-                <select class="col-xs-7 col-sm-2 m-t-20" ng-change="listProducts('s')" ng-options="product.name as product.name for product in products" ng-model="data.name">
+                <select class="col-xs-7 col-sm-2 m-t-20" ng-change="listProducts()" ng-options="product.name as product.name for product in products" ng-model="data.name">
                    <option value=""  selected="selected">Seleccione</option>
                 </select>
                 <h2 class="col-xs-5 col-sm-1 m-t-20 text-right">Talla</h2>
-                <select class="col-xs-7 col-sm-2 m-t-20" ng-change="listProducts('c')" ng-options="size.id as size.name for size in sizes" ng-model="data.size">
+                <select class="col-xs-7 col-sm-2 m-t-20" ng-options="size.id as size.name for size in sizes" ng-model="data.size">
                    <option value=""  selected="selected">Seleccione</option>
                 </select>
                 <h2 class="col-xs-5 col-sm-1 m-t-20 text-right">Color</h2>

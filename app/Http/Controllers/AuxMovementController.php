@@ -3,6 +3,7 @@
 namespace Dashboard\Http\Controllers;
 
 use Dashboard\Models\Experimental\Movement;
+use Dashboard\Models\Experimental\MovementOutFit;
 use Dashboard\Models\Experimental\Product;
 
 use Illuminate\Http\Request;
@@ -378,6 +379,10 @@ class AuxMovementController extends Controller
         return $movements;
     }
 
+//    private function movementsGet($date1,$date2){
+//
+//    }
+
     public function movementDays(Request $request){
 
         try {
@@ -605,13 +610,75 @@ class AuxMovementController extends Controller
     }
 
     public function move_day(){
-        $date = Carbon::now();
-        $salida = Movement::where('status','=','salida')->where('date_shipment','=',$date->toDateString())->count();
-        $vendido = Movement::where('status','=','Vendido')->where('date_shipment','=',$date->toDateString())->count();
-        $retornado = Movement::where('status','=','Retornado')->where('date_shipment','=',$date->toDateString())->count();
-        $stock = Product::where('status',1)->count();
+        $date = Carbon::today();
+        $date2 = $date->copy()->addDay();
 
-        return response()->json(['data' => [ 'sal' => $salida, 'ven' => $vendido, 'ret' => $retornado, 'stock' => $stock]],200);
+        $salida = Movement::where('status','=','salida')->where('situation','=',null)->where('created_at','>=',$date->toDateTimeString())->where('created_at','<',$date2->toDateTimeString())->count();
+        $salidaOutFits = MovementOutFit::with(['products'])
+            ->where('status','=','salida')->where('respond','=',0)->where('created_at','>=',$date->toDateTimeString())->where('created_at','<',$date2->toDateTimeString())->get();
+        $salidaOut=0;
+        foreach($salidaOutFits as $salidaOutFit){
+            $salidaOut = $salidaOut + count($salidaOutFit->products);
+        }
+
+        $vendido = Movement::where('status','=','Vendido')->where('created_at','>=',$date->toDateTimeString())->where('created_at','<',$date2->toDateTimeString())->count();
+        $vendidoOutFits = MovementOutFit::with(['products'])
+            ->where('status','=','vendido')->where('created_at','>=',$date->toDateTimeString())->where('created_at','<',$date2->toDateTimeString())->get();
+        $vendidoOut=0;
+        foreach($vendidoOutFits as $vendidoOutFit){
+            $vendidoOut = $vendidoOut + count($vendidoOutFit->products);
+        }
+
+        $retornado = Movement::where('status','=','Retornado')->where('created_at','>=',$date->toDateTimeString())->where('created_at','<',$date2->toDateTimeString())->count();
+        $retornadooOutFits = MovementOutFit::with(['products'])
+            ->where('status','=','retornado')->where('created_at','>=',$date->toDateTimeString())->where('created_at','<',$date2->toDateTimeString())->get();
+        $retornadoOut=0;
+        foreach($retornadooOutFits as $retornadoOutFit){
+            $retornadoOut = $retornadoOut + count($retornadoOutFit->products);
+        }
+
+        $stock = Product::where('status',1)->count();
+        $res = Product::where('status',3)->count();
+        return response()->json(['data' => [ 'sal' => $salida + $salidaOut, 'ven' => $vendido + $vendidoOut, 'ret' => $retornado + $retornadoOut, 'stock' => $stock+$res,'res' => $res]],200);
+    }
+
+//    public function move_day_today(){
+//        $date = Carbon::today();
+//        $date2 = $date->copy()->addDay();
+//
+//        $salida = Movement::where('status','=','salida')->where('situation','=',null)->where('date_shipment','>=',$date->toDateTimeString())->where('date_shipment','<',$date2->toDateTimeString())->count();
+//        $vendido = Movement::where('status','=','Vendido')->where('date_shipment','>=',$date->toDateTimeString())->where('date_shipment','<',$date2->toDateTimeString())->count();
+//        $retornado = Movement::where('status','=','Retornado')->where('date_shipment','>=',$date->toDateTimeString())->where('date_shipment','<',$date2->toDateTimeString())->count();
+//        $stock = Product::where('status',1)->count();
+//
+//        return response()->json(['data' => [ 'sal' => $salida, 'ven' => $vendido, 'ret' => $retornado, 'stock' => $stock]],200);
+//    }
+    
+    public function consolidadoOut(){
+        $date = Carbon::today();
+        $date2 = $date->copy()->addDay();
+        $status = 'vendido';
+
+        $vendidoOutFits = MovementOutFit::with(['products','outfit'])
+            ->where('status','=',$status)->where('created_at','>=',$date->toDateTimeString())->where('created_at','<',$date2->toDateTimeString())->get();
+
+//        return $vendidoOutFits;
+
+        $cost=0;
+        $util=0;
+        $price=0;
+        $cantP=0;
+        foreach($vendidoOutFits as $vendidoOutFit){
+            $cantP=$cantP+count($vendidoOutFit->products);
+            foreach ($vendidoOutFit->products as $product){
+                $cost=$cost+$product->cost_provider;
+            }
+            $price=$price+$vendidoOutFit->outfit->price;
+        }
+            $util=$price-$cost;
+
+                
+        return response()->json(['data'=>['cant'=>$cantP,'uti'=>$util,'price'=>$price,'desct'=>0]]);
     }
 
     public function consolidado(){
@@ -627,8 +694,10 @@ class AuxMovementController extends Controller
             ->where('p.status','=',2)
             // ->where('m.situation','=',null)
             ->where('m.status','like','%'.$status.'%')
-            ->where(DB::raw('DATE(m.date_shipment)'),'>=',$date1->toDateString())
-            ->where(DB::raw('DATE(m.date_shipment)'),'<',$date2->toDateString())
+            ->where(DB::raw('DATE(m.created_at)'),'>=',$date1->toDateString())
+            ->where(DB::raw('DATE(m.created_at)'),'<',$date2->toDateString())
+//            ->where(DB::raw('DATE(m.date_shipment)'),'>=',$date1->toDateString())
+//            ->where(DB::raw('DATE(m.date_shipment)'),'<',$date2->toDateString())
 //            ->groupby('m.id')
             ->get();
 
@@ -655,6 +724,10 @@ class AuxMovementController extends Controller
 //            ->get();
 
         return response()->json(['data'=>$movements[0]]);
+    }
+    
+    public function move_day_outfit(){
+        //Falta crear consulta de movimientos de outfit
     }
 
     public function providertest(){

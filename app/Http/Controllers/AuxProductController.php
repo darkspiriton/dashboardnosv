@@ -507,8 +507,12 @@ class AuxProductController extends Controller
                 ->join('sizes as s','s.id','=','p.size_id')
                 ->where('m.status','=','vendido')
                 ->groupby('p.name')->get();
+
+//        return $products;
+
         $j=0;
         $alarms = array();
+
         foreach ($products as $product){
             $dateNow=Carbon::now();
             $date=Carbon::createFromFormat('Y-m-d H:i:s', $product->created_at);
@@ -522,7 +526,7 @@ class AuxProductController extends Controller
                 }
             }
         }
-        if(!empty($data)){
+        if(!empty($alarms)){
             return response()->json([ 'alarms' => $alarms ],200);
         }else{
             return response()->json([ 'message' => 'Por el momento no hay alarmas' ],404);
@@ -531,26 +535,21 @@ class AuxProductController extends Controller
 
     public function listProduct(Request $request){
         try{
-            if(!\Validator::make($request->all(), ['name'  => 'required', 'size' => 'required'])->fails()){
-                return response()->json(\DB::table('auxproducts as p')
-                    ->select('c.id', 'c.name')
-                    ->join('colors as c','c.id','=','p.size_id')
-                    ->where('p.name','=',$request->input('name'))
-                    ->where('p.size_id','=',$request->input('size'))
-                    ->groupBy('c.name')
-                    ->get(),200);
-            } else if (!\Validator::make($request->all(), ['name'  => 'required'])->fails()) {
-                return response()->json(\DB::table('auxproducts as p')
-                    ->select('s.id', 's.name')
-                    ->join('sizes as s','s.id','=','p.size_id')
-                    ->where('p.name','=',$request->input('name'))
-                    ->groupBy('s.name')
-                    ->get(),200);
+            if($request->has("name")){
+                $colors = Product::select("color_id")->distinct()->where("name", $request->input("name"))->lists("color_id");
+                $sizes = Product::select("size_id")->distinct()->where("name", $request->input("name"))->lists("size_id");
+
+                $data = array();
+                $data["sizes"] =  Size::select("id","name")->whereIn("id",$sizes)->get();
+                $data["colors"] =  Color::select("id","name")->whereIn("id",$colors)->get();
+
+                return response()->json($data);
             } else {
-                return response()->json(\DB::table('auxproducts')->select('id','name')->groupBy('name')->get(),200);
+                $products = Product::select("name")->distinct()->orderBy("name","asc")->get();   
+                return response()->json(["products" => $products]);
             }
         } catch (\Exception $e) {
-            return \Response::json(['message' => 'Ocurrio un problema =('], 500);
+            return \Response::json(["message" => "Se cruzaron algunos cables, llame a sistemas"], 500);
         }
     }
 
@@ -560,7 +559,7 @@ class AuxProductController extends Controller
 
             return response()->json(['products' => $products], 200);
         }catch(Exception $e){
-            return response()->json(['message' => 'Ocurrio un problema =('],500);
+            return response()->json(['message' => 'Se cruzaron algunos cables, llame a sistemas'],500);
         }
     }
 

@@ -50,6 +50,13 @@ angular.module('App')
             html: true
         };
 
+        var alertConfirmation = {
+            title: "¿Se genero la salida de productos?",
+            text: "",
+            type: "success",
+            html: true
+        };
+
         $scope.productsClear = [];
 
         $scope.list = function() {
@@ -178,6 +185,8 @@ angular.module('App')
                     function () {
                         petition.post('api/auxmovement/out', {products: $scope.dataProducts}).then(function (data) {
                             toastr.success(data.message);
+                            alertConfirmation.text = confirmationOuts(data.products, data.movements);
+                            swal(alertConfirmation);
                             $scope.formSubmit = false;
                             $scope.list();
                             util.ocultaformulario();
@@ -189,6 +198,58 @@ angular.module('App')
                     });
             });
         };
+
+        /**
+         *  Template para confirmnacion de productos en salida
+         */
+
+         var confirmationOuts = function(products, movements){
+            var tdList = "";
+
+            for(var i in movements)
+            {
+                for(var j in products)
+                {
+                    if(movements[i].product_id == products[j].id)
+                    {
+                        movements[i].product_cod = products[j].cod;
+                        movements[i].product_name = products[j].name;
+                        continue;
+                    }
+                }
+                tdList +=`<tr>                                            
+                            <td>${movements[i].created_at}</td>
+                            <td>${movements[i].date_shipment}</td>
+                            <td>${movements[i].product_cod}</td>
+                            <td>${movements[i].product_name}</td>
+                            <td>${movements[i].discount}</td>
+                        </tr>`;
+            }
+
+            var template = `<table class="table table-bordered w-100 table-attr text-center">
+                                        <thead>
+                                        <tr>
+                                            <th style="Width:100px">creacion</th>
+                                            <th style="Width:100px">fecha</th>
+                                            <th>Cod</th>
+                                            <th>Nombre</th>
+                                            <th>desc.</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>                                            
+                                            ${tdList}
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>`;
+
+            return template;
+         };
+
+         /**
+          * END
+          */
 
         $scope.preciofinal=function (i){
             if($scope.products[i].discount>$scope.products[i].price ){

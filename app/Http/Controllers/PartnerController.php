@@ -6,8 +6,6 @@ use Carbon\Carbon;
 use DB;
 use Dashboard\Http\Controllers\Util\Oxigeno;
 use Dashboard\Http\Requests;
-use Dashboard\Models\Experimental\Movement;
-use Dashboard\Models\Experimental\Product;
 use Dashboard\Models\Experimental\Provider;
 use Dashboard\Models\PaymentProvider\Payment;
 use Illuminate\Http\Request;
@@ -232,24 +230,24 @@ class PartnerController extends Controller
 
         try {
             if ($this->request->has("year") && $this->request->has("month")) {
-                $this->start = $this->carbon::create(
+                $this->start = Carbon::create(
                     $this->request->input("year"),
                     $this->request->input("month"),
                      1, 0, 0, 0, 'America/Lima'
                 );
                 $this->end = $this->start->copy()->lastOfMonth()->addDay(1);
             } elseif ($this->request->has("start") && $this->request->has("end")) {
-                $this->start = $this->carbon::parse($this->request->input('start'))
+                $this->start = carbon::parse($this->request->input('start'))
                     ->setTime(0, 0, 0);
-                $this->end = $this->carbon::parse($this->request->input('end'))
+                $this->end = carbon::parse($this->request->input('end'))
                     ->setTime(0, 0, 0)
                     ->addDay(1);
             } elseif ($this->request->has("day")) {
-                $this->start = $this->carbon::parse($this->request->input('day'))
+                $this->start = carbon::parse($this->request->input('day'))
                     ->setTime(0, 0, 0);
                 $this->end = $this->start->copy()->addDay(1);
             } else {
-                $this->start = $this->carbon::today();
+                $this->start = carbon::today();
                 $this->end = $this->start->copy()->addDay(1);
             }
 
@@ -265,22 +263,22 @@ class PartnerController extends Controller
     {
         try {
             if ($this->request->has("year") && $this->request->has("month")) {
-                $this->start = $this->carbon::create(
+                $this->start = carbon::create(
                     $this->request->input("year"),
                     $this->request->input("month"),
                      1, 0, 0, 0, 'America/Lima'
                 );
                 $this->end = $this->start->copy()->lastOfMonth()->addDay(1);
             } elseif ($this->request->has("start") && $this->request->has("end")) {
-                $this->start = $this->carbon::parse($this->request->input('start'))
+                $this->start = carbon::parse($this->request->input('start'))
                     ->firstOfMonth();
                 $this->end = $this->start->copy()->lastOfMonth();
             } elseif ($this->request->has("day")) {
-                $this->start = $this->carbon::parse($this->request->input('day'))
+                $this->start = carbon::parse($this->request->input('day'))
                     ->firstOfMonth();
                 $this->end = $this->start->copy()->lastOfMonth();
             } else {
-                $this->start = $this->carbon::today()->firstOfMonth();
+                $this->start = carbon::today()->firstOfMonth();
                 $this->end = $this->start->copy()->lastOfMonth();
             }
 

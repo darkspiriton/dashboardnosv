@@ -1,13 +1,13 @@
 angular.module('App')
     .config(function($stateProvider) {
         $stateProvider
-            .state('Productos JVE', {
+            .state('Productos Ventas', {
                 url: '/Vista-general-de-productos-KARDEX',
-                templateUrl: 'app/partials/auxProductJVE.html',
-                controller : 'productsJVECtrl'
+                templateUrl: 'app/partials/auxProductVEN.html',
+                controller : 'productsVENCtrl'
             });
     })
-    .controller('productsJVECtrl', function($scope, $compile, $state, $log, util, petition, toastr){
+    .controller('productsVENCtrl', function($scope, $compile, $state, $log, util, petition, toastr){
 
         util.liPage('productsJVE');
 
@@ -22,7 +22,6 @@ angular.module('App')
                 {"sTitle": "Tipos", "bSortable" : true, "bSearchable": true},
                 {"sTitle": "Precio (S/.)" , "bSearchable": false, 'sWidth': '100px'},
                 {"sTitle": "Status", "bSortable" : false, "bSearchable": true},
-                {"sTitle": "Accion", "bSortable" : false, "bSearchable": false},
             ],
             actions	:   	[
                 ['status',   {
@@ -30,13 +29,9 @@ angular.module('App')
                     1 : { txt : 'disponible' ,  cls : 'btn-success', dis : false},
                     2 : { txt : 'vendido' ,  cls : 'bgm-teal', dis : false}
                 }
-                ],
-                ['actions', [
-                    ['movimientos','movements','bgm-teal']
-                ]
                 ]
             ],
-            data  	: 	['date','cod','name','provider','size','color','types','precio','status','actions'],
+            data  	: 	['date','cod','name','provider','size','color','types','precio','status'],
             configStatus : 'status'
         };
 
@@ -58,58 +53,6 @@ angular.module('App')
         };
 
         // End events
-
-
-        /**
-         *  Nueva vista de movimientos por producto
-         *
-         *  @params int         id
-         *  @return Collection  movements
-         */
-
-        $scope.movements = function(i){
-            var id = $scope.tableData[i].id;
-            petition.get(`api/auxproduct/get/movements/${id}`)
-                .then(function(data){
-                    $scope.productMovements = data.movements;
-                    util.modal('productMovements');
-                }, function(error){
-                    toastr.error('Huy Huy dice: ' + error.data.message);
-                });
-        };
-
-        /*
-         * Helper para vista de detalle de movimientos
-         *
-         *  @params String
-         *  @return tag:a-button
-         */
-
-        $scope.movementStatus = function(status){
-            var info = {
-                'Retornado': ['Retornado','bgm-red'],
-                'Vendido': ['Vendido','bgm-teal'],
-                'salida': ['Salida','bgm-deeppurple']
-            };
-
-            return `<a class="btn btn-xs disabled ${info[status][1]}">${info[status][0]}</a>`;
-        };
-
-        /*
-         * Helper para vista de detalle de movimientos
-         *
-         *  @params Int
-         *  @return tag:a-button
-         */
-
-        $scope.payStatus = function(status){
-            var info = {
-                0: ['Normal','bgm-green',false],
-                1: ['Liquidacion','btn-info',false],
-            };
-
-            return `<a class="btn btn-xs disabled ${info[status][1]}">${info[status][0]}</a>`;
-        };
 
         angular.element(document).ready(function(){
             util.resetTable($scope,$compile);

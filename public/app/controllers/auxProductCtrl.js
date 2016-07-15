@@ -40,7 +40,7 @@ angular.module('App')
                 ]
                 ]
             ],
-            data  	: 	['date','cod','name','provider','size','color','types','cost_provider','utility','precio','status','actions',],
+            data  	: 	['date','cod','name','provider','size','color','types','cost_provider','utility','precio','status','actions'],
             configStatus : 'status'
         };
 
@@ -364,10 +364,34 @@ angular.module('App')
          * Helper para vista de detalle de movimientos
          *
          *  @params String
-         *  @return tag:a-button String
+         *  @return tag:a-button
          */
 
-         // $scope.movementStatus
+        $scope.movementStatus = function(status){
+            var info = {
+                'Retornado': ['Retornado','bgm-red'],
+                'Vendido': ['Vendido','bgm-teal'],
+                'salida': ['Salida','bgm-deeppurple']
+            };
+
+            return `<a class="btn btn-xs disabled ${info[status][1]}">${info[status][0]}</a>`;
+        };
+
+        /*
+         * Helper para vista de detalle de movimientos
+         *
+         *  @params Int
+         *  @return tag:a-button
+         */
+
+        $scope.payStatus = function(status){
+            var info = {
+                0: ['Normal','bgm-green',false],
+                1: ['Liquidacion','btn-info',false],
+            };
+
+            return `<a class="btn btn-xs disabled ${info[status][1]}">${info[status][0]}</a>`;
+        };
 
 
         angular.element(document).ready(function(){

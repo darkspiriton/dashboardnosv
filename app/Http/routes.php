@@ -118,6 +118,8 @@ Route::group(['prefix' => 'api'], function(){
 
         // Route::get('/get/products/provider/sale/{id}','AuxProductController@productProviderTotalMonth');
         // Route::get('/get/products/provider/sale/now/{id}','AuxProductController@productProviderTotalMonthNow');
+
+        Route::get('get/movements/{id}','AuxProductController@movements_for_product');
     });
 
     /**

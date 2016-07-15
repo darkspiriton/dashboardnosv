@@ -768,7 +768,7 @@ class AuxProductController extends Controller
                 ->join('sizes as s','s.id','=','p.size_id')
                 ->leftJoin('settlements as dc','dc.product_id','=','p.id')
                 ->where('p.id', $id)
-                ->orderby('m.date_shipment','asc')
+                ->orderby('m.created_at','desc')
                 ->get();
 
             foreach ($movements as $product) {

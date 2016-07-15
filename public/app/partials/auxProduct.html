@@ -287,14 +287,14 @@
                                         </thead>
                                         <tbody>
                                             <tr ng-repeat="movement in productMovements">
-                                                <td style="display: table-cell;padding: 10 5;">{{ movement.created_at }}</td>
+                                                <td style="display: table-cell;padding: 10 5;width:100px">{{ movement.created_at }}</td>
                                                 <td style="display: table-cell;padding: 10 5;">{{ movement.fecha }}</td>
                                                 <td style="display: table-cell;padding: 10 5;">{{ movement.codigo }}</td>
                                                 <td style="display: table-cell;padding: 10 5;">{{ movement.product }}</td>
                                                 <td style="display: table-cell;padding: 10 5;">{{ movement.color }}</td>
                                                 <td style="display: table-cell;padding: 10 5;">{{ movement.talla }}</td>
-                                                <td style="display: table-cell;padding: 10 5;">{{ movementStatus(movement.status) }}</td>
-                                                <td style="display: table-cell;padding: 10 5;">{{ movementStatus(movement.liquidation) }}</td>
+                                                <td style="display: table-cell;padding: 10 5;" ng-bind-html="movementStatus(movement.status)"></td>
+                                                <td style="display: table-cell;padding: 10 5;" ng-bind-html="payStatus(movement.liquidation)"></td>
                                                 <td style="display: table-cell;padding: 10 5;">{{ movement.price_real }}</td>
                                                 <td style="display: table-cell;padding: 10 5;">{{ movement.price }}</td>
                                                 <td style="display: table-cell;padding: 10 5;">{{ movement.discount }}</td>

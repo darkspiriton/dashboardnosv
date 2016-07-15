@@ -11,3 +11,65 @@
         </div><br>
     </div><br>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="productMovements" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bgm-teal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title c-white">Detalle de movimientos</h3>
+            </div>
+            <div class="modal-body card-padding">
+                <form class="form-horizontal" autocomplete="off" submit="return false;">
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <div class="row">
+                                <div class="attr-group col-xs-12">
+                                    <table class="table table-bordered w-100 table-attr text-center">
+                                        <thead>
+                                        <tr>
+                                            <th style="padding: 10 5;">Creacion</th>
+                                            <th style="padding: 10 5;">Fecha</th>
+                                            <th style="padding: 10 5;">Codigo</th>
+                                            <th style="padding: 10 5;">Producto</th>
+                                            <th style="padding: 10 5;">Color</th>
+                                            <th style="padding: 10 5;">Talla</th>
+                                            <th style="padding: 10 5;">Estado</th>
+                                            <th style="padding: 10 5;">Estado V.</th>
+                                            <th style="padding: 10 5;">P. Real</th>
+                                            <th style="padding: 10 5;">Precio</th>
+                                            <th style="padding: 10 5;">Desc.</th>
+                                            <th style="padding: 10 5;">P. Final</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="movement in productMovements">
+                                                <td style="display: table-cell;padding: 10 5;width:100px">{{ movement.created_at }}</td>
+                                                <td style="display: table-cell;padding: 10 5;">{{ movement.fecha }}</td>
+                                                <td style="display: table-cell;padding: 10 5;">{{ movement.codigo }}</td>
+                                                <td style="display: table-cell;padding: 10 5;">{{ movement.product }}</td>
+                                                <td style="display: table-cell;padding: 10 5;">{{ movement.color }}</td>
+                                                <td style="display: table-cell;padding: 10 5;">{{ movement.talla }}</td>
+                                                <td style="display: table-cell;padding: 10 5;" ng-bind-html="movementStatus(movement.status)"></td>
+                                                <td style="display: table-cell;padding: 10 5;" ng-bind-html="payStatus(movement.liquidation)"></td>
+                                                <td style="display: table-cell;padding: 10 5;">{{ movement.price_real }}</td>
+                                                <td style="display: table-cell;padding: 10 5;">{{ movement.price }}</td>
+                                                <td style="display: table-cell;padding: 10 5;">{{ movement.discount }}</td>
+                                                <td style="display: table-cell;padding: 10 5;">{{ movement.price_final }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -416,7 +416,20 @@ class AuxProductController extends Controller
                 ->where('p.status', '=', 1)
                 ->groupby('p.name', 'c.name', 's.name')->get();
 
-        return response()->json(['stock' => $stock], 200);
+        $resume = Product::with('provider','types')
+                    ->select('created_at as create','provider_id','id', 'name',DB::raw('count(name) as cantP'),'cost_provider','utility')
+                    ->where('status', '=', 1)
+                    ->orWhere('status', '=', 3)
+                    ->groupby('name')->get();
+
+        foreach ($resume as $product) {
+            if ($product->types){
+                $product->typesList = $product->types->implode("name","|");
+            }
+            $product->price_final = $product->cost_provider + $product->utility;
+        }
+
+        return response()->json(['stock' => $stock, 'resume' => $resume], 200);
     }
 
     public function stockProdType($id)

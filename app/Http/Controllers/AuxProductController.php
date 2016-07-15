@@ -16,7 +16,6 @@ use \DB;
 use \Exception;
 use Dashboard\Models\Experimental\Alarm;
 use Dashboard\User;
-
 use Dashboard\Http\Requests;
 
 class AuxProductController extends Controller
@@ -35,23 +34,27 @@ class AuxProductController extends Controller
      */
     public function index(Request $request)
     {
-               $query = DB::table('auxproducts as p')
-                        ->select('p.status',DB::raw('DATE_FORMAT(p.created_at,\'%d-%m-%Y\') as date'),'p.id','p.cod','p.name','s.name as size','c.name as color','pv.name as provider',DB::raw('GROUP_CONCAT(t.name ORDER BY t.name ASC SEPARATOR \' - \') as types'),'p.cost_provider','p.utility',DB::raw('p.cost_provider + p.utility as precio'))
-                        ->join('types_auxproducts as tp','tp.product_id','=','p.id')
-                        ->join('types as t','t.id','=','tp.type_id')
-                        ->join('colors as c','c.id','=','p.color_id')
-                        ->join('sizes as s','s.id','=','p.size_id')
-                        ->join('providers as pv','pv.id','=','p.provider_id')
+        $query = DB::table('auxproducts as p')
+                        ->select('p.status', DB::raw('DATE_FORMAT(p.created_at,\'%d-%m-%Y\') as date'), 'p.id', 'p.cod', 'p.name', 's.name as size', 'c.name as color', 'pv.name as provider', DB::raw('GROUP_CONCAT(t.name ORDER BY t.name ASC SEPARATOR \' - \') as types'), 'p.cost_provider', 'p.utility')
+                        ->addSelect(DB::raw('p.cost_provider + p.utility  as price_real'))
+                        ->addSelect(DB::raw('case when dc.price then dc.price else p.cost_provider + p.utility end as precio'))
+                        ->addSelect(DB::raw('case when dc.price then 1 else 0 end liquidation'))
+                        ->join('types_auxproducts as tp', 'tp.product_id', '=', 'p.id')
+                        ->join('types as t', 't.id', '=', 'tp.type_id')
+                        ->join('colors as c', 'c.id', '=', 'p.color_id')
+                        ->join('sizes as s', 's.id', '=', 'p.size_id')
+                        ->join('providers as pv', 'pv.id', '=', 'p.provider_id')
+                        ->leftJoin('settlements as dc', 'dc.product_id', '=', 'p.id')
                         ->groupBy('cod')
-                        ->orderBy('id','desc');
+                        ->orderBy('id', 'desc');
 
-                        if($request->has('search'))
-                            $query->where('p.name','like', '%'.$request->input('search').'%');
+        if ($request->has('search')) {
+            $query->where('p.name', 'like', '%'.$request->input('search').'%');
+        }
 
-                        $products = $query->get();
+        $products = $query->get();
 
-//        $products=Product::with('size','color','provider');
-        return response()->json(['products' => $products],200);
+        return response()->json(['products' => $products], 200);
     }
 
     /**
@@ -84,13 +87,13 @@ class AuxProductController extends Controller
             // con los errores
             $validator = \Validator::make($request->all(), $rules);
             if ($validator->fails()) {
-                return response()->json(['message' => 'No posee todo los campos necesarios para crear un producto'],401);
+                return response()->json(['message' => 'No posee todo los campos necesarios para crear un producto'], 401);
             }
 
             $product = DB::table('auxproducts')
-                        ->where('cod','=',$request->input('cod'))
+                        ->where('cod', '=', $request->input('cod'))
                         ->get();
-            if($product == null){
+            if ($product == null) {
                 $data['day'] = $request->input('day');
                 $data['count'] = $request->input('count');
 
@@ -117,7 +120,7 @@ class AuxProductController extends Controller
 
                 $cant=$data['cant'];
                 $cod= $data['cod'];
-                for($i=0;$i<$cant;$i++){
+                for ($i=0;$i<$cant;$i++) {
                     $product = new Product();
                     $product->cod= $cod+$i;
                     $product->provider_id= $data['provider_id'];
@@ -130,7 +133,7 @@ class AuxProductController extends Controller
                     $product->utility=$data['uti'];
                     $product->save();
 
-                    foreach($types as $type){
+                    foreach ($types as $type) {
                         $tipo = Type::find($type['id']);
                         $product->types()->attach($tipo);
                     }
@@ -138,13 +141,10 @@ class AuxProductController extends Controller
 
                 //Event::fire(new ProductWasCreated($data));
 
-                return response()->json(['message' => 'El producto se agrego correctamente'],200);
+                return response()->json(['message' => 'El producto se agrego correctamente'], 200);
             } else {
-                return response()->json(['message' => 'El código del producto ya existe'],401);
+                return response()->json(['message' => 'El código del producto ya existe'], 401);
             }
-
-
-
         } catch (Exception $e) {
             // Si algo sale mal devolvemos un error.
             return \Response::json(['message' => 'Ocurrio un error al agregar producto'], 500);
@@ -159,18 +159,17 @@ class AuxProductController extends Controller
      */
     public function show($id)
     {
-        try{
-
-            $product = Product::with('types','alarm')
-                            ->select(array('id','cod','provider_id','color_id','size_id','name','cost_provider as cost','utility as uti','cost_provider as cost','utility as uti','alarm_id'))
+        try {
+            $product = Product::with('types', 'alarm')
+                            ->select(array('id', 'cod', 'provider_id', 'color_id', 'size_id', 'name', 'cost_provider as cost', 'utility as uti', 'cost_provider as cost', 'utility as uti', 'alarm_id'))
                             ->find($id);
 
-            if($product !== null)
-                return response()->json(['product' => $product],200);
+            if ($product !== null) {
+                return response()->json(['product' => $product], 200);
+            }
 
             return \Response::json(['message' => 'No existe ese producto'], 404);
-
-        }catch (Exception $e){
+        } catch (Exception $e) {
             return \Response::json(['message' => 'Ocurrio un error'], 500);
         }
     }
@@ -184,7 +183,6 @@ class AuxProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-
         $rules = [
             'id'           => 'required|integer',
             'cod'           => 'required|integer',
@@ -203,16 +201,19 @@ class AuxProductController extends Controller
 
         try {
             $validator = \Validator::make($request->all(), $rules);
-            if ($validator->fails())
+            if ($validator->fails()) {
                 return response()->json(['message' => 'No posee todo los campos necesarios para actualizar un producto y/o el codigo de producto ya existe'], 401);
+            }
 
-            if (Product::select(DB::raw('count(*)'))->where('cod','=',$request->input('cod'))->where('id','<>',$request->input('id'))->count() > 0)
-                return response()->json(['message' => 'El código ya esta en uso'],401);
+            if (Product::select(DB::raw('count(*)'))->where('cod', '=', $request->input('cod'))->where('id', '<>', $request->input('id'))->count() > 0) {
+                return response()->json(['message' => 'El código ya esta en uso'], 401);
+            }
 
             $product = Product::find($id);
 
-            if($product->exists())
+            if ($product->exists()) {
                 response()->json(['message' => 'El producto no existe', 404]);
+            }
 
             $product->cod = $request->input('cod');
             $product->provider_id = $request->input('provider_id');
@@ -227,21 +228,19 @@ class AuxProductController extends Controller
 //                ->where('size_id','=',$product->size_id)->get()->lists('alarm_id');
 
 
-            Alarm::where('id',$product->alarm_id)->update(['day' => $request->input('alarm.day'), 'count' => $request->input('alarm.count')]);
+            Alarm::where('id', $product->alarm_id)->update(['day' => $request->input('alarm.day'), 'count' => $request->input('alarm.count')]);
 
-            $types = Array();
-            foreach ($request->input('types') as $i => $type){
+            $types = array();
+            foreach ($request->input('types') as $i => $type) {
                 $types[$i] = $type["id"];
             }
 
             $product->types()->sync($types);
 
             return response()->json(['message' => 'Producto editado correctamente']);
-
         } catch (Exception $e) {
             return \Response::json(['message' => 'Ocurrio un error al editar producto'], 500);
         }
-
     }
 
     /**
@@ -253,28 +252,29 @@ class AuxProductController extends Controller
     public function destroy($id)
     {
         $auxproduct= Product::find($id);
-        if($auxproduct->exists){
+        if ($auxproduct->exists) {
             $movements = $auxproduct->movements;
             $publicity = $auxproduct->publicities;
             $liquidation = $auxproduct->settlement;
 
-            if($movements->count() > 0){
+            if ($movements->count() > 0) {
                 return response()->json(['message'=>'No se puede eliminar este producto porque posee movimiento asociados'], 401);
-            }else if($publicity->count() > 0){
+            } elseif ($publicity->count() > 0) {
                 return response()->json(['message'=>'No se puede eliminar este producto tiene publicidad asociada'], 401);
-            }else if($liquidation !== null){
+            } elseif ($liquidation !== null) {
                 return response()->json(['message'=>'No se puede eliminar este producto esta en liquidacion'], 401);
-            }else{
+            } else {
                 $auxproduct->types()->detach();
                 $auxproduct->delete();
-                return response()->json(['message'=>'Se elimino el producto correctamente'],200);
+                return response()->json(['message'=>'Se elimino el producto correctamente'], 200);
             }
-        }else{
+        } else {
             return response()->json(['message'=>'No existe este producto']);
         }
     }
 
-    public function setProvider(Request $request){
+    public function setProvider(Request $request)
+    {
         // Creamos las reglas de validación
         $rules = [
             'name'          => 'required',
@@ -285,13 +285,12 @@ class AuxProductController extends Controller
             // con los errores
             $validator = \Validator::make($request->all(), $rules);
             if ($validator->fails()) {
-                return response()->json(['message' => 'No posee todo los campos necesario para crear un nuevo proveedor'],401);
+                return response()->json(['message' => 'No posee todo los campos necesario para crear un nuevo proveedor'], 401);
             }
 
-            $provider = Provider::where('name','=',$request->input('name'))->exists();
+            $provider = Provider::where('name', '=', $request->input('name'))->exists();
 
-            if(!$provider){
-
+            if (!$provider) {
                 $types = json_decode($request->input('types'), true);
 
                 $user = new User();
@@ -311,20 +310,18 @@ class AuxProductController extends Controller
                 $proveedor->name = ucwords($request->input('name'));
                 $proveedor->idUser= $user->id;
                 $proveedor->save();
-                return response()->json(['message' => 'El nuevo proveedor se agrego correctamente'],200);
-
+                return response()->json(['message' => 'El nuevo proveedor se agrego correctamente'], 200);
             } else {
-
-                return response()->json(['message' => 'El nombre del proveedor ya existe'],401);
+                return response()->json(['message' => 'El nombre del proveedor ya existe'], 401);
             }
-
         } catch (Exception $e) {
             // Si algo sale mal devolvemos un error.
             return \Response::json(['message' => 'Ocurrio un error al agregar proveedor'], 500);
         }
     }
 
-    public function setColor(Request $request){
+    public function setColor(Request $request)
+    {
         // Creamos las reglas de validación
         $rules = [
             'name'          => 'required',
@@ -335,41 +332,38 @@ class AuxProductController extends Controller
             // con los errores
             $validator = \Validator::make($request->all(), $rules);
             if ($validator->fails()) {
-                return response()->json(['message' => 'No posee todo los campos necesario para crear un nuevo color'],401);
+                return response()->json(['message' => 'No posee todo los campos necesario para crear un nuevo color'], 401);
             }
 
-            $color = Color::where('name','=',$request->input('name'))->exists();
+            $color = Color::where('name', '=', $request->input('name'))->exists();
 
-            if(!$color){
-                
+            if (!$color) {
                 $c = new Color();
                 $c->name = ucwords($request->input('name'));
                 $c->save();
-                return response()->json(['message' => 'El nuevo color se agrego correctamente'],200);
-
+                return response()->json(['message' => 'El nuevo color se agrego correctamente'], 200);
             } else {
-
-                return response()->json(['message' => 'El nombre del color ya existe'],401);
+                return response()->json(['message' => 'El nombre del color ya existe'], 401);
             }
-
         } catch (Exception $e) {
             // Si algo sale mal devolvemos un error.
             return \Response::json(['message' => 'Ocurrio un error al agregar color'], 500);
         }
     }
 
-    public function  getCod(){
+    public function getCod()
+    {
         $codigos = DB::table('auxproducts')
             ->select('cod')
-            ->orderby('cod','asc')
+            ->orderby('cod', 'asc')
             ->get();
         $i=0;
         $j=0;
 
-        if($codigos != null){
-            $data = Array();
-            foreach ($codigos as $codigo){
-                if($codigo->cod - $i != 1){
+        if ($codigos != null) {
+            $data = array();
+            foreach ($codigos as $codigo) {
+                if ($codigo->cod - $i != 1) {
                     if ($i !=0) {
                         $cant = $codigo->cod - $i;
                         $codAux = $i;
@@ -377,9 +371,9 @@ class AuxProductController extends Controller
                             $data[$j] = $codAux + $z;
                             $j++;
                         }
-                    }else{
+                    } else {
                         $cod=$codigo->cod;
-                        if($cod!=1) {
+                        if ($cod!=1) {
                             for ($p = 1; $p < $cod; $p++) {
                                 $data[$j] = $p;
                                 $j++;
@@ -389,86 +383,83 @@ class AuxProductController extends Controller
                 }
                 $i=$codigo->cod;
             }
-            if (count($codigo) == 0){
+            if (count($codigo) == 0) {
                 $data[] = 1;
             } else {
                 $data[] = $codigo->cod + 1;
             }
 
 
-            return response()->json(['codes' => $data],200);
-        }else{
-            return response()->json(['message' => 'No hay productos'],200);
+            return response()->json(['codes' => $data], 200);
+        } else {
+            return response()->json(['message' => 'No hay productos'], 200);
         }
-
     }
 
-    public function cantPro(){
-
+    public function cantPro()
+    {
         $cant = DB::table('providers as pr')
-            ->select('pr.name',DB::raw('count(p.id) as cant'))
-            ->join('auxproducts as p','pr.id','=','p.provider_id')
-            ->where('p.status',1)
+            ->select('pr.name', DB::raw('count(p.id) as cant'))
+            ->join('auxproducts as p', 'pr.id', '=', 'p.provider_id')
+            ->where('p.status', 1)
             ->groupby('pr.name')->get();
         
-        return response()->json(['products'=>$cant],200);
+        return response()->json(['products'=>$cant], 200);
     }
 
-    public function stockProd(){
-
+    public function stockProd()
+    {
         $stock = DB::table('auxproducts as p')
-                ->select('p.id','p.name','c.name as color','s.name as size',DB::raw('count(p.name) as cantP',''))
-                ->join('colors as c','c.id','=','p.color_id')
-                ->join('sizes as s','s.id','=','p.size_id')
-                ->where('p.status','=',1)
-                ->groupby('p.name','c.name','s.name')->get();
+                ->select('p.id', 'p.name', 'c.name as color', 's.name as size', DB::raw('count(p.name) as cantP', ''))
+                ->join('colors as c', 'c.id', '=', 'p.color_id')
+                ->join('sizes as s', 's.id', '=', 'p.size_id')
+                ->where('p.status', '=', 1)
+                ->groupby('p.name', 'c.name', 's.name')->get();
 
-        return response()->json(['stock' => $stock],200);
-        
+        return response()->json(['stock' => $stock], 200);
     }
 
-    public function stockProdType($id) {
+    public function stockProdType($id)
+    {
         $types = DB::table('auxproducts as p')
             ->select(DB::raw('GROUP_CONCAT(t.name ORDER BY t.name ASC SEPARATOR \' - \') as types'))
-            ->join('types_auxproducts as tp','tp.product_id','=','p.id')
-            ->join('types as t','t.id','=','tp.type_id')
-            ->where('p.id','=',$id)
+            ->join('types_auxproducts as tp', 'tp.product_id', '=', 'p.id')
+            ->join('types as t', 't.id', '=', 'tp.type_id')
+            ->where('p.id', '=', $id)
             ->groupBy('cod')
             ->first();
 
-        return response()->json($types,200);
+        return response()->json($types, 200);
     }
 
-    public function stockIni(){
-
+    public function stockIni()
+    {
         $stock = DB::table('auxproducts as p')
                 ->select(DB::raw('count(p.name)'))
-                ->where('p.status','=','1')->get();
+                ->where('p.status', '=', '1')->get();
 
-        return response()->json(['stock'=>$stock],200);
+        return response()->json(['stock'=>$stock], 200);
     }
 
-    public function prodSize(){
-
+    public function prodSize()
+    {
         $productSize = DB::table('sizes as s')
-                ->select('p.name','s.name as size',DB::raw('count(p.size_id) as cant'))
-                ->join('auxproducts as p','s.id','=','p.size_id')
-                ->where('p.status','=','1')
-                ->groupby('p.name','s.name')->get();
+                ->select('p.name', 's.name as size', DB::raw('count(p.size_id) as cant'))
+                ->join('auxproducts as p', 's.id', '=', 'p.size_id')
+                ->where('p.status', '=', '1')
+                ->groupby('p.name', 's.name')->get();
 
-        return response()->json(['products'=>$productSize],200);
-
+        return response()->json(['products'=>$productSize], 200);
     }
 
-    public function prodColor(){
-
+    public function prodColor()
+    {
         $productColor = DB::table('colors as c')
-            ->select('p.name','c.name as color',DB::raw('count(p.color_id) as cant'))
-            ->join('auxproducts as p','c.id','=','p.color_id')
-            ->where('p.status','=','1')
-            ->groupby('p.name','c.name')->get();
-        return response()->json(['products'=>$productColor],200);
-
+            ->select('p.name', 'c.name as color', DB::raw('count(p.color_id) as cant'))
+            ->join('auxproducts as p', 'c.id', '=', 'p.color_id')
+            ->where('p.status', '=', '1')
+            ->groupby('p.name', 'c.name')->get();
+        return response()->json(['products'=>$productColor], 200);
     }
 
     public function prodOutProvider()
@@ -481,31 +472,35 @@ class AuxProductController extends Controller
             ->orderby('cant', 'desc')->get();
 
         return response()->json(['products' => $productOutProvider], 200);
-    }   
+    }
     
-    public function getProviders(){
-        $providers = Provider::orderBy('name','asc')->get();
-        return response()->json(['providers' => $providers ],200);
+    public function getProviders()
+    {
+        $providers = Provider::orderBy('name', 'asc')->get();
+        return response()->json(['providers' => $providers ], 200);
     }
 
-    public function getSizes(){
+    public function getSizes()
+    {
         $sizes = Size::all();
-        return response()->json(['sizes' => $sizes],200);
+        return response()->json(['sizes' => $sizes], 200);
     }
 
-    public function getColors(){
-        $colors = Color::orderBy('name','asc')->get();
-        return response()->json(['colors' => $colors],200);
+    public function getColors()
+    {
+        $colors = Color::orderBy('name', 'asc')->get();
+        return response()->json(['colors' => $colors], 200);
     }
 
-    public function alarm(){
+    public function alarm()
+    {
         $products = DB::table('alarms as a')
-                ->select('p.name','c.name as color','s.name as talla','p.created_at','a.day','a.count',DB::raw('count(p.id) as cant'))
-                ->join('auxproducts as p','a.id','=','p.alarm_id')
-                ->join('auxmovements as m','p.id','=','m.product_id')
-                ->join('colors as c','c.id','=','p.color_id')
-                ->join('sizes as s','s.id','=','p.size_id')
-                ->where('m.status','=','vendido')
+                ->select('p.name', 'c.name as color', 's.name as talla', 'p.created_at', 'a.day', 'a.count', DB::raw('count(p.id) as cant'))
+                ->join('auxproducts as p', 'a.id', '=', 'p.alarm_id')
+                ->join('auxmovements as m', 'p.id', '=', 'm.product_id')
+                ->join('colors as c', 'c.id', '=', 'p.color_id')
+                ->join('sizes as s', 's.id', '=', 'p.size_id')
+                ->where('m.status', '=', 'vendido')
                 ->groupby('p.name')->get();
 
 //        return $products;
@@ -513,39 +508,40 @@ class AuxProductController extends Controller
         $j=0;
         $alarms = array();
 
-        foreach ($products as $product){
+        foreach ($products as $product) {
             $dateNow=Carbon::now();
             $date=Carbon::createFromFormat('Y-m-d H:i:s', $product->created_at);
 
             $diff=(int)$dateNow->diffInDays($date);
 
-            if($diff > (int)$product->day){
-                if((int)$product->cant < (int)$product->count){
+            if ($diff > (int)$product->day) {
+                if ((int)$product->cant < (int)$product->count) {
                     $alarms[$j] = array('name' => $product->name);
-                     $j++;
+                    $j++;
                 }
             }
         }
-        if(!empty($alarms)){
-            return response()->json([ 'alarms' => $alarms ],200);
-        }else{
-            return response()->json([ 'message' => 'Por el momento no hay alarmas' ],404);
+        if (!empty($alarms)) {
+            return response()->json([ 'alarms' => $alarms ], 200);
+        } else {
+            return response()->json([ 'message' => 'Por el momento no hay alarmas' ], 404);
         }
     }
 
-    public function listProduct(Request $request){
-        try{
-            if($request->has("name")){
+    public function listProduct(Request $request)
+    {
+        try {
+            if ($request->has("name")) {
                 $colors = Product::select("color_id")->distinct()->where("name", $request->input("name"))->lists("color_id");
                 $sizes = Product::select("size_id")->distinct()->where("name", $request->input("name"))->lists("size_id");
 
                 $data = array();
-                $data["sizes"] =  Size::select("id","name")->whereIn("id",$sizes)->get();
-                $data["colors"] =  Color::select("id","name")->whereIn("id",$colors)->get();
+                $data["sizes"] =  Size::select("id", "name")->whereIn("id", $sizes)->get();
+                $data["colors"] =  Color::select("id", "name")->whereIn("id", $colors)->get();
 
                 return response()->json($data);
             } else {
-                $products = Product::select("name")->distinct()->orderBy("name","asc")->get();   
+                $products = Product::select("name")->distinct()->orderBy("name", "asc")->get();
                 return response()->json(["products" => $products]);
             }
         } catch (\Exception $e) {
@@ -553,55 +549,57 @@ class AuxProductController extends Controller
         }
     }
 
-    public function UniqueProduct(){
-        try{
+    public function UniqueProduct()
+    {
+        try {
             $products = Product::select(array('name'/*,'price'*/))->groupBy('name')->get();
 
             return response()->json(['products' => $products], 200);
-        }catch(Exception $e){
-            return response()->json(['message' => 'Se cruzaron algunos cables, llame a sistemas'],500);
+        } catch (Exception $e) {
+            return response()->json(['message' => 'Se cruzaron algunos cables, llame a sistemas'], 500);
         }
     }
 
-    public function CodesLists($name){
+    public function CodesLists($name)
+    {
         try {
             $products = \DB::table('auxproducts AS p')
-                ->select(array('p.id','p.name as n',\DB::raw('concat(p.cod," - ",p.name," - ",c.name," - ",s.name) as name')))
-                ->join('colors AS c','c.id','=','p.color_id')
-                ->join('sizes AS s','s.id','=','p.size_id')
-                ->where('p.status','=',1)
-                ->where('p.name','=',$name)
+                ->select(array('p.id', 'p.name as n', \DB::raw('concat(p.cod," - ",p.name," - ",c.name," - ",s.name) as name')))
+                ->join('colors AS c', 'c.id', '=', 'p.color_id')
+                ->join('sizes AS s', 's.id', '=', 'p.size_id')
+                ->where('p.status', '=', 1)
+                ->where('p.name', '=', $name)
                 ->get();
 
-            if(count($products) == 0)
-                return response()->json(['message' => 'No hay productos en existencia'],404);
+            if (count($products) == 0) {
+                return response()->json(['message' => 'No hay productos en existencia'], 404);
+            }
 
-            return response()->json(['codes' => $products],200);
-
+            return response()->json(['codes' => $products], 200);
         } catch (\Exception $e) {
             return \Response::json(['message' => 'Ocurrio un error al agregar producto'], 500);
         }
     }
 
-    public function productProvider(Request $request, $id){
-
-        if($request->has('date1')){
+    public function productProvider(Request $request, $id)
+    {
+        if ($request->has('date1')) {
             try {
                 $date1 = Carbon::createFromFormat('Y-m-d', $request->input('date1'));
-            } catch(\InvalidArgumentException $e) {
-                return response()->json(['message' => 'Fechas no validas, formato aceptado: Y-m-d'],401);
+            } catch (\InvalidArgumentException $e) {
+                return response()->json(['message' => 'Fechas no validas, formato aceptado: Y-m-d'], 401);
             }
-        }else{
+        } else {
             $date1 = Carbon::today();
         }
 
         $date2 = $date1->copy()->addDay();
-        $movements=$this->movementsGet($date1,$date2,$id);
-        return response()->json(['movements' => $movements],200);
+        $movements=$this->movementsGet($date1, $date2, $id);
+        return response()->json(['movements' => $movements], 200);
     }
 
-    public function productProviderMonth(Request $request, $id){
-
+    public function productProviderMonth(Request $request, $id)
+    {
         $rules = [
             'year' => 'required|integer',
             'month' => 'required|integer'
@@ -609,7 +607,7 @@ class AuxProductController extends Controller
 
         $validator = \Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json(['message' => 'No posee todo los campos necesarios para consultar proveedores por meses'],401);
+            return response()->json(['message' => 'No posee todo los campos necesarios para consultar proveedores por meses'], 401);
         }
 
         $year=$request->input('year');
@@ -618,68 +616,69 @@ class AuxProductController extends Controller
         $date1=Carbon::create($year, $month, 1, 0, 0, 0, 'America/Lima');
         $date2 = $date1->copy()->addMonth();
 
-        $movements=$this->movementsGet($date1,$date2,$id);
-        return response()->json(['movements' => $movements],200);
+        $movements=$this->movementsGet($date1, $date2, $id);
+        return response()->json(['movements' => $movements], 200);
     }
 
-    public function productProviderDate(Request $request, $id){
-
+    public function productProviderDate(Request $request, $id)
+    {
         try {
             $date1 = Carbon::createFromFormat('Y-m-d', $request->input('dateaux1'));
             $dateaux2 = Carbon::createFromFormat('Y-m-d', $request->input('dateaux2'));
-        } catch(\InvalidArgumentException $e) {
-            return response()->json(['message' => 'Fechas no validas, formato aceptado: Y-m-d'],401);
+        } catch (\InvalidArgumentException $e) {
+            return response()->json(['message' => 'Fechas no validas, formato aceptado: Y-m-d'], 401);
         }
 
         $date2 = $dateaux2->copy()->addDay();
-        $movements=$this->movementsGet($date1,$date2,$id);
-        return response()->json(['movements' => $movements],200);
+        $movements=$this->movementsGet($date1, $date2, $id);
+        return response()->json(['movements' => $movements], 200);
     }
 
-    public function productProviderTotalMonth(Request $request, $id){
-
+    public function productProviderTotalMonth(Request $request, $id)
+    {
         $rules =[
             'year' => 'required|integer',
             'month' => 'required|integer'
         ];
 
         $validator = \Validator::make($request->all(), $rules);
-        if($validator->fails()){
-            return response()->json(['message','No posee todo los campos necesarios para consultar ventas de proveedores']);
+        if ($validator->fails()) {
+            return response()->json(['message', 'No posee todo los campos necesarios para consultar ventas de proveedores']);
         }
 
-        $sales = $this->saleMonth($request->input('year'),$request->input('month'),$id);
+        $sales = $this->saleMonth($request->input('year'), $request->input('month'), $id);
 
         return $sales;
     }
 
-    public function productProviderTotalMonthNow($id){
+    public function productProviderTotalMonthNow($id)
+    {
         $date1=Carbon::today();
-        $sales = $this->saleMonth($date1->year,$date1->month,$id);
+        $sales = $this->saleMonth($date1->year, $date1->month, $id);
 
         return $sales;
     }
 
-    private function saleMonth($year,$month,$id){
-
+    private function saleMonth($year, $month, $id)
+    {
         $date1=Carbon::create($year, $month, 1, 0, 0, 0, 'America/Lima');
         $date2 = $date1->copy()->addMonth();
 
 
         $status = 'vendido';
         $movements=DB::table('auxproducts as p')
-            ->select('m.date_shipment as fecha',DB::raw('count(p.name) as cantidad'))
-            ->join('auxmovements as m','p.id','=','m.product_id')
-            ->join('colors as c','c.id','=','p.color_id')
-            ->join('sizes as s','s.id','=','p.size_id')
-            ->leftJoin('settlements AS d','d.product_id','=','p.id')
-            ->where('m.status','like','%'.$status.'%')
+            ->select('m.date_shipment as fecha', DB::raw('count(p.name) as cantidad'))
+            ->join('auxmovements as m', 'p.id', '=', 'm.product_id')
+            ->join('colors as c', 'c.id', '=', 'p.color_id')
+            ->join('sizes as s', 's.id', '=', 'p.size_id')
+            ->leftJoin('settlements AS d', 'd.product_id', '=', 'p.id')
+            ->where('m.status', 'like', '%'.$status.'%')
 //            ->where('m.situation',null)
 //            ->where('p.provider_id',$id)
-            ->where(DB::raw('DATE(m.date_shipment)'),'>=',$date1->toDateString())
-            ->where(DB::raw('DATE(m.date_shipment)'),'<',$date2->toDateString())
+            ->where(DB::raw('DATE(m.date_shipment)'), '>=', $date1->toDateString())
+            ->where(DB::raw('DATE(m.date_shipment)'), '<', $date2->toDateString())
             ->groupby('fecha')
-            ->orderby('fecha','asc')
+            ->orderby('fecha', 'asc')
             ->get();
 
         $days=$date1->daysInMonth;
@@ -688,24 +687,23 @@ class AuxProductController extends Controller
 
         $days_list = array();
         $data_list = array();
-        for($x=1;$x<=$days;$x++){
+        for ($x=1;$x<=$days;$x++) {
             array_push($days_list, $x);
         }
 
-        foreach($movements as $movement){
+        foreach ($movements as $movement) {
             $date1 = Carbon::createFromFormat('Y-m-d', $movement->fecha);
             $date1->day;
 //            array_push($days_list, $init);
-            for($i=$init;$i<=$days;$i++){
-                if($date1->day==$i){
+            for ($i=$init;$i<=$days;$i++) {
+                if ($date1->day==$i) {
                     array_push($data_list, $movement->cantidad);
 //                    $prueba[$i]=$movement->cantidad;
                     break;
-                }else{
+                } else {
                     array_push($data_list, 0);
 //                    $prueba[$i]= 0;
                 }
-
             }
             $init=$date1->day+1;
         }
@@ -713,71 +711,100 @@ class AuxProductController extends Controller
         //falta crear vector con los dias y sus cantidades respectivamente. y devolverlas al proveedor y se muestren en el grafico
 
         return response()->json(['days_lists' => $days_list, 'data_lists' => $data_list]);
-
     }
 
 
 
 
-    private function movementsGet($date1,$date2,$id){
+    private function movementsGet($date1, $date2, $id)
+    {
         $status = 'vendido';
         $movements=DB::table('auxproducts as p')
-            ->select('m.date_shipment as fecha','p.cod as codigo','p.name as product','c.name as color',
-                DB::raw('case when d.price then d.price else p.cost_provider + p.utility end as price'),'s.name as talla','m.status','m.discount',
+            ->select('m.date_shipment as fecha', 'p.cod as codigo', 'p.name as product', 'c.name as color',
+                DB::raw('case when d.price then d.price else p.cost_provider + p.utility end as price'), 's.name as talla', 'm.status', 'm.discount',
                 DB::raw('case when d.price then d.price-m.discount else p.cost_provider + p.utility -m.discount end as pricefinal'),
-                DB::raw('case when d.price then 1 else 0 end as liquidacion'),'p.cost_provider as cost')
-            ->join('auxmovements as m','p.id','=','m.product_id')
-            ->join('colors as c','c.id','=','p.color_id')
-            ->join('sizes as s','s.id','=','p.size_id')
-            ->leftJoin('settlements AS d','d.product_id','=','p.id')
-            ->where('m.status','like','%'.$status.'%')
+                DB::raw('case when d.price then 1 else 0 end as liquidacion'), 'p.cost_provider as cost')
+            ->join('auxmovements as m', 'p.id', '=', 'm.product_id')
+            ->join('colors as c', 'c.id', '=', 'p.color_id')
+            ->join('sizes as s', 's.id', '=', 'p.size_id')
+            ->leftJoin('settlements AS d', 'd.product_id', '=', 'p.id')
+            ->where('m.status', 'like', '%'.$status.'%')
 //            ->where('m.situation',null)
-            ->where('p.provider_id',$id)
-            ->where(DB::raw('DATE(m.date_shipment)'),'>=',$date1->toDateString())
-            ->where(DB::raw('DATE(m.date_shipment)'),'<',$date2->toDateString())
-            ->orderby('p.name','c.name','s.name')
+            ->where('p.provider_id', $id)
+            ->where(DB::raw('DATE(m.date_shipment)'), '>=', $date1->toDateString())
+            ->where(DB::raw('DATE(m.date_shipment)'), '<', $date2->toDateString())
+            ->orderby('p.name', 'c.name', 's.name')
             ->get();
 
         return $movements;
     }
     
-    public function getIdProvider(Request $request){
+    public function getIdProvider(Request $request)
+    {
         $user = $request->input('user')['sub'];
-        $proveedor =  Provider::where('idUser',$user)->first();
+        $proveedor =  Provider::where('idUser', $user)->first();
 
-        if($proveedor != null){
+        if ($proveedor != null) {
             $id=$proveedor->id;
             return response()->json(['provider_id'=>$id]);
-        }else{
+        } else {
             return response()->json(['message'=>'Proveedor invalido']);
         }
-
     }
 
-    public function movements_for_product($id){
-        try{
+    public function movements_for_product($id)
+    {
+        try {
             $movements = DB::table('auxproducts as p')
-                ->select('m.created_at','m.date_shipment as fecha','m.status','m.discount')
-                ->addSelect('p.cod as codigo','p.name as product','p.cost_provider','p.utility')
-                ->addSelect('c.name as color','s.name as talla')
+                ->select('m.created_at', 'm.date_shipment as fecha', 'm.status', 'm.discount')
+                ->addSelect('p.cod as codigo', 'p.name as product', 'p.cost_provider', 'p.utility')
+                ->addSelect('c.name as color', 's.name as talla')
                 ->addSelect(DB::raw('p.cost_provider + p.utility  as price_real'))
                 ->addSelect(DB::raw('case when dc.price then dc.price else p.cost_provider + p.utility end as price'))
                 ->addSelect(DB::raw('case when dc.price then 1 else 0 end liquidation'))
-                ->join('auxmovements as m','p.id','=','m.product_id')
-                ->join('colors as c','c.id','=','p.color_id')
-                ->join('sizes as s','s.id','=','p.size_id')
-                ->leftJoin('settlements as dc','dc.product_id','=','p.id')
+                ->join('auxmovements as m', 'p.id', '=', 'm.product_id')
+                ->join('colors as c', 'c.id', '=', 'p.color_id')
+                ->join('sizes as s', 's.id', '=', 'p.size_id')
+                ->leftJoin('settlements as dc', 'dc.product_id', '=', 'p.id')
                 ->where('p.id', $id)
-                ->orderby('m.created_at','desc')
+                ->orderby('m.created_at', 'desc')
                 ->get();
 
             foreach ($movements as $product) {
                 $product->price_final = $product->price - $product->discount;
             }
 
-            return response()->json(['movements' => $movements]);        
-        } catch(\Exception $e){
+            return response()->json(['movements' => $movements]);
+        } catch (\Exception $e) {
             return response()->json(['message' => 'Ricky esta jugando con lo cables, no se puedo consultar los movimientos']);
         }
+    }
+
+    public function product_reserve($id)
+    {
+        $product = Product::find($id);
+
+        if ($product == null) {
+            return response()->json(["message" => "el producto no existe"], 404);
+        }
+
+        if ($product->status != 1 && $product->status != 3) {
+            return response()->json(["message" => "El producto no se puede reservar, por su estado"], 401);
+        }
+
+        if ($product->status == 1) {
+            $product->status = 3;
+            $product->save();
+
+            return response()->json(["message" => "Se reservo el producto exitosamente"]);
+        } else if($product->status == 3){
+            $product->status = 1;
+            $product->save();
+
+            return response()->json(["message" => "Se retiro reserva"]);
+        } else {
+            return response()->json(["message" => "No se pudo cambiar el estado"], 401);
+        }
+        
     }
 }

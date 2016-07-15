@@ -20,23 +20,27 @@ angular.module('App')
                 {"sTitle": "Talla", "bSortable" : true},
                 {"sTitle": "Color", "bSortable" : true, "bSearchable": true},
                 {"sTitle": "Tipos", "bSortable" : true, "bSearchable": true},
-                {"sTitle": "Precio (S/.)" , "bSearchable": false, 'sWidth': '100px'},
+                {"sTitle": "Estado V." , "bSearchable": false},
+                {"sTitle": "P. Real" , "bSearchable": false},
+                {"sTitle": "Precio" , "bSearchable": false},
                 {"sTitle": "Status", "bSortable" : false, "bSearchable": true},
                 {"sTitle": "Accion", "bSortable" : false, "bSearchable": false},
             ],
-            actions	:   	[
-                ['status',   {
-                    0 : { txt : 'salida' , cls : 'btn-danger', dis : false},
-                    1 : { txt : 'disponible' ,  cls : 'btn-success', dis : false},
-                    2 : { txt : 'vendido' ,  cls : 'bgm-teal', dis : false}
-                }
-                ],
-                ['actions', [
-                    ['movimientos','movements','bgm-teal']
-                ]
-                ]
-            ],
-            data  	: 	['date','cod','name','provider','size','color','types','precio','status','actions'],
+            // actions	:   	[
+            //     ['status',   {
+            //         0 : { txt : 'salida' , cls : 'btn-danger', dis : false},
+            //         1 : { txt : 'disponible' ,  cls : 'btn-success', dis : false},
+            //         2 : { txt : 'vendido' ,  cls : 'bgm-teal', dis : false},
+            //         3 : { txt : 'reservado' ,  cls : 'bgm-black', dis : false}
+            //     }
+            //     ],
+            //     ['actions', [
+            //         ['movimientos','movements','bgm-indigo'],
+            //         ['reservar','reserve','bgm-purple']
+            //     ]
+            //     ]
+            // ],
+            data  	: 	['date','cod','name','provider','size','color','types','liquidation','price_real','precio','status','actions'],
             configStatus : 'status'
         };
 
@@ -110,6 +114,25 @@ angular.module('App')
 
             return `<a class="btn btn-xs disabled ${info[status][1]}">${info[status][0]}</a>`;
         };
+
+        /*
+         * Helper para vista de detalle de movimientos
+         *
+         *  @params Int
+         *  @return Object:String   Confirmation
+         */
+
+        $scope.reserve = function(i){
+            var id = $scope.tableData[i].id;
+            petition.put(`api/auxproduct/reserve/${id}`)
+                .then(function(data){
+                    $scope.list();
+                    toastr.success(data.message);
+                }, function(error){
+                    $scope.list();
+                    toastr.error('Huy Huy dice: ' + error.data.message);
+                });
+        }
 
         angular.element(document).ready(function(){
             util.resetTable($scope,$compile);

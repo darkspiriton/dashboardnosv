@@ -25,6 +25,7 @@ class AuxProductController extends Controller
     public function __construct()
     {
         $this->middleware('auth:GOD,ADM,JVE,PUB,PRO,VEN');
+        $this->middleware('auth:GOD,ADM,JVE', ['only' => 'movements_for_product']);
     }
 
     /**
@@ -753,15 +754,30 @@ class AuxProductController extends Controller
 
     }
 
+    public function movements_for_product($id){
+        try{
+            $movements = DB::table('auxproducts as p')
+                ->select('m.created_at','m.date_shipment as fecha','m.status','m.discount')
+                ->addSelect('p.cod as codigo','p.name as product','p.cost_provider','p.utility')
+                ->addSelect('c.name as color','s.name as talla')
+                ->addSelect(DB::raw('p.cost_provider + p.utility  as price_real'))
+                ->addSelect(DB::raw('case when dc.price then dc.price else p.cost_provider + p.utility end as price'))
+                ->addSelect(DB::raw('case when dc.price then 1 else 0 end liquidation'))
+                ->join('auxmovements as m','p.id','=','m.product_id')
+                ->join('colors as c','c.id','=','p.color_id')
+                ->join('sizes as s','s.id','=','p.size_id')
+                ->leftJoin('settlements as dc','dc.product_id','=','p.id')
+                ->where('p.id', $id)
+                ->orderby('m.date_shipment','asc')
+                ->get();
 
-//    public function movementOtherDay(Request $request){
-//        try {
-//            $date1 = Carbon::createFromFormat('Y-m-d', $request->input('date1'));
-//        } catch(\InvalidArgumentException $e) {
-//            return response()->json(['message' => 'Fechas no validas, formato aceptado: Y-m-d'],401);
-//        }
-//        $date2 = $date1->copy()->addDay();
-//        $movements=$this->movementsGet($date1,$date2);
-//        return response()->json(['movements' => $movements],200);
-//    }
+            foreach ($movements as $product) {
+                $product->price_final = $product->price - $product->discount;
+            }
+
+            return response()->json(['movements' => $movements]);        
+        } catch(\Exception $e){
+            return response()->json(['message' => 'Ricky esta jugando con lo cables, no se puedo consultar los movimientos']);
+        }
+    }
 }

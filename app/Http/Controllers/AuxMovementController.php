@@ -501,9 +501,8 @@ class AuxMovementController extends Controller
             ->where('p.size_id','like','%'.$size.'%')
             ->where('p.color_id','like','%'.$color.'%')
             ->where(DB::raw('DATE(m.date_shipment)'),'>=',$date1->toDateString())
-            ->where(DB::raw('DATE(m.date_shipment)'),'<',$date2->toDateString())
+            ->where(DB::raw('DATE(m.date_shipment)'),'<=',$date2->toDateString())
             ->orderby('m.date_shipment','asc')
-            ->orderby('p.name','c.name','s.name')
             ->get();
 
         foreach ($data['movements'] as $product) {
@@ -530,7 +529,7 @@ class AuxMovementController extends Controller
             ->where('p.size_id','like','%'.$size.'%')
             ->where('p.color_id','like','%'.$color.'%')
             ->where(DB::raw('DATE(m.date_shipment)'),'>=',$ini->toDateString())
-            ->where(DB::raw('DATE(m.date_shipment)'),'<',$fin->toDateString())
+            ->where(DB::raw('DATE(m.date_shipment)'),'<=',$fin->toDateString())
             ->groupby('m.date_shipment')
             ->get();
 
@@ -556,7 +555,6 @@ class AuxMovementController extends Controller
             ->where('m.date_shipment','>=',$date1->toDateString())
             ->where('m.date_shipment','<=',$date2->toDateString())
             ->orderby('m.date_shipment','asc')
-            ->orderby('p.name','c.name','s.name')
             ->get();
 
         foreach ($data['movements'] as $product) {
@@ -594,25 +592,6 @@ class AuxMovementController extends Controller
     }
 
     private function find_for_dates($date1, $date2, $status){
-
-        $products = Product::with(['bymovements','settlement','color','size'])
-            ->select(array('id','cod','id as product_id','name','color_id','size_id','cost_provider','utility'))
-            ->where('status',0)
-            ->get();
-
-        foreach ($products as $key => $product) {
-            if(count($product->bymovements) == 0){
-                $products->splice($key,1);
-                continue;
-            }
-            $product->movement =  $product->bymovements[0];
-            $product->price = $this->getPriceAttribute($product);
-            $product->pricefinal = $this->getPriceFinalAttribute($product);
-            $product->liquidation = $this->getLiquidationAttribute($product);
-            unset($product->bymovements);
-        }
-
-
         $data = array();
         $data['movements'] = DB::table('auxproducts as p')
             ->select('m.created_at','m.date_shipment as fecha','m.status','m.discount')
@@ -629,7 +608,6 @@ class AuxMovementController extends Controller
             ->where('m.date_shipment','>=',$date1->toDateString())
             ->where('m.date_shipment','<=',$date2->toDateString())
             ->orderby('m.date_shipment','asc')
-            ->groupby('m.created_at')
             ->get();
 
         foreach ($data['movements'] as $product) {

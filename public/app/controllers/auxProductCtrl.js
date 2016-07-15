@@ -24,7 +24,7 @@ angular.module('App')
                 {"sTitle": "Utilidad (S/.)" , "bSearchable": true},
                 {"sTitle": "Precio (S/.)" , "bSearchable": true},
                 {"sTitle": "Status", "bSortable" : false, "bSearchable": true},
-                {"sTitle": "Accion", "bSortable" : false, "bSearchable": true ,'sWidth': '190px'}
+                {"sTitle": "Accion", "bSortable" : false, "bSearchable": true ,'sWidth': '300px'}
             ],
             actions	:   	[
                 ['status',   {
@@ -35,7 +35,8 @@ angular.module('App')
                 ],
                 ['actions', [
                     ['eliminar', 'delete' ,'bgm-red'],
-                    ['editar', 'edit' ,'btn-primary']
+                    ['editar', 'edit' ,'btn-primary'],
+                    ['movimientos','movements','bgm-teal']
                 ]
                 ]
             ],
@@ -339,6 +340,35 @@ angular.module('App')
         };
 
         // End events
+
+
+        /**
+         *  Nueva vista de movimientos por producto
+         *
+         *  @params int         id
+         *  @return Collection  movements
+         */
+
+        $scope.movements = function(i){
+            var id = $scope.tableData[i].id;
+            petition.get(`api/auxproduct/get/movements/${id}`)
+                .then(function(data){
+                    $scope.productMovements = data.movements;
+                    util.modal('productMovements');
+                }, function(error){
+                    toastr.error('Huy Huy dice: ' + error.data.message);
+                });
+        };
+
+        /*
+         * Helper para vista de detalle de movimientos
+         *
+         *  @params String
+         *  @return tag:a-button String
+         */
+
+         // $scope.movementStatus
+
 
         angular.element(document).ready(function(){
             util.resetTable($scope,$compile);

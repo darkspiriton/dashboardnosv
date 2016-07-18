@@ -59,7 +59,7 @@ elixir(function(mix) {
      */
 
     mix.browserify([
-        "app/controllers/auxStockVENCtrl.js",
+        "app/controllers/auxProductVENCtrl.js",
         ], "public/app/controllers/compile/vendedorControllers.js");
 
     /*

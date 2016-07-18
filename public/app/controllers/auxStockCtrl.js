@@ -3,7 +3,8 @@ angular.module('App')
         $stateProvider
             .state('Stock', {
                 url: '/Stock-general-de-productos',
-                template: `<div class="card" >
+                template: 
+                `<div class="card">
                     <div class="card-header bgm-blue">
                         <h2>Stock general de productos</h2>
                         <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="list()"
@@ -16,6 +17,19 @@ angular.module('App')
                     </div><br>
                         <div class="col-sm-12" ng-hide="updateList">
                             <table id="table" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
+                        </div><br>
+                    </div><br>
+                </div>
+                <div class="card">
+                    <div class="card-header bgm-blue">
+                        <h2>Stock general de productos</h2>
+                        <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="list()"
+                                data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
+                                title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
+                    </div>
+                    <div class="card-body card-padding table-responsive">
+                        <div class="col-sm-12">
+                            <table id="stockResume" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
                         </div><br>
                     </div><br>
                 </div>
@@ -57,7 +71,7 @@ angular.module('App')
                 {"sTitle": "Color", "bSortable" : true, "sWidth": "150px"},
                 {"sTitle": "Talla", "bSortable" : true, "sWidth": "80px"},
                 {"sTitle": "Stock", "bSortable" : true, "sWidth": "80px"},
-                {"sTitle": "Accion", "bSortable" : true, "sWidth": "80px"}
+                // {"sTitle": "Accion", "bSortable" : true, "sWidth": "80px"}
             ],
             actions	:  	[
                 ['actions', [
@@ -65,9 +79,23 @@ angular.module('App')
                             ]
                 ]
             ],
-            data  	: 	['name','color','size','cantP','actions'],
+            data  	: 	['name','color','size','cantP'/*,'actions'*/],
             configStatus : 'status'
         };
+
+        resumeConfig = {
+            columns :   [
+                {"sTitle": "Creacion", "bSortable" : true},
+                {"sTitle": "Proveedor", "bSortable" : true},
+                {"sTitle": "Tipo", "bSortable" : true},
+                {"sTitle": "Modelo", "bSortable" : true},
+                {"sTitle": "Stock", "bSortable" : true},
+                {"sTitle": "P. Proveedor", "bSortable" : true},
+                {"sTitle": "Utilidad", "bSortable" : true},
+                {"sTitle": "P. Final", "bSortable" : true}
+            ],
+            data    :   ['create','provider.name','typesList','name','cantP','cost_provider','utility','price_final']
+        }
 
         $scope.view = function(i){
             $scope.types = [];
@@ -86,7 +114,8 @@ angular.module('App')
             petition.get('api/auxproduct/get/stockProd')
                 .then(function(data){
                     $scope.tableData = data.stock;
-                    $('#table').AJQtable('view', $scope, $compile);
+                    $('#table').AJQtable2('view2', $scope, $compile);
+                    $('#stockResume').AJQtable2('view2', $scope, $compile, data.resume, resumeConfig);
                     $scope.updateList = false;
                 }, function(error){
                     console.log(error);

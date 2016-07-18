@@ -24,7 +24,7 @@ angular.module('App')
                 {"sTitle": "Utilidad (S/.)" , "bSearchable": true},
                 {"sTitle": "Precio (S/.)" , "bSearchable": true},
                 {"sTitle": "Status", "bSortable" : false, "bSearchable": true},
-                {"sTitle": "Accion", "bSortable" : false, "bSearchable": true ,'sWidth': '190px'}
+                {"sTitle": "Accion", "bSortable" : false, "bSearchable": true ,'sWidth': '300px'}
             ],
             actions	:   	[
                 ['status',   {
@@ -35,11 +35,12 @@ angular.module('App')
                 ],
                 ['actions', [
                     ['eliminar', 'delete' ,'bgm-red'],
-                    ['editar', 'edit' ,'btn-primary']
+                    ['editar', 'edit' ,'btn-primary'],
+                    ['movimientos','movements','bgm-teal']
                 ]
                 ]
             ],
-            data  	: 	['date','cod','name','provider','size','color','types','cost_provider','utility','precio','status','actions',],
+            data  	: 	['date','cod','name','provider','size','color','types','cost_provider','utility','precio','status','actions'],
             configStatus : 'status'
         };
 
@@ -339,6 +340,59 @@ angular.module('App')
         };
 
         // End events
+
+
+        /**
+         *  Nueva vista de movimientos por producto
+         *
+         *  @params int         id
+         *  @return Collection  movements
+         */
+
+        $scope.movements = function(i){
+            var id = $scope.tableData[i].id;
+            petition.get(`api/auxproduct/get/movements/${id}`)
+                .then(function(data){
+                    $scope.productMovements = data.movements;
+                    util.modal('productMovements');
+                }, function(error){
+                    toastr.error('Huy Huy dice: ' + error.data.message);
+                });
+        };
+
+        /*
+         * Helper para vista de detalle de movimientos
+         *
+         *  @params String
+         *  @return tag:a-button
+         */
+
+        $scope.movementStatus = function(status){
+            var info = {
+                'Retornado': ['Retornado','bgm-red'],
+                'Vendido': ['Vendido','bgm-teal'],
+                'salida': ['Salida','bgm-deeppurple']
+            };
+
+            return `<a class="btn btn-xs disabled ${info[status][1]}">${info[status][0]}</a>`;
+        };
+
+        /*
+         * Helper para vista de detalle de movimientos
+         *
+         *  @params Int
+         *  @return tag:a-button
+         */
+
+        $scope.payStatus = function(status){
+            var info = {
+                0: ['Normal','bgm-green',false],
+                1: ['Liquidacion','btn-info',false],
+            };
+
+            return `<a class="btn btn-xs disabled ${info[status][1]}">${info[status][0]}</a>`;
+        };
+
 
         angular.element(document).ready(function(){
            

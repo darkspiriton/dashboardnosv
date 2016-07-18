@@ -11,7 +11,10 @@ angular.module('App')
                 '                title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>'+
                 '    </div>'+
                 '    <div class="card-body card-padding table-responsive">'+
-                '        <div class="col-sm-12">'+
+                '       <div class="col-sm-12" ng-show="updateList">'+
+                '           <i class="fa fa-refresh fa-spin fa-5x" style="display: table;margin: 0 auto;"></i>'+
+                '        </div><br>'+
+                '        <div class="col-sm-12" ng-hide="updateList">'+
                 '            <table id="table" class="table table-bordered table-striped w-100" style="text-align:center;"></table>'+
                 '        </div><br>'+
                 '    </div><br>'+
@@ -60,7 +63,6 @@ angular.module('App')
         };
 
         angular.element(document).ready(function(){
-            util.resetTable($scope,$compile);
             $scope.product = angular.copy($scope.productClear);
             $scope.list();
         });

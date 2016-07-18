@@ -347,6 +347,9 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
             }
         }
     })
+
+
+
     .controller('appCtrl', function AppCtrl($state, $log, $scope, $window, $auth, storage) {
         $scope.pageTitle = 'Home';
 

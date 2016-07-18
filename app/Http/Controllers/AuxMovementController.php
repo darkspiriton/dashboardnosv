@@ -386,9 +386,6 @@ class AuxMovementController extends Controller
         return $movements;
     }
 
-//    private function movementsGet($date1,$date2){
-//
-//    }
 
     public function movementDays(Request $request){
 

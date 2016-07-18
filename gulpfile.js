@@ -128,9 +128,9 @@ elixir(function(mix) {
      |
      */
 
-    mix.scripts(
-       ['satellizer.js'],
-       'public/app/lib/satellizer.min.js'
-    );
+    // mix.scripts(
+    //    ['satellizer.js'],
+    //    'public/app/lib/satellizer.min.js'
+    // );
 
 });

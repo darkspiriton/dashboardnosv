@@ -12,6 +12,20 @@ angular.module('App')
 
         util.liPage('productsJVE');
 
+
+        var status = {
+                    0 : ['salida','btn-danger', false],
+                    1 : ['disponible', 'btn-success', false],
+                    2 : ['vendido', 'bgm-teal', false],
+                    3 : ['reservado', 'bgm-black', false]
+                };
+
+        var statusForSale = {
+                    0 : ['normal', 'btn-success', false],
+                    1 : ['liquidacion', 'btn-info', false]
+                };
+
+
         $scope.tableConfig 	= 	{
             columns :	[
                 {"sTitle": "Fecha", "bSortable" : true, 'sWidth': '100px'},
@@ -27,22 +41,37 @@ angular.module('App')
                 {"sTitle": "Status", "bSortable" : false, "bSearchable": true},
                 {"sTitle": "Accion", "bSortable" : false, "bSearchable": false},
             ],
-            actions	:   	[
-                ['status',   {
-                    0 : { txt : 'salida' , cls : 'btn-danger', dis : false},
-                    1 : { txt : 'disponible' ,  cls : 'btn-success', dis : false},
-                    2 : { txt : 'vendido' ,  cls : 'bgm-teal', dis : false},
-                    3 : { txt : 'reservado' ,  cls : 'bgm-black', dis : false}
-                }
+            // actions	:   	[
+            //     ['status',   {
+            //         0 : { txt : 'salida' , cls : 'btn-danger', dis : false},
+            //         1 : { txt : 'disponible' ,  cls : 'btn-success', dis : false},
+            //         2 : { txt : 'vendido' ,  cls : 'bgm-teal', dis : false},
+            //         3 : { txt : 'reservado' ,  cls : 'bgm-black', dis : false}
+            //     }
+            //     ],
+            //     ['actions', [
+            //         ['movimientos','movements','bgm-indigo'],
+            //         ['reservar','reserve','bgm-purple']
+            //     ]
+            //     ]
+            // ],
+            buttons :
+                [
+                    {
+                        type: 'status',
+                        list:  [
+                            { name: 'status', column: 'status', render: status},
+                            { name: 'statusForSale', column: 'liquidation', render: statusForSale},
+                        ]
+                    },
+                    {
+                        type: 'actions',
+                        list: [
+                            { name: 'actions', render: [['movimientos','movements','bgm-indigo'],['reservar','reserve','bgm-purple']]}
+                        ]
+                    }
                 ],
-                ['actions', [
-                    ['movimientos','movements','bgm-indigo'],
-                    ['reservar','reserve','bgm-purple']
-                ]
-                ]
-            ],
-            data  	: 	['date','cod','name','provider','size','color','types','liquidation','price_real','precio','status','actions'],
-            configStatus : 'status'
+            data  	: 	['date','cod','name','provider','size','color','types','statusForSale','price_real','precio','status','actions'],
         };
 
         $scope.list = function(s) {
@@ -53,7 +82,7 @@ angular.module('App')
             petition.get('api/auxproduct', obj)
                 .then(function(data){
                     $scope.tableData = data.products;
-                    $('#table').AJQtable('view', $scope, $compile);
+                    $('#table').AJQtable2('view2', $scope, $compile);
                     $scope.updateList = false;
                 }, function(error){
                     console.log(error);

@@ -147,7 +147,7 @@ angular.module('App')
 
         //Agregado reciente
         $scope.salesAndPayments = function() {
-            petition.get('api/partner/get/payments',{params: $scope.date})
+            petition.get('api/partner/get/payments', {params: $scope.date})
                 .then(function(response){
                     $scope.sAndP = response.movements;
                     $('#sales').AJQtable2('view2', $scope, $compile, response.movements, salesConfig);
@@ -196,16 +196,16 @@ angular.module('App')
             $scope.date.provider_id = $scope.p.provider_id;
         }
 
-        $scope.list = function(){
+        $scope.list = function(x){
             // console.log($scope.date.provider_id);
             $scope.listTopSales();
             $scope.listLessSold();
             $scope.productSales();
             $scope.listProductMovements();
             $scope.salesDate();
-            $scope.salesAndPayments();
-            $scope.detail();
-        }
+            if(x != 1)
+                $scope.salesAndPayments();
+        };
 
         /**
          * Controller from cesar
@@ -347,10 +347,10 @@ angular.module('App')
         };
              
         angular.element(document).ready(function(){
-            $scope.list();
+            $scope.list(1);
             $scope.listProviders();
             $scope.day = $scope.mtn = $scope.range = {};
-            $scope.searchView = 0;
-            $scope.dateNow = new Date();
+            // $scope.searchView = 0;
+            // $scope.dateNow = new Date();
         });
     });

@@ -185,6 +185,68 @@
     </div>
 </div>
 
+<!-- Modal -->
+<div class="modal fade" id="salesPaymentsDetail" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bgm-teal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title c-white">Detalle de pago de {{ salesPaymentsDetail.month }}</h3>
+            </div>
+            <div class="modal-body card-padding">
+                <form class="form-horizontal" autocomplete="off" submit="return false;">
+                    <div class="form-group form-pad-top">
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Mes: </label>
+                        <label class="col-xs-6 col-sm-9 control-label" style="text-align: left" ng-bind="salesPaymentsDetail.month"></label>
+
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Inicio: </label>
+                        <label class="col-xs-6 col-sm-9 control-label" style="text-align: left" ng-bind="salesPaymentsDetail.start"></label>
+
+                        <label class="col-xs-4 col-xs-offset-1 col-sm-offset-1 col-sm-2 control-label">Fin: </label>
+                        <label class="col-xs-6 col-sm-9 control-label" style="text-align: left" ng-bind="salesPaymentsDetail.end"></label>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <div class="row">
+                                <div class="attr-group col-xs-12">
+                                    <table class="table table-bordered w-100 table-attr text-center">
+                                        <thead>
+                                        <tr>
+                                            <th>Fecha</th>
+                                            <th>Banco</th>
+                                            <th>Razon</th>
+                                            <th>Descuento</th>
+                                            <th>Motivo</th>
+                                            <th>Pago</th>
+                                            <th>Tipo Pago</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr ng-repeat="payment in salesPaymentsDetail.data.payments.data">
+                                            <td style="display: table-cell;">{{ payment.date.substr(0,10) }}</td>
+                                            <td style="display: table-cell;">{{ payment.bank.name }}</td>
+                                            <td style="display: table-cell;">{{ payment.reason }}</td>
+                                            <td style="display: table-cell;">{{ payment.amount_discount }}</td>
+                                            <td style="display: table-cell;">{{ payment.type_d.type }}</td>
+                                            <td style="display: table-cell;">{{ payment.amount }}</td>
+                                            <td style="display: table-cell;">{{ payment.type_p.name }}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript">
     (function(){
 

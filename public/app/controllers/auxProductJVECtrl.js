@@ -55,7 +55,6 @@ angular.module('App')
         // End events
 
         angular.element(document).ready(function(){
-            util.resetTable($scope,$compile);
             $scope.list();
         });
     });

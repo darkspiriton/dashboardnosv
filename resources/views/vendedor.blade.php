@@ -3,8 +3,8 @@
 @section('dashMenu')
     <ul class="main-menu">
         <li class="active"><a href="#/"><i class="md md-home"></i> Inicio</a></li>
-        <li id="productsJVE">
-            <a ui-sref="Productos Ventas"><i class="md md-shop-two"></i>Kardex</a>
+        <li id="stockVEN">
+            <a ui-sref="Stock Ventas"><i class="md md-shop-two"></i>Stock de Productos</a>
         </li>
     </ul>
 @stop

@@ -65,20 +65,15 @@ angular.module('App')
 
         $scope.tableConfig 	= 	{
             columns :	[
-                {"sTitle": "Nombre", "bSortable" : true},
-                {"sTitle": "Color", "bSortable" : true, "sWidth": "150px"},
-                {"sTitle": "Talla", "bSortable" : true, "sWidth": "80px"},
-                {"sTitle": "Stock", "bSortable" : true, "sWidth": "80px"},
-                // {"sTitle": "Accion", "bSortable" : true, "sWidth": "80px"}
+                {"sTitle": "Modelo", "bSortable" : true},
+                {"sTitle": "Proveedor", "bSortable" : true},
+                {"sTitle": "Tipo", "bSortable" : true},
+                {"sTitle": "Color", "bSortable" : true},
+                {"sTitle": "Talla", "bSortable" : true},
+                {"sTitle": "Precio", "bSortable" : true, "sWidth": "80px"},
+                {"sTitle": "Stock", "bSortable" : true, "sWidth": "80px"}
             ],
-            actions	:  	[
-                ['actions', [
-                                ['caracterisitica', 'view' ,'btn-primary']
-                            ]
-                ]
-            ],
-            data  	: 	['name','color','size','cantP'/*,'actions'*/],
-            configStatus : 'status'
+            data : 	['name','provider.name','typesList','color.name','size.name','price_final','cantP'],
         };
 
         var resumeConfig = {
@@ -95,18 +90,6 @@ angular.module('App')
             data    :   ['create','provider.name','typesList','name','cantP','cost_provider','utility','price_final']
         }
 
-        $scope.view = function(i){
-            $scope.types = [];
-            petition.get('api/auxproduct/get/stockProd/type/'+ $scope.tableData[i].id)
-                .then(function(data){
-                    $scope.types = data.types;
-                    util.modal();
-                }, function(error){
-                    console.log(error);
-                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
-                });
-        };
-
         $scope.list = function() {
             $scope.updateList = true;
             petition.get('api/auxproduct/get/stockProd')
@@ -116,14 +99,12 @@ angular.module('App')
                     $('#stockResume').AJQtable2('view2', $scope, $compile, data.resume, resumeConfig);
                     $scope.updateList = false;
                 }, function(error){
-                    console.log(error);
-                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                    toastr.error('Huy Huy dice: ' + (error.data.message || "Mordi lo cables =("));
                     $scope.updateList = false;
                 });
         };
 
         angular.element(document).ready(function(){
-            util.resetTable($scope,$compile);
             $scope.product = angular.copy($scope.productClear);
             $scope.list();
         });

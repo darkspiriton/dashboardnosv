@@ -41,20 +41,6 @@ angular.module('App')
                 {"sTitle": "Status", "bSortable" : false, "bSearchable": true},
                 {"sTitle": "Accion", "bSortable" : false, "bSearchable": false},
             ],
-            // actions	:   	[
-            //     ['status',   {
-            //         0 : { txt : 'salida' , cls : 'btn-danger', dis : false},
-            //         1 : { txt : 'disponible' ,  cls : 'btn-success', dis : false},
-            //         2 : { txt : 'vendido' ,  cls : 'bgm-teal', dis : false},
-            //         3 : { txt : 'reservado' ,  cls : 'bgm-black', dis : false}
-            //     }
-            //     ],
-            //     ['actions', [
-            //         ['movimientos','movements','bgm-indigo'],
-            //         ['reservar','reserve','bgm-purple']
-            //     ]
-            //     ]
-            // ],
             buttons :
                 [
                     {

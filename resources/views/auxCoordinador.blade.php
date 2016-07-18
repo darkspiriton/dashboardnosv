@@ -32,13 +32,6 @@
 
 @section('dashCtrls')
     <script src="app/lib/filesave.js"></script>
-    <script src="app/controllers/homeCtrl.js"></script>
-    <script src="app/controllers/auxMovementCtrl.js"></script>
-    <script src="app/controllers/auxMovement2_JVECtrl.js"></script>
-    <script src="app/controllers/auxStockCtrl.js"></script>
-    <script src="app/controllers/auxMovementOutFitCtrl.js"></script>
-    <script src="app/controllers/auxMovementOutFit2Ctrl.js"></script>
-    <script src="app/controllers/publicityJVECtrl.js"></script>
-    <script src="app/controllers/auxProductJVECtrl.js"></script>
-    <script src="app/controllers/auxIndicator7Ctrl.js"></script>
-@stop
+    <!-- Dependencias en Resource/assets/js/app - Gulpfile.js -->
+    <script src="{{ elixir('app/controllers/compile/coordinadorControllers.js') }}"></script>
+ @stop

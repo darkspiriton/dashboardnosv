@@ -39,8 +39,8 @@ class AuxProductController extends Controller
                         ->addSelect(DB::raw('p.cost_provider + p.utility  as price_real'))
                         ->addSelect(DB::raw('case when dc.price then dc.price else p.cost_provider + p.utility end as precio'))
                         ->addSelect(DB::raw('case when dc.price then 1 else 0 end liquidation'))
-                        ->join('types_auxproducts as tp', 'tp.product_id', '=', 'p.id')
-                        ->join('types as t', 't.id', '=', 'tp.type_id')
+                        ->leftJoin('types_auxproducts as tp', 'tp.product_id', '=', 'p.id')
+                        ->leftJoin('types as t', 't.id', '=', 'tp.type_id')
                         ->join('colors as c', 'c.id', '=', 'p.color_id')
                         ->join('sizes as s', 's.id', '=', 'p.size_id')
                         ->join('providers as pv', 'pv.id', '=', 'p.provider_id')
@@ -409,18 +409,24 @@ class AuxProductController extends Controller
 
     public function stockProd()
     {
-        $stock = DB::table('auxproducts as p')
-                ->select('p.id', 'p.name', 'c.name as color', 's.name as size', DB::raw('count(p.name) as cantP', ''))
-                ->join('colors as c', 'c.id', '=', 'p.color_id')
-                ->join('sizes as s', 's.id', '=', 'p.size_id')
-                ->where('p.status', '=', 1)
-                ->groupby('p.name', 'c.name', 's.name')->get();
+        $stock = Product::with('provider','types','color','size')
+                ->select('provider_id','id','name','color_id','size_id',DB::raw('count(name) as cantP'),'cost_provider','utility')
+                ->where('status', '=', 1)
+                ->groupby('name', 'name', 'name')->get();
 
         $resume = Product::with('provider','types')
                     ->select('created_at as create','provider_id','id', 'name',DB::raw('count(name) as cantP'),'cost_provider','utility')
                     ->where('status', '=', 1)
                     ->orWhere('status', '=', 3)
                     ->groupby('name')->get();
+
+        foreach ($stock as $product) {
+            if ($product->types){
+                $product->typesList = $product->types->implode("name","|");
+            }
+
+            $product->price_final = $product->cost_provider + $product->utility;
+        }            
 
         foreach ($resume as $product) {
             if ($product->types){

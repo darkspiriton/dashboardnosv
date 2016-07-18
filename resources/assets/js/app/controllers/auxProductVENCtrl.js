@@ -10,7 +10,7 @@ angular.module('App')
     .controller('productsVENCtrl', ["$scope", "$compile", "$state", "$log", "util", "petition", "toastr",
         function($scope, $compile, $state, $log, util, petition, toastr){
 
-        util.liPage('productsJVE');
+        util.liPage('productsVEN');
 
         $scope.tableConfig 	= 	{
             columns :	[

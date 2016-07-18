@@ -10,6 +10,6 @@
 @stop
 
 @section('dashCtrls')
-    <script src="app/controllers/homeCtrl.js"></script>
-    <<script src="app/controllers/auxProductVENCtrl.js"></script>
+    <!-- Dependencias en Resource/assets/js/app - Gulpfile.js -->
+    <script src="{{ elixir('app/controllers/compile/vendedorControllers.js') }}"></script>
 @stop

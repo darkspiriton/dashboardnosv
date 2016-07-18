@@ -152,6 +152,7 @@
 <!-- Application Code -->
 
 <script src="app/app.js"></script>
+<script src="app/controllers/homeCtrl.js"></script>
 @yield('dashCtrls')
 
 

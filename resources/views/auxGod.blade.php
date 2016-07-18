@@ -139,50 +139,6 @@
 
 @section('dashCtrls')
     <script src="app/lib/filesave.js"></script>
-    <script src="app/controllers/auxStockCtrl.js"></script>
-    <script src="app/controllers/homeCtrl.js"></script>
-    <script src="app/controllers/auxAlarmCtrl.js"></script>
-    <script src="app/controllers/auxProductCtrl.js"></script>
-    <script src="app/controllers/auxIndicator1Ctrl.js"></script>
-    <script src="app/controllers/auxIndicator2Ctrl.js"></script>
-    <script src="app/controllers/auxIndicator3Ctrl.js"></script>
-    <script src="app/controllers/auxIndicator4Ctrl.js"></script>
-    <script src="app/controllers/auxIndicator5Ctrl.js"></script>
-    <script src="app/controllers/auxIndicator6Ctrl.js"></script>
-    <script src="app/controllers/auxIndicator7Ctrl.js"></script>
-    <script src="app/controllers/usersCtrl.js"></script>
-    <script src="app/controllers/commentsCtrl.js"></script>
-    <script src="app/controllers/employeesCtrl.js"></script>
-    <script src="app/controllers/payrollEntryCtrl.js"></script>
-    <script src="app/controllers/godEmployeeAssistsCtrl.js"></script>
-    <script src="app/controllers/indicatorPayRoleCtrl.js"></script>
-    <script src="app/controllers/products_out.js"></script>
-    <script src="app/controllers/q_questionnairesCtrl.js"></script>
-    <script src="app/controllers/q_questionsCtrl.js"></script>
-    <script src="app/controllers/q_categoriesCtrl.js"></script>
-    <script src="app/controllers/q_AnswerIndicator.js"></script>
-    <script src="app/controllers/q_productsCtrl.js"></script>
-    <script src="app/controllers/q_customersCtrl.js"></script>
-    <script src="app/controllers/outFitCtrl.js"></script>
-    <script src="app/controllers/liquidationCtrl.js"></script>
-    <script src="app/controllers/auxMovementCtrl.js"></script>
-    <script src="app/controllers/auxMovement2Ctrl.js"></script>
-    <script src="app/controllers/auxMovementOutFitCtrl.js"></script>
-    <script src="app/controllers/auxMovementOutFit2Ctrl.js"></script>
-
-    <script src="app/controllers/auxEsquemaCtrl.js"></script>
-    <script src="app/controllers/publicityJVECtrl.js"></script>
-    <script src="app/controllers/publicityCtrl.js"></script>
-    <script src="app/controllers/facebookPublicityCtrl.js"></script>
-    <script src="app/controllers/PartnerCtrl.js"></script>
-
-    <script src="app/controllers/auxMovementDayCtrl.js"></script>
-    <script src="app/controllers/auxProviderProductCtrl.js"></script>
-
-    <script src="app/controllers/PartnerPanelCtrl.js"></script>
-    {{--<script src="app/controllers/PartnerCtrl.js"></script>--}}
-
-    <script src="app/controllers/PaymentCtrl.js"></script>
-    <script src="app/controllers/PaymentListCtrl.js"></script>
-
+    <!-- Dependencias en Resource/assets/js/app - Gulpfile.js -->
+    <script src="{{ elixir('app/controllers/compile/godControllers.js') }}"></script>
 @stop

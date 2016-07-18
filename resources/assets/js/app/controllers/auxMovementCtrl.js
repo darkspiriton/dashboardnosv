@@ -304,7 +304,6 @@ angular.module('App')
         }
 
         angular.element(document).ready(function(){
-            util.resetTable($scope,$compile);
             resetProduct();
             $scope.list();
         });

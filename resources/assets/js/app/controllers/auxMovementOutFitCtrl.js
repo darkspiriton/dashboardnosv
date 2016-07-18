@@ -226,7 +226,6 @@ angular.module('App')
         }
 
         angular.element(document).ready(function(){
-            util.resetTable($scope,$compile);
             $scope.movement = angular.copy($scope.movementClear);
             $scope.productsView = [];
             $scope.OutFitList = '';

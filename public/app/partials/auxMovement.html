@@ -1,4 +1,4 @@
-<div class="card" >
+<div class="card">
     <div class="card-header bgm-blue">
         <h2>Gestion de movimientos de productos</h2>
         <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="list()"
@@ -7,7 +7,12 @@
     </div>
 
     <div class="card-body card-padding table-responsive">
-        <div class="col-sm-12">
+
+        <div class="col-sm-12" ng-show="updateList">
+            <i class="fa fa-refresh fa-spin fa-5x" style="display: table;margin: 0 auto;"></i>
+        </div><br>
+
+        <div class="col-sm-12" ng-hide="updateList">
             <table id="table" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
         </div><br>
         <div class="card-footer">

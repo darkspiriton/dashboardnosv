@@ -15,15 +15,17 @@ angular.module('App')
         $scope.tableConfig 	= 	{
             columns :	[
                 {"sTitle": "Fecha de creación", "bSortable" : true, "sWidth": "90px"},
+                {"sTitle": "Código de Orden", "bSortable" : true, "sWidth": "90px"},
+                {"sTitle": "Fecha de solicitud", "bSortable" : true, "sWidth": "90px"},                
                 {"sTitle": "Fecha de salida", "bSortable" : true, "sWidth": "90px"},
                 {"sTitle": "Codigo", "bSortable" : true},
                 {"sTitle": "Producto", "bSortable" : true},
-                {"sTitle": "Talla", "bSortable" : false},
-                {"sTitle": "Color", "bSortable" : false},
+                {"sTitle": "Talla", "bSortable" : true},
+                {"sTitle": "Color", "bSortable" : true},
                 {"sTitle": "Precio  (S/)", "bSortable" : false},
                 {"sTitle": "Descuento (S/)", "bSortable" : false},
                 {"sTitle": "Precio Final (S/)", "bSortable" : false},
-                {"sTitle": "Tipo", "bSortable" : false, "sWidth": "80px"},
+                {"sTitle": "Tipo", "bSortable" : true, "sWidth": "80px"},
                 {"sTitle": "Acción" , "bSortable" : false, "bSearchable": false , "sWidth": "420px"}
             ],
             actions	:  	[
@@ -39,7 +41,7 @@ angular.module('App')
                 ]
                 ]
             ],
-            data    :   ['movement.created_at','movement.date_shipment','cod','name','size.name','color.name','price',
+            data    :   ['movement.created_at','movement.cod_order','movement.date_request','movement.date_shipment','cod','name','size.name','color.name','price',
                             'movement.discount','pricefinal','status','actions'
                         ],
             configStatus : 'liquidation'

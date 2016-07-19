@@ -142,8 +142,10 @@ angular.module('App')
         /*
          |  END
          */
+        $scope.codOrder=null;
+        $scope.requestDate=null;
 
-        $scope.submit = function() {
+        $scope.submit = function() {    
             valid_product_date($scope.dataProducts, function() {
                 alertConfig.title = '¿Todo es correcto?';
                 alertConfig.text=`<table class="table table-bordered w-100 table-attr text-center">
@@ -199,7 +201,7 @@ angular.module('App')
                                 </div>`;
                 swal(alertConfig,
                     function () {
-                        petition.post('api/auxmovement/out', {products: $scope.dataProducts}).then(function (data) {
+                        petition.post('api/auxmovement/out', {products: $scope.dataProducts,codOrder:$scope.codOrder, requestDate:$scope.requestDate}).then(function (data) {
                             toastr.success(data.message);
                             alertConfirmation.text = confirmationOuts(data.products, data.movements);
                             swal(alertConfirmation);
@@ -308,6 +310,7 @@ angular.module('App')
 
         $scope.new = function(){
             $scope.anadir = true;
+            $scope.codOrder=null;
             resetProduct();
             util.muestraformulario();
         };

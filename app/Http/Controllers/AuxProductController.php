@@ -412,7 +412,7 @@ class AuxProductController extends Controller
         $stock = Product::with('provider','types','color','size')
                 ->select('provider_id','id','name','color_id','size_id',DB::raw('count(name) as cantP'),'cost_provider','utility')
                 ->where('status', '=', 1)
-                ->groupby('name', 'name', 'name')->get();
+                ->groupby('name','color_id','size_id')->get();
 
         $resume = Product::with('provider','types')
                     ->select('created_at as create','provider_id','id', 'name',DB::raw('count(name) as cantP'),'cost_provider','utility')

@@ -144,7 +144,8 @@ class AuxMovementController extends Controller
         // Creamos las reglas de validación
         $rules = [
             'products'    => 'required|array',
-            'codOrder'    => 'required|string',
+            'requestDate'  => 'required|date',
+            'codOrder'    => 'required',
             'products.*.id'    => 'required|integer|exists:auxproducts,id',
             'products.*.discount'    => 'required|numeric',
             'products.*.date'    => 'required|date',
@@ -171,7 +172,8 @@ class AuxMovementController extends Controller
                     $movement->date_shipment =substr($product['date'],0,10);
                     $movement->discount = $product['discount'];
                     $movement->status = 'salida';
-                    $movement->codOrder = $request->input('codOrder');
+                    $movement->date_request = substr($request->input('requestDate'),0,10);
+                    $movement->cod_order = strtoupper($request->input('codOrder'));
                     $prd->movements()->save($movement);
                     $prd->status = 0;
                     $prd->save();

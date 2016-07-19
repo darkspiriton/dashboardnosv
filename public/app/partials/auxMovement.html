@@ -29,11 +29,20 @@
     <div class="card-header bgm-blue">
         <div class="form-horizontal">
             <div class="form-group">
-                <label class="col-xs-2 col-sm-2 control-label c-white f-17 p-0">Código de Orden 1:</label>
+                <label class="col-xs-2 col-sm-2 control-label c-white f-17 p-0">Código de Orden:</label>
+                <div class="col-xs-10 col-sm-3">
+                    <div class="input-group w-100">
+                        <div class="fg-line ">
+                            <input ng-model="codOrder" type="text" class="btn btn-block" >
+                        </div>
+                    </div>
+                </div>
+
+                <label class="col-xs-2 col-sm-2 control-label c-white f-17 p-0">Fecha de Solicitud:</label>
                 <div class="col-xs-10 col-sm-3">
                     <div class="input-group w-100">
                         <div class="fg-line report-date">
-                            <input ng-model="codOrder" type="text" class="btn btn-block" >
+                            <input ng-model="requestDate" type="date" class="btn btn-block" >
                         </div>
                     </div>
                 </div>
@@ -86,7 +95,7 @@
         <form class="form-horizontal">
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <button ng-disabled="products.length == 0" ng-click="submit()" type="button" class="btn btn-primary btn-sm waves-effect">Guardar</button>
+                    <button ng-disabled="products.length == 0" ng-disable="codOrder" ng-click="submit()" type="button" class="btn btn-primary btn-sm waves-effect">Guardar</button>
                     <a ng-click="cancel()" class="btn btn-danger btn-sm waves-effect">Cancelar</a>
                 </div>
             </div>

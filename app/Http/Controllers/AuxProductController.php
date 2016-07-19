@@ -31,7 +31,7 @@ class AuxProductController extends Controller
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
-     */
+     */s
     public function index(Request $request)
     {
         $query = DB::table('auxproducts as p')

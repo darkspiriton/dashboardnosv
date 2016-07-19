@@ -43,6 +43,7 @@ angular.module('App')
             text: "",
             type: "warning",
             showCancelButton: true,
+            customClass: "product-out",
             confirmButtonColor: "#DD6B55",
             confirmButtonText: "SI",
             cancelButtonColor: "#212121",
@@ -54,6 +55,7 @@ angular.module('App')
         var alertConfirmation = {
             title: "¿Se genero la salida de productos?",
             text: "",
+            customClass: "product-out",
             type: "success",
             html: true
         };
@@ -68,65 +70,78 @@ angular.module('App')
                     $('#table').AJQtable('view', $scope, $compile);
                     $scope.updateList = false;
                 }, function(error){
-                    toastr.error('Uyuyuy dice: ' + error.data.message);
+                    toastr.error('Huy huy dice: ' + error.data.message);
                     util.resetTable($scope,$compile);
                     $scope.updateList = false;
                 });
         };
 
         $scope.addProduct = function(ind){
-            var count = 0;
-            for(i in  $scope.products){
-                if(angular.equals($scope.tableData[ind],$scope.products[i])){
-                    count++;
-                }
-            }
-
-            if (count == 0 && $scope.anadir){
-                toastr.success('se añadio');
-                $scope.dataProducts.push({id: $scope.tableData[ind].id, discount:0});
-                $scope.tableData[ind].discount = 0;
-                $scope.tableData[ind].preciofinal = $scope.tableData[ind].price-$scope.tableData[ind].discount;
-                $scope.products.push(angular.copy($scope.tableData[ind]));
-            }
+            addProductHelper($scope.tableData[ind]);
         };
 
         $scope.addProduct2 = function(ind){
             $scope.prdTemp.id = $scope.codes[ind].id;
             $scope.prdTemp.cod =  $scope.codes[ind].cod;
-            var count = 0;
-            for(i in  $scope.products){
-                if(angular.equals($scope.prdTemp,$scope.products[i])){
-                    count++;
-                }
-            }
 
-            if (count == 0 && $scope.anadir){
-                toastr.success('se añadio');
-                $scope.dataProducts.push({id: $scope.codes[ind].id, discount:0});
-                $scope.prdTemp.discount = 0;
-                $scope.prdTemp.preciofinal =$scope.prdTemp.price-$scope.prdTemp.discount;
-                $scope.products.push(angular.copy($scope.prdTemp));
-            }
+            addProductHelper($scope.prdTemp);
 
             $scope.otherCod = null;
             util.modalClose('codes');
         };
 
-        $scope.otherProduct = function (i) {
+        $scope.otherProduct = function (i){
             if ($scope.anadir){
                 $scope.codes = [];
                 petition.get('api/auxmovement/get/codes' , {params: {id: $scope.tableData[i].id}})
                     .then(function(data){
                         $scope.codes = data.codes;
-                        $scope.prdTemp = angular.copy($scope.tableData[i]);
+                        productTemp(i);
                         util.modal('codes');
                     }, function(error){
-                        toastr.error('Uyuyuy dice: ' + error.data.message);
+                        toastr.error('Huy huy dice: ' + error.data.message);
                         $scope.updateList = false;
                     });
             }
         };
+
+        /*
+         |
+         |  Helpers for validate products    
+         |
+         */
+
+        function productTemp(i){
+            $scope.prdTemp = null;
+            $scope.prdTemp = angular.copy($scope.tableData[i]);
+            $scope.prdTemp.id = null;
+            $scope.prdTemp.cod =  null;
+        }
+
+        function addProductHelper(product){
+            var product = angular.copy(product);
+            var count = 0;
+            for(i in  $scope.dataProducts){
+                if($scope.dataProducts[i].id == product.id){
+                    count++;
+                    break;
+                }
+            }
+
+            if (count == 0 && $scope.anadir){
+                $scope.dataProducts.push({id: product.id, discount:0});
+
+                product.discount = 0;
+                product.preciofinal = product.price - product.discount;
+                $scope.products.push(angular.copy(product));
+
+                toastr.success('se añadio');
+            }
+        }
+
+        /*
+         |  END
+         */
 
         $scope.submit = function() {
             valid_product_date($scope.dataProducts, function() {
@@ -153,7 +168,7 @@ angular.module('App')
                                             <td>${( function(){
                                                 var cod = "";
                                                 for(i in $scope.products){
-                                                    cod += "-"+$scope.products[i].name+"<br>"
+                                                    cod += "• "+$scope.products[i].name+"<br>"
                                                 }
                                                 return cod; })()}
                                             </td>
@@ -193,7 +208,7 @@ angular.module('App')
                             util.ocultaformulario();
                             $scope.anadir = false;
                         }, function (error) {
-                            toastr.error('Uyuyuy dice: ' + error.data.message);
+                            toastr.error('Huy huy dice: ' + error.data.message);
                             $scope.formSubmit = false;
                         })
                     });
@@ -245,7 +260,7 @@ angular.module('App')
                                     </table>
                                 </div>`;
 
-            return "template";
+            return template;
          };
 
          /**
@@ -262,7 +277,6 @@ angular.module('App')
                 return ;
             }
 
-            // $scope.products[i].discount = parseInt($scope.products[i].discount);
             $scope.products[i].preciofinal = Math.round(($scope.products[i].price - $scope.products[i].discount)*100)/100;
             $scope.dataProducts[i].discount = angular.copy($scope.products[i].discount);
             
@@ -272,7 +286,7 @@ angular.module('App')
         function valid_product_date(prd, callback){
             for(i in prd){
                 if (prd[i].date == undefined){
-                    toastr.error('Uyuyuy dice: Falta ingresar fecha de salida');
+                    toastr.error('Huy huy dice: Falta ingresar fecha de salida');
                     return;
                 }
             }

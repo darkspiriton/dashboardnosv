@@ -7,9 +7,9 @@
 <link href="vendors/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css">
 
 <!-- CSS -->
-<link href="css/app.min.1.css" rel="stylesheet">
-<link href="css/app.min.2.css" rel="stylesheet">
-<link href="css/styles.min.css" rel="stylesheet">
+<link href="{{ elixir('css/app.min.1.css') }}" rel="stylesheet">
+<link href="{{ elixir('css/app.min.2.css') }}" rel="stylesheet">
+<link href="{{ elixir('css/styles.min.css') }}" rel="stylesheet">
 
 <!-- Aplication CSS -->
 <link href="css/toastr.min.css" rel="stylesheet">

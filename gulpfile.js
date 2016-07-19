@@ -20,11 +20,11 @@ require('laravel-elixir-stylus');
  */
 
 elixir(function(mix) {
-    // mix.sass('app1.css' , 'public/css/app.min.1.css');
-    // mix.sass('app2.css' , 'public/css/app.min.2.css');
-    // mix.stylus('loginStyles.styl' , 'public/css/loginStyles.min.css');
-    // mix.stylus('styles.styl' , 'public/css/styles.min.css');
-    // mix.stylus('toastr.styl' , 'public/css/toastr.min.css');
+    mix.sass('app1.css' , 'public/css/app.min.1.css');
+    mix.sass('app2.css' , 'public/css/app.min.2.css');
+    mix.stylus('loginStyles.styl' , 'public/css/loginStyles.min.css');
+    mix.stylus('styles.styl' , 'public/css/styles.min.css');
+    mix.stylus('toastr.styl' , 'public/css/toastr.min.css');
 });
 
 /*
@@ -117,10 +117,16 @@ elixir(function(mix) {
      */
 
     mix.version([
+        //  JS
         "public/app/controllers/compile/coordinadorControllers.js",
         "public/app/controllers/compile/vendedorControllers.js",
-        "public/app/controllers/compile/godControllers.js"
+        "public/app/controllers/compile/godControllers.js",
+        //  CSS
+        "css/app.min.1.css",
+        "css/app.min.2.css",
+        "css/styles.min.css"
         ]);
+
 
     /*
      |

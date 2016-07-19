@@ -21,6 +21,9 @@ use Dashboard\Http\Requests;
 class AuxProductController extends Controller
 {
 
+    /**
+     * AuxProductController constructor.
+     */
     public function __construct()
     {
         $this->middleware('auth:GOD,ADM,JVE,PUB,PRO,VEN');
@@ -31,7 +34,7 @@ class AuxProductController extends Controller
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
-     */s
+     */
     public function index(Request $request)
     {
         $query = DB::table('auxproducts as p')

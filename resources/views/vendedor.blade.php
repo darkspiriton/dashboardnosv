@@ -3,13 +3,13 @@
 @section('dashMenu')
     <ul class="main-menu">
         <li class="active"><a href="#/"><i class="md md-home"></i> Inicio</a></li>
-        <li id="productsJVE">
-            <a ui-sref="Productos Ventas"><i class="md md-shop-two"></i>Kardex</a>
+        <li id="productsVEN">
+            <a ui-sref="Stock Ventas"><i class="md md-shop-two"></i>Stock de Productos</a>
         </li>
     </ul>
 @stop
 
 @section('dashCtrls')
-    <script src="app/controllers/homeCtrl.js"></script>
-    <<script src="app/controllers/auxProductVENCtrl.js"></script>
+    <!-- Dependencias en Resource/assets/js/app - Gulpfile.js -->
+    <script src="{{ elixir('app/controllers/compile/vendedorControllers.js') }}"></script>
 @stop

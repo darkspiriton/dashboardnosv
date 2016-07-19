@@ -29,8 +29,8 @@
     <div class="card-header bgm-blue">
         <div class="form-horizontal">
             <div class="form-group">
-                <label class="col-xs-2 col-sm-2 control-label c-white f-17 p-0">Código de Orden:</label>
-                <div class="col-xs-10 col-sm-3">
+                <label class="col-xs-1 col-sm-1 control-label c-white f-17 p-0">Código de Orden:</label>
+                <div class="col-xs-2 col-sm-2">
                     <div class="input-group w-100">
                         <div class="fg-line ">
                             <input ng-model="codOrder" type="text" class="btn btn-block" >
@@ -38,11 +38,20 @@
                     </div>
                 </div>
 
-                <label class="col-xs-2 col-sm-2 control-label c-white f-17 p-0">Fecha de Solicitud:</label>
-                <div class="col-xs-10 col-sm-3">
+                <label class="col-xs-1 col-sm-1 control-label c-white f-17 p-0">Fecha de Solicitud:</label>
+                <div class="col-xs-2 col-sm-2">
                     <div class="input-group w-100">
                         <div class="fg-line report-date">
                             <input ng-model="requestDate" type="date" class="btn btn-block" >
+                        </div>
+                    </div>
+                </div>
+
+                <label class="col-xs-1 col-sm-1 control-label c-white f-17 p-0">Fecha de Salida:</label>
+                <div class="col-xs-2 col-sm-2">
+                    <div class="input-group w-100">
+                        <div class="fg-line report-date">
+                            <input ng-model="shipmentDate" type="date" class="btn btn-block" >
                         </div>
                     </div>
                 </div>
@@ -67,7 +76,7 @@
                         <th>Precio Venta</th>
                         <th>Descuento</th>
                         <th>Precio Final</th>
-                        <th>F. Salida</th>
+<!--                         <th>F. Salida</th> -->
                         <th>Accion</th>
                     </tr>
                     </thead>
@@ -82,9 +91,9 @@
                             <input class="form-control input-sm" type="number"  ng-change="preciofinal($index)" ng-model="product.discount" required>
                         </td>
                         <td style="display: table-cell;">{{ product.preciofinal }}</td>
-                        <td style="display: table-cell; width: 160px">
+                        <!-- <td style="display: table-cell; width: 160px">
                             <input class="form-control input-sm" type="date" ng-model="dataProducts[$index].date" required>
-                        </td>
+                        </td> -->
                         <td style="width: 80px"><button ng-click="removeProduct($index)" class="btn btn-danger btn-sm waves-effect">Eliminar</button></td>
                     </tr>
                     </tbody>

@@ -16,7 +16,7 @@ angular.module('App')
             columns :	[
                 {"sTitle": "Fecha de creación", "bSortable" : true, "sWidth": "90px"},
                 {"sTitle": "Código de Pedido", "bSortable" : true, "sWidth": "90px"},
-                {"sTitle": "Fecha de solicitud", "bSortable" : true, "sWidth": "90px"},                
+                {"sTitle": "Fecha de Pedido", "bSortable" : true, "sWidth": "90px"},                
                 {"sTitle": "Fecha de salida", "bSortable" : true, "sWidth": "90px"},
                 {"sTitle": "Codigo", "bSortable" : true},
                 {"sTitle": "Producto", "bSortable" : true},

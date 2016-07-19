@@ -798,6 +798,7 @@ class AuxMovementController extends Controller
             ->where('color_id','=',$prd->color_id)
             ->where('size_id','=',$prd->size_id)
             ->where('status','=',1)
+            ->orderBy('cod','asc')
             ->get();
 
         return response()->json(['codes' => $product],200);

@@ -86,6 +86,7 @@ class AuxMovementController extends Controller
         $rules = [
             'id'    => 'required',
             'situation' =>  'required'
+
         ];
 
         //Se va a pasar datos del movimiento
@@ -143,9 +144,12 @@ class AuxMovementController extends Controller
         // Creamos las reglas de validación
         $rules = [
             'products'    => 'required|array',
+            'requestDate'  => 'required|date',
+            'shipmentDate'  => 'required|date',
+            'codOrder'    => 'required',
             'products.*.id'    => 'required|integer|exists:auxproducts,id',
             'products.*.discount'    => 'required|numeric',
-            'products.*.date'    => 'required|date',
+            // 'products.*.date'    => 'required|date',
         ];
 
         //Se va a pasar datos del movimiento
@@ -166,9 +170,11 @@ class AuxMovementController extends Controller
                 $prd = Product::find($product['id']);
                 if($prd->status == 1){
                     $movement = new Movement();
-                    $movement->date_shipment =substr($product['date'],0,10);
+                    $movement->date_shipment =substr($request->input('shipmentDate'),0,10);
                     $movement->discount = $product['discount'];
                     $movement->status = 'salida';
+                    $movement->date_request = substr($request->input('requestDate'),0,10);
+                    $movement->cod_order = strtoupper($request->input('codOrder'));
                     $prd->movements()->save($movement);
                     $prd->status = 0;
                     $prd->save();
@@ -225,7 +231,7 @@ class AuxMovementController extends Controller
     public function sale(Request $request){
         // Creamos las reglas de validación
         $rules = [
-            'id'    => 'required',
+            'id'    => 'required|integer',
         ];
 
         //Se va a pasar datos del movimiento

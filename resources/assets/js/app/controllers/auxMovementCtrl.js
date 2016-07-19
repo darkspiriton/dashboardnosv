@@ -142,9 +142,12 @@ angular.module('App')
         /*
          |  END
          */
+        $scope.codOrder=null;
+        $scope.requestDate=null;
+        $scope.shipmentDate=null;
 
-        $scope.submit = function() {
-            valid_product_date($scope.dataProducts, function() {
+        $scope.submit = function() {    
+            valid_product_details($scope.codOrder,$scope.requestDate,$scope.shipmentDate, function() {
                 alertConfig.title = '¿Todo es correcto?';
                 alertConfig.text=`<table class="table table-bordered w-100 table-attr text-center">
                                         <thead>
@@ -199,7 +202,9 @@ angular.module('App')
                                 </div>`;
                 swal(alertConfig,
                     function () {
-                        petition.post('api/auxmovement/out', {products: $scope.dataProducts}).then(function (data) {
+                        petition.post('api/auxmovement/out', {products: $scope.dataProducts,
+                        codOrder:$scope.codOrder, requestDate:$scope.requestDate, shipmentDate:$scope.shipmentDate})
+                        .then(function (data) {
                             toastr.success(data.message);
                             alertConfirmation.text = confirmationOuts(data.products, data.movements);
                             swal(alertConfirmation);
@@ -218,7 +223,6 @@ angular.module('App')
         /**
          *  Template para confirmnacion de productos en salida
          */
-
          var confirmationOuts = function(products, movements){
             var tdList = "";
 
@@ -263,9 +267,7 @@ angular.module('App')
             return template;
          };
 
-         /**
-          * END
-          */
+
 
         $scope.preciofinal=function (i){
             if($scope.products[i].discount>$scope.products[i].price ){
@@ -282,15 +284,20 @@ angular.module('App')
             
         }
 
+        function valid_product_details(codOrder, requestDate, shipmentDate, callback){
+            if(codOrder != null && requestDate != null && shipmentDate != null){
+                return callback();
+            }else{
+                toastr.error('Huy huy dice: Falta ingresar los datos de la salida')
+                return;
+            }            
 
-        function valid_product_date(prd, callback){
-            for(i in prd){
-                if (prd[i].date == undefined){
-                    toastr.error('Huy huy dice: Falta ingresar fecha de salida');
-                    return;
-                }
-            }
-            return callback();
+        }
+
+        function removeDetail(){
+            $scope.codOrder=null;
+            $scope.requestDate=null;
+            $scope.shipmentDate=null;
         }
 
 
@@ -301,13 +308,15 @@ angular.module('App')
         };
 
         $scope.cancel = function () {
-            $scope.anadir = false;
+            $scope.anadir = false;            
+            removeDetail();
             resetProduct();
             util.ocultaformulario();
         };
 
         $scope.new = function(){
             $scope.anadir = true;
+            removeDetail();
             resetProduct();
             util.muestraformulario();
         };

@@ -21,6 +21,9 @@ use Dashboard\Http\Requests;
 class AuxProductController extends Controller
 {
 
+    /**
+     * AuxProductController constructor.
+     */
     public function __construct()
     {
         $this->middleware('auth:GOD,ADM,JVE,PUB,PRO,VEN');

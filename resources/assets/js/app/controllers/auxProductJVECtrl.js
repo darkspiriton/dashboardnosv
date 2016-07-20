@@ -152,7 +152,7 @@ angular.module('App')
             var id = $scope.tableData[i].id;
             petition.put(`api/auxproduct/reserve/${id}`)
                 .then(function(data){
-                    $scope.list();
+                    $scope.searchList($scope.data);
                     toastr.success(data.message);
                 }, function(error){
                     $scope.list();
@@ -188,15 +188,12 @@ angular.module('App')
             s || (s = {});
 
             if (s.name){
-                console.log("1");
                 $scope.data.product = s.name;
                 resetColorSize();
             } else if (s.provider_id){
-                console.log("2");
                 $scope.data.provider_id = s.provider_id;
                 resetProduct();
             } else {
-                console.log("3");
                 resetProduct();
                 $scope.provider.provider_id = null;
                 $scope.data.provider_id = null;

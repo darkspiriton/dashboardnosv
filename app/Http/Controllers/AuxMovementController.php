@@ -113,7 +113,8 @@ class AuxMovementController extends Controller
                             5 => 'No es la talla',
                             6 => 'No se encontro el código',
                             7 => 'No llegamos al cliente',
-                            8 => 'Cliente cancelo su pedido'
+                            8 => 'Cliente cancelo su pedido',
+                            9 => 'Retorno-Cambio'
                         ];
 
             if($move->status != 'vendido'){

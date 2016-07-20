@@ -10,8 +10,21 @@ angular.module('App')
     .controller('productsJVECtrl', ["$scope", "$compile", "$state", "$log", "util", "petition", "toastr",
         function($scope, $compile, $state, $log, util, petition, toastr){
 
-        util.liPage('productsJVE');
+        /*
+         |
+         |  Init
+         |
+         */
 
+        $scope.provider = {};
+        $scope.product = {};
+        $scope.data = {};
+
+        /*
+         |  END
+         */
+
+        util.liPage('productsJVE');
 
         var status = {
                     0 : ['salida','btn-danger', false],
@@ -39,7 +52,7 @@ angular.module('App')
                 {"sTitle": "P. Real" , "bSearchable": false},
                 {"sTitle": "Precio" , "bSearchable": false},
                 {"sTitle": "Status", "bSortable" : false, "bSearchable": true},
-                {"sTitle": "Accion", "bSortable" : false, "bSearchable": false},
+                {"sTitle": "Accion", "bSortable" : false, "bSearchable": false, "sWidth" : "230px"}
             ],
             buttons :
                 [
@@ -174,11 +187,20 @@ angular.module('App')
         $scope.productList = function(s){
             s || (s = {});
 
-            if(s.product)
-                $scope.data.product = s.product.name;
-
-            if(s.provider)
-                $scope.data.provider = s.provider.provider;
+            if (s.name){
+                console.log("1");
+                $scope.data.product = s.name;
+                resetColorSize();
+            } else if (s.provider_id){
+                console.log("2");
+                $scope.data.provider_id = s.provider_id;
+                resetProduct();
+            } else {
+                console.log("3");
+                resetProduct();
+                $scope.provider.provider_id = null;
+                $scope.data.provider_id = null;
+            } 
 
             petition.get(`api/auxproduct/filter/get/products`, {params: s})
                 .then(function(data){
@@ -195,7 +217,7 @@ angular.module('App')
 
         $scope.searchList = function(dataSearch){
             $scope.updateList = true;
-            console.log(dataSearch);
+            if(dataSearch.status_sale === "")dataSearch.status_sale = null;
             petition.get(`api/auxproduct/filter/get/search`, {params: dataSearch})
                 .then(function(data){
                     $scope.tableData = data.products;
@@ -207,19 +229,33 @@ angular.module('App')
                 });
         }
 
+        function resetProduct(){
+            $scope.products = [];
+            $scope.colors = [];
+            $scope.sizes = [];
+
+            $scope.product = {};
+            $scope.data.product = null;
+            $scope.data.color = null;
+            $scope.data.size = null;
+        }
+
+        function resetColorSize(){
+            $scope.colors = [];
+            $scope.sizes = [];
+
+            $scope.data.color = null;
+            $scope.data.size = null;
+        }
+
         /*
          *  END
          */ 
-
 
         angular.element(document).ready(function(){
             $scope.list();
             $scope.typesList();
             $scope.providerList();
             $scope.productList();
-
-            $scope.provider = {};
-            $scope.product = {};
-            $scope.data = {};
         });
     }]);

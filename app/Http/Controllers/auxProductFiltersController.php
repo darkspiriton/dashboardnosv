@@ -14,26 +14,56 @@ use \DB;
 
 class auxProductFiltersController extends Controller
 {
+
+    /**
+     * Restricion de metodos por nivel de usuario
+     *
+     */
+    public function __construct()
+    {
+        $this->middleware("auth:GOD,ADM,JVE", ["only" => ["FilterForAll"]]);
+    }
+
+    /**
+     * Listado de tipos de produtos
+     *
+     *	@return Illuminate\Http\Response 		Dashboard\Models\Experimental\Type
+     */
     public function TypeProductList()
     {
         try {
             $types = Type::all();
             return response()->json(["types" => $types]);
         } catch (\Exception $e) {
-            return \Response::json(["message" => "Pascal mordio algunos cables, llame a sistemas"], 500);
+            return response()->json(["message" => "Pascal mordio algunos cables, llame a sistemas"], 500);
         }
     }
 
+    /**
+     * Listado de proveedores
+     *
+     *	@return Illuminate\Http\Response 		Dashboard\Models\Experimental\Provider
+     */
     public function ProviderList()
     {
         try {
             $providers = Provider::get(array("id", "name"));
             return response()->json(["providers" => $providers]);
         } catch (\Exception $e) {
-            return \Response::json(["message" => "Pascal mordio algunos cables, llame a sistemas"], 500);
+            return response()->json(["message" => "Pascal mordio algunos cables, llame a sistemas"], 500);
         }
     }
 
+    /**
+     * Listado de productos | colores | tallas
+     *
+     *	@param 	Illuminate\Http\Request 	$request | string:name		
+     *	@return Illuminate\Http\Response 	Dashboard\Models\Experimental\Color
+     *	@return Illuminate\Http\Response	Dashboard\Models\Experimental\Size
+     *
+     *	@param 	Illuminate\Http\Request		$request | int:provider_id
+     *	@return Illuminate\Http\Response	Dashboard\Models\Experimental\Product
+     */
     public function ProductList(Request $request)
     {
         try {
@@ -49,8 +79,8 @@ class auxProductFiltersController extends Controller
             } else {
                 $query = Product::select("name")->distinct()->orderBy("name", "asc");
 
-                if ($request->has("provider")) {
-                    $query->where("provider_id", $request->input("provider"));
+                if ($request->has("provider_id")) {
+                    $query->where("provider_id", $request->input("provider_id"));
                 }
 
                 $products = $query->get();
@@ -58,19 +88,26 @@ class auxProductFiltersController extends Controller
                 return response()->json(["products" => $products]);
             }
         } catch (\Exception $e) {
-            return \Response::json(["message" => "Pascal mordio algunos cables, llame a sistemas"], 500);
+            return response()->json(["message" => "Pascal mordio algunos cables, llame a sistemas"], 500);
         }
     }
 
+    /**
+     * Listado de productos por filtro de busqueda
+     *
+     *	@param 	Illuminate\Http\Request 	$request
+     *	@return Illuminate\Http\Response 	Illuminate\Support\Facades\DB
+     */
     public function FilterForAll(Request $request)
     {
         $rules = [
-            "type"        =>    "integer|exists:types,id",
-            "provider"    =>    "integer|exists:providers,id",
-            "product"    =>    "string|max:100",
-            "color"        =>    "integer|exists:colors,id",
-            "size"        =>    "integer|exists:sizes,id",
-            "status"    =>    "integer|between:0,3"
+            "type"            =>    "integer|exists:types,id",
+            "provider_id"    =>    "integer|exists:providers,id",
+            "product"         =>    "string|max:100",
+            "color"           =>    "integer|exists:colors,id",
+            "size"            =>    "integer|exists:sizes,id",
+            "status"        =>  "integer|between:0,3",
+            "status_sale"    =>    "integer|between:0,1"
         ];
 
         if (Validator::make($request->all(), $rules)->fails()) {
@@ -95,8 +132,8 @@ class auxProductFiltersController extends Controller
             $query->where('tp.type_id', $request->input('type'));
         }
 
-        if ($request->has('provider')) {
-            $query->where('p.provider_id', $request->input('provider'));
+        if ($request->has('provider_id')) {
+            $query->where('p.provider_id', $request->input('provider_id'));
         }
 
         if ($request->has('product')) {
@@ -115,7 +152,20 @@ class auxProductFiltersController extends Controller
             $query->where('p.status', $request->input('status'));
         }
 
+        if ($request->has('status')) {
+            $query->where('p.status', $request->input('status'));
+        }
+
         $products = $query->get();
+
+        if ($request->has('status_sale')) {
+            $statusSale = $request->input('status_sale');
+            foreach ($products as $key => $value) {
+                if ($value->liquidation != $statusSale) {
+                    unset($products[$key]);
+                }
+            }
+        }
 
         return response()->json(['products' => $products], 200);
     }

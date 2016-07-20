@@ -117,10 +117,16 @@ elixir(function(mix) {
      */
 
     mix.version([
+        //  JS
         "public/app/controllers/compile/coordinadorControllers.js",
         "public/app/controllers/compile/vendedorControllers.js",
-        "public/app/controllers/compile/godControllers.js"
+        "public/app/controllers/compile/godControllers.js",
+        //  CSS
+        "css/app.min.1.css",
+        "css/app.min.2.css",
+        "css/styles.min.css"
         ]);
+
 
     /*
      |

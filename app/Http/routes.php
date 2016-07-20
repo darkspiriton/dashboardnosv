@@ -112,15 +112,19 @@ Route::group(['prefix' => 'api'], function(){
         Route::get('/get/uniques','AuxProductController@UniqueProduct');
         Route::get('/get/uniques/{name}/codes','AuxProductController@CodesLists');
         
-        // Route::get('/get/products/provider/{id}','AuxProductController@productProvider');
-        // Route::get('/get/products/provider/month/{id}','AuxProductController@productProviderMonth');
-        // Route::get('/get/products/provider/date/{id}','AuxProductController@productProviderDate');
-
-        // Route::get('/get/products/provider/sale/{id}','AuxProductController@productProviderTotalMonth');
-        // Route::get('/get/products/provider/sale/now/{id}','AuxProductController@productProviderTotalMonthNow');
-
         Route::get('get/movements/{id}','AuxProductController@movements_for_product');
         Route::put('reserve/{id}','AuxProductController@product_reserve');
+    });
+
+    /**
+     * AUX PRODUCTS - FILTERS
+     */
+
+    Route::group(['prefix'=>'auxproduct/filter'],function(){
+        Route::get('get/types','auxProductFiltersController@TypeProductList');
+        Route::get('get/providers','auxProductFiltersController@ProviderList');
+        Route::get('get/products','auxProductFiltersController@ProductList');
+        Route::get('get/search','auxProductFiltersController@FilterForAll');
     });
 
     /**

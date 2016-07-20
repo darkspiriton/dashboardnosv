@@ -73,7 +73,8 @@ angular.module('App')
             {id: 5, name:'No es la talla' },
             {id: 6, name:'No se encontro el código' },
             {id: 7, name:'No llegamos al cliente' },
-            {id: 8, name:'Cliente cancelo su pedido' }
+            {id: 8, name:'Cliente cancelo su pedido' },
+            {id: 9, name:'Retorno-Cambio' }
         ];
 
         $scope.list = function() {
@@ -185,6 +186,9 @@ angular.module('App')
                                                         break;
                                                     case 8:
                                                         situation="Cliente cancelo su pedido";
+                                                        break;
+                                                    case 9:
+                                                        situation="Retorno-Cambio";
                                                         break;
                                                 }
                                                 return situation; })()}

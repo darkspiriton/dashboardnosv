@@ -276,34 +276,10 @@ class AuxMovementController extends Controller
     }
 
     public function movementPending(){
-
-
-//        $products = DB::table('auxproducts AS p')
-//            ->select('p.cod','m.date_shipment','p.id as product_id',
-//            'p.name','s.name as size','c.name as color','m.id as movement_id',
-//                DB::raw('m.created_at as date'),
-//                DB::raw('case when d.price then d.price else p.cost_provider + p.utility end as price'),
-//                DB::raw('case when d.price then 1 else 0 end as status'),'m.discount as discount')
-//            ->join('auxmovements AS m','m.product_id','=','p.id')
-//            ->join('colors AS c','c.id','=','p.color_id')
-//            ->join('sizes AS s','s.id','=','p.size_id')
-//            ->leftJoin('settlements AS d','d.product_id','=','p.id')
-//            ->where('p.status','=',0)
-//            ->where('m.status','=','salida')
-//            ->get();
-//            ->groupBy('p.id')->get();
-//
-//        $products = Product::with(['movement' => function($query){
-//            return $query->where('status','salida');
-//        },'settlement','color','size'])
-//            ->select(array('id','cod','id as product_id','name','color_id','size_id'))
-
         $products = Product::with(['bymovements','settlement','color','size'])
             ->select(array('id','cod','id as product_id','name','color_id','size_id','cost_provider','utility'))
             ->where('status',0)
             ->get();
-
-//        return $products;
 
         foreach ($products as $key => $product) {
             if(count($product->bymovements) == 0){
@@ -371,7 +347,7 @@ class AuxMovementController extends Controller
 
     private function movementsGet($start){
         $movements=DB::table('auxproducts as p')
-            ->select('m.created_at','m.date_shipment as fecha','m.status','m.discount')
+            ->select('m.created_at','m.date_shipment as fecha','m.status','m.discount','cod_order','date_request')
             ->addSelect('p.cod as codigo','p.name as product','p.cost_provider','p.utility')
             ->addSelect('c.name as color','s.name as talla')
             ->addSelect(DB::raw('p.cost_provider + p.utility  as price_real'))
@@ -439,14 +415,14 @@ class AuxMovementController extends Controller
             return response()->json(['message' => 'Fechas no validas, formato aceptado: Y-m-d'],401);
         }
 
-        if (!\Validator::make($request->all(),['name' => 'required'])->fails()){
+        if ($request->has("name")){
             $data = $this->find_for_product($date1,$date2,
                 $request->input('status'),
                 $request->input('name'),
                 $request->input('size'),
                 $request->input('color')
             );
-        } else if (!\Validator::make($request->all(),['provider' => 'required'])->fails()){
+        } else if ($request->has("provider")){
             $data = $this->find_for_provider($date1,$date2,
                 $request->input('status'),
                 $request->input('provider')
@@ -460,7 +436,7 @@ class AuxMovementController extends Controller
         $data = $data['movements'];
         $date = date('Y-m-d');
         $tittle = 'Reporte de movimientos de productos entre las fechas: '.$date1->toDateString().' y '.$date2->toDateString();
-        $columns = array('creacion','fecha','codigo','product','color','talla','status');
+        $columns = ['creacion','fecha','codigo','product','color','talla','status'];
 
         $view =  \View::make('pdf.templatePDF', compact('data','columns','tittle','date'))->render();
 
@@ -473,7 +449,7 @@ class AuxMovementController extends Controller
     private function entrefechas($date1,$date2, $status = 'Vendido'){
 
         $movements=DB::table('auxproducts as p')
-            ->select('m.date_shipment as fecha','p.cod as codigo','p.name as product','c.name as color','s.name as talla','m.status')
+            ->select('m.date_shipment as fecha','p.cod as codigo','p.name as product','c.name as color','s.name as talla','m.status','cod_order','date_request')
             ->join('auxmovements as m','p.id','=','m.product_id')
             ->join('colors as c','c.id','=','p.color_id')
             ->join('sizes as s','s.id','=','p.size_id')
@@ -490,7 +466,7 @@ class AuxMovementController extends Controller
 
         $data = array();
         $data['movements'] = DB::table('auxproducts as p')
-            ->select('m.created_at','m.date_shipment as fecha','m.status','m.discount')
+            ->select('m.created_at','m.date_shipment as fecha','m.status','m.discount','cod_order','date_request')
             ->addSelect('p.cod as codigo','p.name as product','p.cost_provider','p.utility')
             ->addSelect('c.name as color','s.name as talla')
             ->addSelect(DB::raw('p.cost_provider + p.utility  as price_real'))
@@ -544,7 +520,7 @@ class AuxMovementController extends Controller
 
         $data = array();
         $data['movements'] = DB::table('auxproducts as p')
-            ->select('m.created_at','m.date_shipment as fecha','m.status','m.discount')
+            ->select('m.created_at','m.date_shipment as fecha','m.status','m.discount','cod_order','date_request')
             ->addSelect('p.cod as codigo','p.name as product','p.cost_provider','p.utility')
             ->addSelect('c.name as color','s.name as talla')
             ->addSelect(DB::raw('p.cost_provider + p.utility  as price_real'))
@@ -598,7 +574,7 @@ class AuxMovementController extends Controller
     private function find_for_dates($date1, $date2, $status){
         $data = array();
         $data['movements'] = DB::table('auxproducts as p')
-            ->select('m.created_at','m.date_shipment as fecha','m.status','m.discount')
+            ->select('m.created_at','m.date_shipment as fecha','m.status','m.discount','cod_order','date_request')
             ->addSelect('p.cod as codigo','p.name as product','p.cost_provider','p.utility')
             ->addSelect('c.name as color','s.name as talla')
             ->addSelect(DB::raw('p.cost_provider + p.utility  as price_real'))

@@ -139,7 +139,6 @@ class auxProductFiltersController extends Controller
      *	@param  Illuminate\Http\Request  $request
      *	@return  Illuminate\Http\Response
      */	
-
     public function FilterStockForAllByVEN(Request $request){
     	$query = Product::from( 'auxproducts as p' )
     			->with('provider','types','color','size')

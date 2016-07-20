@@ -436,7 +436,20 @@ class AuxMovementController extends Controller
         $data = $data['movements'];
         $date = date('Y-m-d');
         $tittle = 'Reporte de movimientos de productos entre las fechas: '.$date1->toDateString().' y '.$date2->toDateString();
-        $columns = ['creacion','fecha','codigo','product','color','talla','status'];
+        $columns = ['Fecha Pedido' => 'date_request',
+                        'Fecha Envio' => 'fecha',
+                        'Orden' => 'cod_order',
+                        'Cod' => 'codigo',
+                        'Modelo' => 'product',
+                        'Color' => 'color',
+                        'Talla' => 'talla',
+                        'Estado' => 'status',
+                        // '' => 'status_product',
+                        // 'P. Real' => 'price_real',
+                        'Precio V.' => 'price',
+                        'Desc.' => 'discount',
+                        'Precio F.' => 'price_final'
+                    ];
 
         $view =  \View::make('pdf.templatePDF', compact('data','columns','tittle','date'))->render();
 

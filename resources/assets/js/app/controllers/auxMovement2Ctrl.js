@@ -25,7 +25,7 @@ angular.module('App')
                 {"sTitle": "Precio  (S/)", "bSortable" : true},
                 {"sTitle": "Descuento (S/)", "bSortable" : true},
                 {"sTitle": "Precio Final (S/)", "bSortable" : true},
-                {"sTitle": "Tipo", "bSortable" : true, "sWidth": "80px"},
+                {"sTitle": "Venta", "bSortable" : true, "sWidth": "80px"},
                 {"sTitle": "Acción" , "bSearchable": false , "sWidth": "360px"}
             ],
             actions	:  	[
@@ -46,6 +46,14 @@ angular.module('App')
                         ],
             configStatus : 'liquidation'
         };
+
+        /**
+         *  Copia de tabla principal de salida de productos
+         */
+        var tableDispacth = angular.copy($scope.tableConfig);
+        tableDispacth.columns.splice(-2,2);
+        tableDispacth.actions.splice(-1,1);
+        tableDispacth.data.splice(-2,2);
 
         var alertConfig = {
             title: "¿Esta seguro?",
@@ -314,9 +322,41 @@ angular.module('App')
             util.modal("reProgram");
         };
 
+        /**
+         *  Metodo para despacho de producto por fecha.
+         *  Descarga de hoja de despacho por fecha
+         */
+
+        $scope.filter = function(){
+            petition.get('api/auxmovement/get/dispatch', {params: {date: $scope.dispatch}})
+                .then(function(data){
+                    $('#dispatch').AJQtable2('view2', $scope, $compile, data.products, tableDispacth);
+                }, function(error){
+                    toastr.error('Huy Huy: ' + error.data.message);
+                });
+        };
+
+        $scope.download = function(){
+            petition.post('api/auxmovement/get/dispatch/download', {date: $scope.dispatch}, {responseType:'arraybuffer'})
+                .then(function(data){
+                    var date = new Date().getTime();
+                    var name = `${date}-ficha-de-despacho-${$scope.dispatch}.pdf`;
+                    var file = new Blob([data],{ type : 'application/pdf'});
+                    saveAs(file, name);
+                }, function(error){
+                    console.info(error);
+                });
+        };
+
+        /**
+         *  END
+         */
+
         angular.element(document).ready(function(){
             util.resetTable($scope,$compile);
             $scope.product = angular.copy($scope.productClear);
             $scope.list();
+
+            $scope.filter();
         });
     }]);

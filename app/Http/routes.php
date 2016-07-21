@@ -151,6 +151,8 @@ Route::group(['prefix' => 'api'], function(){
         Route::get('/get/movementDay/consolidadoOut','AuxMovementController@consolidadoOut');
 
         Route::get('/get/movementDay/provider','AuxMovementController@providertest');
+        Route::get('/get/dispatch','AuxMovementController@getDispatchForDate');
+        Route::post('/get/dispatch/download','AuxMovementController@dispatchForDateDownload');
     });
 
     /**

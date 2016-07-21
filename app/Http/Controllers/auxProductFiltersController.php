@@ -147,7 +147,7 @@ class auxProductFiltersController extends Controller
 
     	foreach ($stock as $product) {
     	    if ($product->types){
-    	        $product->typesList = $product->types->implode("name","|");
+    	        $product->typesList = $product->types->implode("name"," | ");
     	    }
 
     	    $product->price_final = $product->cost_provider + $product->utility;

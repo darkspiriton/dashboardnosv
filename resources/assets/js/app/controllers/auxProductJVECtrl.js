@@ -41,7 +41,7 @@ angular.module('App')
 
         $scope.tableConfig 	= 	{
             columns :	[
-                {"sTitle": "Fecha", "bSortable" : true, 'sWidth': '100px'},
+                {"sTitle": "Fecha", "bSortable" : true, 'sWidth': '80px'},
                 {"sTitle": "Codigo", "bSortable" : true, 'sWidth': '1px'},
                 {"sTitle": "Nombre", "bSortable" : true, 'sWidth': '250px'},
                 {"sTitle": "Proveedor", "bSortable" : true},

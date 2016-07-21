@@ -814,4 +814,113 @@ class AuxMovementController extends Controller
         return response()->json(['codes' => $product],200);
     }
 
+    /**
+     *    Listar productos a despachar por fecha
+     *
+     *    @param  Illuminate\Http\Request  $request
+     *    @return  Illuminate\Http\Response
+     */ 
+    public function getDispatchForDate(Request $request){
+        if($request->has("date")){
+            if(\Validator::make($request->all(),["date" => "required|date"])->fails())
+                return response()->json(["message" => "Fecha de busqueda invalida."]);
+
+            $date = Carbon::parse($request->input("date"));
+        } else {
+            $date = Carbon::now();
+        }
+
+        $products = $this->dispatchForDate($date);
+
+        return response()->json(['products' => $products], 200);
+
+    }
+
+    /**
+     *    Descarga de pdf para ficha de despacho por fecha
+     *
+     *    @param  Illuminate\Http\Request  $request
+     *    @return  ArrayBuffer
+     */
+    public function dispatchForDateDownload(Request $request){
+        if($request->has("date")){
+            if(\Validator::make($request->all(),["date" => "required|date"])->fails())
+                return response()->json(["message" => "Fecha de busqueda invalida."]);
+
+            $dateFind = Carbon::parse($request->input("date"));
+        } else {
+            $dateFind = Carbon::now();
+        }
+
+        $data = $this->dispatchForDate($dateFind);
+
+        foreach ($data as $row) {
+            $row->movement_date_request =  $row->movement->date_request;
+            $row->movement_date_shipment =  $row->movement->date_shipment;
+            $row->movement_discount =  $row->movement->discount;
+            $row->movement_cod_order =  $row->movement->cod_order;
+            $row->color_name =  $row->color->name;
+            $row->size_name =  $row->size->name;
+            if($row->movement->discount == 0){
+                $row->sale = "Normal";
+            } else {
+                $row->sale = "Liquidacion";
+            }
+
+        }
+
+        $date = date('Y-m-d');
+        $tittle = 'Ficha de despacho para la fecha: '.$dateFind->toDateString();
+        $columns = ['Orden' => 'movement_cod_order',
+                        'Fecha Pedido' => 'movement_date_request',
+                        'Fecha Salida' => 'movement_date_shipment',
+                        'Cod' => 'cod',
+                        'Modelo' => 'name',
+                        'Color' => 'color_name',
+                        'Talla' => 'size_name',
+                        'Venta' => 'sale',
+                        'Precio V.' => 'price',
+                        'Desc.' => 'movement_discount',
+                        'Precio F.' => 'pricefinal'
+                    ];
+
+        $view =  \View::make('pdf.templatePDF', compact('data','columns','tittle','date'))->render();
+
+        $pdf = \PDF::loadHTML($view);
+        $pdf->setOrientation('landscape');
+
+        return $pdf->download();
+    }
+
+    /**
+     *    Product Collection para despacho por fecha
+     *
+     *    @param  Carbon\Carbon  $date
+     *    @return  Dashboard\Models\Experimental\Product
+     */
+    private function dispatchForDate(Carbon $date){
+        $products = Product::from('auxproducts as p')
+            ->with(['bymovements','settlement','color','size'])
+            ->select(array('p.id','cod','p.id as product_id','name','color_id','size_id','cost_provider','utility'))
+            ->join('auxmovements AS m','m.product_id','=','p.id')
+            ->where('p.status',0)
+            ->where('m.date_shipment','>=', $date->toDateString())
+            ->where('m.date_shipment','<=', $date->toDateString())
+            ->get();
+
+        foreach ($products as $key => $product) {
+            if(count($product->bymovements) == 0){
+                $products->splice($key,1);
+                continue;
+            }
+            $product->movement =  $product->bymovements[0];
+            $product->price = $this->getPriceAttribute($product);
+            $product->pricefinal = $this->getPriceFinalAttribute($product);
+            $product->liquidation = $this->getLiquidationAttribute($product);
+            unset($product->bymovements);
+        }
+
+        return $products;
+    }
+
 }

@@ -151,6 +151,9 @@ angular.module('App')
                 alertConfig.title = '¿Todo es correcto?';
                 alertConfig.text=`<table class="table table-bordered w-100 table-attr text-center">
                                         <thead>
+                                        ${$scope.codOrder}
+                                        ${$scope.requestDate}
+                                        ${$scope.shipmentDate}
                                         <tr>
                                             <th>Cod</th>
                                             <th>Nombre</th>

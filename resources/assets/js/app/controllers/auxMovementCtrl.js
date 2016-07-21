@@ -159,7 +159,7 @@ angular.module('App')
                                         <tr>                                            
                                             <h5><label> Código : </label>${setUpper($scope.codOrder)}</h5>                                            
                                             <h5><label> F. Pedido : </label>${util.setDate($scope.requestDate)}</h5>                                           
-                                            <h5> <label> F. Envio : </label>${util.setDate($scope.shipmentDate)}</h5>                                                                      
+                                            <h5> <label> F. Salida : </label>${util.setDate($scope.shipmentDate)}</h5>                                                                      
                                         <tr>
                                         <tr>
                                             <th>Cod</th>
@@ -246,7 +246,7 @@ angular.module('App')
                                         <tr>                                            
                                             <h5><label> Código : </label>${setUpper($scope.codOrder)}</h5>                                            
                                             <h5><label> F. Pedido : </label>${util.setDate($scope.requestDate)}</h5>                                           
-                                            <h5> <label> F. Envio : </label>${util.setDate($scope.shipmentDate)}</h5>                                                                      
+                                            <h5> <label> F. Salida : </label>${util.setDate($scope.shipmentDate)}</h5>                                                                      
                                         <tr>
                                         <tr>
                                             <th style="Width:100px">creacion</th>

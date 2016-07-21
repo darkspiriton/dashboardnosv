@@ -146,11 +146,21 @@ angular.module('App')
         $scope.requestDate=null;
         $scope.shipmentDate=null;
 
-        $scope.submit = function() {    
+        function setUpper(string){
+            var upper = ' '+string.toString().toUpperCase();
+            return upper;
+        }
+
+               $scope.submit = function() {    
             valid_product_details($scope.codOrder,$scope.requestDate,$scope.shipmentDate, function() {
                 alertConfig.title = '¿Todo es correcto?';
                 alertConfig.text=`<table class="table table-bordered w-100 table-attr text-center">
                                         <thead>
+                                        <tr>                                            
+                                            <h5><label> Código : </label>${setUpper($scope.codOrder)}</h5>                                            
+                                            <h5><label> F. Pedido : </label>${util.setDate($scope.requestDate)}</h5>                                           
+                                            <h5> <label> F. Salida : </label>${util.setDate($scope.shipmentDate)}</h5>                                                                      
+                                        <tr>
                                         <tr>
                                             <th>Cod</th>
                                             <th>Nombre</th>
@@ -233,6 +243,11 @@ angular.module('App')
 
             var template = `<table class="table table-bordered w-100 table-attr text-center">
                                         <thead>
+                                        <tr>                                            
+                                            <h5><label> Código : </label>${setUpper($scope.codOrder)}</h5>                                            
+                                            <h5><label> F. Pedido : </label>${util.setDate($scope.requestDate)}</h5>                                           
+                                            <h5> <label> F. Salida : </label>${util.setDate($scope.shipmentDate)}</h5>                                                                      
+                                        <tr>
                                         <tr>
                                             <th style="Width:100px">creacion</th>
                                             <th style="Width:100px">fecha</th>

@@ -1,0 +1,19 @@
+Remember that you can report errors and get help in https://github.com/NicoSantangelo/sublime-gulp
+
+07-20-2016 17:14:
+(node:7236) fs: re-evaluating native module sources is not supported. If you are using the graceful-fs module, please update it to a more recent version.
+C:\Users\Cesar\AppData\Roaming\Sublime Text 3\Packages\Gulp\write_tasks_to_cache.js:31
+        throw ex;
+        ^
+
+ReferenceError: gulp is not defined
+    at Object.<anonymous> (E:\Programas\Projects\PHPStorm\dashboardnosv\.sublime-gulp-tmp.js:143:23)
+    at Module._compile (module.js:541:32)
+    at Object.Module._extensions..js (module.js:550:10)
+    at Module.load (module.js:458:32)
+    at tryModuleLoad (module.js:417:12)
+    at Function.Module._load (module.js:409:3)
+    at Module.require (module.js:468:17)
+    at require (internal/module.js:20:19)
+    at requireGulp (C:\Users\Cesar\AppData\Roaming\Sublime Text 3\Packages\Gulp\write_tasks_to_cache.js:28:16)
+    at Object.<anonymous> (C:\Users\Cesar\AppData\Roaming\Sublime Text 3\Packages\Gulp\write_tasks_to_cache.js:83:12)

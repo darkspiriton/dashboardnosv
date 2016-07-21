@@ -349,6 +349,16 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
                 table || (table = '#table');
                 scope.tableData = [];
                 $(table).AJQtable('view', scope, compile);
+            },
+            setDate: function (date){
+               var datestring = "";
+               var date = new Date(date);
+               var day = date.getDate();
+                   day = (day.toString().length == 1)?'0'+day.toString():day;
+               var month = date.getMonth() + 1;
+                   month = (month.toString().length == 1)?'0'+month.toString():month;
+               var year = date.getFullYear();
+               return datestring.concat(' ',day,'-',month,'-',year);
             }
         }
     }])

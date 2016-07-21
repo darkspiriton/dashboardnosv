@@ -132,8 +132,7 @@ angular.module('App')
                     $('#table').AJQtable2('view2', $scope, $compile);
                     $scope.updateList = false;
                 }, function(error){
-                    console.log(error);
-                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                    toastr.error('Huy Huy dice: ' + error.data.message);
                     $scope.updateList = false;
                 });
         };
@@ -146,7 +145,6 @@ angular.module('App')
                     $scope.productState = false;
                     util.muestraformulario();
                 }, function (error) {
-                    console.log(error);
                     toastr.error('Uyuyuy dice: '+ error.data.message);
                 });
         };
@@ -205,8 +203,7 @@ angular.module('App')
                     $scope.providers = data.providers;
                     $scope.providers.push(newProvider);
                 }, function(error){
-                    console.log(error);
-                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                    toastr.error('Huy Huy dice: ' + error.data.message);
                 });
         };
 
@@ -215,8 +212,7 @@ angular.module('App')
                 .then(function(data){
                     $scope.sizes = data.sizes;
                 }, function(error){
-                    console.log(error);
-                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                    toastr.error('Huy Huy dice: ' + error.data.message);
                 });
         };
 
@@ -226,8 +222,7 @@ angular.module('App')
                     $scope.colors = data.colors;
                     $scope.colors.push(newColor);
                 }, function(error){
-                    console.log(error);
-                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                    toastr.error('Huy Huy dice: ' + error.data.message);
                 });
         };
 
@@ -237,8 +232,7 @@ angular.module('App')
                     $scope.types = data.types;
                     $scope.types.push(newType);
                 }, function(error){
-                    console.log(error);
-                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                    toastr.error('Huy Huy dice: ' + error.data.message);
                 });
         };
 
@@ -251,8 +245,7 @@ angular.module('App')
                      $scope.btnCods = false;
                 }, function(error){
                      $scope.btnCods = false;
-                    console.log(error);
-                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                    toastr.error('Huy Huy dice: ' + error.data.message);
                 });
         };
 
@@ -266,7 +259,7 @@ angular.module('App')
                     $scope.productDetail = angular.copy($scope.tableData[ind]);
                     util.modal();
                 }, function(error){
-                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                    toastr.error('Huy Huy dice: ' + error.data.message);
                 });
         };
 
@@ -289,7 +282,7 @@ angular.module('App')
                         $scope.listCodes();
                         util.ocultaformulario();
                     }, function(error){
-                        toastr.error('Uyuyuy dice: ' + error.data.message);
+                        toastr.error('Huy Huy dice: ' + error.data.message);
                         $scope.formSubmit=false;
                     })
                 });
@@ -369,7 +362,6 @@ angular.module('App')
                     $scope.listColors();
                     $scope.listTypes();
                 }, function(error){
-                    console.log(error);
                     toastr.error('Uyuyuy dice: ' + error.data.message);
                 });
         };

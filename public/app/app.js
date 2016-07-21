@@ -1,5 +1,6 @@
 angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 'toastr', 'ui.router', 'satellizer','angular-fb'])
-    .config(function ($stateProvider, $urlRouterProvider, $authProvider, $fbProvider) {
+    .config(["$stateProvider", "$urlRouterProvider", "$authProvider", "$fbProvider",
+        function ($stateProvider, $urlRouterProvider, $authProvider, $fbProvider) {
         $authProvider.tokenName = "token";
         $authProvider.tokenPrefix = "DB_NV";
 
@@ -15,7 +16,7 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
 
         $urlRouterProvider.otherwise('/home');
 
-    })
+    }])
     .directive('fileModel', function () {
         return {
             controller: function ($parse, $element, $attrs, $scope) {
@@ -233,58 +234,62 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
             dataFile: dataFile
         }
     })
-    .factory('petition', function ($http, $location) {
+    .factory('petition', ["$http", "$location", "$q", function ($http, $location, $q) {
         var baseUrl = function (URL) {
             var prot = $location.protocol();
             var host = $location.host();
             return prot + '://' + host + '/' + URL;
         };
 
-        var promise;
 
         return {
 
             get: function (URL, data) {
                 data || (data = {});
-                promise = $http.get(baseUrl(URL), data).then(function (response) {
-                    return response.data;
+                var deferred = $q.defer();
+                $http.get(baseUrl(URL), data).then(function (response) {
+                    deferred.resolve(response.data);
                 });
 
-                return promise;
+                return deferred.promise;
             },
             post: function (URL, data, config) {
                 data || (data = {});
                 config || (config = {});
-                promise = $http.post(baseUrl(URL), data, config).then(function (response) {
-                    return response.data;
+                var deferred = $q.defer();
+                $http.post(baseUrl(URL), data, config).then(function (response) {
+                    deferred.resolve(response.data);
                 });
 
-                return promise;
+                return deferred.promise;
             },
             put: function (URL, data) {
                 data || (data = {});
-                promise = $http.put(baseUrl(URL), data).then(function (response) {
-                    return response.data;
+                var deferred = $q.defer();
+                $http.put(baseUrl(URL), data).then(function (response) {
+                    deferred.resolve(response.data);
                 });
 
-                return promise;
+                return deferred.promise;
             },
             delete: function (URL, data) {
                 data || (data = {});
-                promise = $http.delete(baseUrl(URL), data).then(function (response) {
-                    return response.data;
+                var deferred = $q.defer();
+                $http.delete(baseUrl(URL), data).then(function (response) {
+                    deferred.resolve(response.data);
                 });
 
-                return promise;
+                return deferred.promise;
             },
             custom: function (config) {
-                promise = $http(config).then(function (response) {
-                    return response.data;
+                var deferred = $q.defer();
+                $http(config).then(function (response) {
+                    deferred.resolve(response.data);
                 });
-                return promise;
+                return deferred.promise;
             }
         };
-    })
+    }])
     .factory('storage', ['$window', '$log', '$auth', function ($window, $log, $auth) {
         var storageType = 'localStorage';
         var roleName = 'roleName';
@@ -309,7 +314,7 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
             }
         };
     }])
-    .factory('util', function ($location) {
+    .factory('util', ["$location", function ($location) {
         return {
             liPage: function (name) {
                 $('li.active').removeClass('active');
@@ -346,7 +351,7 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
                 $(table).AJQtable('view', scope, compile);
             }
         }
-    })
+    }])
 
 
 

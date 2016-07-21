@@ -235,8 +235,6 @@ class AuxMovementController extends Controller
         $newMovement->date_request = $movement->date_request;
         $newMovement->save(); 
 
-        return $newMovement;
-
         return response()->json(['message' => 'Se reprogramo la salida', 'movement' => $newMovement]);
     }
 
@@ -358,22 +356,7 @@ class AuxMovementController extends Controller
 
     private function movementsGet($start){
         $movements=DB::table('auxproducts as p')
-<<<<<<< HEAD
-        ->select('m.created_at','m.date_shipment as fecha','m.status','m.discount')
-        ->addSelect('p.cod as codigo','p.name as product','p.cost_provider','p.utility')
-        ->addSelect('c.name as color','s.name as talla')
-        ->addSelect(DB::raw('p.cost_provider + p.utility  as price_real'))
-        ->addSelect(DB::raw('case when dc.price then dc.price else p.cost_provider + p.utility end as price'))
-        ->addSelect(DB::raw('case when dc.price then 1 else 0 end liquidation'))
-        ->join('auxmovements as m','p.id','=','m.product_id')
-        ->join('colors as c','c.id','=','p.color_id')
-        ->join('sizes as s','s.id','=','p.size_id')
-        ->leftJoin('settlements as dc','dc.product_id','=','p.id')
-        ->where('m.date_shipment','>=',$start->toDateString())
-        ->where('m.date_shipment','<=',$start->toDateString())
-        ->orderby('p.name','c.name','s.name')
-        ->get();
-=======
+
             ->select('m.created_at','m.date_shipment as fecha','m.status','m.discount','cod_order','date_request')
             ->addSelect('p.cod as codigo','p.name as product','p.cost_provider','p.utility')
             ->addSelect('c.name as color','s.name as talla')
@@ -388,7 +371,6 @@ class AuxMovementController extends Controller
             ->where('m.date_shipment','<=',$start->toDateString())
             ->orderby('p.name','c.name','s.name')
             ->get();
->>>>>>> 04a81349a3e3381e9267a2fa1d50d98fa071ab9f
 
         foreach ($movements as $product) {
             $product->price_final = $product->price - $product->discount;
@@ -449,13 +431,10 @@ class AuxMovementController extends Controller
                 $request->input('name'),
                 $request->input('size'),
                 $request->input('color')
-<<<<<<< HEAD
-                );
-        } else if (!\Validator::make($request->all(),['provider' => 'required'])->fails()){
-=======
+
             );
         } else if ($request->has("provider")){
->>>>>>> 04a81349a3e3381e9267a2fa1d50d98fa071ab9f
+
             $data = $this->find_for_provider($date1,$date2,
                 $request->input('status'),
                 $request->input('provider')
@@ -509,17 +488,7 @@ class AuxMovementController extends Controller
     private function entrefechas($date1,$date2, $status = 'Vendido'){
 
         $movements=DB::table('auxproducts as p')
-<<<<<<< HEAD
-        ->select('m.date_shipment as fecha','p.cod as codigo','p.name as product','c.name as color','s.name as talla','m.status')
-        ->join('auxmovements as m','p.id','=','m.product_id')
-        ->join('colors as c','c.id','=','p.color_id')
-        ->join('sizes as s','s.id','=','p.size_id')
-        ->where('m.status','like','%'.$status.'%')
-        ->where(DB::raw('DATE(m.date_shipment)'),'>=',$date1->toDateString())
-        ->where(DB::raw('DATE(m.date_shipment)'),'<',$date2->toDateString())
-        ->orderby('p.name','c.name','s.name')
-        ->get();
-=======
+
             ->select('m.date_shipment as fecha','p.cod as codigo','p.name as product','c.name as color','s.name as talla','m.status','cod_order','date_request')
             ->join('auxmovements as m','p.id','=','m.product_id')
             ->join('colors as c','c.id','=','p.color_id')
@@ -529,7 +498,6 @@ class AuxMovementController extends Controller
             ->where(DB::raw('DATE(m.date_shipment)'),'<',$date2->toDateString())
             ->orderby('p.name','c.name','s.name')
             ->get();
->>>>>>> 04a81349a3e3381e9267a2fa1d50d98fa071ab9f
 
         return $movements;
     }
@@ -538,26 +506,7 @@ class AuxMovementController extends Controller
 
         $data = array();
         $data['movements'] = DB::table('auxproducts as p')
-<<<<<<< HEAD
-        ->select('m.created_at','m.date_shipment as fecha','m.status','m.discount')
-        ->addSelect('p.cod as codigo','p.name as product','p.cost_provider','p.utility')
-        ->addSelect('c.name as color','s.name as talla')
-        ->addSelect(DB::raw('p.cost_provider + p.utility  as price_real'))
-        ->addSelect(DB::raw('case when dc.price then dc.price else p.cost_provider + p.utility end as price'))
-        ->addSelect(DB::raw('case when dc.price then 1 else 0 end liquidation'))
-        ->join('auxmovements as m','p.id','=','m.product_id')
-        ->join('colors as c','c.id','=','p.color_id')
-        ->join('sizes as s','s.id','=','p.size_id')
-        ->leftJoin('settlements as dc','dc.product_id','=','p.id')
-        ->where('m.status','like','%'.(($status)?$status:'').'%')
-        ->where('p.name','like','%'.$name.'%')
-        ->where('p.size_id','like','%'.$size.'%')
-        ->where('p.color_id','like','%'.$color.'%')
-        ->where(DB::raw('DATE(m.date_shipment)'),'>=',$date1->toDateString())
-        ->where(DB::raw('DATE(m.date_shipment)'),'<=',$date2->toDateString())
-        ->orderby('m.date_shipment','asc')
-        ->get();
-=======
+
             ->select('m.created_at','m.date_shipment as fecha','m.status','m.discount','cod_order','date_request')
             ->addSelect('p.cod as codigo','p.name as product','p.cost_provider','p.utility')
             ->addSelect('c.name as color','s.name as talla')
@@ -576,7 +525,6 @@ class AuxMovementController extends Controller
             ->where(DB::raw('DATE(m.date_shipment)'),'<=',$date2->toDateString())
             ->orderby('m.date_shipment','asc')
             ->get();
->>>>>>> 04a81349a3e3381e9267a2fa1d50d98fa071ab9f
 
         foreach ($data['movements'] as $product) {
             $product->price_final = $product->price - $product->discount;
@@ -613,24 +561,7 @@ class AuxMovementController extends Controller
 
         $data = array();
         $data['movements'] = DB::table('auxproducts as p')
-<<<<<<< HEAD
-        ->select('m.created_at','m.date_shipment as fecha','m.status','m.discount')
-        ->addSelect('p.cod as codigo','p.name as product','p.cost_provider','p.utility')
-        ->addSelect('c.name as color','s.name as talla')
-        ->addSelect(DB::raw('p.cost_provider + p.utility  as price_real'))
-        ->addSelect(DB::raw('case when dc.price then dc.price else p.cost_provider + p.utility end as price'))
-        ->addSelect(DB::raw('case when dc.price then 1 else 0 end liquidation'))
-        ->join('auxmovements as m','p.id','=','m.product_id')
-        ->join('colors as c','c.id','=','p.color_id')
-        ->join('sizes as s','s.id','=','p.size_id')
-        ->leftJoin('settlements as dc','dc.product_id','=','p.id')
-        ->where('m.status','like','%'.(($status)?$status:'').'%')
-        ->where('p.provider_id','=', $provider)
-        ->where('m.date_shipment','>=',$date1->toDateString())
-        ->where('m.date_shipment','<=',$date2->toDateString())
-        ->orderby('m.date_shipment','asc')
-        ->get();
-=======
+
             ->select('m.created_at','m.date_shipment as fecha','m.status','m.discount','cod_order','date_request')
             ->addSelect('p.cod as codigo','p.name as product','p.cost_provider','p.utility')
             ->addSelect('c.name as color','s.name as talla')
@@ -647,7 +578,6 @@ class AuxMovementController extends Controller
             ->where('m.date_shipment','<=',$date2->toDateString())
             ->orderby('m.date_shipment','asc')
             ->get();
->>>>>>> 04a81349a3e3381e9267a2fa1d50d98fa071ab9f
 
         foreach ($data['movements'] as $product) {
             $product->price_final = $product->price - $product->discount;
@@ -686,23 +616,7 @@ class AuxMovementController extends Controller
     private function find_for_dates($date1, $date2, $status){
         $data = array();
         $data['movements'] = DB::table('auxproducts as p')
-<<<<<<< HEAD
-        ->select('m.created_at','m.date_shipment as fecha','m.status','m.discount')
-        ->addSelect('p.cod as codigo','p.name as product','p.cost_provider','p.utility')
-        ->addSelect('c.name as color','s.name as talla')
-        ->addSelect(DB::raw('p.cost_provider + p.utility  as price_real'))
-        ->addSelect(DB::raw('case when dc.price then dc.price else p.cost_provider + p.utility end as price'))
-        ->addSelect(DB::raw('case when dc.price then 1 else 0 end liquidation'))
-        ->join('auxmovements as m','p.id','=','m.product_id')
-        ->join('colors as c','c.id','=','p.color_id')
-        ->join('sizes as s','s.id','=','p.size_id')
-        ->leftJoin('settlements as dc','dc.product_id','=','p.id')
-        ->where('m.status','like','%'.(($status)?$status:'').'%')
-        ->where('m.date_shipment','>=',$date1->toDateString())
-        ->where('m.date_shipment','<=',$date2->toDateString())
-        ->orderby('m.date_shipment','asc')
-        ->get();
-=======
+
             ->select('m.created_at','m.date_shipment as fecha','m.status','m.discount','cod_order','date_request')
             ->addSelect('p.cod as codigo','p.name as product','p.cost_provider','p.utility')
             ->addSelect('c.name as color','s.name as talla')
@@ -718,7 +632,6 @@ class AuxMovementController extends Controller
             ->where('m.date_shipment','<=',$date2->toDateString())
             ->orderby('m.date_shipment','asc')
             ->get();
->>>>>>> 04a81349a3e3381e9267a2fa1d50d98fa071ab9f
 
         foreach ($data['movements'] as $product) {
             $product->price_final = $product->price - $product->discount;

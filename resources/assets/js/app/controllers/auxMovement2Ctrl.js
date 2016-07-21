@@ -280,14 +280,7 @@ angular.module('App')
                                                 <th>${$scope.tableData[$scope.index].name}</th>
                                                 <td>${$scope.tableData[$scope.index].size.name}</td>
                                                 <td>${$scope.tableData[$scope.index].color.name}</td>
-                                                <td>${(function(){ 
-                                                    var day = $scope.programDate.getDate();
-                                                    var month = ($scope.programDate.getMonth().toString().length == 1)?
-                                                        '0'.concat(($scope.programDate.getMonth() + 1).toString()):
-                                                        ($scope.programDate.getMonth() + 1).toString();
-                                                    var year = $scope.programDate.getFullYear();
-                                                    var date = '';
-                                                    return date.concat(day,'-',month,'-',year)})()}</td>
+                                                <td>${util.setDate($scope.programDate)}</td>
                                             </tr>
                                         </tbody>
                                     </table>

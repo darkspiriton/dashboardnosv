@@ -5,53 +5,55 @@
                 data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
                 title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
     </div>
-        <div class="card-header bgm-lightblue">
-           <div ng-form="dates" class="row report-date">
+    <div class="card-header bgm-lightblue">
+       <div ng-form="dates" class="row report-date">
 
-                <h2 class="col-xs-5 col-sm-1 text-right m-t-20">Tipo</h2>
-                <select class="col-xs-7 col-sm-2 m-t-20" ng-change="noProduct()" ng-options="type.id as type.name for type in types" ng-model="data.provider">
-                   <option value="" selected="selected">Seleccione</option>
-                </select>
+            <h2 class="col-xs-5 col-sm-1 text-right m-t-20">Tipo</h2>
+            <select class="col-xs-7 col-sm-2 m-t-20" ng-options="type.id as type.name for type in types" ng-model="data.type">
+               <option value="" selected="selected">Seleccione</option>
+            </select>
 
-                <h2 class="col-xs-5 col-sm-1 text-right  m-t-20">Proveedor</h2>
-                <select class="col-xs-7 col-sm-2 m-t-20" ng-change="productList(provider)" ng-options="provider.id as provider.name for provider in providers" ng-model="provider.provider">
-                   <option value="" selected="selected">Seleccione</option>
-                </select>
+            <h2 class="col-xs-5 col-sm-1 text-right  m-t-20">Proveedor</h2>
+            <select class="col-xs-7 col-sm-2 m-t-20" ng-options="provider.id as provider.name for provider in providers" ng-model="data.provider_id">
+               <option value="" selected="selected">Seleccione</option>
+            </select>
 
-<!--                 <h2 class="col-xs-5 col-sm-1 text-right m-t-20">Venta</h2>
-                <select class="col-xs-7 col-sm-2 m-t-20" ng-change="noProduct()" ng-options="provider.id as provider.name for provider in providers" ng-model="data.provider">
-                   <option value="" selected="selected">Seleccione</option>
-                </select> -->
+            <h2 class="col-xs-5 col-sm-1 text-right m-t-20">Venta</h2>
+            <select class="col-xs-7 col-sm-2 m-t-20" ng-model="data.status_sale">
+               <option value="" selected="selected">Seleccione</option>
+               <option value="0" selected="selected">Normal</option>
+               <option value="1" selected="selected">Liquidacion</option>
+            </select>
 
-                <h2 class="col-xs-5 col-sm-1 text-right m-t-20">Estado</h2>
-                <select class="col-xs-7 col-sm-2 m-t-20" ng-model="data.status">
-                    <option value="" selected="selected">Seleccione</option>
-                    <option value="0">Salida</option>
-                    <option value="1">Disponible</option>
-                    <option value="2">Vendido</option>
-                    <option value="3">Reservado</option>
-                </select>
+            <h2 class="col-xs-5 col-sm-1 text-right m-t-20">Estado</h2>
+            <select class="col-xs-7 col-sm-2 m-t-20" ng-model="data.status">
+                <option value="" selected="selected">Seleccione</option>
+                <option value="0">Salida</option>
+                <option value="1">Disponible</option>
+                <option value="2">Vendido</option>
+                <option value="3">Reservado</option>
+            </select>
 
-                <h2 class="col-xs-5 col-sm-1 m-t-20 text-right">Producto</h2>
-                <select class="col-xs-7 col-sm-2 m-t-20" ng-change="productList(product)" ng-options="product.name as product.name for product in products" ng-model="product.name">
-                   <option value=""  selected="selected">Seleccione</option>
-                </select>
+            <h2 class="col-xs-5 col-sm-1 m-t-20 text-right">Producto</h2>
+            <select class="col-xs-7 col-sm-2 m-t-20" ng-options="product.name as product.name for product in products" ng-model="data.product">
+               <option value=""  selected="selected">Seleccione</option>
+            </select>
 
-                <h2 class="col-xs-5 col-sm-1 m-t-20 text-right">Talla</h2>
-                <select class="col-xs-7 col-sm-2 m-t-20" ng-options="size.id as size.name for size in sizes" ng-model="data.size">
-                   <option value=""  selected="selected">Seleccione</option>
-                </select>
+            <h2 class="col-xs-5 col-sm-1 m-t-20 text-right">Talla</h2>
+            <select class="col-xs-7 col-sm-2 m-t-20" ng-options="size.id as size.name for size in sizes" ng-model="data.size">
+               <option value=""  selected="selected">Seleccione</option>
+            </select>
 
-                <h2 class="col-xs-5 col-sm-1 m-t-20 text-right">Color</h2>
-                <select class="col-xs-7 col-sm-2 m-t-20" ng-options="color.id as color.name for color in colors" ng-model="data.color">
-                   <option value="" selected="selected">Seleccione</option>
-                </select>
+            <h2 class="col-xs-5 col-sm-1 m-t-20 text-right">Color</h2>
+            <select class="col-xs-7 col-sm-2 m-t-20" ng-options="color.id as color.name for color in colors" ng-model="data.color">
+               <option value="" selected="selected">Seleccione</option>
+            </select>
 
-                <div class="col-xs-offset-0 col-xs-12 col-sm-offset-1 col-sm-2 p-0 m-t-20">
-                    <input type="button" ng-disabled="!dates.$valid" ng-click="searchList(data)" class="btn btn-block bgm-black" value="buscar">
-                </div>
-           </div>
-        </div>
+            <div class="col-xs-offset-0 col-xs-12 col-sm-offset-1 col-sm-2 p-0 m-t-20">
+                <input type="button" ng-disabled="!dates.$valid" ng-click="searchList(data)" class="btn btn-block bgm-indigo" value="buscar">
+            </div>
+       </div>
+    </div>
     <div class="card-body card-padding table-responsive">
         <div class="col-sm-12" ng-show="updateList">
             <i class="fa fa-refresh fa-spin fa-5x" style="display: table;margin: 0 auto;"></i>

@@ -157,49 +157,30 @@ angular.module('App')
                                         <tr>
                                             <th>Cod</th>
                                             <th>Nombre</th>
+                                            <th>Talla</th>
+                                            <th>Color</th>
                                             <th>P. Venta</th>
-                                            <th>Descuento</th>
-                                            <th>preciofinal</th>
+                                            <th>Desc.</th>
+                                            <th>P. Final</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        <tr>                                            
-                                            <td>${( function(){
-                                                var cod = "";
-                                                for(i in $scope.products){                                                    
-                                                    cod += $scope.products[i].cod+"<br>"                                                    
-                                                }
-                                                return cod; })()}
-                                            </td>                                            
-                                            <td>${( function(){
-                                                var cod = "";
+                                            ${(function(){
+                                                var rowList = "";
                                                 for(i in $scope.products){
-                                                    cod += "• "+$scope.products[i].name+"<br>"
+                                                    var row = "<tr>";
+                                                    row += `<td>${$scope.products[i].cod}</td>`;
+                                                    row += `<td>${$scope.products[i].name}</td>`;
+                                                    row += `<td>${$scope.products[i].size}</td>`;
+                                                    row += `<td>${$scope.products[i].color}</td>`;
+                                                    row += `<td>${$scope.products[i].price}</td>`;
+                                                    row += `<td>${$scope.products[i].discount}</td>`;
+                                                    row += `<td>${$scope.products[i].preciofinal}</td>`;
+                                                    row += `</tr>`;
+                                                    rowList += row;
                                                 }
-                                                return cod; })()}
-                                            </td>
-                                            <td>${( function(){
-                                                var cod = "";
-                                                for(i in $scope.products){
-                                                    cod += $scope.products[i].price+"<br>"
-                                                }
-                                                return cod; })()}
-                                            </td>
-                                            <td>${( function(){
-                                                var cod = "";
-                                                for(i in $scope.dataProducts){
-                                                    cod += $scope.dataProducts[i].discount+"<br>"
-                                                }
-                                                return cod; })()}
-                                            </td>
-                                            <td>${( function(){
-                                                var cod = "";
-                                                for(i in $scope.products){
-                                                    cod += $scope.products[i].preciofinal+"<br>"
-                                                }
-                                                return cod; })()}
-                                            </td>
-                                        </tr>
+                                                return rowList;
+                                            })()}
                                         </tbody>
                                     </table>
                                 </div>`;
@@ -237,6 +218,8 @@ angular.module('App')
                     {
                         movements[i].product_cod = products[j].cod;
                         movements[i].product_name = products[j].name;
+                        movements[i].product_size = products[j].size.name;
+                        movements[i].product_color = products[j].color.name;
                         break;
                     }
                 }
@@ -245,6 +228,8 @@ angular.module('App')
                             <td>${movements[i].date_shipment}</td>
                             <td>${movements[i].product_cod}</td>
                             <td>${movements[i].product_name}</td>
+                            <td>${movements[i].product_size}</td>
+                            <td>${movements[i].product_color}</td>
                             <td>${movements[i].discount}</td>
                         </tr>`;
             }
@@ -256,6 +241,8 @@ angular.module('App')
                                             <th style="Width:100px">fecha</th>
                                             <th>Cod</th>
                                             <th>Nombre</th>
+                                            <th>Talla</th>
+                                            <th>Color</th>
                                             <th>desc.</th>
                                         </tr>
                                         </thead>

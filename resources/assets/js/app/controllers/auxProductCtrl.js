@@ -10,39 +10,72 @@ angular.module('App')
     .controller('productsCtrl', ["$scope", "$compile", "$state", "$log", "util", "petition", "toastr",
         function($scope, $compile, $state, $log, util, petition, toastr){
 
+        /*
+         |
+         |  Init
+         |
+         */
+
+        $scope.provider = {};
+        $scope.product = {};
+        $scope.data = {};
+
+        /*
+         |  END
+         */
+
+        var actions = [
+                        ['eliminar', 'delete' ,'bgm-red'],
+                        ['editar', 'edit' ,'btn-primary'],
+                        ['movimientos','movements','bgm-teal']
+                    ];
+
+        var status = {
+                    0 : ['salida','btn-danger', false],
+                    1 : ['disponible', 'btn-success', false],
+                    2 : ['vendido', 'bgm-teal', false],
+                    3 : ['reservado', 'bgm-black', false]
+                };
+
+        var statusForSale = {
+                    0 : ['normal', 'btn-success', false],
+                    1 : ['liquidacion', 'btn-info', false]
+                };
+
         util.liPage('products');
 
         $scope.tableConfig 	= 	{
             columns :	[
-                {"sTitle": "Fecha", "bSortable" : true, 'sWidth': '90px'},
+                {"sTitle": "Fecha", "bSortable" : true, 'sWidth': '100px'},
                 {"sTitle": "Codigo", "bSortable" : true, 'sWidth': '1px'},
                 {"sTitle": "Nombre", "bSortable" : true, 'sWidth': '250px'},
                 {"sTitle": "Proveedor", "bSortable" : true},
                 {"sTitle": "Talla", "bSortable" : true},
                 {"sTitle": "Color", "bSortable" : true, "bSearchable": true},
                 {"sTitle": "Tipos", "bSortable" : true, "bSearchable": true},
-                {"sTitle": "P. Proveedor (S/.)" , "bSearchable": true},
-                {"sTitle": "Utilidad (S/.)" , "bSearchable": true},
-                {"sTitle": "Precio (S/.)" , "bSearchable": true},
+                {"sTitle": "Estado V." , "bSearchable": false},
+                {"sTitle": "P. Real" , "bSearchable": false},
+                {"sTitle": "Precio" , "bSearchable": false},
                 {"sTitle": "Status", "bSortable" : false, "bSearchable": true},
-                {"sTitle": "Accion", "bSortable" : false, "bSearchable": true ,'sWidth': '300px'}
+                {"sTitle": "Accion", "bSortable" : false, "bSearchable": false, "sWidth" : "360px"}
             ],
-            actions	:   	[
-                ['status',   {
-                    0 : { txt : 'salida' , cls : 'btn-danger', dis : false},
-                    1 : { txt : 'disponible' ,  cls : 'btn-success', dis : false},
-                    2 : { txt : 'vendido' ,  cls : 'bgm-teal', dis : false},
-                    3 : { txt : 'reservado' ,  cls : 'bgm-black', dis : false}
-                }
+            buttons :
+                [
+                    {
+                        type: 'status',
+                        list:  [
+                            { name: 'status', column: 'status', render: status},
+                            { name: 'statusForSale', column: 'liquidation', render: statusForSale},
+                        ]
+                    },
+                    {
+                        type: 'actions',
+                        list: [
+                            { name: 'actions', render: actions}
+                        ]
+                    }
                 ],
-                ['actions', [
-                    ['eliminar', 'delete' ,'bgm-red'],
-                    ['editar', 'edit' ,'btn-primary'],
-                    ['movimientos','movements','bgm-teal']
-                ]
-                ]
-            ],
-            data  	: 	['date','cod','name','provider','size','color','types','cost_provider','utility','precio','status','actions'],
+            data  	: 	['date','cod','name','provider','size','color','types','statusForSale','price_real','precio','status','actions'],
             configStatus : 'status'
         };
 
@@ -96,11 +129,10 @@ angular.module('App')
             petition.get('api/auxproduct', obj)
                 .then(function(data){
                     $scope.tableData = data.products;
-                    $('#table').AJQtable('view', $scope, $compile);
+                    $('#table').AJQtable2('view2', $scope, $compile);
                     $scope.updateList = false;
                 }, function(error){
-                    console.log(error);
-                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                    toastr.error('Huy Huy dice: ' + error.data.message);
                     $scope.updateList = false;
                 });
         };
@@ -113,7 +145,6 @@ angular.module('App')
                     $scope.productState = false;
                     util.muestraformulario();
                 }, function (error) {
-                    console.log(error);
                     toastr.error('Uyuyuy dice: '+ error.data.message);
                 });
         };
@@ -172,8 +203,7 @@ angular.module('App')
                     $scope.providers = data.providers;
                     $scope.providers.push(newProvider);
                 }, function(error){
-                    console.log(error);
-                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                    toastr.error('Huy Huy dice: ' + error.data.message);
                 });
         };
 
@@ -182,8 +212,7 @@ angular.module('App')
                 .then(function(data){
                     $scope.sizes = data.sizes;
                 }, function(error){
-                    console.log(error);
-                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                    toastr.error('Huy Huy dice: ' + error.data.message);
                 });
         };
 
@@ -193,8 +222,7 @@ angular.module('App')
                     $scope.colors = data.colors;
                     $scope.colors.push(newColor);
                 }, function(error){
-                    console.log(error);
-                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                    toastr.error('Huy Huy dice: ' + error.data.message);
                 });
         };
 
@@ -204,8 +232,7 @@ angular.module('App')
                     $scope.types = data.types;
                     $scope.types.push(newType);
                 }, function(error){
-                    console.log(error);
-                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                    toastr.error('Huy Huy dice: ' + error.data.message);
                 });
         };
 
@@ -218,8 +245,7 @@ angular.module('App')
                      $scope.btnCods = false;
                 }, function(error){
                      $scope.btnCods = false;
-                    console.log(error);
-                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                    toastr.error('Huy Huy dice: ' + error.data.message);
                 });
         };
 
@@ -233,7 +259,7 @@ angular.module('App')
                     $scope.productDetail = angular.copy($scope.tableData[ind]);
                     util.modal();
                 }, function(error){
-                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
+                    toastr.error('Huy Huy dice: ' + error.data.message);
                 });
         };
 
@@ -256,7 +282,7 @@ angular.module('App')
                         $scope.listCodes();
                         util.ocultaformulario();
                     }, function(error){
-                        toastr.error('Uyuyuy dice: ' + error.data.message);
+                        toastr.error('Huy Huy dice: ' + error.data.message);
                         $scope.formSubmit=false;
                     })
                 });
@@ -336,7 +362,6 @@ angular.module('App')
                     $scope.listColors();
                     $scope.listTypes();
                 }, function(error){
-                    console.log(error);
                     toastr.error('Uyuyuy dice: ' + error.data.message);
                 });
         };
@@ -395,9 +420,79 @@ angular.module('App')
             return `<a class="btn btn-xs disabled ${info[status][1]}">${info[status][0]}</a>`;
         };
 
+                /*
+         *
+         * Helper para filtro
+         *
+         */
+
+        $scope.typesList = function(){
+            petition.get(`api/auxproduct/filter/get/types`)
+                .then(function(data){
+                    $scope.types = data.types;
+                }, function(error){
+                    toastr.error('Huy Huy dice: ' + error.data.message);
+                });
+        }
+
+        $scope.providerList = function(){
+            petition.get(`api/auxproduct/filter/get/providers`)
+                .then(function(data){
+                    $scope.providers = data.providers;
+                }, function(error){
+                    toastr.error('Huy Huy dice: ' + error.data.message);
+                });
+        }
+
+        $scope.productList = function(){
+            petition.get(`api/auxproduct/filter/get/products`)
+                .then(function(data){
+                    $scope.products = data.products;
+                    $scope.colors = data.colors;
+                    $scope.sizes = data.sizes;
+                }, function(error){
+                    toastr.error('Huy Huy dice: ' + error.data.message);
+                });
+        }
+
+        $scope.searchList = function(dataSearch){
+            $scope.updateList = true;
+            if(dataSearch.status_sale === "")dataSearch.status_sale = null;
+            petition.get(`api/auxproduct/filter/get/search`, {params: dataSearch})
+                .then(function(data){
+                    $scope.tableData = data.products;
+                    $('#table').AJQtable2('view2', $scope, $compile);
+                    $scope.updateList = false;
+                }, function(error){
+                    toastr.error('Huy Huy dice: ' + error.data.message);
+                    $scope.updateList = false;
+                });
+        }
+
+        function resetProduct(){
+            $scope.products = [];
+            $scope.colors = [];
+            $scope.sizes = [];
+
+            $scope.product = {};
+            $scope.data.product = null;
+            $scope.data.color = null;
+            $scope.data.size = null;
+        }
+
+        function resetColorSize(){
+            $scope.colors = [];
+            $scope.sizes = [];
+
+            $scope.data.color = null;
+            $scope.data.size = null;
+        }
+
+        /*
+         *  END
+         */ 
 
         angular.element(document).ready(function(){
-           
             $scope.product = angular.copy($scope.productClear);
             $scope.newFeature = {};
             $scope.list();
@@ -405,5 +500,9 @@ angular.module('App')
             $scope.listSizes();
             $scope.listColors();
             $scope.listTypes();
+
+            $scope.typesList();
+            $scope.providerList();
+            $scope.productList();
         });
     }]);

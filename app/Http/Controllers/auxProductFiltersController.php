@@ -14,63 +14,82 @@ use \DB;
 
 class auxProductFiltersController extends Controller
 {
+
+    /**
+     * Restricion de metodos por nivel de usuario
+     *
+     */
+    public function __construct()
+    {
+        $this->middleware("auth:GOD,ADM,JVE", ["only" => ["FilterForAll"]]);
+    }
+
+    /**
+     * Listado de tipos de produtos
+     *
+     *	@return  Illuminate\Http\Response
+     */
     public function TypeProductList()
     {
         try {
-            $types = Type::all();
+            $types = Type::orderBy("name","asc")->get();
             return response()->json(["types" => $types]);
         } catch (\Exception $e) {
-            return \Response::json(["message" => "Pascal mordio algunos cables, llame a sistemas"], 500);
+            return response()->json(["message" => "Pascal mordio algunos cables, llame a sistemas"], 500);
         }
     }
 
+    /**
+     * Listado de proveedores
+     *
+     *	@return Illuminate\Http\Response
+     */
     public function ProviderList()
     {
         try {
-            $providers = Provider::get(array("id", "name"));
+            $providers = Provider::select(array("id", "name"))->orderBy("name","asc")->get();
             return response()->json(["providers" => $providers]);
         } catch (\Exception $e) {
-            return \Response::json(["message" => "Pascal mordio algunos cables, llame a sistemas"], 500);
+            return response()->json(["message" => "Pascal mordio algunos cables, llame a sistemas"], 500);
         }
     }
 
+    /**
+     * Listado de productos | colores | tallas
+     *
+     *	@param  Illuminate\Http\Request  $request | string:name
+     *	@return  Illuminate\Http\Response
+     */
     public function ProductList(Request $request)
     {
         try {
-            if ($request->has("name")) {
-                $colors = Product::select("color_id")->distinct()->where("name", $request->input("name"))->lists("color_id");
-                $sizes = Product::select("size_id")->distinct()->where("name", $request->input("name"))->lists("size_id");
-
                 $data = array();
-                $data["sizes"] =  Size::select("id", "name")->whereIn("id", $sizes)->get();
-                $data["colors"] =  Color::select("id", "name")->whereIn("id", $colors)->get();
+                $data["sizes"] =  Size::select(array("id", "name"))->orderBy("name","asc")->get();
+                $data["colors"] =  Color::select(array("id", "name"))->orderBy("name","asc")->get();
+                $data['products'] = Product::select("name")->distinct()->orderBy("name", "asc")->get();
 
                 return response()->json($data);
-            } else {
-                $query = Product::select("name")->distinct()->orderBy("name", "asc");
-
-                if ($request->has("provider")) {
-                    $query->where("provider_id", $request->input("provider"));
-                }
-
-                $products = $query->get();
-
-                return response()->json(["products" => $products]);
-            }
         } catch (\Exception $e) {
-            return \Response::json(["message" => "Pascal mordio algunos cables, llame a sistemas"], 500);
+            return response()->json(["message" => "Pascal mordio algunos cables, llame a sistemas"], 500);
         }
     }
 
+    /**
+     * Listado de productos por filtro de busqueda
+     *
+     *	@param  Illuminate\Http\Request  $request
+     *	@return  Illuminate\Http\Response
+     */
     public function FilterForAll(Request $request)
     {
         $rules = [
-            "type"        =>    "integer|exists:types,id",
-            "provider"    =>    "integer|exists:providers,id",
-            "product"    =>    "string|max:100",
-            "color"        =>    "integer|exists:colors,id",
-            "size"        =>    "integer|exists:sizes,id",
-            "status"    =>    "integer|between:0,3"
+            "type"            =>    "integer|exists:types,id",
+            "provider_id"    =>    "integer|exists:providers,id",
+            "product"         =>    "string|max:100",
+            "color"           =>    "integer|exists:colors,id",
+            "size"            =>    "integer|exists:sizes,id",
+            "status"        =>  "integer|between:0,3",
+            "status_sale"    =>    "integer|between:0,1"
         ];
 
         if (Validator::make($request->all(), $rules)->fails()) {
@@ -91,32 +110,117 @@ class auxProductFiltersController extends Controller
                         ->groupBy('cod')
                         ->orderBy('id', 'desc');
 
-        if ($request->has('type')) {
-            $query->where('tp.type_id', $request->input('type'));
-        }
-
-        if ($request->has('provider')) {
-            $query->where('p.provider_id', $request->input('provider'));
-        }
-
-        if ($request->has('product')) {
-            $query->where('p.name', $request->input('product'));
-        }
-
-        if ($request->has('color')) {
-            $query->where('p.color_id', $request->input('color'));
-        }
-
-        if ($request->has('size')) {
-            $query->where('p.size_id', $request->input('size'));
-        }
-
-        if ($request->has('status')) {
-            $query->where('p.status', $request->input('status'));
-        }
+        $query = $this->QueryRequest($request, $query);
 
         $products = $query->get();
 
+        $products = $this->StatusSalesCase($request, $products);
+
         return response()->json(['products' => $products], 200);
+    }
+
+    /**
+     *	Filtro de stock de productos para vendedores
+     *
+     *	@param  Illuminate\Http\Request  $request
+     *	@return  Illuminate\Http\Response
+     */	
+    public function FilterStockForAllByVEN(Request $request){
+    	$query = Product::from( 'auxproducts as p' )
+    			->with('provider','types','color','size')
+    	        ->select('provider_id','p.id','p.name','color_id','size_id',DB::raw('count(p.name) as cantP'),'cost_provider','utility')
+    	        ->addSelect(DB::raw('case when dc.price then 1 else 0 end liquidation'))
+    	        ->leftJoin('types_auxproducts as tp', 'tp.product_id', '=', 'p.id')
+    	        ->leftJoin('types as t', 't.id', '=', 'tp.type_id')
+    	        ->join('colors as c', 'c.id', '=', 'p.color_id')
+    	        ->join('sizes as s', 's.id', '=', 'p.size_id')
+    	        ->join('providers as pv', 'pv.id', '=', 'p.provider_id')
+    	        ->leftJoin('settlements as dc', 'dc.product_id', '=', 'p.id')
+    	        ->where('status', '=', 1)
+    	        ->groupby('name','color_id','size_id');
+
+    	$query = $this->QueryRequest($request, $query);
+
+    	$stock = $query->get();
+
+    	$stock = $this->StatusSalesCase($request, $stock);
+
+    	foreach ($stock as $product) {
+    	    if ($product->types){
+    	        $product->typesList = $product->types->implode("name","|");
+    	    }
+
+    	    $product->price_final = $product->cost_provider + $product->utility;
+    	}  
+
+    	return response()->json(['stock' => $stock], 200);
+    }
+
+    /**
+     *	Agregar consultas al filtro de  busqueda de productos 
+     *	por parametros recibidos.
+     *
+     *	@param  Illuminate\Http\Request  $request
+     *	@param  Illuminate\Support\Facades\DB  $query
+     *	@return  Illuminate\Support\Facades\DB
+     *	
+     *	@param  Illuminate\Http\Request  $request
+     *	@param  Illuminate\Database\Eloquent\Model  $query
+     *	@return  Illuminate\Database\Eloquent\Model 	    
+     */
+    private function QueryRequest(Request $request, $query){
+    	if ($request->has('type')) {
+    	    $query->where('tp.type_id', $request->input('type'));
+    	}
+
+    	if ($request->has('provider_id')) {
+    	    $query->where('p.provider_id', $request->input('provider_id'));
+    	}
+
+    	if ($request->has('product')) {
+    	    $query->where('p.name', $request->input('product'));
+    	}
+
+    	if ($request->has('color')) {
+    	    $query->where('p.color_id', $request->input('color'));
+    	}
+
+    	if ($request->has('size')) {
+    	    $query->where('p.size_id', $request->input('size'));
+    	}
+
+    	if ($request->has('status')) {
+    	    $query->where('p.status', $request->input('status'));
+    	}
+
+    	if ($request->has('status')) {
+    	    $query->where('p.status', $request->input('status'));
+    	}
+
+    	return $query;
+    }
+
+    /**
+     *	Remover productos por tipo de estado de venta normal|liquidacion
+     *
+     *	@param  Illuminate\Http\Request  $request
+     *	@param  Array  $data
+     *	@return  Array
+     *
+     *	@param  Illuminate\Http\Request  $request
+     *	@param  Collection  $data    
+     *	@return  Collection
+     */
+    private function StatusSalesCase(Request $request, $data){
+    	if ($request->has('status_sale')) {
+    	    $statusSale = $request->input('status_sale');
+    	    foreach ($data as $key => $value) {
+    	        if ($value->liquidation != $statusSale) {
+    	            unset($data[$key]);
+    	        }
+    	    }
+    	}
+
+    	return $data;
     }
 }

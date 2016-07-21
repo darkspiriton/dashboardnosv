@@ -125,6 +125,7 @@ Route::group(['prefix' => 'api'], function(){
         Route::get('get/providers','auxProductFiltersController@ProviderList');
         Route::get('get/products','auxProductFiltersController@ProductList');
         Route::get('get/search','auxProductFiltersController@FilterForAll');
+        Route::get('get/search/stock','auxProductFiltersController@FilterStockForAllByVEN');
     });
 
     /**

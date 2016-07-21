@@ -10,8 +10,21 @@ angular.module('App')
     .controller('productsJVECtrl', ["$scope", "$compile", "$state", "$log", "util", "petition", "toastr",
         function($scope, $compile, $state, $log, util, petition, toastr){
 
-        util.liPage('productsJVE');
+        /*
+         |
+         |  Init
+         |
+         */
 
+        $scope.provider = {};
+        $scope.product = {};
+        $scope.data = {};
+
+        /*
+         |  END
+         */
+
+        util.liPage('productsJVE');
 
         var status = {
                     0 : ['salida','btn-danger', false],
@@ -39,7 +52,7 @@ angular.module('App')
                 {"sTitle": "P. Real" , "bSearchable": false},
                 {"sTitle": "Precio" , "bSearchable": false},
                 {"sTitle": "Status", "bSortable" : false, "bSearchable": true},
-                {"sTitle": "Accion", "bSortable" : false, "bSearchable": false},
+                {"sTitle": "Accion", "bSortable" : false, "bSearchable": false, "sWidth" : "230px"}
             ],
             buttons :
                 [
@@ -139,7 +152,7 @@ angular.module('App')
             var id = $scope.tableData[i].id;
             petition.put(`api/auxproduct/reserve/${id}`)
                 .then(function(data){
-                    $scope.list();
+                    $scope.searchList($scope.data);
                     toastr.success(data.message);
                 }, function(error){
                     $scope.list();
@@ -171,23 +184,12 @@ angular.module('App')
                 });
         }
 
-        $scope.productList = function(s){
-            s || (s = {});
-
-            if(s.product)
-                $scope.data.product = s.product.name;
-
-            if(s.provider)
-                $scope.data.provider = s.provider.provider;
-
-            petition.get(`api/auxproduct/filter/get/products`, {params: s})
+        $scope.productList = function(){
+            petition.get(`api/auxproduct/filter/get/products`)
                 .then(function(data){
-                    if(data.products){
-                        $scope.products = data.products;
-                    } else {
-                        $scope.colors = data.colors;
-                        $scope.sizes = data.sizes;
-                    }
+                    $scope.products = data.products;
+                    $scope.colors = data.colors;
+                    $scope.sizes = data.sizes;
                 }, function(error){
                     toastr.error('Huy Huy dice: ' + error.data.message);
                 });
@@ -195,7 +197,7 @@ angular.module('App')
 
         $scope.searchList = function(dataSearch){
             $scope.updateList = true;
-            console.log(dataSearch);
+            if(dataSearch.status_sale === "")dataSearch.status_sale = null;
             petition.get(`api/auxproduct/filter/get/search`, {params: dataSearch})
                 .then(function(data){
                     $scope.tableData = data.products;
@@ -207,19 +209,33 @@ angular.module('App')
                 });
         }
 
+        function resetProduct(){
+            $scope.products = [];
+            $scope.colors = [];
+            $scope.sizes = [];
+
+            $scope.product = {};
+            $scope.data.product = null;
+            $scope.data.color = null;
+            $scope.data.size = null;
+        }
+
+        function resetColorSize(){
+            $scope.colors = [];
+            $scope.sizes = [];
+
+            $scope.data.color = null;
+            $scope.data.size = null;
+        }
+
         /*
          *  END
          */ 
-
 
         angular.element(document).ready(function(){
             $scope.list();
             $scope.typesList();
             $scope.providerList();
             $scope.productList();
-
-            $scope.provider = {};
-            $scope.product = {};
-            $scope.data = {};
         });
     }]);

@@ -11,6 +11,7 @@
         table td {
             padding: 5px;
             font-family: Helvetica, Arial, sans-serif;
+            font-size: 14px;
         }
         table thead tr th {
             background: #2196f3;
@@ -43,16 +44,16 @@
 <table class="w-100">
     <thead>
     <tr role="row">
-        @foreach($columns as $column)
-        <th>{{ $column }}</th>
+        @foreach($columns as $key => $column)
+        <th>{{ $key }}</th>
         @endforeach
     </tr>
     </thead>
     <tbody>
     @foreach($data as $row)
     <tr>
-        @foreach($row as $value)
-        <td>{{ $value }}</td>
+        @foreach($columns as $key => $value)
+            <td>{{ $row->$value }}</td>
         @endforeach
     </tr>
     @endforeach

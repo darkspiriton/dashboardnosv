@@ -12,7 +12,7 @@ angular.module('App')
                                 title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
                     </div>
                     <div class="card-header bgm-lightblue">
-                       <div ng-form="dates" class="row report-date">
+                        <div ng-form="dates" class="row report-date">
 
                             <h2 class="col-xs-5 col-sm-1 text-right m-t-20">Tipo</h2>
                             <select class="col-xs-7 col-sm-2 m-t-20" ng-options="type.id as type.name for type in types" ng-model="data.type">
@@ -51,7 +51,7 @@ angular.module('App')
                             <div class="col-xs-offset-0 col-xs-12 col-sm-offset-1 col-sm-2 p-0 m-t-20">
                                 <input type="button" ng-disabled="!dates.$valid" ng-click="searchList(data)" class="btn btn-block bgm-indigo" value="buscar">
                             </div>
-                       </div>
+                        </div>
                     </div>
                     <div class="card-body card-padding table-responsive">
                         <div class="col-sm-12">
@@ -107,7 +107,7 @@ angular.module('App')
                 });
         };
 
-                /*
+        /*
          *
          * Helper para filtro
          *

@@ -184,29 +184,12 @@ angular.module('App')
                 });
         }
 
-        $scope.productList = function(s){
-            s || (s = {});
-
-            if (s.name){
-                $scope.data.product = s.name;
-                resetColorSize();
-            } else if (s.provider_id){
-                $scope.data.provider_id = s.provider_id;
-                resetProduct();
-            } else {
-                resetProduct();
-                $scope.provider.provider_id = null;
-                $scope.data.provider_id = null;
-            } 
-
-            petition.get(`api/auxproduct/filter/get/products`, {params: s})
+        $scope.productList = function(){
+            petition.get(`api/auxproduct/filter/get/products`)
                 .then(function(data){
-                    if(data.products){
-                        $scope.products = data.products;
-                    } else {
-                        $scope.colors = data.colors;
-                        $scope.sizes = data.sizes;
-                    }
+                    $scope.products = data.products;
+                    $scope.colors = data.colors;
+                    $scope.sizes = data.sizes;
                 }, function(error){
                     toastr.error('Huy Huy dice: ' + error.data.message);
                 });

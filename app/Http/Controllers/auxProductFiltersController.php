@@ -32,7 +32,7 @@ class auxProductFiltersController extends Controller
     public function TypeProductList()
     {
         try {
-            $types = Type::all();
+            $types = Type::orderBy("name","asc")->get();
             return response()->json(["types" => $types]);
         } catch (\Exception $e) {
             return response()->json(["message" => "Pascal mordio algunos cables, llame a sistemas"], 500);
@@ -47,7 +47,7 @@ class auxProductFiltersController extends Controller
     public function ProviderList()
     {
         try {
-            $providers = Provider::get(array("id", "name"));
+            $providers = Provider::select(array("id", "name"))->orderBy("name","asc")->get();
             return response()->json(["providers" => $providers]);
         } catch (\Exception $e) {
             return response()->json(["message" => "Pascal mordio algunos cables, llame a sistemas"], 500);
@@ -63,26 +63,12 @@ class auxProductFiltersController extends Controller
     public function ProductList(Request $request)
     {
         try {
-            if ($request->has("name")) {
-                $colors = Product::select("color_id")->distinct()->where("name", $request->input("name"))->lists("color_id");
-                $sizes = Product::select("size_id")->distinct()->where("name", $request->input("name"))->lists("size_id");
-
                 $data = array();
-                $data["sizes"] =  Size::select("id", "name")->whereIn("id", $sizes)->get();
-                $data["colors"] =  Color::select("id", "name")->whereIn("id", $colors)->get();
+                $data["sizes"] =  Size::select(array("id", "name"))->orderBy("name","asc")->get();
+                $data["colors"] =  Color::select(array("id", "name"))->orderBy("name","asc")->get();
+                $data['products'] = Product::select("name")->distinct()->orderBy("name", "asc")->get();
 
                 return response()->json($data);
-            } else {
-                $query = Product::select("name")->distinct()->orderBy("name", "asc");
-
-                if ($request->has("provider_id")) {
-                    $query->where("provider_id", $request->input("provider_id"));
-                }
-
-                $products = $query->get();
-
-                return response()->json(["products" => $products]);
-            }
         } catch (\Exception $e) {
             return response()->json(["message" => "Pascal mordio algunos cables, llame a sistemas"], 500);
         }

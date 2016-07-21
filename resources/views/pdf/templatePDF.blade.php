@@ -11,6 +11,7 @@
         table td {
             padding: 5px;
             font-family: Helvetica, Arial, sans-serif;
+            font-size: 14px;
         }
         table thead tr th {
             background: #2196f3;

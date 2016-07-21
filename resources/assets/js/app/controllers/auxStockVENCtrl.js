@@ -20,7 +20,7 @@ angular.module('App')
                             </select>
 
                             <h2 class="col-xs-5 col-sm-1 text-right  m-t-20">Proveedor</h2>
-                            <select class="col-xs-7 col-sm-2 m-t-20" ng-change="productList(provider)" ng-options="provider.id as provider.name for provider in providers" ng-model="provider.provider_id">
+                            <select class="col-xs-7 col-sm-2 m-t-20" ng-options="provider.id as provider.name for provider in providers" ng-model="data.provider_id">
                                <option value="" selected="selected">Seleccione</option>
                             </select>
 
@@ -34,7 +34,7 @@ angular.module('App')
                             <div class="col-xs-12 col-sm-3 m-t-20" style="height:30px;"></div>
 
                             <h2 class="col-xs-5 col-sm-1 m-t-20 text-right">Producto</h2>
-                            <select class="col-xs-7 col-sm-2 m-t-20" ng-change="productList(product)" ng-options="product.name as product.name for product in products" ng-model="product.name">
+                            <select class="col-xs-7 col-sm-2 m-t-20" ng-options="product.name as product.name for product in products" ng-model="data.product">
                                <option value=""  selected="selected">Seleccione</option>
                             </select>
 
@@ -131,29 +131,12 @@ angular.module('App')
                 });
         }
 
-        $scope.productList = function(s){
-            s || (s = {});
-
-            if (s.name){
-                $scope.data.product = s.name;
-                resetColorSize();
-            } else if (s.provider_id){
-                $scope.data.provider_id = s.provider_id;
-                resetProduct();
-            } else {
-                resetProduct();
-                $scope.provider.provider_id = null;
-                $scope.data.provider_id = null;
-            } 
-
-            petition.get(`api/auxproduct/filter/get/products`, {params: s})
+        $scope.productList = function(){
+            petition.get(`api/auxproduct/filter/get/products`)
                 .then(function(data){
-                    if(data.products){
-                        $scope.products = data.products;
-                    } else {
-                        $scope.colors = data.colors;
-                        $scope.sizes = data.sizes;
-                    }
+                    $scope.products = data.products;
+                    $scope.colors = data.colors;
+                    $scope.sizes = data.sizes;
                 }, function(error){
                     toastr.error('Huy Huy dice: ' + error.data.message);
                 });

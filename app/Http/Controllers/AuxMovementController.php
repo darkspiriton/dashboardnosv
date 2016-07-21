@@ -168,7 +168,7 @@ class AuxMovementController extends Controller
             $movementsRes = array();
 
             foreach($products as $product){
-                $prd = Product::find($product['id']);
+                $prd = Product::with(["color","size"])->find($product['id']);
                 if($prd->status == 1){
                     $movement = new Movement();
                     $movement->date_shipment =substr($request->input('shipmentDate'),0,10);
@@ -434,6 +434,21 @@ class AuxMovementController extends Controller
         }
 
         $data = $data['movements'];
+
+        foreach ($data as $row) {
+            foreach ($row as $col => $value) {
+                if($col == "liquidation"){
+                    if($value == 0){
+                        $row->sale = "N";
+                    } else {
+                        $row->sale = "L";                        
+                    }
+                }
+                if ($col == "status")
+                    $row->$col = strtolower($value);
+            }
+        }
+
         $date = date('Y-m-d');
         $tittle = 'Reporte de movimientos de productos entre las fechas: '.$date1->toDateString().' y '.$date2->toDateString();
         $columns = ['Fecha Pedido' => 'date_request',
@@ -444,8 +459,7 @@ class AuxMovementController extends Controller
                         'Color' => 'color',
                         'Talla' => 'talla',
                         'Estado' => 'status',
-                        // '' => 'status_product',
-                        // 'P. Real' => 'price_real',
+                        'Venta' => 'sale',
                         'Precio V.' => 'price',
                         'Desc.' => 'discount',
                         'Precio F.' => 'price_final'

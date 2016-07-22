@@ -463,7 +463,7 @@ class AuxMovementController extends Controller
         ->join('sizes as s','s.id','=','p.size_id')
         ->leftJoin('settlements as dc','dc.product_id','=','p.id')
         ->orderby('m.date_shipment','asc')
-        ->where('m.situation', null);
+        ->where('m.situation', 'Reprogramado');
 
         if($request->has('date1') && $request->has('date2')){
             $start = Carbon::parse($request->input('date1'));

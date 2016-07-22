@@ -69,7 +69,6 @@ angular.module('App')
                     $scope.updateList = false;
                     $scope.drawShow=false;
                 }, function(error){
-                    console.log(error);
                     toastr.error('Huy huy dice: ' + error.data.message);
                     $scope.updateList = false;
                 });
@@ -96,7 +95,6 @@ angular.module('App')
                     }
                     $scope.updateList = false;
                 }, function(error){
-                    console.log(error);
                     toastr.error('Huy huy dice: ' + error.data.message);
                     $scope.updateList = false;
                 });
@@ -107,7 +105,6 @@ angular.module('App')
                 .then(function(data){
                     $scope.providers = data.providers;
                 }, function(error){
-                    console.log(error);
                     toastr.error('Huy huy dice: ' + error.data.message);
                 });
         };
@@ -115,8 +112,8 @@ angular.module('App')
         $scope.filter = function(){
             $scope.updateList = true;
             $scope.dateSave = angular.copy($scope.data);
-            $scope.dateSave.date1 = $filter('date')($scope.data.date1, 'yyyy-MM-dd')
-            $scope.dateSave.date2 = $filter('date')($scope.data.date2, 'yyyy-MM-dd')
+            // $scope.dateSave.date1 = $filter('date')($scope.data.date1, 'yyyy-MM-dd');
+            // $scope.dateSave.date2 = $filter('date')($scope.data.date2, 'yyyy-MM-dd');
             petition.get('api/auxmovement/get/movementDays', { params : $scope.dateSave })
                 .then(function(data){
                     $scope.reportDownload = true;
@@ -131,7 +128,6 @@ angular.module('App')
                         $scope.drawShow=false;
                     }
                 }, function(error){
-                    console.log(error);
                     toastr.error('Huy huy dice: ' + error.data.message);
                     $scope.updateList = false;
                 });
@@ -159,7 +155,7 @@ angular.module('App')
         };
 
         function providerName(p, providers){
-            for(i in providers){
+            for(var i in providers){
                 if (p == providers[i].id){
                     return providers[i].name;
                 }

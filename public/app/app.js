@@ -26,12 +26,12 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
                     $scope.$apply();
                 });
             }
-        }
+        };
     })
     .factory('color', function () {
         var colors = ['#F44336', '#03A9F4', '#8BC34A', '#009688', '#E91E63', '#FF9800', '#00BCD4', '#FFEB3B', '#9C27B0', '#673AB7', '#3F51B5', '#4CAF50'];
         get = function (i) {
-            i || (i = 0);
+            i = i || 0;
             i = (i > 11) ? i - 12 : i;
             return colors[i];
         };
@@ -43,9 +43,9 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
     .factory('chart', ['color', function (color) {
         dataChart = function (data, config, callback) {
             var dataChart = [];
-            for (i in data) {
+            for (var i in data) {
                 var temp = {};
-                for (y in config) {
+                for (var y in config) {
                     temp[y] = data[i][config[y]];
                 }
                 dataChart.push(temp);
@@ -53,11 +53,11 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
             callback(dataChart);
         };
         dataColumn = function (data, days, callback) {
-            var barData = new Array();
+            var barData = [];
             for (var y = 0; y < data.length; y++) {
                 var temp = [];
                 for (var i = 1; i <= days; i++) {
-                    temp.push([i, 0])
+                    temp.push([i, 0]);
                 }
                 for (var d in data[y].data) {
                     for (var x = 0; x < temp.length; x++) {
@@ -201,12 +201,12 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
                 options: options || {}
             });
 
-            return chart
+            return chart;
         }            
 
         return {
             make: make
-        }           
+        };           
     })
     .factory('toformData', function () {
         dataFile = function (data) {
@@ -228,11 +228,11 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
                 }
             });
             return formData;
-        }
+        };
 
         return {
             dataFile: dataFile
-        }
+        };
     })
     .factory('petition', ["$http", "$location", "$q", function ($http, $location, $q) {
         var baseUrl = function (URL) {
@@ -245,7 +245,7 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
         return {
 
             get: function (URL, data) {
-                data || (data = {});
+                data = data || {};
                 var deferred = $q.defer();
                 $http.get(baseUrl(URL), data).then(function (response) {
                     deferred.resolve(response.data);
@@ -254,8 +254,8 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
                 return deferred.promise;
             },
             post: function (URL, data, config) {
-                data || (data = {});
-                config || (config = {});
+                data = data || {};
+                config = config || {};
                 var deferred = $q.defer();
                 $http.post(baseUrl(URL), data, config).then(function (response) {
                     deferred.resolve(response.data);
@@ -264,7 +264,7 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
                 return deferred.promise;
             },
             put: function (URL, data) {
-                data || (data = {});
+                data = data || {};
                 var deferred = $q.defer();
                 $http.put(baseUrl(URL), data).then(function (response) {
                     deferred.resolve(response.data);
@@ -273,7 +273,7 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
                 return deferred.promise;
             },
             delete: function (URL, data) {
-                data || (data = {});
+                data = data || {};
                 var deferred = $q.defer();
                 $http.delete(baseUrl(URL), data).then(function (response) {
                     deferred.resolve(response.data);
@@ -333,11 +333,11 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
                 }, 1000);
             },
             modal: function (id) {
-                id || (id = 'Modal');
+                id = id || 'Modal';
                 $('#' + id).modal('show');
             },
             modalClose: function (id) {
-                id || (id = 'Modal');
+                id = id || 'Modal';
                 $('#' + id).modal('hide');
             },
             baseUrl: function (URL) {
@@ -346,13 +346,13 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
                 return prot + '://' + host + '/' + URL;
             },
             resetTable: function (scope, compile, table){
-                table || (table = '#table');
+                table = table || '#table';
                 scope.tableData = [];
                 $(table).AJQtable('view', scope, compile);
             },
             setDate: function (date){
                var datestring = "";
-               var date = new Date(date);
+               date = new Date(date);
                var day = date.getDate();
                    day = (day.toString().length == 1)?'0'+day.toString():day;
                var month = date.getMonth() + 1;
@@ -360,7 +360,7 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
                var year = date.getFullYear();
                return datestring.concat(' ',day,'-',month,'-',year);
             }
-        }
+        };
     }])
 
 

@@ -922,12 +922,10 @@ class AuxMovementController extends Controller
             ->where('status',0)
             ->get();
 
-        $test = array();
+        $filter = array();
         foreach ($products as $key => $product) {
 
-            if(count($product->bymovements) == 0){
-                continue;
-            }
+            if(count($product->bymovements) == 0)continue;
 
             if($product->bymovements[0]->date_shipment == $date){
                 $product->movement =  $product->bymovements[0];
@@ -936,14 +934,12 @@ class AuxMovementController extends Controller
                 $product->liquidation = $this->getLiquidationAttribute($product);
                 unset($product->bymovements);
 
-                array_push($test,$product);
+                array_push($filter,$product);
             }
 
         }
 
-        // dd($test);
-
-        return $test;
+        return $filter;
     }
 
 }

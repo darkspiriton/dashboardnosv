@@ -23,7 +23,7 @@
         }
         h3{
             margin: 0;
-            font-size: 21px;
+            font-size: 16px;
             font-family: Helvetica, Arial, sans-serif;
             font-weight: 500;
             line-height: 1.1;
@@ -37,7 +37,7 @@
         <p>{{ $date }}</p>
     </div>
     <div class="col-sm-6">
-        <h3>{{ $tittle }}</h3>
+        <h3>{{ $title }}</h3>
     </div>
 </div>
 <hr>

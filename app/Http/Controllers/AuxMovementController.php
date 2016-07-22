@@ -123,6 +123,8 @@ class AuxMovementController extends Controller
                 $movement = new Movement();
                 $movement->situation = $situations[$request->input('situation')];
                 $movement->date_shipment = $move->date_shipment;
+                $movement->cod_order = $move->cod_order;
+                $movement->date_request = $move->date_request;
                 $movement->discount=$move->discount;
                 $movement->status = 'Retornado';
 
@@ -264,6 +266,8 @@ class AuxMovementController extends Controller
 
             if($move->status != 'Vendido'){
                 $movement = new Movement();
+                $movement->date_request = $move->date_request;
+                $movement->cod_order= $move->cod_order;
                 $movement->date_shipment = $move->date_shipment;
                 $movement->discount=$move->discount;
                 $movement->situation ="Vendido";

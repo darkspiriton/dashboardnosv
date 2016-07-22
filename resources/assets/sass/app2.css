@@ -1521,3 +1521,8 @@ div.fc-row {
     height: 400px;
     width: 600px;
 }
+
+.table-mediun tr td,
+.table-mediun tr th {
+    font-size: 12px !important;
+}

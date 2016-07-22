@@ -62,7 +62,7 @@ angular.module('App')
         $scope.list = function() {
             $scope.updateList = true;
             $scope.reportDownload = false;
-            petition.get('api/auxmovement/get/movementDay')
+            petition.get('api/auxmovement/get/movementDays')
                 .then(function(data){
                     $scope.tableData = data.movements;
                     $('#table').AJQtable2('view2', $scope, $compile);

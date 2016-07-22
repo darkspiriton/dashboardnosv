@@ -339,18 +339,22 @@ class AuxMovementController extends Controller
 
     public function movementDay(Request $request){
         $start = Carbon::today()->setTime(0,0,0);
-        $movements = $this->queryReportMovement($request, $start, $start);
+        $request["date1"] = $start->toDateString();
+        $request["date2"] = $start->toDateString();
+        $movements = $this->queryReportMovement($request);
         return response()->json(['movements' => $movements],200);
     }
 
     public function movementOtherDay(Request $request){
         try {
-            $date1 = Carbon::parse($request->input('date1'))->setTime(0,0,0);            
+            $start = Carbon::parse($request->input('date1'))->setTime(0,0,0);
+            $request["date1"] = $start->toDateString();
         } catch(\InvalidArgumentException $e) {
             return response()->json(['message' => 'Fechas no validas, formato aceptado: Y-m-d'],401);
-        }        
-        $date2 = $date1->copy()->addDay();        
-        $movements = $this->queryReportMovement($request, $start, $start);
+        }
+        $request["date2"] = $start->toDateString();
+
+        $movements = $this->queryReportMovement($request);
         return response()->json(['movements' => $movements],200);
     }
 
@@ -380,14 +384,7 @@ class AuxMovementController extends Controller
 
     public function movementDaysDownload(Request $request){
 
-        try {
-            $start = Carbon::parse($request->input('date1'))->setTime(0,0,0);
-            $end = Carbon::parse($request->input('date2'))->setTime(23,59,59);
-        } catch(\InvalidArgumentException $e) {
-            return response()->json(['message' => 'Fechas no validas, formato aceptado: Y-m-d'],401);
-        }
-
-        $data = $this->queryReportMovement($request, $start, $end);
+        $data = $this->queryReportMovement($request);
 
         foreach ($data as $row) {
             foreach ($row as $col => $value) {
@@ -404,14 +401,21 @@ class AuxMovementController extends Controller
         }
 
         $date = date('Y-m-d');
-        $title = 'Reporte de movimientos de productos entre las fechas: '.$start->toDateString().' y '.$end->toDateString();
+
+        $title = "";
+        if($request->has("date1") && $request->has("date2")){
+            $start = Carbon::parse($request->input("date1"));
+            $end = Carbon::parse($request->input("date2"));
+            $title = 'Reporte de movimientos de productos entre las fechas: '.$start->toDateString().' y '.$end->toDateString();
+        }
         if($request->has("order_date")){
             $order_date = Carbon::parse($request->input("order_date"));
-            $title .= ' - Fecha de pedido: '.$order_date->toDateString();
+            $title .= ($title?' - ':'').'Fecha de pedido: '.$order_date->toDateString();
         }
         if($request->has("order")){
-            $title .= ' - N° Pedido: '.$request->input("order");
+            $title .= ($title?' - ':'').'N° Pedido: '.$request->input("order");
         }
+
         $columns = ['Fecha Pedido' => 'date_request',
             'Fecha Envio' => 'fecha',
             'Pedido' => 'cod_order',
@@ -441,7 +445,7 @@ class AuxMovementController extends Controller
      *  @param  Carbon\Carbon  $send
      *  @return  Dashboard\Models\Experimental\Product
      */
-    private function queryReportMovement(Request $request, Carbon $start, Carbon $end){
+    private function queryReportMovement(Request $request){
 
         $query = Product::from('auxproducts as p')
         ->select('m.created_at','m.date_shipment as fecha','m.status','m.discount','cod_order','date_request')
@@ -454,9 +458,14 @@ class AuxMovementController extends Controller
         ->join('colors as c','c.id','=','p.color_id')
         ->join('sizes as s','s.id','=','p.size_id')
         ->leftJoin('settlements as dc','dc.product_id','=','p.id')
-        ->orderby('m.date_shipment','asc')
-        ->where('m.date_shipment','>=', $start->toDateString())
-        ->where('m.date_shipment','<=', $end->toDateString());
+        ->orderby('m.date_shipment','asc');
+
+        if($request->has('date1') && $request->has('date2')){
+            $start = Carbon::parse($request->input('date1'));
+            $end = Carbon::parse($request->input('date2'));
+            $query->where('m.date_shipment','>=', $start->toDateString())
+                ->where('m.date_shipment','<=', $end->toDateString());
+        }
 
         if($request->has('status'))
             $query->where('m.status', $request->input('status'));

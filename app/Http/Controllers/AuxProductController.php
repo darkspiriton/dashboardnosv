@@ -778,7 +778,7 @@ class AuxProductController extends Controller
     {
         try {
             $movements = DB::table('auxproducts as p')
-                ->select('m.created_at', 'm.date_shipment as fecha', 'm.status', 'm.discount')
+                ->select('m.date_request as pedido', 'm.cod_order', 'm.date_shipment as entrega', 'm.status', 'm.discount')
                 ->addSelect('p.cod as codigo', 'p.name as product', 'p.cost_provider', 'p.utility')
                 ->addSelect('c.name as color', 's.name as talla')
                 ->addSelect(DB::raw('p.cost_provider + p.utility  as price_real'))
@@ -789,7 +789,7 @@ class AuxProductController extends Controller
                 ->join('sizes as s', 's.id', '=', 'p.size_id')
                 ->leftJoin('settlements as dc', 'dc.product_id', '=', 'p.id')
                 ->where('p.id', $id)
-                ->orderby('m.created_at', 'desc')
+                ->orderby('m.date_shipment', 'desc')
                 ->get();
 
             foreach ($movements as $product) {

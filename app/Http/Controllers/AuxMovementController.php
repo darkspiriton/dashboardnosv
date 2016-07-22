@@ -915,28 +915,35 @@ class AuxMovementController extends Controller
      *    @return  Dashboard\Models\Experimental\Product
      */
     private function dispatchForDate(Carbon $date){
-        $products = Product::from('auxproducts as p')
-            ->with(['bymovements','settlement','color','size'])
-            ->select(array('p.id','cod','p.id as product_id','name','color_id','size_id','cost_provider','utility'))
-            ->join('auxmovements AS m','m.product_id','=','p.id')
-            ->where('p.status',0)
-            ->where('m.date_shipment','>=', $date->toDateString())
-            ->where('m.date_shipment','<=', $date->toDateString())
+        $date = $date->toDateString();
+
+        $products = Product::with(['bymovements','settlement','color','size'])
+            ->select(array('id','cod','id as product_id','name','color_id','size_id','cost_provider','utility'))
+            ->where('status',0)
             ->get();
 
+        $test = array();
         foreach ($products as $key => $product) {
+
             if(count($product->bymovements) == 0){
-                $products->splice($key,1);
                 continue;
             }
-            $product->movement =  $product->bymovements[0];
-            $product->price = $this->getPriceAttribute($product);
-            $product->pricefinal = $this->getPriceFinalAttribute($product);
-            $product->liquidation = $this->getLiquidationAttribute($product);
-            unset($product->bymovements);
+
+            if($product->bymovements[0]->date_shipment == $date){
+                $product->movement =  $product->bymovements[0];
+                $product->price = $this->getPriceAttribute($product);
+                $product->pricefinal = $this->getPriceFinalAttribute($product);
+                $product->liquidation = $this->getLiquidationAttribute($product);
+                unset($product->bymovements);
+
+                array_push($test,$product);
+            }
+
         }
 
-        return $products;
+        // dd($test);
+
+        return $test;
     }
 
 }

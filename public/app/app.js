@@ -26,12 +26,12 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
                     $scope.$apply();
                 });
             }
-        }
+        };
     })
     .factory('color', function () {
         var colors = ['#F44336', '#03A9F4', '#8BC34A', '#009688', '#E91E63', '#FF9800', '#00BCD4', '#FFEB3B', '#9C27B0', '#673AB7', '#3F51B5', '#4CAF50'];
         get = function (i) {
-            i || (i = 0);
+            i || ( i = 0 );
             i = (i > 11) ? i - 12 : i;
             return colors[i];
         };

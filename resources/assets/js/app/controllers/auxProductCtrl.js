@@ -27,7 +27,8 @@ angular.module('App')
         var actions = [
                         ['eliminar', 'delete' ,'bgm-red'],
                         ['editar', 'edit' ,'btn-primary'],
-                        ['movimientos','movements','bgm-teal']
+                        ['movimientos','movements','bgm-teal'],
+                        ['observar','observe','bgm-green']
                     ];
 
         var status = {

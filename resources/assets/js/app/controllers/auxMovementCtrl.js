@@ -230,9 +230,7 @@ angular.module('App')
                         break;
                     }
                 }
-                tdList +=`<tr>                                            
-                            <td>${movements[i].created_at}</td>
-                            <td>${movements[i].date_shipment}</td>
+                tdList +=`<tr>
                             <td>${movements[i].product_cod}</td>
                             <td>${movements[i].product_name}</td>
                             <td>${movements[i].product_size}</td>
@@ -249,8 +247,6 @@ angular.module('App')
                                             <h5> <label> F. Salida : </label>${util.setDate($scope.shipmentDate)}</h5>                                                                      
                                         <tr>
                                         <tr>
-                                            <th style="Width:100px">creacion</th>
-                                            <th style="Width:100px">fecha</th>
                                             <th>Cod</th>
                                             <th>Nombre</th>
                                             <th>Talla</th>

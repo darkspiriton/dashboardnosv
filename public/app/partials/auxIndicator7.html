@@ -33,7 +33,6 @@
                    <option value="Vendido">Vendido</option>
                    <option value="Retornado">Retornado</option>
                    <option value="salida">Salida</option>
-                   <option value="reprogramado">Reprogramado</option>
                 </select>
 
                 <h2 class="col-xs-5 col-sm-1 text-right  m-t-20">Proveedor</h2>
@@ -77,6 +76,30 @@
             <div class="card-body card-padding-sm">
                 <div id="bar-chart" class="flot-chart"></div>
                 <div class="flc-bar"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="returnDetail" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bgm-teal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title c-white">Detalle de retorno</h3>
+            </div>
+            <div class="modal-body card-padding">
+                <form name="reProgramMoviment" class="form-horizontal" autocomplete="off">
+                    <div class="form-group m-b-0">
+                        <label class="col-xs-12 col-sm-4 control-label">Motivo: </label>
+                        <label class="col-xs-12 col-sm-8 control-label" style="text-align:left;">{{ returnDetail }}</label>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
             </div>
         </div>
     </div>

@@ -115,14 +115,18 @@ angular.module('App')
          *  @return tag:a-button
          */
 
-        $scope.movementStatus = function(status){
+        $scope.movementStatus = function(movement){
             var info = {
                 'Retornado': ['Retornado','bgm-red'],
                 'Vendido': ['Vendido','bgm-teal'],
-                'salida': ['Salida','bgm-deeppurple']
+                'salida': ['Salida','bgm-deeppurple'],
+                'reprogramado': ['reprogramado','bgm-purple']
             };
-
-            return `<a class="btn btn-xs disabled ${info[status][1]}">${info[status][0]}</a>`;
+            if(movement.status == 'salida'){
+                if(movement.situation == 'reprogramado')
+                    return `<a class="btn btn-xs disabled ${info.reprogramado[1]}">${info.reprogramado[0]}</a>`;
+            }
+            return `<a class="btn btn-xs disabled ${info[movement.status][1]}">${info[movement.status][0]}</a>`;
         };
 
         /*
@@ -158,7 +162,7 @@ angular.module('App')
                     $scope.list();
                     toastr.error('Huy Huy dice: ' + error.data.message);
                 });
-        }
+        };
 
         /*
          *
@@ -173,7 +177,7 @@ angular.module('App')
                 }, function(error){
                     toastr.error('Huy Huy dice: ' + error.data.message);
                 });
-        }
+        };
 
         $scope.providerList = function(){
             petition.get(`api/auxproduct/filter/get/providers`)
@@ -182,7 +186,7 @@ angular.module('App')
                 }, function(error){
                     toastr.error('Huy Huy dice: ' + error.data.message);
                 });
-        }
+        };
 
         $scope.productList = function(){
             petition.get(`api/auxproduct/filter/get/products`)
@@ -193,7 +197,7 @@ angular.module('App')
                 }, function(error){
                     toastr.error('Huy Huy dice: ' + error.data.message);
                 });
-        }
+        };
 
         $scope.searchList = function(dataSearch){
             $scope.updateList = true;
@@ -207,7 +211,7 @@ angular.module('App')
                     toastr.error('Huy Huy dice: ' + error.data.message);
                     $scope.updateList = false;
                 });
-        }
+        };
 
         function resetProduct(){
             $scope.products = [];

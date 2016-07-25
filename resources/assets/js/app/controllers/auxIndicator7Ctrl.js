@@ -19,10 +19,33 @@ angular.module('App')
         };
 
         var s2 = {
-            'Retornado': ['Retornado','bgm-red',false],
-            'Vendido': ['Vendido','bgm-teal',false],
-            'salida': ['Salida','bgm-deeppurple',false]
+            0: ['Retornado','bgm-red',false],
+            1: ['Vendido','bgm-teal',false],
+            2: ['Salida','bgm-deeppurple',false],
+            3: ['Reprogramado','bgm-purple',false]
         };
+
+        var status_mov = function($row){
+                                if($row.status == 'retornado'){
+                                    return 0;
+                                } else if($row.status == 'Vendido'){
+                                    return 1;
+                                } else if($row.status == 'salida'){
+                                    if($row.situation == 'reprogramado'){
+                                        return 3;
+                                    } else {
+                                        return 2;
+                                    }
+                                }
+                             };
+
+        var statusSituation = function($row){
+                if($row.status == 'salida'){
+                    if($row.situation != 'reprogramado'){
+                        return $row.situation;
+                    } else return '';
+                } else return ''; 
+            };
 
         $scope.tableConfig 	= 	{
             columns :	[
@@ -34,6 +57,7 @@ angular.module('App')
                 {"sTitle": "Color", "bSortable" : true},
                 {"sTitle": "Talla", "bSortable" : true},
                 {"sTitle": "Estado", "bSortable" : true},
+                {"sTitle": "Detalle", "bSortable" : true},
                 {"sTitle": "Estado V.", "bSortable" : true},
                 {"sTitle": "P. Real", "bSortable" : true},
                 {"sTitle": "Precio", "bSortable" : true},
@@ -46,11 +70,17 @@ angular.module('App')
                         type: 'status',
                         list:  [
                             { name: 'status_product', column: 'liquidation', render: s1},
-                             { name: 'status_mov', column: 'status', render: s2}
+                            { name: 'status_mov', render: s2, call_me: status_mov},
+                        ]
+                    },
+                    {
+                        type: 'custom',
+                        list:  [
+                            { name: 'statusDetail', call_me: statusSituation}
                         ]
                     }
                 ],
-            data  	: 	['date_request','fecha','cod_order','codigo','product','color','talla','status_mov','status_product','price_real','price','discount','price_final']
+            data  	: 	['date_request','fecha','cod_order','codigo','product','color','talla','status_mov','statusDetail','status_product','price_real','price','discount','price_final']
         };
 
         $scope.data = {

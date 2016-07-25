@@ -481,7 +481,15 @@ class AuxMovementController extends Controller
         }
 
         if ($request->has('status')) {
-            $query->where('m.status', $request->input('status'));
+            if ($request->input('status') == 'salida') {
+                $query->where('m.status', 'salida')
+                    ->where('m.situation', '<>', 'reprogramado');
+            } elseif ($request->input('status') == 'reprogramado') {
+                $query->where('m.status', 'salida')
+                    ->where('m.situation','reprogramado');
+            } else {
+                $query->where('m.status', $request->input('status'));
+            }
         }
 
         if ($request->has('name')) {

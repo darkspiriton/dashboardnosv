@@ -474,10 +474,6 @@ class AuxMovementController extends Controller
             $end = Carbon::parse($request->input('date2'));
             $query->where('m.date_shipment', '>=', $start->toDateString())
                 ->where('m.date_shipment', '<=', $end->toDateString());
-        } else {
-            $date = Carbon::now();
-            $query->where('m.date_shipment', '>=', $date->toDateString())
-                ->where('m.date_shipment', '<=', $date->toDateString());
         }
 
         if ($request->has('status')) {
@@ -514,7 +510,7 @@ class AuxMovementController extends Controller
         }
 
         if ($request->has('order')) {
-            $query->where('m.cod_order', $request->input('order'));
+            $query->where('m.cod_order', trim($request->input('order')));
         }
 
         $products = $query->get();

@@ -41,6 +41,7 @@ angular.module('App')
 
         $scope.tableConfig 	= 	{
             columns :	[
+                {"sTitle": "Creacion", "bSortable" : true, "sWidth" : '80px'},
                 {"sTitle": "F. Pedido", "bSortable" : true, "sWidth" : '80px'},
                 {"sTitle": "F. Entrega", "bSortable" : true, "sWidth" : '80px'},
                 {"sTitle": "Pedido", "bSortable" : true, "sWidth" : '1px'},
@@ -65,7 +66,7 @@ angular.module('App')
                         ]
                     }
                 ],
-            data  	: 	['date_request','fecha','cod_order','codigo','product','color','talla','status_mov','status_product','price_real','price','discount','price_final']
+            data  	: 	['created_at','date_request','fecha','cod_order','codigo','product','color','talla','status_mov','status_product','price_real','price','discount','price_final']
         };
 
         $scope.data = {
@@ -77,7 +78,7 @@ angular.module('App')
         $scope.list = function() {
             $scope.updateList = true;
             $scope.reportDownload = false;
-            petition.get('api/auxmovement/get/movementDays')
+            petition.get('api/auxmovement/get/movementDay')
                 .then(function(data){
                     $scope.tableData = data.movements;
                     $('#table').AJQtable2('view2', $scope, $compile);

@@ -168,7 +168,7 @@ class AuxMovementController extends Controller
             $movementsRes = array();
 
             foreach ($products as $product) {
-                $prd = Product::with(["color", "size"])->find($product['id']);
+                $prd = Product::with(["color", "size","settlement"])->find($product['id']);
                 if ($prd->status == 1) {
                     $movement = new Movement();
                     $movement->date_shipment =substr($request->input('shipmentDate'), 0, 10);

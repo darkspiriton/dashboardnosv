@@ -784,12 +784,15 @@ class AuxMovementController extends Controller
             $row->movement_cod_order =  $row->movement->cod_order;
             $row->color_name =  $row->color->name;
             $row->size_name =  $row->size->name;
+            $row->orderCase =  $row->movement->cod_order;
             if ($row->movement->discount == 0) {
                 $row->sale = "Normal";
             } else {
                 $row->sale = "Liquidacion";
             }
         }
+
+        $data = $data->sortBy("orderCase");
 
         $date = date('Y-m-d');
         $title = 'Ficha de despacho para la fecha: '.$dateFind->toDateString();
@@ -829,7 +832,8 @@ class AuxMovementController extends Controller
         ->where('status', 0)
         ->get();
 
-        $filter = array();
+        $filter = collect();
+        // dd($filter);
         foreach ($products as $key => $product) {
             if (count($product->bymovements) == 0) {
                 continue;
@@ -842,7 +846,7 @@ class AuxMovementController extends Controller
                 $product->liquidation = $this->getLiquidationAttribute($product);
                 unset($product->bymovements);
 
-                array_push($filter, $product);
+                $filter->prepend($product);
             }
         }
 

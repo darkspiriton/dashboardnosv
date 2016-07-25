@@ -272,7 +272,7 @@ angular.module('App')
         };
 
         $scope.submit = function () {
-            alertConfig.title = '¿Todo es correcto?'
+            alertConfig.title = '¿Todo es correcto?';
             swal(alertConfig ,
                 function() {
                     var method = ( $scope.product.id ) ? 'PUT' : 'POST';
@@ -292,7 +292,7 @@ angular.module('App')
                     }, function(error){
                         toastr.error('Huy Huy dice: ' + error.data.message);
                         $scope.formSubmit=false;
-                    })
+                    });
                 });
 
         };
@@ -313,7 +313,7 @@ angular.module('App')
         // Events
 
         $scope.eventProvider = function( v ){
-            if ( v != 0)return true;
+            if ( v !== 0)return true;
             $scope.product.provider_id = null;
             $scope.newFeature.tittle = 'Nuevo Proveedor';
             $scope.newFeature.label = 'Ingrese nombre de proveedor';
@@ -323,7 +323,7 @@ angular.module('App')
         };
 
         $scope.eventColor = function( v ){
-            if ( v != 0)return true;
+            if ( v !== 0)return true;
             $scope.product.color_id = null;
             $scope.newFeature.tittle = 'Nuevo Color';
             $scope.newFeature.label = 'Ingrese nombre de color';
@@ -333,7 +333,7 @@ angular.module('App')
         };
 
         $scope.addType = function( i ){
-            if ( $scope.types[i].id == 0) {
+            if ( $scope.types[i].id === 0) {
                 $scope.typeSelect = null;
                 $scope.newFeature.tittle = 'Nuevo Tipo de Producto';
                 $scope.newFeature.label = 'Ingrese el tipo';
@@ -342,13 +342,13 @@ angular.module('App')
                 util.modal('feature');
             }else{
                 var count = 0;
-                for(ind in  $scope.product.types){
+                for(var ind in  $scope.product.types){
                     if(angular.equals($scope.types[i],$scope.product.types[ind])){
                         count++;
                     }
                 }
 
-                if (count == 0){
+                if (count === 0){
                     $scope.product.types.push(angular.copy($scope.types[i]));
                 }
                 $scope.typeSelect = null;
@@ -402,14 +402,18 @@ angular.module('App')
          *  @return tag:a-button
          */
 
-        $scope.movementStatus = function(status){
+        $scope.movementStatus = function(movement){
             var info = {
                 'Retornado': ['Retornado','bgm-red'],
                 'Vendido': ['Vendido','bgm-teal'],
-                'salida': ['Salida','bgm-deeppurple']
+                'salida': ['Salida','bgm-deeppurple'],
+                'reprogramado': ['reprogramado','bgm-purple']
             };
-
-            return `<a class="btn btn-xs disabled ${info[status][1]}">${info[status][0]}</a>`;
+            if(movement.status == 'salida'){
+                if(movement.situation == 'reprogramado')
+                    return `<a class="btn btn-xs disabled ${info.reprogramado[1]}">${info.reprogramado[0]}</a>`;
+            }
+            return `<a class="btn btn-xs disabled ${info[movement.status][1]}">${info[movement.status][0]}</a>`;
         };
 
         /*
@@ -441,7 +445,7 @@ angular.module('App')
                 }, function(error){
                     toastr.error('Huy Huy dice: ' + error.data.message);
                 });
-        }
+        };
 
         $scope.providerList = function(){
             petition.get(`api/auxproduct/filter/get/providers`)
@@ -450,7 +454,7 @@ angular.module('App')
                 }, function(error){
                     toastr.error('Huy Huy dice: ' + error.data.message);
                 });
-        }
+        };
 
         $scope.productList = function(){
             petition.get(`api/auxproduct/filter/get/products`)
@@ -461,7 +465,7 @@ angular.module('App')
                 }, function(error){
                     toastr.error('Huy Huy dice: ' + error.data.message);
                 });
-        }
+        };
 
         $scope.searchList = function(dataSearch){
             $scope.updateList = true;
@@ -475,7 +479,7 @@ angular.module('App')
                     toastr.error('Huy Huy dice: ' + error.data.message);
                     $scope.updateList = false;
                 });
-        }
+        };
 
         /**
          *    Helper para observar un producto en el kardex

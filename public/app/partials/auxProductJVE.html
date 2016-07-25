@@ -80,11 +80,12 @@
                         <div class="col-xs-12">
                             <div class="row">
                                 <div class="attr-group col-xs-12">
-                                    <table ng-show="productMovements.length > 0" class="table table-bordered w-100 table-attr text-center">
+                                    <table class="table table-bordered w-100 table-attr text-center table-mediun">
                                         <thead>
                                         <tr>
-                                            <th style="padding: 10 5;">Creacion</th>
-                                            <th style="padding: 10 5;">Fecha</th>
+                                            <th style="padding: 10 5;">F. Pedido</th>
+                                            <th style="padding: 10 5;">F. Entrega</th>
+                                            <th style="padding: 10 5;">N° P.</th>
                                             <th style="padding: 10 5;">Codigo</th>
                                             <th style="padding: 10 5;">Producto</th>
                                             <th style="padding: 10 5;">Color</th>
@@ -99,13 +100,14 @@
                                         </thead>
                                         <tbody>
                                             <tr ng-repeat="movement in productMovements">
-                                                <td style="display: table-cell;padding: 10 5;width:100px">{{ movement.created_at }}</td>
-                                                <td style="display: table-cell;padding: 10 5;">{{ movement.fecha }}</td>
+                                                <td style="display: table-cell;padding: 10 5;width:100px">{{ movement.pedido }}</td>
+                                                <td style="display: table-cell;padding: 10 5;">{{ movement.entrega }}</td>
+                                                <td style="display: table-cell;padding: 10 5;">{{ movement.cod_order }}</td>
                                                 <td style="display: table-cell;padding: 10 5;">{{ movement.codigo }}</td>
                                                 <td style="display: table-cell;padding: 10 5;">{{ movement.product }}</td>
                                                 <td style="display: table-cell;padding: 10 5;">{{ movement.color }}</td>
                                                 <td style="display: table-cell;padding: 10 5;">{{ movement.talla }}</td>
-                                                <td style="display: table-cell;padding: 10 5;" ng-bind-html="movementStatus(movement.status)"></td>
+                                                <td style="display: table-cell;padding: 10 5;" ng-bind-html="movementStatus(movement)"></td>
                                                 <td style="display: table-cell;padding: 10 5;" ng-bind-html="payStatus(movement.liquidation)"></td>
                                                 <td style="display: table-cell;padding: 10 5;">{{ movement.price_real }}</td>
                                                 <td style="display: table-cell;padding: 10 5;">{{ movement.price }}</td>

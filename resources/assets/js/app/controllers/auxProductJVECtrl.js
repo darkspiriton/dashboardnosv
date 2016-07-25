@@ -139,14 +139,18 @@ angular.module('App')
          *  @return tag:a-button
          */
 
-        $scope.movementStatus = function(status){
+        $scope.movementStatus = function(movement){
             var info = {
                 'Retornado': ['Retornado','bgm-red'],
                 'Vendido': ['Vendido','bgm-teal'],
-                'salida': ['Salida','bgm-deeppurple']
+                'salida': ['Salida','bgm-deeppurple'],
+                'reprogramado': ['reprogramado','bgm-purple']
             };
-
-            return `<a class="btn btn-xs disabled ${info[status][1]}">${info[status][0]}</a>`;
+            if(movement.status == 'salida'){
+                if(movement.situation == 'reprogramado')
+                    return `<a class="btn btn-xs disabled ${info.reprogramado[1]}">${info.reprogramado[0]}</a>`;
+            }
+            return `<a class="btn btn-xs disabled ${info[movement.status][1]}">${info[movement.status][0]}</a>`;
         };
 
         /*
@@ -292,6 +296,7 @@ angular.module('App')
            util.modalClose();
          };
 
+
         /*
          *
          * Helper para filtro
@@ -339,7 +344,7 @@ angular.module('App')
                     toastr.error('Huy Huy dice: ' + error.data.message);
                     $scope.updateList = false;
                 });
-        }
+        };
 
         function resetProduct(){
             $scope.products = [];

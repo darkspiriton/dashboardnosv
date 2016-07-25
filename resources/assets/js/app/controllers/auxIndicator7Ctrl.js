@@ -19,13 +19,29 @@ angular.module('App')
         };
 
         var s2 = {
-            'Retornado': ['Retornado','bgm-red',false],
-            'Vendido': ['Vendido','bgm-teal',false],
-            'salida': ['Salida','bgm-deeppurple',false]
+            0: ['Retornado','bgm-red'],
+            1: ['Vendido','bgm-teal',false],
+            2: ['Salida','bgm-deeppurple',false],
+            3: ['Reprogramado','bgm-purple',false]
         };
+
+        var status_mov = function($row){
+                                if($row.status == 'Retornado'){
+                                    return 0;
+                                } else if($row.status == 'Vendido'){
+                                    return 1;
+                                } else if($row.status == 'salida'){
+                                    if($row.situation == 'reprogramado'){
+                                        return 3;
+                                    } else {
+                                        return 2;
+                                    }
+                                }
+                             };
 
         $scope.tableConfig 	= 	{
             columns :	[
+                {"sTitle": "Creacion", "bSortable" : true, "sWidth" : '80px'},
                 {"sTitle": "F. Pedido", "bSortable" : true, "sWidth" : '80px'},
                 {"sTitle": "F. Entrega", "bSortable" : true, "sWidth" : '80px'},
                 {"sTitle": "Pedido", "bSortable" : true, "sWidth" : '1px'},
@@ -46,11 +62,11 @@ angular.module('App')
                         type: 'status',
                         list:  [
                             { name: 'status_product', column: 'liquidation', render: s1},
-                             { name: 'status_mov', column: 'status', render: s2}
+                            { name: 'status_mov', render: s2, call_me: status_mov},
                         ]
                     }
                 ],
-            data  	: 	['date_request','fecha','cod_order','codigo','product','color','talla','status_mov','status_product','price_real','price','discount','price_final']
+            data  	: 	['created_at','date_request','fecha','cod_order','codigo','product','color','talla','status_mov','status_product','price_real','price','discount','price_final']
         };
 
         $scope.data = {
@@ -72,6 +88,11 @@ angular.module('App')
                     toastr.error('Huy huy dice: ' + error.data.message);
                     $scope.updateList = false;
                 });
+        };
+
+        $scope.status_mov = function(i){
+            $scope.returnDetail = angular.copy($scope.tableData[i].situation);
+            util.modal("returnDetail");
         };
 
         $scope.listProducts = function(select) {

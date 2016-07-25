@@ -1,4 +1,3 @@
-
 angular.module('App')
 	.config(["$stateProvider", function($stateProvider) {
 		$stateProvider
@@ -229,6 +228,12 @@ angular.module('App')
 						movements[i].product_name = products[j].name;
 						movements[i].product_size = products[j].size.name;
 						movements[i].product_color = products[j].color.name;
+						if(products[j].settlement){
+							movements[i].price = (products[j].settlement.price).toFixed(2);
+						} else {
+							movements[i].price = (products[j].cost_provider + products[j].utility).toFixed(2);
+						}
+						movements[i].price_final = (movements[i].price - movements[i].discount).toFixed(2);
 						break;
 					}
 				}
@@ -237,7 +242,9 @@ angular.module('App')
 							<td>${movements[i].product_name}</td>
 							<td>${movements[i].product_size}</td>
 							<td>${movements[i].product_color}</td>
+							<td>${movements[i].price}</td>
 							<td>${movements[i].discount}</td>
+							<td>${movements[i].price_final}</td>
 						</tr>`;
 			}
 
@@ -253,7 +260,9 @@ angular.module('App')
 											<th>Nombre</th>
 											<th>Talla</th>
 											<th>Color</th>
+											<th>Precio</th>
 											<th>desc.</th>
+											<th>P. Final</th>
 										</tr>
 										</thead>
 										<tbody>

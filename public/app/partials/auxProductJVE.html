@@ -32,6 +32,7 @@
                 <option value="1">Disponible</option>
                 <option value="2">Vendido</option>
                 <option value="3">Reservado</option>
+                <option value="4">Observado</option>
             </select>
 
             <h2 class="col-xs-5 col-sm-1 m-t-20 text-right">Producto</h2>
@@ -123,6 +124,73 @@
                         </div>
                     </div>
                 </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="Modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bgm-teal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title c-white">Motivo de observación</h3>
+            </div>
+            <div class="modal-body card-padding">
+                <form name="form" class="form-horizontal" autocomplete="off">
+                    <div class="form-group">
+                        <label class="col-xs-2 col-sm-4 control-label">Seleccione motivo de observación</label>
+                        <div class="col-xs-10 col-sm-6">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="md md-list"></i></span>
+                                <div class="fg-line select">
+                                    <select class="form-control" ng-options="situation.name as situation.name for situation in situations" ng-model="productAux.situation" required>
+                                        <option value="" disabled="disabled" select="true">Seleccione</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button ng-disabled="!form.$valid" ng-click="changeObserve()" type="button" class="btn btn-primary btn-sm waves-effect">Guardar</button>
+                            <a ng-click="cancel()" class="btn btn-danger btn-sm waves-effect">Cancelar</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="ModalDetail" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bgm-teal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title c-white">Motivo de observación</h3>
+            </div>
+            <div class="modal-body card-padding">
+                <form name="form2" class="form-horizontal" autocomplete="off">
+                    <div class="form-group">
+                        <label class="col-xs-2 col-sm-4 control-label">{{observe_detail}}</label>
+                    </div>
+                </form>
+
+    
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>

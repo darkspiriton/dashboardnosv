@@ -114,6 +114,9 @@ Route::group(['prefix' => 'api'], function(){
         
         Route::get('get/movements/{id}','AuxProductController@movements_for_product');
         Route::put('reserve/{id}','AuxProductController@product_reserve');
+        Route::get('observe/{id}','AuxProductController@product_observe_status');
+        Route::put('observe/update/{id}','AuxProductController@product_observe_update');
+        Route::get('observe/detail/{id}','AuxProductController@product_observe_detail');
     });
 
     /**

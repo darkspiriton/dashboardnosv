@@ -250,6 +250,8 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
                 var deferred = $q.defer();
                 $http.get(baseUrl(URL), data).then(function (response) {
                     deferred.resolve(response.data);
+                }, function(error){
+                    deferred.reject(error);
                 });
 
                 return deferred.promise;
@@ -260,6 +262,8 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
                 var deferred = $q.defer();
                 $http.post(baseUrl(URL), data, config).then(function (response) {
                     deferred.resolve(response.data);
+                }, function(error){
+                    deferred.reject(error);
                 });
 
                 return deferred.promise;
@@ -269,6 +273,8 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
                 var deferred = $q.defer();
                 $http.put(baseUrl(URL), data).then(function (response) {
                     deferred.resolve(response.data);
+                }, function(error){
+                    deferred.reject(error);
                 });
 
                 return deferred.promise;
@@ -278,6 +284,8 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
                 var deferred = $q.defer();
                 $http.delete(baseUrl(URL), data).then(function (response) {
                     deferred.resolve(response.data);
+                }, function(error){
+                    deferred.reject(error);
                 });
 
                 return deferred.promise;
@@ -286,6 +294,8 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
                 var deferred = $q.defer();
                 $http(config).then(function (response) {
                     deferred.resolve(response.data);
+                }, function(error){
+                    deferred.reject(error);
                 });
                 return deferred.promise;
             }

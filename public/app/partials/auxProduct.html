@@ -50,7 +50,8 @@
             </select>
 
             <div class="col-xs-offset-0 col-xs-12 col-sm-offset-1 col-sm-2 p-0 m-t-20">
-                <input type="button" ng-disabled="!dates.$valid" ng-click="searchList(data)" class="btn btn-block bgm-indigo" value="buscar">
+                <input type="button" ng-disabled="!dates.$valid" ng-click="searchList(data)" class="btn bgm-indigo col-sm-6" value="buscar">
+                <input type="button" ng-click="download(data)" class="btn bgm-purple col-sm-6" value="PDF">
             </div>
        </div>
     </div>

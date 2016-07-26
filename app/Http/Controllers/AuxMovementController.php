@@ -105,8 +105,15 @@ class AuxMovementController extends Controller
             $move = $product->movements->first();
 
             $situations = [ 
-            1 => 'Producto dañado',
-            2 => 'Producto no esta en el almacen'
+                1 => 'No le gusto',
+                2 => 'La foto no es igual al producto',
+                3 => 'Producto dañado',
+                4 => 'No se encontro cliente',
+                5 => 'No es la talla',
+                6 => 'No se encontro el código',
+                7 => 'No llegamos al cliente',
+                8 => 'Cliente cancelo su pedido',
+                9 => 'Retorno-Cambio'
             ];
 
             if ($move->status != 'vendido') {

@@ -161,15 +161,15 @@ angular.module('App')
 
         function otherView(data){
             for(var i in data){
-                if (data[i].status === 0){
+                if (data[i].status == 0){
                     data[i].statusSale = "salida";
-                } else if (data[i].status === 1){
+                } else if (data[i].status == 1){
                     data[i].statusSale = "disponible";
-                } else if (data[i].status === 2){
+                } else if (data[i].status == 2){
                     data[i].statusSale = "vendido";
-                } else if (data[i].status === 3){
+                } else if (data[i].status == 3){
                     data[i].statusSale = "reservado";
-                } else if (data[i].status === 4){
+                } else if (data[i].status == 4){
                     data[i].statusSale = "observado";
                 } else {
                     data[i].statusSale = "Otro";

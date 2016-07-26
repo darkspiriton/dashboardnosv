@@ -482,6 +482,7 @@ angular.module('App')
         };
 
         $scope.download = function(dataSearch){
+            $scope.downloadBtn = true;
             if(dataSearch.status_sale === "")dataSearch.status_sale = null;
             petition.post('api/auxproduct/filter/get/search/download', dataSearch, {responseType:'arraybuffer'})
                 .then(function(data){
@@ -489,8 +490,10 @@ angular.module('App')
                     var name = date + '-reporte-de-kardex.pdf';
                     var file = new Blob([data],{ type : 'application/pdf'});
                     saveAs(file, name);
+                    $scope.downloadBtn = false;
                 }, function(error){
-                    console.info(error);
+                    toastr.error("El archivo es demasiado grande, no se pudo descargar")
+                    $scope.downloadBtn = false;
                 });
         };
 

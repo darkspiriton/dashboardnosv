@@ -159,12 +159,11 @@ class auxProductFiltersController extends Controller
 
             $query = $this->QueryRequest($request, $query);
 
-            $data = $query->get();
+            $products = $query->get();
 
-            $data = $this->StatusSalesCase($request, $data);
+            $products = $this->StatusSalesCase($request, $products);
 
-            $collect = collect();
-            foreach ($data as $product) {
+            foreach ($products as $product) {
                 if($product->liquidation == 0){
                     $product->status_sale = "normal";
                 } else if($product->liquidation == 1){
@@ -184,9 +183,8 @@ class auxProductFiltersController extends Controller
                 } else if($product->status == 4){
                     $product->status_prd = "observado";
                 }
-
-                $collect->prepend($product);
             }
+            $collect = collect($products);
             $collect->sortBy("name");
 
             $data = $collect->toArray();

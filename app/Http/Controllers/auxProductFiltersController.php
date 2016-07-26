@@ -165,7 +165,6 @@ class auxProductFiltersController extends Controller
             $products = $this->StatusSalesCase($request, $products);
             echo "7";
             foreach ($products as $product) {
-                echo "-7.1";
                 if($product->liquidation == 0){
                     $product->status_sale = "normal";
                 } else if($product->liquidation == 1){
@@ -173,7 +172,6 @@ class auxProductFiltersController extends Controller
                 } else {
                     $product->status_sale = "Otros";
                 }
-                echo "-7.2";
                 if($product->status == 0){
                     $product->status_prd = "salida";
                 } else if($product->status == 1){
@@ -185,7 +183,6 @@ class auxProductFiltersController extends Controller
                 } else if($product->status == 4){
                     $product->status_prd = "observado";
                 }
-                echo "-7.3";
             }
             echo "8";
             $collect = collect($products);
@@ -215,8 +212,9 @@ class auxProductFiltersController extends Controller
             $pdf = \PDF::loadHTML($view);
             $pdf->setOrientation('landscape');
             echo "14";
+            return $view;
             return $pdf->download();
-        } catch(\Exception $e){
+        } catch(DOMPDF_Exception $e){
             Log::error("Descarga de kardex: ".$e->getMessage());
             return response()->json(["message" => "Pascal pordio algunos cables no se pudo realizar la descarga", "error" => $e.getMessage()], 500);
         }

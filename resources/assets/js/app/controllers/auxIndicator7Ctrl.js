@@ -155,14 +155,17 @@ angular.module('App')
         };
 
         $scope.download = function(){
+            $scope.downloadBtn = true;
             petition.post('api/auxmovement/get/movementDays/download', $scope.dateSave, {responseType:'arraybuffer'})
                 .then(function(data){
                     var date = new Date().getTime();
                     var name = date + '-reporte-de-movimiento-'+ $scope.dateSave.date1+'-al-'+$scope.dateSave.date2+'.pdf';
                     var file = new Blob([data],{ type : 'application/pdf'});
                     saveAs(file, name);
+                    $scope.downloadBtn = false;
                 }, function(error){
-                    console.info(error);
+                    toastr.error("El archivo es demasiado grande, no se pudo descargar");
+                    $scope.downloadBtn = false;
                 });
         };
 

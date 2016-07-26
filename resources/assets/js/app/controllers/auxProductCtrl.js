@@ -492,7 +492,7 @@ angular.module('App')
                     saveAs(file, name);
                     $scope.downloadBtn = false;
                 }, function(error){
-                    toastr.error("El archivo es demasiado grande, no se pudo descargar")
+                    toastr.error("El archivo es demasiado grande, no se pudo descargar");
                     $scope.downloadBtn = false;
                 });
         };

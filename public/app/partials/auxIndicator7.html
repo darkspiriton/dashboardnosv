@@ -57,7 +57,7 @@
                 </select>
 
                 <input type="button" ng-disabled="!dates.$valid" ng-click="filter()" class="btn bgm-indigo m-l-20 m-t-20 col-sm-1" value="buscar">
-                <input type="button" ng-if="reportDownload" ng-click="download()" class="btn bgm-purple m-l-20 m-t-20 col-sm-1" value="PDF">
+                <input type="button" ng-disabled="downloadBtn" ng-click="download()" class="btn bgm-purple m-l-20 m-t-20 col-sm-1" value="PDF">
            </div>
         </div>
         <div class="card-body card-padding table-responsive">

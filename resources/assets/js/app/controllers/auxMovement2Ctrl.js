@@ -330,14 +330,17 @@ angular.module('App')
         };
 
         $scope.download = function(){
+            $scope.downloadBtn = true;
             petition.post('api/auxmovement/get/dispatch/download', {date: $scope.dispatch}, {responseType:'arraybuffer'})
                 .then(function(data){
                     var date = new Date().getTime();
                     var name = `${date}-ficha-de-despacho-${$scope.dispatch}.pdf`;
                     var file = new Blob([data],{ type : 'application/pdf'});
                     saveAs(file, name);
+                    $scope.downloadBtn = false;
                 }, function(error){
-                    console.info(error);
+                    toastr.error("El archivo es demasiado grande, no se pudo descargar");
+                    $scope.downloadBtn = false;
                 });
         };
 

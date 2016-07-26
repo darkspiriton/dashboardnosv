@@ -87,6 +87,19 @@ angular.module('App')
             configStatus : 'status'
         };
 
+        var configList =    {
+            columns :   [
+                {"sTitle": "Codigo", "bSortable" : true, 'sWidth': '1px'},
+                {"sTitle": "Nombre", "bSortable" : true, 'sWidth': '250px'},
+                {"sTitle": "Proveedor", "bSortable" : true},
+                {"sTitle": "Talla", "bSortable" : true},
+                {"sTitle": "Color", "bSortable" : true, "bSearchable": true},
+                {"sTitle": "Tipos", "bSortable" : true, "bSearchable": true},
+                {"sTitle": "Status", "bSortable" : false, "bSearchable": true},
+            ],
+            data    :   ['cod','name','provider','size','color','types','statusSale'],
+        };
+
         var alertConfig = {
             title: "¿Esta seguro?",
             text: "",
@@ -138,12 +151,32 @@ angular.module('App')
                 .then(function(data){
                     $scope.tableData = data.products;
                     $('#table').AJQtable2('view2', $scope, $compile);
+                    otherView(data.products);
                     $scope.updateList = false;
                 }, function(error){
                     toastr.error('Huy Huy dice: ' + error.data.message);
                     $scope.updateList = false;
                 });
         };
+
+        function otherView(data){
+            for(var i in data){
+                if (data[i].status === 0){
+                    data[i].statusSale = "salida";
+                } else if (data[i].status === 1){
+                    data[i].statusSale = "disponible";
+                } else if (data[i].status === 2){
+                    data[i].statusSale = "vendido";
+                } else if (data[i].status === 3){
+                    data[i].statusSale = "reservado";
+                } else if (data[i].status === 4){
+                    data[i].statusSale = "observado";
+                } else {
+                    data[i].statusSale = "Otro";
+                }
+            }
+            $('#tableList').AJQtable2('view2', $scope, $compile, data, configList);
+        }
 
         $scope.edit = function (i) {
             petition.get('api/auxproduct/' + $scope.tableData[i].id)

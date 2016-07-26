@@ -1,6 +1,6 @@
 angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 'toastr', 'ui.router', 'satellizer','angular-fb'])
-    .config(["$stateProvider", "$urlRouterProvider", "$authProvider", "$fbProvider",
-        function ($stateProvider, $urlRouterProvider, $authProvider, $fbProvider) {
+    .config(["$stateProvider", "$urlRouterProvider", "$authProvider", "$fbProvider", "$locationProvider",
+        function ($stateProvider, $urlRouterProvider, $authProvider, $fbProvider, $locationProvider) {
         $authProvider.tokenName = "token";
         $authProvider.tokenPrefix = "DB_NV";
 
@@ -15,6 +15,7 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
             });
 
         $urlRouterProvider.otherwise('/home');
+        $locationProvider.html5Mode(true);
 
     }])
     .directive('fileModel', function () {

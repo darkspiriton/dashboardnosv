@@ -483,7 +483,6 @@ angular.module('App')
 
         $scope.download = function(dataSearch){
             if(dataSearch.status_sale === "")dataSearch.status_sale = null;
-            console.log(dataSearch);
             petition.post('api/auxproduct/filter/get/search/download', dataSearch, {responseType:'arraybuffer'})
                 .then(function(data){
                     var date = new Date().getTime();

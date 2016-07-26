@@ -129,6 +129,7 @@ class auxProductFiltersController extends Controller
     public function FilterForAllDownload(Request $request)
     {
         try{
+            echo "1";
             $rules = [
                 "type"            =>    "integer|exists:types,id",
                 "provider_id"    =>    "integer|exists:providers,id",
@@ -138,11 +139,11 @@ class auxProductFiltersController extends Controller
                 "status"        =>  "integer|between:0,3",
                 "status_sale"    =>    "integer|between:0,1"
             ];
-
+            echo "2";
             if (Validator::make($request->all(), $rules)->fails()) {
                 return response()->json(["message" => "Parametros de busqueda no validos"], 401);
             }
-
+            echo "3";
             $query = DB::table('auxproducts as p')
                             ->select('p.status', DB::raw('DATE_FORMAT(p.created_at,\'%d-%m-%Y\') as date'), 'p.id', 'p.cod', 'p.name', 's.name as size', 'c.name as color', 'pv.name as provider', DB::raw('GROUP_CONCAT(t.name ORDER BY t.name ASC SEPARATOR \' - \') as types'), 'p.cost_provider', 'p.utility')
                             ->addSelect(DB::raw('p.cost_provider + p.utility  as price_real'))
@@ -156,14 +157,15 @@ class auxProductFiltersController extends Controller
                             ->leftJoin('settlements as dc', 'dc.product_id', '=', 'p.id')
                             ->groupBy('cod')
                             ->orderBy('id', 'desc');
-
+            echo "4";               
             $query = $this->QueryRequest($request, $query);
-
+            echo "5";
             $products = $query->get();
-
+            echo "6";
             $products = $this->StatusSalesCase($request, $products);
-
+            echo "7";
             foreach ($products as $product) {
+                echo "-7.1";
                 if($product->liquidation == 0){
                     $product->status_sale = "normal";
                 } else if($product->liquidation == 1){
@@ -171,7 +173,7 @@ class auxProductFiltersController extends Controller
                 } else {
                     $product->status_sale = "Otros";
                 }
-
+                echo "-7.2";
                 if($product->status == 0){
                     $product->status_prd = "salida";
                 } else if($product->status == 1){
@@ -183,14 +185,16 @@ class auxProductFiltersController extends Controller
                 } else if($product->status == 4){
                     $product->status_prd = "observado";
                 }
+                echo "-7.3";
             }
+            echo "8";
             $collect = collect($products);
             $collect->sortBy("name");
-
+            echo "9";
             $data = $collect->toArray();
-
+            echo "10";
             $date = date('Y-m-d');
-
+            echo "11";
             $title = 'Reporte de kardex para el día: '.$date;
 
             $columns = ['Fecha' => 'date',
@@ -205,12 +209,12 @@ class auxProductFiltersController extends Controller
                 'Precio.' => 'precio',
                 'Estado' => 'status_prd',
             ];
-
+            echo "12";
             $view =  \View::make('pdf.templatePDF', compact('data', 'columns', 'title', 'date'))->render();
-
+            echo "13";
             $pdf = \PDF::loadHTML($view);
             $pdf->setOrientation('landscape');
-
+            echo "14";
             return $pdf->download();
         } catch(\Exception $e){
             Log::error("Descarga de kardex: ".$e->getMessage());

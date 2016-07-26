@@ -19,6 +19,12 @@ angular.module('App')
         $scope.provider = {};
         $scope.product = {};
         $scope.data = {};
+        $scope.productAux = [];
+
+        $scope.situations = [
+            {id: 1, name:'Producto dañado' },
+            {id: 2, name:'Producto no esta en el almacen' }
+        ];
 
         /*
          |  END
@@ -28,14 +34,15 @@ angular.module('App')
                         ['eliminar', 'delete' ,'bgm-red'],
                         ['editar', 'edit' ,'btn-primary'],
                         ['movimientos','movements','bgm-teal'],
-                        ['observar','observe','bgm-green']
+                        ['observar','observe','bgm-lime']
                     ];
 
         var status = {
                     0 : ['salida','btn-danger', false],
                     1 : ['disponible', 'btn-success', false],
                     2 : ['vendido', 'bgm-teal', false],
-                    3 : ['reservado', 'bgm-black', false]
+                    3 : ['reservado', 'bgm-black', false],
+                    4 : ['observado', 'bgm-black']
                 };
 
         var statusForSale = {
@@ -65,7 +72,7 @@ angular.module('App')
                     {
                         type: 'status',
                         list:  [
-                            { name: 'status', column: 'status', render: status},
+                            { name: 'obseveDetail', column: 'status', render: status},
                             { name: 'statusForSale', column: 'liquidation', render: statusForSale},
                         ]
                     },
@@ -76,7 +83,7 @@ angular.module('App')
                         ]
                     }
                 ],
-            data  	: 	['date','cod','name','provider','size','color','types','statusForSale','price_real','precio','status','actions'],
+            data  	: 	['date','cod','name','provider','size','color','types','statusForSale','price_real','precio','obseveDetail','actions'],
             configStatus : 'status'
         };
 
@@ -369,7 +376,7 @@ angular.module('App')
 
         // End events
 
-
+// 
         /**
          *  Nueva vista de movimientos por producto
          *
@@ -487,6 +494,114 @@ angular.module('App')
                     console.info(error);
                 });
         };
+
+        /**
+         *    Helper para observar un producto en el kardex
+         *
+         *    @param  Int  id
+         *    @return  Object:String    Confirmation
+         */
+         $scope.observe = function (i){
+            $scope.productId = $scope.tableData[i].id;
+            $scope.productAux.cod = $scope.tableData[i].cod;
+            $scope.productAux.name = $scope.tableData[i].name;
+            $scope.productAux.size = $scope.tableData[i].size;
+            $scope.productAux.color = $scope.tableData[i].color;
+            $scope.productAux.situation = null;
+            petition.get('api/auxproduct/observe/' +  $scope.productId)
+                .then(function(data){
+                    //Validar si el producto esta observado o no
+                    $scope.status=data.status;
+                    if($scope.status == false){
+                        util.modal('Modal');                        
+                        //Mostrar modal y poder elegir el motivo de la observacion
+                        //Luego mostrar detalle de modificacion
+                        //Luego mostrar detalle de confirmacion
+                        //changeObserve(productAux,id);
+                    }else if ($scope.status == true){
+                        //Mostrar detalle de modificacion
+                        //Luego mostrar detalle de confirmacion
+                        $scope.changeObserve();
+                    } else if ($scope.status == null){
+                        toastr.error('Huy Huy dice: ' + data.message);
+                    }
+                },function(error){
+                    $scope.list();
+                    toastr.error('Huy Huy dice: ' + error.data.message);
+                });
+
+         };
+
+
+         /**{
+                   *    Método de modificacion de estatus}
+          *
+          *    @param  Int  Id
+          *    @return  Object:String    Confirmation
+          */
+         $scope.changeObserve = function (id) {
+             alertConfig.title = "¿Desea cambiar el estado?";
+             alertConfig.text = `<table class="table table-bordered w-100 table-attr text-center">
+                                         <thead>
+                                         <tr>
+                                             <th>Codigo</th>
+                                             <th>Nombre</th>
+                                             <th>Talla</th>
+                                             <th>Color</th>
+                                             <th>Motivo</th>
+                                         </tr>
+                                         </thead>
+                                         <tbody>
+                                         <tr>
+                                             <td>${$scope.productAux.cod}</td>
+                                             <td>${$scope.productAux.name}</td>
+                                             <td>${$scope.productAux.size}</td>
+                                             <td>${$scope.productAux.color}</td>
+                                             <td>${(function(){
+                                                if ($scope.productAux.situation === null){
+                                                    return 'Desactivar estado observado';
+                                                }else{
+                                                    return  $scope.productAux.situation;
+                                                }
+                                             })()}
+                                            </td>
+                                         </tr>
+                                         </tbody>
+                                     </table>
+                                     </div>`;
+
+             sweetAlert(alertConfig, function () {
+                 petition.put('api/auxproduct/observe/update/'+ $scope.productId , {situation:$scope.productAux.situation} )
+                     .then(function (data) {
+                        util.modalClose();
+                        toastr.success(data.message);
+                        $scope.list();
+                     }, function (error) {
+                         toastr.error('Uyuyuy dice: ' + error.data.message);
+                     });
+             });
+         };
+         /**
+          *    Se obtiene el detalle de la observacion
+          *
+          *    @param  int  Id
+          *    @return  String
+          */
+         $scope.obseveDetail=function(i){
+            var id = $scope.tableData[i].id;
+            petition.get('api/auxproduct/observe/detail/'+id)
+                .then(function(data){
+                    $scope.observe_detail = data.observe_detail;
+                    util.modal('ModalDetail');
+                },function(error){
+                    $scope.list();
+                    toastr.error('Huy Huy dice: ' + error.data.message);
+                });
+         };
+
+         $scope.cancel = function(){
+           util.modalClose();
+         };
 
         function resetProduct(){
             $scope.products = [];

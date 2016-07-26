@@ -829,4 +829,67 @@ class AuxProductController extends Controller
         }
         
     }
+
+    /**
+     *    Devuelve el estado del producto con respecto a si esta observado
+     *
+     *    @param  Int  id
+     *    @return  Boolean status
+     */
+    public function product_observe_status($id)
+    {
+        $product = Product::find($id);
+
+        if ($product == null){
+            return response()->json(['message' => 'El producto no existe'],404);
+        }
+        $stat=$product->status;
+        if ($stat == 1){
+            return response()->json(['status' => false],200);
+        } else if($stat == 4){
+            return response()->json(['status' => true],200);
+        }else{
+            return response()->json(['status' => null,'message' => 'Solo se puede cambiar el estado a productos disponibles'],200);
+        }
+
+    }
+
+    public function product_observe_update(Request $request,$id)
+    {
+        $rules =[
+            'situation'=>'string',
+        ];        
+        $validator = \Validator::make($request->all(),$rules);
+        if ($validator->fails()){
+            return response()->json(['message' => 'No posee todo los campos necesarios para actualizar producto']);
+        };
+
+        $product = Product::find($id);
+        if ($product == null){
+            return response()->json(['message' => 'El producto no existe'],404);
+        };
+
+        if ($product->status == 4){
+            $product->status = 1;
+            $product->observe_detail = null;
+            $product->save();
+            return response()->json(['message'=>'Se quito el estado de observado']);
+
+        } else if($product->status == 1) {
+            $product->status = 4;   
+            $product->observe_detail = $request->input('situation');         
+            $product->save();
+            return response()->json(['message'=>'Se actualizo el estado a observado']);
+
+        }     
+        return response()->json(['message'=>'No se pudo actualizar el estado del producto']);       
+    }
+
+    public function product_observe_detail($id){
+        $product = Product::find($id);
+        if($product == null){
+            return response()->json(['message'=>'l producto no existe'],404);
+        }
+        return response()->json(['observe_detail'=>$product->observe_detail],200);
+    }
 }

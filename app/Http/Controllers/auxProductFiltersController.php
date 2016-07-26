@@ -88,7 +88,7 @@ class auxProductFiltersController extends Controller
             "product"         =>    "string|max:100",
             "color"           =>    "integer|exists:colors,id",
             "size"            =>    "integer|exists:sizes,id",
-            "status"        =>  "integer|between:0,3",
+            "status"        =>  "integer|between:0,4",
             "status_sale"    =>    "integer|between:0,1"
         ];
 

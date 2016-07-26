@@ -1,5 +1,4 @@
 <?php
-
 namespace Dashboard\Http\Controllers;
 
 use Carbon\Carbon;

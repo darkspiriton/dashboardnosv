@@ -15,7 +15,7 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
             });
 
         $urlRouterProvider.otherwise('/home');
-        $locationProvider.html5Mode(true);
+        // $locationProvider.html5Mode(true);
 
     }])
     .directive('fileModel', function () {

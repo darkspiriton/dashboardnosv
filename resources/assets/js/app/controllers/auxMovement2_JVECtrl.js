@@ -12,8 +12,8 @@ angular.module('App')
 
         util.liPage('movimientos2');
 
-        $scope.tableConfig 	= 	{
-            columns :	[
+        $scope.tableConfig  =   {
+            columns :   [
                 {"sTitle": "Fecha de creación", "bSortable" : true, "sWidth": "90px"},
                 {"sTitle": "Código de Pedido", "bSortable" : true, "sWidth": "90px"},
                 {"sTitle": "Fecha de Pedido", "bSortable" : true, "sWidth": "90px"},                
@@ -28,7 +28,7 @@ angular.module('App')
                 {"sTitle": "Venta", "bSortable" : true, "sWidth": "80px"},
                 {"sTitle": "Acción" , "bSortable" : false, "bSearchable": false , "sWidth": "420px"}
             ],
-            actions	:  	[
+            actions :   [
                 ['status',   {
                     0 : { txt : 'regular' , cls : 'bgm-green', dis : false },
                     1 : { txt : 'liquidacion' ,  cls : 'btn-info',dis: false}
@@ -37,7 +37,8 @@ angular.module('App')
                 ['actions', [
                     ['Retornado', 'prdReturn' ,'bgm-teal'],
                     ['Vendido', 'prdSale' ,'bgm-blue'],
-                    ['reprogramar', 'reprogramar' ,'bgm-purple']
+                    ['reprogramar', 'reprogramar' ,'bgm-purple'],
+                    ['descuento', 'discountEdit' ,'bgm-red']
                 ]
                 ]
             ],
@@ -301,6 +302,101 @@ angular.module('App')
                     toastr.error("El archivo es demasiado grande, no se pudo descargar");
                     $scope.downloadBtn = false;
                 });
+        };
+
+        $scope.discountEdit = function(i){
+            $scope.idDiscount = $scope.tableData[i].movement.id;
+            $scope.priceAux = $scope.tableData[i].price;
+            $scope.priceAuxFinal= $scope.tableData[i].price-$scope.tableData[i].movement.discount;
+            $scope.priceAuxFinal = Math.round($scope.priceAuxFinal*100)/100;
+            $scope.priceAuxNew = $scope.priceAux;
+            $scope.discountAux = $scope.tableData[i].movement.discount;
+            $scope.discountNew = null;
+            util.modal('discountUpdate'); 
+
+            $scope.product.cod=$scope.tableData[i].cod;
+            $scope.product.name=$scope.tableData[i].name;
+            $scope.product.size=$scope.tableData[i].size.name;
+            $scope.product.color=$scope.tableData[i].color.name;   
+        };
+
+        function discountEmpyte(){
+           $scope.idDiscount = null;
+           $scope.priceAux = null;
+           $scope.priceAuxFinal= null;
+           $scope.priceAuxNew = null;
+           $scope.discountAux = null;
+           $scope.discountNew = null; 
+        }
+        
+        $scope.discountUpdate = function(){
+            if ($scope.discountNew === null){
+                toastr.error('Huy Huy dice: Ingrese un nuevo descuento para actualizar el movimiento');
+            }else if($scope.discountNew>$scope.priceAux){
+                toastr.error('Huy Huy dice: El descuento no puede ser mayor que el Precio del Producto');
+            } else{               
+                alertConfig.title = '¿Todo es correcto?';
+                alertConfig.text=`<table class="table table-bordered w-100 table-attr text-center">
+                                            <thead>
+
+                                            <tr>
+                                                <th>Cod</th>
+                                                <th>Producto</th>
+                                                <th>Talla</th>
+                                                <th>Color</th>
+                                                <th>Descuento</th>
+                                                <th>Precio Final</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <th>${$scope.product.cod}</th>
+                                                    <th>${$scope.product.name}</th>
+                                                    <td>${$scope.product.size}</td>
+                                                    <td>${$scope.product.color}</td>
+                                                    <td>${$scope.discountNew}</td>
+                                                    <td>${$scope.priceAuxNew}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>`;
+                swal(alertConfig,
+                    function () {
+                        petition.put('api/auxmovement/get/movement/discount/'+$scope.idDiscount , {discount: $scope.discountNew})
+                            .then(function(data){                                   
+                                $scope.formSubmit = false;
+                                discountEmpyte();
+                                $scope.list();
+                                util.modalClose('discountUpdate');
+                            }, function(error){
+                                toastr.error('Huy Huy dice: ' + error.data.message);
+                            });
+                    });
+            }
+        };
+
+        $scope.validatePrice = function(val){
+            var max_val = $scope.priceAux;
+            if(typeof val !== 'undefined'){
+                if(val <= max_val){
+                    $scope.discountValid = false;
+                    $scope.priceAuxNew = Math.round(($scope.priceAux - $scope.discountNew)*100)/100;        
+                }
+                else{
+                    $scope.discountValid = true;                    
+                    $scope.priceAuxNew = $scope.priceAux;         
+                }
+            }else{
+                $scope.priceAuxNew = $scope.priceAux;      
+            }
+            // if ($scope.discountNew !== null){
+            //     $scope.priceAuxNew = $scope.priceAux - $scope.discountNew;
+            // }else if($scope.discountNew>$scope.priceAux){
+            //     $scope.discountNew=0;
+            // }else if($scope.discountNew === null){
+            //     $scope.priceAuxNew = $scope.priceAux;
+            // }
+           
         };
 
         /**

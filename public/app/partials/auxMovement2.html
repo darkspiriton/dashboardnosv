@@ -105,3 +105,49 @@
         </div>
     </div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="discountUpdate" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bgm-teal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title c-white">Actualizar descuento de producto</h3>
+            </div>
+            <div class="modal-body card-padding">
+                <form name="default" class="form-horizontal" autocomplete="off">
+                    <div class="form-group m-b-0">  
+                        <label class="col-xs-12 col-sm-4 control-label" style="padding-top: 0px;">Precio Final actual</label>
+                        <div class="col-xs-12 col-sm-6 report-date">
+                             <input disabled type="number" class="btn btn-block btn-default m-t-5" ng-model="priceAuxFinal">
+                        </div>                      
+                        <label class="col-xs-12 col-sm-4 control-label" style="padding-top: 0px;">Descuento actual</label>
+                        <div class="col-xs-12 col-sm-6 report-date">
+                             <input disabled type="number" class="btn btn-block btn-default m-t-5" ng-model="discountAux">
+                        </div>
+                                            
+                        <label class="col-xs-12 col-sm-4 control-label" style="padding-top: 0px;">Nuevo descuento</label>
+                        <div class="col-xs-12 col-sm-6 report-date">
+                             <input type="number" class="btn btn-block btn-default m-t-5" ng-model="discountNew" ng-change="validatePrice(discountNew)" min="0" required>
+                        </div>
+
+                        <label class="col-xs-12 col-sm-4 control-label">Nuevo Precio Final</label>
+                        <div class="col-xs-12 col-sm-6 report-date">
+                             <input disabled type="number" class="btn btn-block btn-default m-t-5" ng-model="priceAuxNew">
+                        </div>
+
+                        <div class="col-xs-12 col-sm-12">
+                            <a class="btn btn-block btn-primary m-t-5" ng-disabled="!default.$valid || discountValid" ng-click="discountUpdate()">guardar</a>
+                        </div>
+
+
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

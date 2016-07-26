@@ -813,6 +813,28 @@ class AuxMovementController extends Controller
         return $pdf->download();
     }
 
+    public function discountUpdate(Request $request,$id){
+        $rules = [
+            'discount' => 'required|numeric'
+        ];
+        $validator = \Validator::make($request->all(),$rules);
+        if ($validator->fails()){
+            return response()->json(['message' => 'No posee los campos necesarios para realizar actualizacion de descuento'],404);
+        }        
+
+        $movement = Movement::find($id);     
+        // return $movement;
+        if($movement == null){
+            return response()->json(['message' => 'No se encuentra ningun movimiento con ese identificador'],404);
+        }
+
+        $movement->discount = $request->input('discount');
+        $movement->save();
+
+        return response()->json(['message' => 'Se actualizo correctament el descuento'],200);
+
+    }
+
     /**
      *    Product Collection para despacho por fecha
      *
@@ -848,4 +870,6 @@ class AuxMovementController extends Controller
 
         return $filter;
     }
+
+
 }

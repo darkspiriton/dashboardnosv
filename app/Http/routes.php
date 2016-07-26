@@ -141,6 +141,7 @@ Route::group(['prefix' => 'api'], function(){
 
 
     Route::group(['prefix'=>'auxmovement/'],function(){
+        Route::put('/get/movement/discount/{id}','AuxMovementController@discountUpdate');
         Route::get('/get/movement','AuxMovementController@movementPending');
         Route::get('/get/movementDay','AuxMovementController@movementDay');
         Route::get('/get/movementDays','AuxMovementController@movementDays');

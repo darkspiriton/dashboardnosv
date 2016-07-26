@@ -212,9 +212,9 @@ class auxProductFiltersController extends Controller
             $pdf->setOrientation('landscape');
 
             return $pdf->download();
-        } catch(Exception $e){
+        } catch(\Exception $e){
             Log::error("Descarga de kardex: ".$e->getMessage());
-            return response()->json(["message" => "Pascal pordio algunos cables no se pudo realizar la descarga"], 500);
+            return response()->json(["message" => "Pascal pordio algunos cables no se pudo realizar la descarga", "error" => $e.getMessage()], 500);
         }
     }
 

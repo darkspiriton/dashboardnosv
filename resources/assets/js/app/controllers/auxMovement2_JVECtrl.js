@@ -293,7 +293,7 @@ angular.module('App')
             petition.post('api/auxmovement/get/dispatch/download', {date: $scope.dispatch}, {responseType:'arraybuffer'})
                 .then(function(data){
                     var date = new Date().getTime();
-                    var name = `${date}-ficha-de-despacho-${$scope.dispatch}.pdf`;
+                    var name = `${date}-ficha-de-despacho.pdf`;
                     var file = new Blob([data],{ type : 'application/pdf'});
                     saveAs(file, name);
                     $scope.downloadBtn = false;

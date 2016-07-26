@@ -8,7 +8,7 @@
     <title ng-bind-html="pageTitle"></title>
     <link rel="icon" type="image/jpeg" href="img/favicon.jpg" />.
     @include('layouts.dashHead')
-    <base href="/dashboard">
+    <!-- <base href="/dashboard"> -->
 </head>
 <body>
 <header id="header">

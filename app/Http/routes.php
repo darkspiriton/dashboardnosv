@@ -284,8 +284,8 @@ Route::group(['prefix' => 'api'], function(){
  */
 
 Route::get('/test', function(\Illuminate\Http\Request $request){
-
-    return "=)";
+    $collect = collect([0,1,2,3,4,5]);
+    return $collect->toArray();
 
 });
 

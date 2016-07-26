@@ -229,11 +229,11 @@ angular.module('App')
 						movements[i].product_size = products[j].size.name;
 						movements[i].product_color = products[j].color.name;
 						if(products[j].settlement){
-							movements[i].price = (products[j].settlement.price).toFixed(2);
+							movements[i].price = Number(products[j].settlement.price).toFixed(2);
 						} else {
-							movements[i].price = (products[j].cost_provider + products[j].utility).toFixed(2);
+							movements[i].price = Number(products[j].cost_provider + products[j].utility).toFixed(2);
 						}
-						movements[i].price_final = (movements[i].price - movements[i].discount).toFixed(2);
+						movements[i].price_final = Number(movements[i].price - movements[i].discount).toFixed(2);
 						break;
 					}
 				}

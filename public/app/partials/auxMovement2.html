@@ -25,7 +25,7 @@
             <h2 class="col-xs-5 col-sm-3 text-right m-t-20">Fecha de despacho</h2>
             <input type="date" class="btn btn-default col-xs-7 col-sm-2 m-t-20" ng-change="filter()" ng-model="dispatch" required>
 
-            <input type="button" ng-click="download()" class="btn bgm-purple m-l-20 m-t-20 col-sm-2" value="DESCARGAR">
+            <input type="button" ng-disabled="downloadBtn" ng-click="download()" class="btn bgm-purple m-l-20 m-t-20 col-sm-2" value="DESCARGAR">
        </div>
     </div>
     <div class="card-body card-padding table-responsive">

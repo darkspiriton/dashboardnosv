@@ -128,6 +128,7 @@ Route::group(['prefix' => 'api'], function(){
         Route::get('get/providers','auxProductFiltersController@ProviderList');
         Route::get('get/products','auxProductFiltersController@ProductList');
         Route::get('get/search','auxProductFiltersController@FilterForAll');
+        Route::post('get/search/download','auxProductFiltersController@FilterForAllDownload');
         Route::get('get/search/stock','auxProductFiltersController@FilterStockForAllByVEN');
     });
 
@@ -284,8 +285,8 @@ Route::group(['prefix' => 'api'], function(){
  */
 
 Route::get('/test', function(\Illuminate\Http\Request $request){
-
-    return "=)";
+    $collect = collect([0,1,2,3,4,5]);
+    return $collect->toArray();
 
 });
 

@@ -773,6 +773,9 @@ class AuxMovementController extends Controller
 
         $data = $this->dispatchForDate($dateFind);
 
+        $data = $data->sortBy("orderCase");
+
+        $c = 1;
         foreach ($data as $row) {
             $row->movement_date_request =  $row->movement->date_request;
             $row->movement_date_shipment =  $row->movement->date_shipment;
@@ -786,23 +789,26 @@ class AuxMovementController extends Controller
             } else {
                 $row->sale = "Liquidacion";
             }
-        }
 
-        $data = $data->sortBy("orderCase");
+            $row->index = $c;
+            $c++;
+        }
 
         $date = date('Y-m-d');
         $title = 'Ficha de despacho para la fecha: '.$dateFind->toDateString();
-        $columns = ['Orden' => 'movement_cod_order',
-        'Fecha Pedido' => 'movement_date_request',
-        'Fecha Salida' => 'movement_date_shipment',
-        'Cod' => 'cod',
-        'Modelo' => 'name',
-        'Color' => 'color_name',
-        'Talla' => 'size_name',
-        'Venta' => 'sale',
-        'Precio V.' => 'price',
-        'Desc.' => 'movement_discount',
-        'Precio F.' => 'pricefinal'
+        $columns = [
+            'id' => 'index',
+            'Orden' => 'movement_cod_order',
+            'Fecha Pedido' => 'movement_date_request',
+            'Fecha Salida' => 'movement_date_shipment',
+            'Cod' => 'cod',
+            'Modelo' => 'name',
+            'Color' => 'color_name',
+            'Talla' => 'size_name',
+            'Venta' => 'sale',
+            'Precio V.' => 'price',
+            'Desc.' => 'movement_discount',
+            'Precio F.' => 'pricefinal'
         ];
 
         $view =  \View::make('pdf.templatePDF', compact('data', 'columns', 'title', 'date'))->render();

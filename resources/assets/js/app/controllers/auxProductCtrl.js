@@ -469,8 +469,8 @@ angular.module('App')
 
         $scope.searchList = function(dataSearch){
             $scope.updateList = true;
-            if(dataSearch.status_sale === "")dataSearch.status_sale = null;
-            petition.get(`api/auxproduct/filter/get/search`, {params: dataSearch})
+
+            petition.get('api/auxproduct/filter/get/search', {params: dataSearch})
                 .then(function(data){
                     $scope.tableData = data.products;
                     $('#table').AJQtable2('view2', $scope, $compile);
@@ -478,6 +478,22 @@ angular.module('App')
                 }, function(error){
                     toastr.error('Huy Huy dice: ' + error.data.message);
                     $scope.updateList = false;
+                });
+        };
+
+        $scope.download = function(dataSearch){
+            $scope.downloadBtn = true;
+            if(dataSearch.status_sale === "")dataSearch.status_sale = null;
+            petition.post('api/auxproduct/filter/get/search/download', dataSearch, {responseType:'arraybuffer'})
+                .then(function(data){
+                    var date = new Date().getTime();
+                    var name = date + '-reporte-de-kardex.pdf';
+                    var file = new Blob([data],{ type : 'application/pdf'});
+                    saveAs(file, name);
+                    $scope.downloadBtn = false;
+                }, function(error){
+                    toastr.error("El archivo es demasiado grande, no se pudo descargar");
+                    $scope.downloadBtn = false;
                 });
         };
 
@@ -583,7 +599,7 @@ angular.module('App')
                     $scope.list();
                     toastr.error('Huy Huy dice: ' + error.data.message);
                 });
-         }
+         };
 
          $scope.cancel = function(){
            util.modalClose();

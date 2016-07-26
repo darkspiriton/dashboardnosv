@@ -1,6 +1,6 @@
 angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 'toastr', 'ui.router', 'satellizer','angular-fb'])
-    .config(["$stateProvider", "$urlRouterProvider", "$authProvider", "$fbProvider",
-        function ($stateProvider, $urlRouterProvider, $authProvider, $fbProvider) {
+    .config(["$stateProvider", "$urlRouterProvider", "$authProvider", "$fbProvider", "$locationProvider",
+        function ($stateProvider, $urlRouterProvider, $authProvider, $fbProvider, $locationProvider) {
         $authProvider.tokenName = "token";
         $authProvider.tokenPrefix = "DB_NV";
 
@@ -15,6 +15,7 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
             });
 
         $urlRouterProvider.otherwise('/home');
+        $locationProvider.html5Mode(true);
 
     }])
     .directive('fileModel', function () {
@@ -249,6 +250,8 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
                 var deferred = $q.defer();
                 $http.get(baseUrl(URL), data).then(function (response) {
                     deferred.resolve(response.data);
+                }, function(error){
+                    deferred.reject(error);
                 });
 
                 return deferred.promise;
@@ -259,6 +262,8 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
                 var deferred = $q.defer();
                 $http.post(baseUrl(URL), data, config).then(function (response) {
                     deferred.resolve(response.data);
+                }, function(error){
+                    deferred.reject(error);
                 });
 
                 return deferred.promise;
@@ -268,6 +273,8 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
                 var deferred = $q.defer();
                 $http.put(baseUrl(URL), data).then(function (response) {
                     deferred.resolve(response.data);
+                }, function(error){
+                    deferred.reject(error);
                 });
 
                 return deferred.promise;
@@ -277,6 +284,8 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
                 var deferred = $q.defer();
                 $http.delete(baseUrl(URL), data).then(function (response) {
                     deferred.resolve(response.data);
+                }, function(error){
+                    deferred.reject(error);
                 });
 
                 return deferred.promise;
@@ -285,6 +294,8 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
                 var deferred = $q.defer();
                 $http(config).then(function (response) {
                     deferred.resolve(response.data);
+                }, function(error){
+                    deferred.reject(error);
                 });
                 return deferred.promise;
             }

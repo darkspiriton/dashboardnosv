@@ -310,7 +310,7 @@ angular.module('App')
             $scope.priceAuxFinal= $scope.tableData[i].price-$scope.tableData[i].movement.discount;
             $scope.priceAuxFinal = Math.round($scope.priceAuxFinal*100)/100;
             $scope.priceAuxNew = $scope.priceAux;
-            $scope.discountAux = $scope.tableData[i].movement.discount;
+            $scope.discountAux = parseFloat($scope.tableData[i].movement.discount);
             $scope.discountNew = null;
             util.modal('discountUpdate'); 
 

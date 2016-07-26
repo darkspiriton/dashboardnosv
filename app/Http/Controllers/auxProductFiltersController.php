@@ -128,96 +128,89 @@ class auxProductFiltersController extends Controller
      */
     public function FilterForAllDownload(Request $request)
     {
-        try{
-            echo "1";
-            $rules = [
-                "type"            =>    "integer|exists:types,id",
-                "provider_id"    =>    "integer|exists:providers,id",
-                "product"         =>    "string|max:100",
-                "color"           =>    "integer|exists:colors,id",
-                "size"            =>    "integer|exists:sizes,id",
-                "status"        =>  "integer|between:0,3",
-                "status_sale"    =>    "integer|between:0,1"
-            ];
-            echo "2";
-            if (Validator::make($request->all(), $rules)->fails()) {
-                return response()->json(["message" => "Parametros de busqueda no validos"], 401);
-            }
-            echo "3";
-            $query = DB::table('auxproducts as p')
-                            ->select('p.status', DB::raw('DATE_FORMAT(p.created_at,\'%d-%m-%Y\') as date'), 'p.id', 'p.cod', 'p.name', 's.name as size', 'c.name as color', 'pv.name as provider', DB::raw('GROUP_CONCAT(t.name ORDER BY t.name ASC SEPARATOR \' - \') as types'), 'p.cost_provider', 'p.utility')
-                            ->addSelect(DB::raw('p.cost_provider + p.utility  as price_real'))
-                            ->addSelect(DB::raw('case when dc.price then dc.price else p.cost_provider + p.utility end as precio'))
-                            ->addSelect(DB::raw('case when dc.price then 1 else 0 end liquidation'))
-                            ->leftJoin('types_auxproducts as tp', 'tp.product_id', '=', 'p.id')
-                            ->leftJoin('types as t', 't.id', '=', 'tp.type_id')
-                            ->join('colors as c', 'c.id', '=', 'p.color_id')
-                            ->join('sizes as s', 's.id', '=', 'p.size_id')
-                            ->join('providers as pv', 'pv.id', '=', 'p.provider_id')
-                            ->leftJoin('settlements as dc', 'dc.product_id', '=', 'p.id')
-                            ->groupBy('cod')
-                            ->orderBy('id', 'desc');
-            echo "4";               
-            $query = $this->QueryRequest($request, $query);
-            echo "5";
-            $products = $query->get();
-            echo "6";
-            $products = $this->StatusSalesCase($request, $products);
-            echo "7";
-            foreach ($products as $product) {
-                if($product->liquidation == 0){
-                    $product->status_sale = "normal";
-                } else if($product->liquidation == 1){
-                    $product->status_sale = "liquidacion";
-                } else {
-                    $product->status_sale = "Otros";
-                }
-                if($product->status == 0){
-                    $product->status_prd = "salida";
-                } else if($product->status == 1){
-                    $product->status_prd = "disponible";
-                } else if($product->status == 2){
-                    $product->status_prd = "vendido";
-                } else if($product->status == 3){
-                    $product->status_prd = "reservado";
-                } else if($product->status == 4){
-                    $product->status_prd = "observado";
-                }
-            }
-            echo "8";
-            $collect = collect($products);
-            $collect->sortBy("name");
-            echo "9";
-            $data = $collect->toArray();
-            echo "10";
-            $date = date('Y-m-d');
-            echo "11";
-            $title = 'Reporte de kardex para el día: '.$date;
+        $rules = [
+            "type"            =>    "integer|exists:types,id",
+            "provider_id"    =>    "integer|exists:providers,id",
+            "product"         =>    "string|max:100",
+            "color"           =>    "integer|exists:colors,id",
+            "size"            =>    "integer|exists:sizes,id",
+            "status"        =>  "integer|between:0,3",
+            "status_sale"    =>    "integer|between:0,1"
+        ];
 
-            $columns = ['Fecha' => 'date',
-                'Codigo' => 'cod',
-                'Nombre' => 'name',
-                'Proveedor' => 'provider',
-                'Talla' => 'size',
-                'Color' => 'color',
-                'Tipos' => 'types',
-                'Estado V.' => 'status_sale',
-                'Precio R.' => 'price_real',
-                'Precio.' => 'precio',
-                'Estado' => 'status_prd',
-            ];
-            echo "12";
-            $view =  \View::make('pdf.templatePDF', compact('data', 'columns', 'title', 'date'))->render();
-            echo "13";
-            $pdf = \PDF::loadHTML($view);
-            $pdf->setOrientation('landscape');
-            echo "14";
-            return $view;
-            return $pdf->download();
-        } catch(DOMPDF_Exception $e){
-            Log::error("Descarga de kardex: ".$e->getMessage());
-            return response()->json(["message" => "Pascal pordio algunos cables no se pudo realizar la descarga", "error" => $e.getMessage()], 500);
+        if (Validator::make($request->all(), $rules)->fails()) {
+            return response()->json(["message" => "Parametros de busqueda no validos"], 401);
         }
+
+        $query = DB::table('auxproducts as p')
+                        ->select('p.status', DB::raw('DATE_FORMAT(p.created_at,\'%d-%m-%Y\') as date'), 'p.id', 'p.cod', 'p.name', 's.name as size', 'c.name as color', 'pv.name as provider', DB::raw('GROUP_CONCAT(t.name ORDER BY t.name ASC SEPARATOR \' - \') as types'), 'p.cost_provider', 'p.utility')
+                        ->addSelect(DB::raw('p.cost_provider + p.utility  as price_real'))
+                        ->addSelect(DB::raw('case when dc.price then dc.price else p.cost_provider + p.utility end as precio'))
+                        ->addSelect(DB::raw('case when dc.price then 1 else 0 end liquidation'))
+                        ->leftJoin('types_auxproducts as tp', 'tp.product_id', '=', 'p.id')
+                        ->leftJoin('types as t', 't.id', '=', 'tp.type_id')
+                        ->join('colors as c', 'c.id', '=', 'p.color_id')
+                        ->join('sizes as s', 's.id', '=', 'p.size_id')
+                        ->join('providers as pv', 'pv.id', '=', 'p.provider_id')
+                        ->leftJoin('settlements as dc', 'dc.product_id', '=', 'p.id')
+                        ->groupBy('cod')
+                        ->orderBy('id', 'desc');
+
+        $query = $this->QueryRequest($request, $query);
+
+        $products = $query->get();
+
+        $products = $this->StatusSalesCase($request, $products);
+
+        foreach ($products as $product) {
+            if($product->liquidation == 0){
+                $product->status_sale = "normal";
+            } else if($product->liquidation == 1){
+                $product->status_sale = "liquidacion";
+            } else {
+                $product->status_sale = "Otros";
+            }
+
+            if($product->status == 0){
+                $product->status_prd = "salida";
+            } else if($product->status == 1){
+                $product->status_prd = "disponible";
+            } else if($product->status == 2){
+                $product->status_prd = "vendido";
+            } else if($product->status == 3){
+                $product->status_prd = "reservado";
+            } else if($product->status == 4){
+                $product->status_prd = "observado";
+            }
+        }
+        $collect = collect($products);
+        $collect->sortBy("name");
+
+        $data = $collect->toArray();
+
+        $date = date('Y-m-d');
+
+        $title = 'Reporte de kardex para el día: '.$date;
+
+        $columns = ['Fecha' => 'date',
+            'Codigo' => 'cod',
+            'Nombre' => 'name',
+            'Proveedor' => 'provider',
+            'Talla' => 'size',
+            'Color' => 'color',
+            'Tipos' => 'types',
+            'Estado V.' => 'status_sale',
+            'Precio R.' => 'price_real',
+            'Precio.' => 'precio',
+            'Estado' => 'status_prd',
+        ];
+
+        $view =  \View::make('pdf.templatePDF', compact('data', 'columns', 'title', 'date'))->render();
+
+        $pdf = \PDF::loadHTML($view);
+        $pdf->setOrientation('landscape');
+
+        return $pdf->download();
     }
 
     /**

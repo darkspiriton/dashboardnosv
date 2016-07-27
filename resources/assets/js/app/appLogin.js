@@ -1,5 +1,6 @@
 angular.module('loginApp', ['ngResource', 'ngMessages', 'ngAnimate', 'toastr', 'ui.router', 'satellizer'])
-    .config(function($stateProvider, $urlRouterProvider, $authProvider) {
+    .config([$stateProvider, $urlRouterProvider, $authProvider,
+        function($stateProvider, $urlRouterProvider, $authProvider) {
 
         $stateProvider
             .state('homeLogin', {
@@ -13,4 +14,4 @@ angular.module('loginApp', ['ngResource', 'ngMessages', 'ngAnimate', 'toastr', '
         $authProvider.tokenName = "token";
         $authProvider.tokenPrefix = "DB_NV";
 
-    });
+    }]);

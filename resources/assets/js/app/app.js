@@ -376,7 +376,8 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
 
 
 
-    .controller('appCtrl', function AppCtrl($state, $log, $scope, $window, $auth, storage) {
+    .controller('appCtrl', ["$state", "$log", "$scope", "$window", "$auth", "storage",
+        function AppCtrl($state, $log, $scope, $window, $auth, storage) {
         $scope.pageTitle = 'Home';
 
         if ($auth.isAuthenticated()) {
@@ -403,4 +404,4 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
         } else {
             $window.location.href = '/';
         }
-    });
+    }]);

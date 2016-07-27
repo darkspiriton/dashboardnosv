@@ -152,7 +152,7 @@ angular.module('App')
 			return upper;
 		}
 
-			   $scope.submit = function() {    
+		$scope.submit = function() {    
 			valid_product_details($scope.codOrder,$scope.requestDate,$scope.shipmentDate, function() {
 				alertConfig.title = '¿Todo es correcto?';
 				alertConfig.text=`<table class="table table-bordered w-100 table-attr text-center">
@@ -175,7 +175,7 @@ angular.module('App')
 										<tbody>
 											${(function(){
 												var rowList = "";
-												for(i in $scope.products){
+												for(var i in $scope.products){
 													var row = "<tr>";
 													row += `<td>${$scope.products[i].cod}</td>`;
 													row += `<td>${$scope.products[i].name}</td>`;
@@ -207,7 +207,7 @@ angular.module('App')
 						}, function (error) {
 							toastr.error('Huy huy dice: ' + error.data.message);
 							$scope.formSubmit = false;
-						})
+						});
 					});
 			});
 		};
@@ -291,7 +291,7 @@ angular.module('App')
 			$scope.products[i].preciofinal = Math.round(($scope.products[i].price - $scope.products[i].discount)*100)/100;
 			$scope.dataProducts[i].discount = angular.copy($scope.products[i].discount);
 			
-		}
+		};
 
 		function valid_product_details(codOrder, requestDate, shipmentDate, callback){
 			if(codOrder != null && requestDate != null && shipmentDate != null){

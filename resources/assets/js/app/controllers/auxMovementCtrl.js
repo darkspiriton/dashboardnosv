@@ -248,7 +248,7 @@ angular.module('App')
 						</tr>`;
 			}
 
-			var template = `<table class="table table-bordered w-100 table-attr text-center">
+			var template = `<table class="table table-attr table-bordered text-center w-100">
 										<thead>
 										<tr>                                            
 											<h5><label> Código : </label>${setUpper($scope.codOrder)}</h5>                                            
@@ -261,8 +261,8 @@ angular.module('App')
 											<th>Talla</th>
 											<th>Color</th>
 											<th>Precio</th>
-											<th>desc.</th>
-											<th>P. Final</th>
+											<th>Desc.</th>
+											<th>Total</th>
 										</tr>
 										</thead>
 										<tbody>

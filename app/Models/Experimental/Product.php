@@ -9,7 +9,8 @@ class Product extends Model
 {
     protected $table = "auxproducts";
     protected $hidden = ['pivot', 'updated_at'];
-   
+    protected $casts = ["utility" => "float", "cost_provider" => "float"];
+
     public function size(){
         return $this->belongsTo(Size::class);
     }

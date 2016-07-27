@@ -122,7 +122,7 @@ angular.module('App')
 		function addProductHelper(product){
 			var product = angular.copy(product);
 			var count = 0;
-			for(i in  $scope.dataProducts){
+			for(var i in  $scope.dataProducts){
 				if($scope.dataProducts[i].id == product.id){
 					count++;
 					break;

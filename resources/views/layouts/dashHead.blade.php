@@ -12,6 +12,6 @@
 <link href="{{ elixir('css/styles.min.css') }}" rel="stylesheet">
 
 <!-- Aplication CSS -->
-<link href="css/toastr.min.css" rel="stylesheet">
+<link href="{{ elixir('css/toastr.min.css') }}" rel="stylesheet">
 
 <script src="https://use.fontawesome.com/7edf371a0f.js"></script>

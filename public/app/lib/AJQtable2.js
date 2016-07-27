@@ -1,11 +1,11 @@
 /**
- * Created by luizh on 13/06/2016.
+ * Created by luiidev
  */
-"use strict";
 (function( $ ){
+    "use strict";
     var AJQactions2 = {};
     var view2 = function ($scope , $compile, tableData, tableConfig) {
-        tableConfig || (tableConfig = {});
+        tableConfig = tableConfig || {};
 
         var rowCompiler, oTable, acc = {};
         var App = {};
@@ -23,7 +23,7 @@
             App.options = $scope.tableConfig.options || {};
         }
 
-        App.rows    = tableData || $scope.tableData || [];
+        App.rows = tableData || $scope.tableData || [];
 
 
         // Conpilar en angular las filas
@@ -51,22 +51,22 @@
             if(obj.type == 'status'){
                 $.each(obj.list, function(l , button){
                     AJQactions2[button.name] = {};
-                    AJQactions2[button.name]['render'] = button.render;
-                    AJQactions2[button.name]['event'] = button.name;
-                    AJQactions2[button.name]['column'] = button.column;
+                    AJQactions2[button.name].render = button.render;
+                    AJQactions2[button.name].event = button.name;
+                    AJQactions2[button.name].column = button.column;
                     if(typeof button.call_me == 'function') {
-                        AJQactions2[button.name]['call_me'] = button.call_me;
-                        AJQactions2[button.name]['run'] = function (i) {
+                        AJQactions2[button.name].call_me = button.call_me;
+                        AJQactions2[button.name].run = function (i) {
                             var est = this.call_me(App.rows[i]);
                             if (!this.render.hasOwnProperty(est)) if (this.render.hasOwnProperty('fail')) est = 'fail'; else return '';
                             return `<a class="btn btn-xs ${this.render[est][1]}" ng-click="${this.event}(${i},$event)" style="min-width: 82px;" ${((this.render[est][2] === false) ? 'disabled="disabled"' : '')}>${this.render[est][0]}</a>`;
-                        }
+                        };
                     } else {
-                        AJQactions2[button.name]['run'] = function (i) {
+                        AJQactions2[button.name].run = function (i) {
                             var est = searchObject(App.rows[i], this.column);
                             if (!this.render.hasOwnProperty(est)) if (this.render.hasOwnProperty('fail')) est = 'fail'; else return '';
                             return `<a class="btn btn-xs ${this.render[est][1]}" ng-click="${this.event}(${i},$event)" style="min-width: 82px;" ${((this.render[est][2] === false) ? 'disabled="disabled"' : '')}>${this.render[est][0]}</a>`;
-                        }
+                        };
                     }
                 });
             }
@@ -78,31 +78,31 @@
                         btns = btns + `<a class="btn btn-xs ${button.render[x][2]}" ng-click="${button.render[x][1]}('{i}','$event')" style="min-width: 82px;">${button.render[x][0]}</a>`;
                     }
                     AJQactions2[button.name] = {};
-                    AJQactions2[button.name]['render'] = btns;
-                    AJQactions2[button.name]['run'] = function (i) {
+                    AJQactions2[button.name].render = btns;
+                    AJQactions2[button.name].run = function (i) {
                         return this.render.replace(new RegExp("{i}",'g'), i);
-                    }
+                    };
                 });
             }
 
             if(obj.type == 'custom'){
                 $.each(obj.list, function(l , button){
                     AJQactions2[button.name] = {};
-                    AJQactions2[button.name]['render'] = button.template;
-                    AJQactions2[button.name]['column'] = button.column;
+                    AJQactions2[button.name].render = button.template;
+                    AJQactions2[button.name].column = button.column;
                     if(typeof button.call_me == 'function') {
-                        AJQactions2[button.name]['call_me'] = button.call_me;
-                        AJQactions2[button.name]['run'] = function(i){
+                        AJQactions2[button.name].call_me = button.call_me;
+                        AJQactions2[button.name].run = function(i){
                             return this.call_me(App.rows[i], i, App.rows);
-                        }
+                        };
                     } else {
-                    AJQactions2[button.name]['run'] = function (i) {
+                    AJQactions2[button.name].run = function (i) {
                         var template = this.render;
                         for(var y in this.column){
                                 template = template.replace(`{${y}}`, searchObject(App.rows[i], this.column[y]));
                             }
                             return template;
-                        }   
+                        };
                     }
                 });
             }
@@ -125,8 +125,8 @@
         oTable.fnClearTable();
 
         // Llenar de registros la tabla
+        var data = [];
         if (Object.keys(AJQactions2).length > 0){
-            var data = [];
             $.each(App.rows, function(i , obj){
                 var temp = [];
                 $.each( App.data , function(x, val){
@@ -144,7 +144,6 @@
             if(data.length > 0)
                 oTable.fnAddData(data);
         } else {
-            var data = [];
             $.each(App.rows, function(i , obj){
                 var temp = [];
                 $.each( App.data , function(x, val){
@@ -158,7 +157,7 @@
             if(data.length > 0)
                 oTable.fnAddData(data);
         }
-    }
+    };
 
     function search2( busqueda ){
         $(this[0]).dataTable().fnFilter(busqueda);
@@ -176,7 +175,7 @@
     }
 
     var methods = {
-        init : function() { console.log('indique accion') },
+        init : function() { console.log('indique accion'); },
         view2 : view2,
         search2 : search2,
         removeRow2 : removeRow2

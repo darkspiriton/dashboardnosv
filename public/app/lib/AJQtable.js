@@ -2,7 +2,7 @@
 
 	var view = function ($scope , $compile) {
 
-		var data , options, rowCompiler, cols, actions, acc = new Object();
+		var data , options, rowCompiler, cols, actions, acc = {};
 
 		// Datos de configuracion
 		var config = {};
@@ -11,14 +11,14 @@
 		actions 	= $scope.tableConfig.actions || [];
 		data 	= $scope.tableConfig.data || [];
 		config.configStatus  = ($scope.tableConfig.configStatus)?$scope.tableConfig.configStatus: 'sta';
-		$scope.tableData || ($scope.tableData = [])
+		$scope.tableData = $scope.tableData || [];
 
 		// Conpilar en angular las filas
 		rowCompiler = function(nRow, aData, iDataIndex) {
 			var element, linker;
 			linker = $compile(nRow);
 			element = linker($scope);
-			return nRow = element;
+			return element;
 		};
 
 		function searchObject(obj, prop) {
@@ -27,7 +27,7 @@
 				return false;
 			}
 
-			var _index = prop.indexOf('.')
+			var _index = prop.indexOf('.');
 			if(_index > -1) {
 				return searchObject(obj[prop.substring(0, _index)], prop.substr(_index + 1));
 			}
@@ -35,29 +35,29 @@
 			return obj[prop];
 		}
 
-		for (i in actions) {
+		for (var i in actions) {
 			if ( actions[i][0]  === 'actions' ) {
-				acc['dataA'] =  actions[i][1];
-				acc['actions'] = function(ind){
-					var btns = ''
-					for (x in acc.dataA){
+				acc.dataA = actions[i][1];
+				acc.actions = function(ind){
+					var btns = '';
+					for (var x in acc.dataA){
 						btns = btns + '<button class="btn btn-xs '+ acc.dataA[x][2] +'" ng-click="'+ acc.dataA[x][1] +'(' + ind + "," +"$event" + ')" style="min-width: 82px;">'+ acc.dataA[x][0] +'</button>';
 					}
 					return btns;
-				}
+				};
 			} else if (! acc.hasOwnProperty('actions'))
-				acc['actions'] = function(){ return '' }
+				acc.actions = function(){ return ''; };
 
-			if (actions[i][0]  === 'status' ) {
-				acc['dataS'] =  actions[i][1];
-				acc['status'] = function(ind, est){
+			if (actions[i][0] === 'status' ) {
+				acc.dataS = actions[i][1];
+				acc.status = function(ind, est){
 					if(typeof est == 'undefined')
 						return '';
 					return "<button class='btn btn-xs " + acc.dataS[est].cls + "' ng-click='status("+ ind + ','+ '$event' + ")' style='min-width: 82px;' "+ ((acc.dataS[est].dis === false)?'disabled="disabled"':'') + " >" + acc.dataS[est].txt + "</button>";
-				}
+				};
 			} else if (! acc.hasOwnProperty('status'))
-				acc['status'] = function(){ return '' }
-		};
+				acc.status = function(){ return ''; };
+		}
 
 		// Opciones de la tabla
 		options = {
@@ -75,8 +75,8 @@
 		oTable.fnClearTable();
 
 		// Llenar de registros la tabla
+		var dataTemp = [];
 		if (actions.length > 0){
-			var dataTemp = [];
 			$.each($scope.tableData, function(i , obj){
 				var temp = [];
 				var est = searchObject(obj,config.configStatus);
@@ -97,9 +97,8 @@
 			if(dataTemp.length > 0)
 				oTable.fnAddData(dataTemp);
 		} else {
-			var dataTemp = [];
 			$.each($scope.tableData, function(i , obj){
-				var temp = []
+				var temp = [];
 				$.each( data , function(x, val){
 					if ( val.constructor === Array)
 						temp[x] = (obj[val[0]]).substr(0, val[1]);
@@ -111,7 +110,7 @@
 			if(dataTemp.length > 0)
 				oTable.fnAddData(dataTemp);
 		}
-	}
+	};
 
 	function search( busqueda ){
 		$(this[0]).dataTable().fnFilter(busqueda);
@@ -126,10 +125,10 @@
 			oTable.fnDeleteRow(pos);
 		});
 		callback();
-	};
+	}
 
 	var methods = {
-		init : function() { console.log('indique accion') },
+		init : function() { console.log('indique accion'); },
 		view : view,
 		search : search,
 		removeRow : removeRow

@@ -12,12 +12,12 @@
     <link href="vendors/bower_components/material-design-iconic-font/css/material-design-iconic-font.min.css" rel="stylesheet">
 
     <!-- CSS -->
-    <link href="css/app.min.1.css" rel="stylesheet">
-    <link href="css/app.min.2.css" rel="stylesheet">
-    <link href="css/loginStyles.min.css" rel="stylesheet">
+    <link href="{{ elixir('css/app.min.1.css') }}" rel="stylesheet">
+    <link href="{{ elixir('css/app.min.2.css') }}" rel="stylesheet">
+    <link href="{{ elixir('css/loginStyles.min.css') }}" rel="stylesheet">
 
     <!-- Aplication CSS -->
-    <link href="css/toastr.min.css" rel="stylesheet">
+    <link href="{{ elixir('css/toastr.min.css') }}" rel="stylesheet">
 
 </head>
 
@@ -44,8 +44,8 @@
 <script src="/app/lib/satellizer.min.js"></script>
 
 <!-- Application Code -->
-<script src="app/appLogin.js"></script>
-<script src="app/controllers/loginCtrl.js"></script>
+<script src="{{ elixir('app/appLogin.js') }}"></script>
+<script src="{{ elixir('app/controllers/loginCtrl.js') }}"></script>
 </body>
 
 <!-- Mirrored from 192.185.228.226/projects/ma/v1-4-1/jQuery/login.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 27 Jul 2015 02:21:15 GMT -->

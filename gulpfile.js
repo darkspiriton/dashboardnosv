@@ -1,5 +1,5 @@
-var elixir = require('laravel-elixir');
-require('laravel-elixir-stylus');
+var elixir = require("laravel-elixir");
+require("laravel-elixir-stylus");
 
 /*
  |--------------------------------------------------------------------------
@@ -20,11 +20,11 @@ require('laravel-elixir-stylus');
  */
 
 elixir(function(mix) {
-    mix.sass('app1.css' , 'public/css/app.min.1.css');
-    mix.sass('app2.css' , 'public/css/app.min.2.css');
-    mix.stylus('loginStyles.styl' , 'public/css/loginStyles.min.css');
-    mix.stylus('styles.styl' , 'public/css/styles.min.css');
-    mix.stylus('toastr.styl' , 'public/css/toastr.min.css');
+    mix.sass("app1.css" , "public/css/app.min.1.css");
+    mix.sass("app2.css" , "public/css/app.min.2.css");
+    mix.stylus("loginStyles.styl" , "public/css/loginStyles.min.css");
+    mix.stylus("styles.styl" , "public/css/styles.min.css");
+    mix.stylus("toastr.styl" , "public/css/toastr.min.css");
 });
 
 /*
@@ -110,6 +110,16 @@ elixir(function(mix) {
         "app/controllers/PaymentListCtrl.js"
         ], "public/app/controllers/compile/godControllers.js");
 
+
+    /*
+     |
+     |  Other Compiles
+     |
+     */
+
+    mix.browserify("app/app.js","public/app/app.js");
+    mix.browserify("app/appLogin.js","public/app/appLogin.js");
+
     /*
      |
      |  Versions
@@ -121,22 +131,14 @@ elixir(function(mix) {
         "public/app/controllers/compile/coordinadorControllers.js",
         "public/app/controllers/compile/vendedorControllers.js",
         "public/app/controllers/compile/godControllers.js",
+        "public/app/app.js",
+        "public/app/appLogin.js",
+        "public/app/controllers/loginCtrl.js",
         //  CSS
         "css/app.min.1.css",
         "css/app.min.2.css",
-        "css/styles.min.css"
+        "css/styles.min.css",
+        "css/loginStyles.min.css",
+        "css/toastr.min.css",
         ]);
-
-
-    /*
-     |
-     |  Other Compiles
-     |
-     */
-
-    // mix.scripts(
-    //    ['satellizer.js'],
-    //    'public/app/lib/satellizer.min.js'
-    // );
-
 });

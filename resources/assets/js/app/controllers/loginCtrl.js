@@ -1,5 +1,6 @@
 angular.module('loginApp')
-    .controller('LoginCtrl', function($scope, $location, $auth, $window, toastr, $http){
+    .controller('LoginCtrl', ["$scope", "$location", "$auth", "$window", "toastr", "$http",
+        function($scope, $location, $auth, $window, toastr, $http){
 
         var redirect = function(){
             var token = $auth.getToken();
@@ -17,7 +18,7 @@ angular.module('loginApp')
 
         if ($auth.isAuthenticated()) {
             // authToken = 'Bearer' y authHeader = 'Authorization' son de SatellizerConfig
-            data = {};
+            var data = {};
             var token  = 'Bearer' + ' ' + $auth.getToken();
             $http.get( baseUrl('api/validate-key'), { headers : {'Authorization' : token }})
                 .then(function(response){
@@ -43,4 +44,4 @@ angular.module('loginApp')
             if(e.keyCode == 13 || e.charCode == 13)
                 $scope.login();
         };
-    });
+    }]);

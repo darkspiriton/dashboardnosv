@@ -1,5 +1,5 @@
 angular.module('loginApp', ['ngResource', 'ngMessages', 'ngAnimate', 'toastr', 'ui.router', 'satellizer'])
-    .config([$stateProvider, $urlRouterProvider, $authProvider,
+    .config(["$stateProvider", "$urlRouterProvider", "$authProvider",
         function($stateProvider, $urlRouterProvider, $authProvider) {
 
         $stateProvider

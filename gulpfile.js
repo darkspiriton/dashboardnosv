@@ -132,9 +132,9 @@ elixir(function(mix) {
         "public/app/controllers/compile/coordinadorControllers.js",
         "public/app/controllers/compile/vendedorControllers.js",
         "public/app/controllers/compile/godControllers.js",
-        // "public/app/app.js",
-        // "public/app/appLogin.js",
-        // "public/app/controllers/loginCtrl.js",
+        "public/app/app.js",
+        "public/app/appLogin.js",
+        "public/app/controllers/loginCtrl.js",
         //  CSS
         "css/app.min.1.css",
         "css/app.min.2.css",

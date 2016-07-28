@@ -28,7 +28,7 @@ class Product extends Model
     }
 
     public function movements(){
-        return $this->hasMany(Movement::class)->select('id','situation','status','date_shipment','discount','cod_order','date_request')->orderby('created_at','desc');
+        return $this->hasMany(Movement::class)->orderby('created_at','desc');
     }
 
     public function bymovements(){

@@ -15,7 +15,8 @@ class UserController extends Controller
     
     public function __construct()
     {
-        $this->middleware('auth:GOD');
+        $this->middleware('auth:GOD,ADM,JVE', ["only" => ["sellers"]]);
+        $this->middleware('auth:GOD', ["except" => ["sellers"]]);
     }
 
     /**
@@ -190,6 +191,25 @@ class UserController extends Controller
         $roles = Role::select(array('id','name'))->get();
 
         return response()->json(['roles' => $roles],200);
+    }
+
+    /**
+     *    Lista de vendedores(as)
+     *
+     *    @return  Illuminate\Http\Response
+     */
+    public function sellers(){
+        try{
+            $sellers = User::select("id","first_name as name")
+                                ->where("status", 1)
+                                ->where("role_id", 3)
+                                ->get();
+
+            return response()->json(["sellers" => $sellers]);
+        } catch (\Exception $e){
+            return response()->json(["message" => "Pascal a morido algunos cables, no se pudo listar vendeores(as)"]);
+        }
+
     }
 
 }

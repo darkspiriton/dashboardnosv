@@ -11,6 +11,12 @@ angular.module('App')
 	.controller('auxMovementCtrl', ["$scope", "$compile", "$state", "$log", "$filter", "util", "petition", "toformData", "toastr",
 		function($scope, $compile, $state, $log, $filter, util, petition, toformData, toastr){
 
+		/**
+		 * Initial var
+		 */
+
+		$scope.data = {};
+
 		util.liPage('movimientos');
 
 		$scope.tableConfig  =   {
@@ -122,7 +128,7 @@ angular.module('App')
 		function addProductHelper(product){
 			var product = angular.copy(product);
 			var count = 0;
-			for(i in  $scope.dataProducts){
+			for(var i in  $scope.dataProducts){
 				if($scope.dataProducts[i].id == product.id){
 					count++;
 					break;
@@ -143,74 +149,80 @@ angular.module('App')
 		/*
 		 |  END
 		 */
-		$scope.codOrder=null;
-		$scope.requestDate=null;
-		$scope.shipmentDate=null;
+		$scope.data.codOrder=null;
+		$scope.data.requestDate=null;
+		$scope.data.shipmentDate=null;
 
 		function setUpper(string){
 			var upper = ' '+string.toString().toUpperCase();
 			return upper;
 		}
 
-			   $scope.submit = function() {    
-			valid_product_details($scope.codOrder,$scope.requestDate,$scope.shipmentDate, function() {
-				alertConfig.title = '¿Todo es correcto?';
-				alertConfig.text=`<table class="table table-bordered w-100 table-attr text-center">
-										<thead>
-										<tr>                                            
-											<h5><label> Código : </label>${setUpper($scope.codOrder)}</h5>                                            
-											<h5><label> F. Pedido : </label>${util.setDate($scope.requestDate)}</h5>                                           
-											<h5> <label> F. Salida : </label>${util.setDate($scope.shipmentDate)}</h5>                                                                      
-										<tr>
-										<tr>
-											<th>Cod</th>
-											<th>Nombre</th>
-											<th>Talla</th>
-											<th>Color</th>
-											<th>P. Venta</th>
-											<th>Desc.</th>
-											<th>P. Final</th>
-										</tr>
-										</thead>
-										<tbody>
-											${(function(){
-												var rowList = "";
-												for(i in $scope.products){
-													var row = "<tr>";
-													row += `<td>${$scope.products[i].cod}</td>`;
-													row += `<td>${$scope.products[i].name}</td>`;
-													row += `<td>${$scope.products[i].size}</td>`;
-													row += `<td>${$scope.products[i].color}</td>`;
-													row += `<td>${$scope.products[i].price}</td>`;
-													row += `<td>${$scope.products[i].discount}</td>`;
-													row += `<td>${$scope.products[i].preciofinal}</td>`;
-													row += `</tr>`;
-													rowList += row;
-												}
-												return rowList;
-											})()}
-										</tbody>
-									</table>
-								</div>`;
+		function confirmationTable(){
+			var template = `<table class="table table-bordered w-100 table-attr text-center">
+								<thead>
+								<tr>                                            
+									<h5><label> Código : </label>${setUpper($scope.data.codOrder)}</h5>                                            
+									<h5><label> F. Pedido : </label>${util.setDate($scope.data.requestDate)}</h5>                                           
+									<h5> <label> F. Salida : </label>${util.setDate($scope.data.shipmentDate)}</h5>                                                                      
+								<tr>
+								<tr>
+									<th>Cod</th>
+									<th>Nombre</th>
+									<th>Talla</th>
+									<th>Color</th>
+									<th>P. Venta</th>
+									<th>Desc.</th>
+									<th>P. Final</th>
+								</tr>
+								</thead>
+								<tbody>
+									${(function(){
+										var rowList = "";
+										for(var i in $scope.products){
+											var row = "<tr>";
+											row += `<td>${$scope.products[i].cod}</td>`;
+											row += `<td>${$scope.products[i].name}</td>`;
+											row += `<td>${$scope.products[i].size}</td>`;
+											row += `<td>${$scope.products[i].color}</td>`;
+											row += `<td>${$scope.products[i].price}</td>`;
+											row += `<td>${$scope.products[i].discount}</td>`;
+											row += `<td>${$scope.products[i].preciofinal}</td>`;
+											row += `</tr>`;
+											rowList += row;
+										}
+										return rowList;
+									})()}
+								</tbody>
+							</table>`;
+			return template;
+		}
+
+		$scope.submit = function(data) {    
+			alertConfig.title = '¿Todo es correcto?';
+			alertConfig.text = confirmationTable();
 				swal(alertConfig,
 					function () {
-						petition.post('api/auxmovement/out', {products: $scope.dataProducts,
-						codOrder:$scope.codOrder, requestDate:$scope.requestDate, shipmentDate:$scope.shipmentDate})
-						.then(function (data) {
-							toastr.success(data.message);
-							alertConfirmation.text = confirmationOuts(data.products, data.movements);
-							swal(alertConfirmation);
-							$scope.formSubmit = false;
-							$scope.list();
-							util.ocultaformulario();
-							$scope.anadir = false;
-						}, function (error) {
-							toastr.error('Huy huy dice: ' + error.data.message);
-							$scope.formSubmit = false;
-						})
+						data.products =  $scope.dataProducts;
+						petition.post('api/auxmovement/out', data)
+							.then(function (data) {
+								toastr.success(data.message);
+								confirmnationModal(data);
+								$scope.list();
+								util.ocultaformulario();
+								$scope.anadir = false;
+								$scope.formSubmit = false;
+							}, function (error) {
+								toastr.error('Huy huy dice: ' + error.data.message);
+								$scope.formSubmit = false;
+							});
 					});
-			});
 		};
+
+		function confirmnationModal(data){
+			alertConfirmation.text = confirmationOuts(data.products, data.movements);
+			swal(alertConfirmation);
+		}
 
 		/**
 		 *  Template para confirmnacion de productos en salida
@@ -251,9 +263,9 @@ angular.module('App')
 			var template = `<table class="table table-attr table-bordered text-center w-100">
 										<thead>
 										<tr>                                            
-											<h5><label> Código : </label>${setUpper($scope.codOrder)}</h5>                                            
-											<h5><label> F. Pedido : </label>${util.setDate($scope.requestDate)}</h5>                                           
-											<h5> <label> F. Salida : </label>${util.setDate($scope.shipmentDate)}</h5>                                                                      
+											<h5><label> Código : </label>${setUpper($scope.data.codOrder)}</h5>                                            
+											<h5><label> F. Pedido : </label>${util.setDate($scope.data.requestDate)}</h5>                                           
+											<h5> <label> F. Salida : </label>${util.setDate($scope.data.shipmentDate)}</h5>                                                                      
 										<tr>
 										<tr>
 											<th>Cod</th>
@@ -291,22 +303,12 @@ angular.module('App')
 			$scope.products[i].preciofinal = Math.round(($scope.products[i].price - $scope.products[i].discount)*100)/100;
 			$scope.dataProducts[i].discount = angular.copy($scope.products[i].discount);
 			
-		}
-
-		function valid_product_details(codOrder, requestDate, shipmentDate, callback){
-			if(codOrder != null && requestDate != null && shipmentDate != null){
-				return callback();
-			}else{
-				toastr.error('Huy huy dice: Falta ingresar los datos de la salida')
-				return;
-			}            
-
-		}
+		};
 
 		function removeDetail(){
-			$scope.codOrder=null;
-			$scope.requestDate=null;
-			$scope.shipmentDate=null;
+			$scope.data.codOrder=null;
+			$scope.data.requestDate=null;
+			$scope.data.shipmentDate=null;
 		}
 
 
@@ -335,8 +337,28 @@ angular.module('App')
 			$scope.products = angular.copy($scope.productsClear);
 		}
 
+
+		/**
+		 *	Update for add seller in order
+		 */
+
+		 $scope.listSeller = function(){
+		 	petition.get('api/user/get/sellers')
+		 		.then(function(data){
+		 			$scope.sellers = data.sellers;
+		 		}, function(error){
+		 			toastr.error('Huy huy dice: ' + error.data.message);
+		 		});
+		 };
+
+		/**
+		 * END
+		 */
+
 		angular.element(document).ready(function(){
 			resetProduct();
 			$scope.list();
+
+			$scope.listSeller();
 		});
 	}]);

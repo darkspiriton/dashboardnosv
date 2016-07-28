@@ -2,13 +2,14 @@
 
 namespace Dashboard\Http\Controllers;
 
+use Carbon\Carbon;
+use DB;
+use Dashboard\Http\Requests;
+use Dashboard\Http\Requests\ProductOutRequest;
 use Dashboard\Models\Experimental\Movement;
 use Dashboard\Models\Experimental\MovementOutFit;
 use Dashboard\Models\Experimental\Product;
 use Illuminate\Http\Request;
-use DB;
-use Carbon\Carbon;
-use Dashboard\Http\Requests;
 
 class AuxMovementController extends Controller
 {
@@ -82,9 +83,8 @@ class AuxMovementController extends Controller
     {
         // Creamos las reglas de validación
         $rules = [
-        'id'    => 'required',
-        'situation' =>  'required'
-
+            'id'    => 'required',
+            'situation' =>  'required'
         ];
 
         //Se va a pasar datos del movimiento
@@ -104,7 +104,7 @@ class AuxMovementController extends Controller
 
             $move = $product->movements->first();
 
-            $situations = [ 
+            $situations = [
                 1 => 'No le gusto',
                 2 => 'La foto no es igual al producto',
                 3 => 'Producto dañado',
@@ -117,15 +117,10 @@ class AuxMovementController extends Controller
             ];
 
             if ($move->status != 'vendido') {
-                $move->situation = $situations[$request->input('situation')];
-                $move->save();
-                $movement = new Movement();
-                $movement->situation = $situations[$request->input('situation')];
-                $movement->date_shipment = $move->date_shipment;
-                $movement->cod_order = $move->cod_order;
-                $movement->date_request = $move->date_request;
-                $movement->discount=$move->discount;
-                $movement->status = 'Retornado';
+
+                $movement = $move->replicate();
+                $movement->situation        = $situations[$request->input('situation')];
+                $movement->status           = 'Retornado';
 
                 $product->movements()->save($movement);
 
@@ -136,32 +131,15 @@ class AuxMovementController extends Controller
             }
             return response()->json(['message' => 'El retorno se agrego correctamente'], 200);
         } catch (\Exception $e) {
-            // Si algo sale mal devolvemos un error.
             return \Response::json(['message' => 'Ocurrio un error al agregar una venta'], 500);
         }
     }
 
-    public function product_out(Request $request)
+    public function product_out(ProductOutRequest $request)
     {
-        // Creamos las reglas de validación
-        $rules = [
-        'products'    => 'required|array',
-        'requestDate'  => 'required|date',
-        'shipmentDate'  => 'required|date',
-        'codOrder'    => 'required',
-        'products.*.id'    => 'required|integer|exists:auxproducts,id',
-        'products.*.discount'    => 'required|numeric',
-            // 'products.*.date'    => 'required|date',
-        ];
-
-        //Se va a pasar datos del movimiento
         try {
-            // Ejecutamos el validador y en caso de que falle devolvemos la respuesta
-            // con los errores
-            $validator = \Validator::make($request->all(), $rules);
-            if ($validator->fails()) {
-                return response()->json(['message' => 'No posee todo los campos necesario para crear un movimiento'], 401);
-            }
+            // La validacion esta a cargo de ProductOutRequest, devolvera la respuesta si falla.
+            // Dashboard\Http\Requests\ProductOutRequest
 
             $products = $request->input('products');
 
@@ -169,14 +147,17 @@ class AuxMovementController extends Controller
             $movementsRes = array();
 
             foreach ($products as $product) {
-                $prd = Product::with(["color", "size","settlement"])->find($product['id']);
+                $prd = Product::with(["color", "size", "settlement"])->find($product['id']);
                 if ($prd->status == 1) {
                     $movement = new Movement();
-                    $movement->date_shipment =substr($request->input('shipmentDate'), 0, 10);
-                    $movement->discount = $product['discount'];
-                    $movement->status = 'salida';
-                    $movement->date_request = substr($request->input('requestDate'), 0, 10);
-                    $movement->cod_order = strtoupper($request->input('codOrder'));
+
+                    $movement->date_shipment    = substr($request->input('shipmentDate'), 0, 10);
+                    $movement->discount         = $product['discount'];
+                    $movement->status           = 'salida';
+                    $movement->date_request     = substr($request->input('requestDate'), 0, 10);
+                    $movement->cod_order        = strtoupper($request->input('codOrder'));
+                    $movement->user_id          = $request->input('seller_id');
+
                     $prd->movements()->save($movement);
                     $prd->status = 0;
                     $prd->save();
@@ -187,7 +168,8 @@ class AuxMovementController extends Controller
             }
 
             return response()->json(['message' => 'Se genero la salida de los productos correctamente',
-                'products' => $response, 'movements' => $movementsRes], 200);
+                                        'products' => $response,
+                                        'movements' => $movementsRes], 200);
         } catch (\Exception $e) {
             // Si algo sale mal devolvemos un error.
             return \Response::json(['message' => 'Ocurrio un error al agregar producto'], 500);
@@ -224,17 +206,12 @@ class AuxMovementController extends Controller
             return response()->json(['message' => 'El movimiento no existe'], 404);
         }
 
+        $newMovement = $movement->replicate();
+        $newMovement->date_shipment = $request->input('date');
+        $newMovement->save();
+
         $movement->situation = 'reprogramado';
         $movement->save();
-
-        $newMovement = new Movement();
-        $newMovement->product_id = $movement->product_id;
-        $newMovement->date_shipment = $request->input('date');
-        $newMovement->status = $movement->status;
-        $newMovement->discount = $movement->discount;
-        $newMovement->cod_order = $movement->cod_order;
-        $newMovement->date_request = $movement->date_request;
-        $newMovement->save();
 
         return response()->json(['message' => 'Se reprogramo la salida', 'movement' => $newMovement]);
     }
@@ -262,21 +239,15 @@ class AuxMovementController extends Controller
             }
 
             $move = $product->movements->first();
-            $move->situation="Vendido";
 
             if ($move->status != 'Vendido') {
-                $movement = new Movement();
-                $movement->date_request = $move->date_request;
-                $movement->cod_order= $move->cod_order;
-                $movement->date_shipment = $move->date_shipment;
-                $movement->discount=$move->discount;
-                $movement->situation ="Vendido";
+                $movement = $move->replicate();
                 $movement->status = 'Vendido';
 
                 $product->movements()->save($movement);
 
                 $product->status = 2;
-                $product->push();
+                $product->save();
             } else {
                 return response()->json(['message' => 'Este producto tiene un estado de: VENDIDO'], 401);
             }
@@ -483,7 +454,7 @@ class AuxMovementController extends Controller
                     ->where('m.situation', '<>', 'reprogramado');
             } elseif ($request->input('status') == 'reprogramado') {
                 $query->where('m.status', 'salida')
-                    ->where('m.situation','reprogramado');
+                    ->where('m.situation', 'reprogramado');
             } else {
                 $query->where('m.status', $request->input('status'));
             }
@@ -819,26 +790,26 @@ class AuxMovementController extends Controller
         return $pdf->download();
     }
 
-    public function discountUpdate(Request $request,$id){
+    public function discountUpdate(Request $request, $id)
+    {
         $rules = [
             'discount' => 'required|numeric'
         ];
-        $validator = \Validator::make($request->all(),$rules);
-        if ($validator->fails()){
-            return response()->json(['message' => 'No posee los campos necesarios para realizar actualizacion de descuento'],404);
-        }        
+        $validator = \Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json(['message' => 'No posee los campos necesarios para realizar actualizacion de descuento'], 404);
+        }
 
-        $movement = Movement::find($id);     
+        $movement = Movement::find($id);
         // return $movement;
-        if($movement == null){
-            return response()->json(['message' => 'No se encuentra ningun movimiento con ese identificador'],404);
+        if ($movement == null) {
+            return response()->json(['message' => 'No se encuentra ningun movimiento con ese identificador'], 404);
         }
 
         $movement->discount = $request->input('discount');
         $movement->save();
 
-        return response()->json(['message' => 'Se actualizo correctament el descuento'],200);
-
+        return response()->json(['message' => 'Se actualizo correctament el descuento'], 200);
     }
 
     /**
@@ -876,6 +847,4 @@ class AuxMovementController extends Controller
 
         return $filter;
     }
-
-
 }

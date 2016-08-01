@@ -74,10 +74,13 @@ angular.module('App')
         /**
          *  Copia de tabla principal de salida de productos
          */
-        var tableDispacth = angular.copy($scope.tableConfig);
-        tableDispacth.columns.splice(-2,2);
-        tableDispacth.buttons.splice(0,3);
-        tableDispacth.data.splice(-2,2);
+         var tableDispacth = {};
+         tableDispacth.columns = angular.copy($scope.tableConfig.columns);
+         tableDispacth.columns.splice(-2,2);
+         tableDispacth.data = ["created_at","cod_order","seller_name","date_request","date_shipment",
+                                 "product.cod","product.name","product.size.name","product.color.name",
+                                 "price","discount","pricefinal"
+                             ];
 
         var alertConfig = {
             title: "¿Esta seguro?",
@@ -306,7 +309,7 @@ angular.module('App')
         $scope.filter = function(){
             petition.get('api/auxmovement/get/dispatch', {params: {date: $scope.dispatch}})
                 .then(function(data){
-                    $('#dispatch').AJQtable2('view2', $scope, $compile, data.products, tableDispacth);
+                    $('#dispatch').AJQtable2('view2', $scope, $compile, data.movements, tableDispacth);
                 }, function(error){
                     toastr.error('Huy Huy: ' + error.data.message);
                 });

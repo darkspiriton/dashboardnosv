@@ -2,13 +2,14 @@
 
 namespace Dashboard\Http\Controllers;
 
+use Carbon\Carbon;
+use DB;
+use Dashboard\Http\Requests;
+use Dashboard\Http\Requests\ProductOutRequest;
 use Dashboard\Models\Experimental\Movement;
 use Dashboard\Models\Experimental\MovementOutFit;
 use Dashboard\Models\Experimental\Product;
 use Illuminate\Http\Request;
-use DB;
-use Carbon\Carbon;
-use Dashboard\Http\Requests;
 
 class AuxMovementController extends Controller
 {
@@ -84,7 +85,6 @@ class AuxMovementController extends Controller
         $rules = [
         'id'    => 'required',
         'situation' =>  'required'
-
         ];
 
         //Se va a pasar datos del movimiento
@@ -104,28 +104,23 @@ class AuxMovementController extends Controller
 
             $move = $product->movements->first();
 
-            $situations = [ 
-                1 => 'No le gusto',
-                2 => 'La foto no es igual al producto',
-                3 => 'Producto dañado',
-                4 => 'No se encontro cliente',
-                5 => 'No es la talla',
-                6 => 'No se encontro el código',
-                7 => 'No llegamos al cliente',
-                8 => 'Cliente cancelo su pedido',
-                9 => 'Retorno-Cambio'
+            $situations = [
+            1 => 'No le gusto',
+            2 => 'La foto no es igual al producto',
+            3 => 'Producto dañado',
+            4 => 'No se encontro cliente',
+            5 => 'No es la talla',
+            6 => 'No se encontro el código',
+            7 => 'No llegamos al cliente',
+            8 => 'Cliente cancelo su pedido',
+            9 => 'Retorno-Cambio'
             ];
 
             if ($move->status != 'vendido') {
-                $move->situation = $situations[$request->input('situation')];
-                $move->save();
-                $movement = new Movement();
-                $movement->situation = $situations[$request->input('situation')];
-                $movement->date_shipment = $move->date_shipment;
-                $movement->cod_order = $move->cod_order;
-                $movement->date_request = $move->date_request;
-                $movement->discount=$move->discount;
-                $movement->status = 'Retornado';
+
+                $movement = $move->replicate();
+                $movement->situation        = $situations[$request->input('situation')];
+                $movement->status           = 'Retornado';
 
                 $product->movements()->save($movement);
 
@@ -136,32 +131,15 @@ class AuxMovementController extends Controller
             }
             return response()->json(['message' => 'El retorno se agrego correctamente'], 200);
         } catch (\Exception $e) {
-            // Si algo sale mal devolvemos un error.
             return \Response::json(['message' => 'Ocurrio un error al agregar una venta'], 500);
         }
     }
 
-    public function product_out(Request $request)
+    public function product_out(ProductOutRequest $request)
     {
-        // Creamos las reglas de validación
-        $rules = [
-        'products'    => 'required|array',
-        'requestDate'  => 'required|date',
-        'shipmentDate'  => 'required|date',
-        'codOrder'    => 'required',
-        'products.*.id'    => 'required|integer|exists:auxproducts,id',
-        'products.*.discount'    => 'required|numeric',
-            // 'products.*.date'    => 'required|date',
-        ];
-
-        //Se va a pasar datos del movimiento
         try {
-            // Ejecutamos el validador y en caso de que falle devolvemos la respuesta
-            // con los errores
-            $validator = \Validator::make($request->all(), $rules);
-            if ($validator->fails()) {
-                return response()->json(['message' => 'No posee todo los campos necesario para crear un movimiento'], 401);
-            }
+            // La validacion esta a cargo de ProductOutRequest, devolvera la respuesta si falla.
+            // Dashboard\Http\Requests\ProductOutRequest
 
             $products = $request->input('products');
 
@@ -169,14 +147,17 @@ class AuxMovementController extends Controller
             $movementsRes = array();
 
             foreach ($products as $product) {
-                $prd = Product::with(["color", "size","settlement"])->find($product['id']);
+                $prd = Product::with(["color", "size", "settlement"])->find($product['id']);
                 if ($prd->status == 1) {
                     $movement = new Movement();
-                    $movement->date_shipment =substr($request->input('shipmentDate'), 0, 10);
-                    $movement->discount = $product['discount'];
-                    $movement->status = 'salida';
-                    $movement->date_request = substr($request->input('requestDate'), 0, 10);
-                    $movement->cod_order = strtoupper($request->input('codOrder'));
+
+                    $movement->date_shipment    = substr($request->input('shipmentDate'), 0, 10);
+                    $movement->discount         = $product['discount'];
+                    $movement->status           = 'salida';
+                    $movement->date_request     = substr($request->input('requestDate'), 0, 10);
+                    $movement->cod_order        = strtoupper($request->input('codOrder'));
+                    $movement->user_id          = $request->input('seller_id');
+
                     $prd->movements()->save($movement);
                     $prd->status = 0;
                     $prd->save();
@@ -187,7 +168,8 @@ class AuxMovementController extends Controller
             }
 
             return response()->json(['message' => 'Se genero la salida de los productos correctamente',
-                'products' => $response, 'movements' => $movementsRes], 200);
+                'products' => $response,
+                'movements' => $movementsRes], 200);
         } catch (\Exception $e) {
             // Si algo sale mal devolvemos un error.
             return \Response::json(['message' => 'Ocurrio un error al agregar producto'], 500);
@@ -224,17 +206,12 @@ class AuxMovementController extends Controller
             return response()->json(['message' => 'El movimiento no existe'], 404);
         }
 
+        $newMovement = $movement->replicate();
+        $newMovement->date_shipment = $request->input('date');
+        $newMovement->save();
+
         $movement->situation = 'reprogramado';
         $movement->save();
-
-        $newMovement = new Movement();
-        $newMovement->product_id = $movement->product_id;
-        $newMovement->date_shipment = $request->input('date');
-        $newMovement->status = $movement->status;
-        $newMovement->discount = $movement->discount;
-        $newMovement->cod_order = $movement->cod_order;
-        $newMovement->date_request = $movement->date_request;
-        $newMovement->save();
 
         return response()->json(['message' => 'Se reprogramo la salida', 'movement' => $newMovement]);
     }
@@ -262,21 +239,15 @@ class AuxMovementController extends Controller
             }
 
             $move = $product->movements->first();
-            $move->situation="Vendido";
 
             if ($move->status != 'Vendido') {
-                $movement = new Movement();
-                $movement->date_request = $move->date_request;
-                $movement->cod_order= $move->cod_order;
-                $movement->date_shipment = $move->date_shipment;
-                $movement->discount=$move->discount;
-                $movement->situation ="Vendido";
+                $movement = $move->replicate();
                 $movement->status = 'Vendido';
 
                 $product->movements()->save($movement);
 
                 $product->status = 2;
-                $product->push();
+                $product->save();
             } else {
                 return response()->json(['message' => 'Este producto tiene un estado de: VENDIDO'], 401);
             }
@@ -289,21 +260,18 @@ class AuxMovementController extends Controller
 
     public function movementPending()
     {
-        $products = Product::with(['bymovements', 'settlement', 'color', 'size'])
+        // return Product::get();
+        $products = Product::has('movement')->with(['movement' => function($query){
+            return $query->with('user')->where("status","salida");
+        },'settlement', 'color', 'size'])
         ->select(array('id', 'cod', 'id as product_id', 'name', 'color_id', 'size_id', 'cost_provider', 'utility'))
         ->where('status', 0)
         ->get();
-
+  
         foreach ($products as $key => $product) {
-            if (count($product->bymovements) == 0) {
-                $products->splice($key, 1);
-                continue;
-            }
-            $product->movement =  $product->bymovements[0];
             $product->price = $this->getPriceAttribute($product);
             $product->pricefinal = $this->getPriceFinalAttribute($product);
             $product->liquidation = $this->getLiquidationAttribute($product);
-            unset($product->bymovements);
         }
 
         return response()->json(['products' => $products], 200);
@@ -427,17 +395,17 @@ class AuxMovementController extends Controller
         }
 
         $columns = ['Fecha Pedido' => 'date_request',
-            'Fecha Envio' => 'fecha',
-            'Pedido' => 'cod_order',
-            'Cod' => 'codigo',
-            'Modelo' => 'product',
-            'Color' => 'color',
-            'Talla' => 'talla',
-            'Estado' => 'status',
-            'Venta' => 'sale',
-            'Precio V.' => 'price',
-            'Desc.' => 'discount',
-            'Precio F.' => 'price_final'
+        'Fecha Envio' => 'fecha',
+        'Pedido' => 'cod_order',
+        'Cod' => 'codigo',
+        'Modelo' => 'product',
+        'Color' => 'color',
+        'Talla' => 'talla',
+        'Estado' => 'status',
+        'Venta' => 'sale',
+        'Precio V.' => 'price',
+        'Desc.' => 'discount',
+        'Precio F.' => 'price_final'
         ];
 
         $view =  \View::make('pdf.templatePDF', compact('data', 'columns', 'title', 'date'))->render();
@@ -458,12 +426,14 @@ class AuxMovementController extends Controller
     private function queryReportMovement(Request $request)
     {
         $query = Product::from('auxproducts as p')
+        ->with('user')
         ->select('m.created_at', 'm.date_shipment as fecha', 'm.status', 'm.situation', 'm.discount', 'cod_order', 'date_request')
         ->addSelect('p.cod as codigo', 'p.name as product', 'p.cost_provider', 'p.utility')
         ->addSelect('c.name as color', 's.name as talla')
         ->addSelect(DB::raw('p.cost_provider + p.utility  as price_real'))
         ->addSelect(DB::raw('case when dc.price then dc.price else p.cost_provider + p.utility end as price'))
         ->addSelect(DB::raw('case when dc.price then 1 else 0 end liquidation'))
+        ->addSelect('user_id')
         ->join('auxmovements as m', 'p.id', '=', 'm.product_id')
         ->join('colors as c', 'c.id', '=', 'p.color_id')
         ->join('sizes as s', 's.id', '=', 'p.size_id')
@@ -474,16 +444,16 @@ class AuxMovementController extends Controller
             $start = Carbon::parse($request->input('date1'));
             $end = Carbon::parse($request->input('date2'));
             $query->where('m.date_shipment', '>=', $start->toDateString())
-                ->where('m.date_shipment', '<=', $end->toDateString());
+            ->where('m.date_shipment', '<=', $end->toDateString());
         }
 
         if ($request->has('status')) {
             if ($request->input('status') == 'salida') {
                 $query->where('m.status', 'salida')
-                    ->where('m.situation', '<>', 'reprogramado');
+                ->where('m.situation', '<>', 'reprogramado');
             } elseif ($request->input('status') == 'reprogramado') {
                 $query->where('m.status', 'salida')
-                    ->where('m.situation','reprogramado');
+                ->where('m.situation', 'reprogramado');
             } else {
                 $query->where('m.status', $request->input('status'));
             }
@@ -538,13 +508,13 @@ class AuxMovementController extends Controller
         $draw = array();
 
         $query = DB::table('auxproducts as p')
-            ->select(DB::raw('DAY(m.date_shipment) as fecha'), DB::raw('count(p.cod) as quantity'))
-            ->join('auxmovements as m', 'p.id', '=', 'm.product_id')
-            ->join('colors as c', 'c.id', '=', 'p.color_id')
-            ->join('sizes as s', 's.id', '=', 'p.size_id')
-            ->where('m.date_shipment', '>=', $ini->toDateString())
-            ->where('m.date_shipment', '<=', $fin->toDateString())
-            ->groupby('m.date_shipment');
+        ->select(DB::raw('DAY(m.date_shipment) as fecha'), DB::raw('count(p.cod) as quantity'))
+        ->join('auxmovements as m', 'p.id', '=', 'm.product_id')
+        ->join('colors as c', 'c.id', '=', 'p.color_id')
+        ->join('sizes as s', 's.id', '=', 'p.size_id')
+        ->where('m.date_shipment', '>=', $ini->toDateString())
+        ->where('m.date_shipment', '<=', $fin->toDateString())
+        ->groupby('m.date_shipment');
 
         if ($request->has("status")) {
             $query->where('m.status', $request->input("status"));
@@ -797,18 +767,18 @@ class AuxMovementController extends Controller
         $date = date('Y-m-d');
         $title = 'Ficha de despacho para la fecha: '.$dateFind->toDateString();
         $columns = [
-            'id' => 'index',
-            'Orden' => 'movement_cod_order',
-            'Fecha Pedido' => 'movement_date_request',
-            'Fecha Salida' => 'movement_date_shipment',
-            'Cod' => 'cod',
-            'Modelo' => 'name',
-            'Color' => 'color_name',
-            'Talla' => 'size_name',
-            'Venta' => 'sale',
-            'Precio V.' => 'price',
-            'Desc.' => 'movement_discount',
-            'Precio F.' => 'pricefinal'
+        'id' => 'index',
+        'Orden' => 'movement_cod_order',
+        'Fecha Pedido' => 'movement_date_request',
+        'Fecha Salida' => 'movement_date_shipment',
+        'Cod' => 'cod',
+        'Modelo' => 'name',
+        'Color' => 'color_name',
+        'Talla' => 'size_name',
+        'Venta' => 'sale',
+        'Precio V.' => 'price',
+        'Desc.' => 'movement_discount',
+        'Precio F.' => 'pricefinal'
         ];
 
         $view =  \View::make('pdf.templatePDF', compact('data', 'columns', 'title', 'date'))->render();
@@ -819,26 +789,26 @@ class AuxMovementController extends Controller
         return $pdf->download();
     }
 
-    public function discountUpdate(Request $request,$id){
+    public function discountUpdate(Request $request, $id)
+    {
         $rules = [
-            'discount' => 'required|numeric'
+        'discount' => 'required|numeric'
         ];
-        $validator = \Validator::make($request->all(),$rules);
-        if ($validator->fails()){
-            return response()->json(['message' => 'No posee los campos necesarios para realizar actualizacion de descuento'],404);
-        }        
+        $validator = \Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json(['message' => 'No posee los campos necesarios para realizar actualizacion de descuento'], 404);
+        }
 
-        $movement = Movement::find($id);     
+        $movement = Movement::find($id);
         // return $movement;
-        if($movement == null){
-            return response()->json(['message' => 'No se encuentra ningun movimiento con ese identificador'],404);
+        if ($movement == null) {
+            return response()->json(['message' => 'No se encuentra ningun movimiento con ese identificador'], 404);
         }
 
         $movement->discount = $request->input('discount');
         $movement->save();
 
-        return response()->json(['message' => 'Se actualizo correctament el descuento'],200);
-
+        return response()->json(['message' => 'Se actualizo correctament el descuento'], 200);
     }
 
     /**
@@ -876,6 +846,4 @@ class AuxMovementController extends Controller
 
         return $filter;
     }
-
-
 }

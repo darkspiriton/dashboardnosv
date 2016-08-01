@@ -2,6 +2,7 @@
 
 namespace Dashboard\Models\Experimental;
 
+use Dashboard\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Movement extends Model
@@ -10,5 +11,9 @@ class Movement extends Model
     
     public function product(){
         return $this->belongsTo(Product::class);
+    }
+
+    public function user(){
+    	return $this->belongsTo(User::class)->select("id","first_name");
     }
 }

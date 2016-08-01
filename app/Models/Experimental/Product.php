@@ -3,6 +3,7 @@
 namespace Dashboard\Models\Experimental;
 
 use Dashboard\Models\Publicity\Publicity;
+use Dashboard\User;
 use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
@@ -28,7 +29,11 @@ class Product extends Model
     }
 
     public function movements(){
-        return $this->hasMany(Movement::class)->select('id','situation','status','date_shipment','discount','cod_order','date_request')->orderby('created_at','desc');
+        return $this->hasMany(Movement::class)->orderby('created_at','desc');
+    }
+
+    public function movement(){
+        return $this->hasOne(Movement::class)->orderby('created_at','desc');
     }
 
     public function bymovements(){
@@ -53,5 +58,9 @@ class Product extends Model
     
     public function publicities(){
         return $this->hasMany(Publicity::class);
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class)->select("id","first_name");
     }
 }

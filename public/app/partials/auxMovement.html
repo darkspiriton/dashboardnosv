@@ -26,14 +26,14 @@
         <h2>Crear movimiento de productos</h2>
     </div>
 
-    <div class="card-header bgm-blue">
+    <div ng-form="orderDetail" class="card-header bgm-blue">
         <div class="form-horizontal">
             <div class="form-group">
                 <label class="col-sm-1 control-label c-white f-10 p-0">Cod. Pedido</label>
                 <div class="col-sm-3">
                     <div class="input-group w-100">
                         <div class="fg-line ">
-                            <input ng-model="codOrder" type="text" class="btn btn-block ng-pristine ng-untouched ng-valid">
+                            <input ng-model="data.codOrder" type="text" class="btn btn-block ng-pristine ng-untouched ng-valid" required>
                         </div>
                     </div>
                 </div>
@@ -42,7 +42,7 @@
                 <div class=" col-sm-3">
                     <div class="input-group w-100">
                         <div class="fg-line report-date">
-                            <input ng-model="requestDate" type="date" class="btn btn-block ng-pristine ng-untouched ng-valid">
+                            <input ng-model="data.requestDate" type="date" class="btn btn-block ng-pristine ng-untouched ng-valid" required>
                         </div>
                     </div>
                 </div>
@@ -51,11 +51,18 @@
                 <div class=" col-sm-3">
                     <div class="input-group w-100">
                         <div class="fg-line report-date">
-                            <input ng-model="shipmentDate" type="date" class="btn btn-block ng-pristine ng-untouched ng-valid">
+                            <input ng-model="data.shipmentDate" type="date" class="btn btn-block ng-pristine ng-untouched ng-valid" required>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div ng-form="dates" class="row report-date">
+             <h2 class="col-xs-5 col-sm-2 m-t-20 text-right">Vendedor(a)</h2>
+             <select class="col-xs-7 col-sm-3 m-t-20" ng-options="seller.id as seller.name for seller in sellers" ng-model="data.seller_id" required>
+                <option value="" selected="selected" disabled="disabled">Seleccione</option>
+             </select>
         </div>
     </div>
 
@@ -101,7 +108,7 @@
         <form class="form-horizontal">
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <button ng-disabled="products.length == 0" ng-disable="codOrder" ng-click="submit()" type="button" class="btn btn-primary btn-sm waves-effect">Guardar</button>
+                    <button ng-disabled="products.length == 0 || !orderDetail.$valid" ng-click="submit(data)" type="button" class="btn btn-primary btn-sm waves-effect">Guardar</button>
                     <a ng-click="cancel()" class="btn btn-danger btn-sm waves-effect">Cancelar</a>
                 </div>
             </div>

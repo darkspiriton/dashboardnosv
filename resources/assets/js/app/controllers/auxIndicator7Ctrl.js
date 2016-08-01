@@ -45,6 +45,7 @@ angular.module('App')
                 {"sTitle": "F. Pedido", "bSortable" : true, "sWidth" : '80px'},
                 {"sTitle": "F. Entrega", "bSortable" : true, "sWidth" : '80px'},
                 {"sTitle": "Pedido", "bSortable" : true, "sWidth" : '1px'},
+                {"sTitle": "Vendedor(a)", "bSortable" : true, "sWidth" : '1px'},
                 {"sTitle": "Codigo", "bSortable" : true, "sWidth" : '1px'},
                 {"sTitle": "Producto", "bSortable" : true},
                 {"sTitle": "Color", "bSortable" : true},
@@ -64,9 +65,17 @@ angular.module('App')
                             { name: 'status_product', column: 'liquidation', render: s1},
                             { name: 'status_mov', render: s2, call_me: status_mov},
                         ]
+                    },
+                    {
+                        type: 'custom',
+                        list:  [
+                            { name: 'seller', call_me: function($row){
+                                if($row.user !== null)return $row.user.first_name; else return '';
+                            }},
+                        ]
                     }
                 ],
-            data  	: 	['created_at','date_request','fecha','cod_order','codigo','product','color','talla','status_mov','status_product','price_real','price','discount','price_final']
+            data  	: 	['created_at','date_request','fecha','cod_order','seller','codigo','product','color','talla','status_mov','status_product','price_real','price','discount','price_final']
         };
 
         $scope.data = {

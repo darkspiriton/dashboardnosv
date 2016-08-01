@@ -73,6 +73,7 @@ Route::group(['prefix' => 'api'], function(){
         ['only'=>['index','store','update','destroy','show']]);
 
     Route::get('user/get/roles','UserController@roles');
+    Route::get('user/get/sellers','UserController@sellers');
 
     /**
      * VALIDATE KEY AUTH

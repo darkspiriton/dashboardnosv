@@ -718,9 +718,9 @@ class AuxMovementController extends Controller
             $date = Carbon::now();
         }
 
-        $products = $this->dispatchForDate($date);
+        $movements = $this->dispatchForDate($date);
 
-        return response()->json(['products' => $products], 200);
+        return response()->json(['movements' => $movements], 200);
     }
 
     /**
@@ -743,18 +743,15 @@ class AuxMovementController extends Controller
 
         $data = $this->dispatchForDate($dateFind);
 
-        $data = $data->sortBy("orderCase");
+        $data = $data->sortBy("cod_order");
 
         $c = 1;
         foreach ($data as $row) {
-            $row->movement_date_request =  $row->movement->date_request;
-            $row->movement_date_shipment =  $row->movement->date_shipment;
-            $row->movement_discount =  $row->movement->discount;
-            $row->movement_cod_order =  $row->movement->cod_order;
-            $row->color_name =  $row->color->name;
-            $row->size_name =  $row->size->name;
-            $row->orderCase =  $row->movement->cod_order;
-            if ($row->movement->discount == 0) {
+            $row->product_name = $row->product->name;
+            $row->product_cod = $row->product->cod;
+            $row->color_name =  $row->product->color->name;
+            $row->size_name =  $row->product->size->name;
+            if ($row->discount == 0) {
                 $row->sale = "Normal";
             } else {
                 $row->sale = "Liquidacion";
@@ -767,18 +764,18 @@ class AuxMovementController extends Controller
         $date = date('Y-m-d');
         $title = 'Ficha de despacho para la fecha: '.$dateFind->toDateString();
         $columns = [
-        'id' => 'index',
-        'Orden' => 'movement_cod_order',
-        'Fecha Pedido' => 'movement_date_request',
-        'Fecha Salida' => 'movement_date_shipment',
-        'Cod' => 'cod',
-        'Modelo' => 'name',
-        'Color' => 'color_name',
-        'Talla' => 'size_name',
-        'Venta' => 'sale',
-        'Precio V.' => 'price',
-        'Desc.' => 'movement_discount',
-        'Precio F.' => 'pricefinal'
+            'id' => 'index',
+            'Orden' => 'cod_order',
+            'Fecha Pedido' => 'date_request',
+            'Fecha Salida' => 'date_shipment',
+            'Cod' => 'product_cod',
+            'Modelo' => 'product_name',
+            'Color' => 'color_name',
+            'Talla' => 'size_name',
+            'Venta' => 'sale',
+            'Precio V.' => 'price',
+            'Desc.' => 'discount',
+            'Precio F.' => 'pricefinal'
         ];
 
         $view =  \View::make('pdf.templatePDF', compact('data', 'columns', 'title', 'date'))->render();
@@ -821,29 +818,26 @@ class AuxMovementController extends Controller
     {
         $date = $date->toDateString();
 
-        $products = Product::with(['bymovements', 'settlement', 'color', 'size'])
-        ->select(array('id', 'cod', 'id as product_id', 'name', 'color_id', 'size_id', 'cost_provider', 'utility'))
-        ->where('status', 0)
-        ->get();
+        $movements = Movement::with(["product" => function($query){
+                return $query->with(["color","size","settlement"]);
+            },"user"])
+            ->where("status","salida")
+            ->where("date_shipment",$date)
+            ->get();
 
-        $filter = collect();
-
-        foreach ($products as $key => $product) {
-            if (count($product->bymovements) == 0) {
-                continue;
+        foreach ($movements as $key => $movement) {
+            if($movement->product->settlement == null){
+                $movement->price = $movement->product->utility + $movement->product->cost_provider;
+                $movement->loquidation = 0;
+            } else {
+                $movement->price = $movement->product->settlement->price;
+                $movement->loquidation = 1;
             }
 
-            if ($product->bymovements[0]->date_shipment == $date) {
-                $product->movement =  $product->bymovements[0];
-                $product->price = $this->getPriceAttribute($product);
-                $product->pricefinal = $this->getPriceFinalAttribute($product);
-                $product->liquidation = $this->getLiquidationAttribute($product);
-                unset($product->bymovements);
-
-                $filter->prepend($product);
-            }
+            $movement->pricefinal =  $movement->price -  $movement->discount;
+            $movement->seller_name = ($movement->user)?$movement->user->first_name:"";
         }
 
-        return $filter;
+        return $movements;
     }
 }

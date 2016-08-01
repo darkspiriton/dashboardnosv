@@ -14,7 +14,8 @@ angular.module('App')
 
         var s1 = {
             "Retornado": ['Retorno','bgm-teal',false],
-            "Vendido": ['Vendido','bgm-green',false]
+            "Vendido": ['Vendido','bgm-green',false],
+            "salida": ['Salida','bgm-red',false]
         };
 
 
@@ -40,7 +41,7 @@ angular.module('App')
                         ]
                     }
                 ],
-            data  	: 	['fecha','codigo','product','color','talla','price','discount','pricefinal','status'],
+            data  	: 	['fecha','codigo','product','color','talla','price','discount','price_final','status'],
         };
 
         $scope.list = function() {

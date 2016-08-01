@@ -112,6 +112,15 @@ angular.module('App')
             {id: 9, name:'Retorno-Cambio' }
         ];
 
+        // var newReason = {
+        //     id : 0,
+        //     name : '>>---> (Nuevo Motivo) <---<<'
+        // };
+
+        // $scope.listReason = function(){
+  
+        // };
+
         $scope.list = function() {
             $scope.updateList = true;
             petition.get('api/auxmovement/get/movement')
@@ -394,6 +403,7 @@ angular.module('App')
                                 discountEmpyte();
                                 $scope.list();
                                 util.modalClose('discountUpdate');
+                                toastr.success('Se Actualizo correctamente el descuento');
                             }, function(error){
                                 toastr.error('Huy Huy dice: ' + error.data.message);
                             });

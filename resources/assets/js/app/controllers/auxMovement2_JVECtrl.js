@@ -12,10 +12,24 @@ angular.module('App')
 
         util.liPage('movimientos2');
 
+        var s1 = {
+            0: ['Normal','bgm-green',false],
+            1: ['Liquidacion','btn-info',false],
+            'fail': ['otros','bgm-red',false]
+        };
+
+        var a1 = [
+                    ['Retornado', 'prdReturn' ,'bgm-teal'],
+                    ['Vendido', 'prdSale' ,'bgm-blue'],
+                    ['Eliminar', 'prdDelete' ,'bgm-red'],
+                    ['reprogramar', 'reprogramar' ,'bgm-purple']
+                ];
+
         $scope.tableConfig  =   {
             columns :   [
                 {"sTitle": "Fecha de creación", "bSortable" : true, "sWidth": "90px"},
                 {"sTitle": "Código de Pedido", "bSortable" : true, "sWidth": "90px"},
+                {"sTitle": "Vendedor(a)", "bSortable" : true},
                 {"sTitle": "Fecha de Pedido", "bSortable" : true, "sWidth": "90px"},                
                 {"sTitle": "Fecha de salida", "bSortable" : true, "sWidth": "90px"},
                 {"sTitle": "Codigo", "bSortable" : true},
@@ -28,22 +42,31 @@ angular.module('App')
                 {"sTitle": "Venta", "bSortable" : true, "sWidth": "80px"},
                 {"sTitle": "Acción" , "bSortable" : false, "bSearchable": false , "sWidth": "420px"}
             ],
-            actions :   [
-                ['status',   {
-                    0 : { txt : 'regular' , cls : 'bgm-green', dis : false },
-                    1 : { txt : 'liquidacion' ,  cls : 'btn-info',dis: false}
-                }
+            buttons :
+                [
+                    {
+                        type: 'status',
+                        list:  [
+                            { name: 'status_product', column: 'liquidation', render: s1},
+                        ]
+                    },
+                    {
+                        type: 'actions',
+                        list:  [
+                            { name: 'actions', render: a1},
+                        ]
+                    },
+                    {
+                        type: 'custom',
+                        list:  [
+                            { name: 'seller', call_me: function($row){
+                                if($row.movement.user !== null)return $row.movement.user.first_name; else return '';
+                            }},
+                        ]
+                    }
                 ],
-                ['actions', [
-                    ['Retornado', 'prdReturn' ,'bgm-teal'],
-                    ['Vendido', 'prdSale' ,'bgm-blue'],
-                    ['reprogramar', 'reprogramar' ,'bgm-purple'],
-                    ['descuento', 'discountEdit' ,'bgm-red']
-                ]
-                ]
-            ],
-            data    :   ['movement.created_at','movement.cod_order','movement.date_request','movement.date_shipment','cod','name','size.name','color.name','price',
-                            'movement.discount','pricefinal','status','actions'
+            data    :   ['movement.created_at','movement.cod_order','seller','movement.date_request','movement.date_shipment','cod','name','size.name','color.name','price',
+                            'movement.discount','pricefinal','status_product','actions'
                         ],
             configStatus : 'liquidation'
         };
@@ -53,7 +76,7 @@ angular.module('App')
          */
         var tableDispacth = angular.copy($scope.tableConfig);
         tableDispacth.columns.splice(-2,2);
-        tableDispacth.actions.splice(-1,1);
+        tableDispacth.buttons.splice(0,3);
         tableDispacth.data.splice(-2,2);
 
         var alertConfig = {
@@ -91,7 +114,7 @@ angular.module('App')
             petition.get('api/auxmovement/get/movement')
                 .then(function(data){
                     $scope.tableData = data.products;
-                    $('#table').AJQtable('view', $scope, $compile);
+                    $('#table').AJQtable2('view2', $scope, $compile);
                     $scope.updateList = false;
                 }, function(error){
                     console.log(error);

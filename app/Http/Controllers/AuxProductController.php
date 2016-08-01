@@ -777,6 +777,13 @@ class AuxProductController extends Controller
     public function movements_for_product($id)
     {
         try {
+            
+            // $product = Product::with(["color","size","settlement","movements" => function($query){
+            //                 return $query->with("user");
+            //             }])
+            //             ->select("id","cod","name",DB::raw("cost_provider + utility as price_real"),"color_id","size_id")
+            //             ->find($id);
+
             $movements = DB::table('auxproducts as p')
                 ->select('m.date_request as pedido', 'm.cod_order', 'm.date_shipment as entrega', 'm.status','m.situation', 'm.discount')
                 ->addSelect('p.cod as codigo', 'p.name as product', 'p.cost_provider', 'p.utility')
@@ -784,10 +791,12 @@ class AuxProductController extends Controller
                 ->addSelect(DB::raw('p.cost_provider + p.utility  as price_real'))
                 ->addSelect(DB::raw('case when dc.price then dc.price else p.cost_provider + p.utility end as price'))
                 ->addSelect(DB::raw('case when dc.price then 1 else 0 end liquidation'))
-                ->join('auxmovements as m', 'p.id', '=', 'm.product_id')
+                ->addSelect('u.first_name as seller')
+                ->leftjoin('auxmovements as m', 'p.id', '=', 'm.product_id')
                 ->join('colors as c', 'c.id', '=', 'p.color_id')
                 ->join('sizes as s', 's.id', '=', 'p.size_id')
                 ->leftJoin('settlements as dc', 'dc.product_id', '=', 'p.id')
+                ->leftJoin('users as u','u.id','=','m.user_id')
                 ->where('p.id', $id)
                 ->orderby('m.date_shipment', 'desc')
                 ->get();
@@ -798,7 +807,7 @@ class AuxProductController extends Controller
 
             return response()->json(['movements' => $movements]);
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Ricky esta jugando con lo cables, no se puedo consultar los movimientos']);
+            return response()->json(['message' => 'Ricky esta jugando con los cables, no se puedo consultar los movimientos']);
         }
     }
 

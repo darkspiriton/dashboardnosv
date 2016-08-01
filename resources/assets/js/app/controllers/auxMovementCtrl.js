@@ -60,7 +60,7 @@ angular.module('App')
 		};
 
 		var alertConfirmation = {
-			title: "¿Se genero la salida de productos?",
+			title: "Se genero salida de los productos",
 			text: "",
 			customClass: "product-out",
 			type: "success",

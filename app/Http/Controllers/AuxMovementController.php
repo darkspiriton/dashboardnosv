@@ -751,7 +751,7 @@ class AuxMovementController extends Controller
             $row->product_cod = $row->product->cod;
             $row->color_name =  $row->product->color->name;
             $row->size_name =  $row->product->size->name;
-            if ($row->discount == 0) {
+            if ($row->loquidation == 0) {
                 $row->sale = "Normal";
             } else {
                 $row->sale = "Liquidacion";

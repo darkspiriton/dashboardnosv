@@ -23,7 +23,7 @@ class CreateRequestProductTable extends Migration
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('user_request_id')->references('id')->on('users_request');
+            $table->foreign('user_request_id')->references('id')->on('users_requests');
         });
 
         Schema::create('photos_products',function(Blueprint $table){

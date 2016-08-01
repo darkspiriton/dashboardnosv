@@ -12,7 +12,7 @@ class CreateRequestApplicationTable extends Migration
      */
     public function up()
     {
-        Schema::create('users_request',function(Blueprint $table){
+        Schema::create('users_requests',function(Blueprint $table){
             $table->increments('id');
             $table->string('name');
             $table->string('email');
@@ -27,7 +27,7 @@ class CreateRequestApplicationTable extends Migration
             $table->integer('user_request_id')->unsigned();
             $table->timestamps();
 
-            $table->foreign('user_request_id')->references('id')->on('users_request');
+            $table->foreign('user_request_id')->references('id')->on('users_requests');
         });
     }
 

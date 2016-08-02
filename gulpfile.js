@@ -25,6 +25,7 @@ elixir(function(mix) {
     mix.stylus("loginStyles.styl" , "public/css/loginStyles.min.css");
     mix.stylus("styles.styl" , "public/css/styles.min.css");
     mix.stylus("toastr.styl" , "public/css/toastr.min.css");
+    mix.stylus("loginV2.styl" , "public/css/loginV2.min.css");
 });
 
 /*
@@ -120,6 +121,8 @@ elixir(function(mix) {
     // mix.browserify("app/app.js","public/app/app.js");
     // mix.browserify("app/appLogin.js","public/app/appLogin.js");
     // mix.browserify("app/controllers/loginCtrl.js","public/app/controllers/loginCtrl.js");
+
+    // mix.scripts("loginV2/effects.js","public/js/effects.min.js");
 
     /*
      |

@@ -31,6 +31,10 @@ Route::get('/',['middleware'=>'web', function () {
     return view('login');
 }]);
 
+Route::get('/ventas-login',['middleware'=>'web', function () {
+    return view('login_usc');
+}]);
+
 Route::group(['prefix'=>'auth','middleware' => ['web']],function(){
     Route::post('/login' ,'Auth\AuthTokenController@login');
     Route::post('/signup' ,'Auth\AuthTokenController@signup');

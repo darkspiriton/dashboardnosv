@@ -2,7 +2,8 @@
 <html >
 <head>
 	<meta charset="UTF-8">
-	<title>Random Login Form</title>
+	<title>Ventas | NosVenden</title>
+	<link rel="icon" type="image/jpeg" href="img/favicon.jpg" />
 
 	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Exo:100,200,400">
 	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:700,400,300">

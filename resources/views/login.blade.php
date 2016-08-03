@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>NosVenden | DashBoard</title>
+    <link rel="icon" type="image/jpeg" href="img/favicon.jpg" />
 
     <!-- Vendor CSS -->
     <link href="vendors/bower_components/material-design-iconic-font/css/material-design-iconic-font.min.css" rel="stylesheet">

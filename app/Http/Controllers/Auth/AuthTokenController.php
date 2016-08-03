@@ -96,6 +96,49 @@ class AuthTokenController extends Controller
         return response()->json(['token' => $this->createToken($user)]);
     }
 
+    /**
+     *    Registro para usuarios tipo USC
+     *
+     *    @param  Illuminate\Http\Request  $request
+     *    @return  Illuminate\Http\Response
+     */
+    public function signup_usc(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|max:255',
+            'email' => 'required|email',
+            'phone' => 'required|min:7',
+            'password' => 'required|min:6'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['message' => "Datos de registro no validos."], 422);
+        }
+
+        $validatorMail = Validator::make($request->all(), [
+            'email' => 'unique:users,email',
+        ]);
+
+        if ($validatorMail->fails()) {
+            return response()->json(['message' => "El correo ya se encuentra registrado."], 422);
+        }
+
+
+        $user = new User;
+        $user->first_name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->phone = $request->input('phone');
+        $user->password = bcrypt($request->input('password'));
+        $user->role_id = 7;
+        $user->save();
+
+        $user->status = 1;
+        $user->save();
+
+        return response()->json(["message" => "Registro completado puede ingresar a publicar"]);
+    }
+
     public function dashboard(Request $request){
         
         $token = $request->input('Authorization');

@@ -12,7 +12,7 @@ body{
 	position: absolute;
 	width: 100%;
 	height: 100%;
-	background-image: url(../img/background.jpg);
+	background-image: url(../../img/background.jpg);
 	background-size: cover;
 	-webkit-filter: blur(5px);
 	z-index: 0;
@@ -170,7 +170,7 @@ body{
 }
 
 .register-box {
-	width: 220px;
+	width: 230px;
 	padding: 15px;
 	font-size: 15px;
 	font-family: 'Exo', sans-serif;
@@ -190,4 +190,32 @@ body{
 
 #register input[type=email] {
 	margin-top: 10px;
+}
+
+.error {
+	display: none;
+	padding: 0 15px 0 15px;
+	width: 230px;
+	color: #e10715;
+}
+
+.success {
+	display: none;
+	padding: 0 15px 0 15px;
+	width: 230px;
+	color: #0027f5;
+}
+
+input[type="button"]:disabled {
+	cursor: not-allowed;
+	pointer-events: none;
+	opacity: .8;
+}
+
+.css-form input.ng-invalid.ng-touched {
+  	border: 1px solid rgba(216,111,113,0.9);
+}
+
+.css-form input.ng-valid.ng-touched {
+  	border: 1px solid rgba(163,228,78,0.9);
 }

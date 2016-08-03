@@ -122,7 +122,24 @@ elixir(function(mix) {
     // mix.browserify("app/appLogin.js","public/app/appLogin.js");
     // mix.browserify("app/controllers/loginCtrl.js","public/app/controllers/loginCtrl.js");
 
-    // mix.scripts("loginV2/effects.js","public/js/effects.min.js");
+    /*
+     |
+     |  Compile for APP-USC
+     |
+     */
+
+    /*
+     |
+     |  Compile for Login 
+     |
+     */
+
+    mix.browserify([
+        "app-usc/login.js",
+        "app-usc/controllers/loginCtrl.js",
+        "app-usc/services/loginService.js",
+        ], "public/app-usc/compiled/loginApp.js");
+
 
     /*
      |
@@ -138,11 +155,13 @@ elixir(function(mix) {
         "public/app/app.js",
         "public/app/appLogin.js",
         "public/app/controllers/loginCtrl.js",
+        "public/app-usc/compiled/loginApp.js",
         //  CSS
         "css/app.min.1.css",
         "css/app.min.2.css",
         "css/styles.min.css",
         "css/loginStyles.min.css",
         "css/toastr.min.css",
+        "public/css/loginV2.min.css",
         ]);
 });

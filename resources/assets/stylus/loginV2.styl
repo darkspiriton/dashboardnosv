@@ -26,7 +26,7 @@ body{
 	z-index: 1;
 	opacity: 0.7;
 }
-
+	
 .header{
 	position: absolute;
 	top: calc(50% - 73px);
@@ -174,9 +174,16 @@ body{
 	padding: 15px;
 	font-size: 15px;
 	font-family: 'Exo', sans-serif;
+	text-align: center;
+	height: 20px;
+	line-height: 20px;
 }
 
 .float-l {
+	float: left;
+}
+	
+.float-r {
 	float: right;
 }
 
@@ -188,22 +195,36 @@ body{
 	display: none;
 }
 
+#contact {
+	display: none;
+}
+
 #register input[type=email] {
+	margin-top: 10px;
+}
+
+#contact input[type=email] {
 	margin-top: 10px;
 }
 
 .error {
 	display: none;
-	padding: 0 15px 0 15px;
+	padding: 5px 15px;
 	width: 230px;
 	color: #e10715;
+	font-size: 13px;
+	font-weight: 700;
+	background: rgba(255,255,255,.3);
 }
 
 .success {
 	display: none;
-	padding: 0 15px 0 15px;
+	padding: 5px 15px;
 	width: 230px;
 	color: #0027f5;
+	font-size: 13px;
+	font-weight: 700;
+	background: rgba(255,255,255,.3);
 }
 
 input[type="button"]:disabled {
@@ -218,4 +239,59 @@ input[type="button"]:disabled {
 
 .css-form input.ng-valid.ng-touched {
   	border: 1px solid rgba(163,228,78,0.9);
+}
+
+.modal{
+	background: rgba(0,0,0,.8);
+	width: 1000px;
+	height: 760px;
+	margin: auto;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 4;
+}
+
+.modal-container{
+	background: rgba(0,0,0,0.5);
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	z-index: 3;
+}
+
+.column-left {
+	width: 50%;
+	height: 100%;
+	display: inline-block;
+	float: left;
+}
+
+.column-right {
+	width: 50%;
+	height: 100%;
+	display: inline;
+	float: right;
+}
+
+.m-title {
+	font-family: 'Exo', sans-serif;
+	font-size: 5.2rem;
+	text-align: center;
+	text-transform: uppercase;
+	margin-top: 20px;
+}
+
+.m-body img {
+	width: 400px;
+	height: 300px;
+	display: block;
+	margin: 0 auto;
+}
+
+.m-body iframe {
+	display: block;
+	margin: 0 auto;
 }

@@ -4,12 +4,14 @@ angular.module("loginApp")
 		var showError = function (message){
 			$("#login-error").text(message);
 			$("#register-error").text(message);
+			$("#contact-error").text(message);
 			$(".error").fadeIn("fast");
 			$(".success").hide();
 		};
 
 		var showSuccsess = function (message){
 			$("#register-success").text(message);
+			$("#contact-success").text(message);
 			$(".success").fadeIn("fast");
 		};
 

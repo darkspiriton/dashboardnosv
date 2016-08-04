@@ -253,6 +253,12 @@ Route::group(['prefix' => 'api'], function(){
     Route::resource('payment','PayProviderController',
         ['only' => ['index','store','update','destroy']]);
 
+    /**
+     * REQUESTS PRODUCTS
+     */
+    Route::resource('requestproduct','RequestProductController',
+        ['only' => ['index','store','show','update','destroy']]);
+
     Route::group(['prefix'=>'payment'],function(){
         Route::get('get','PayProviderController@getPayment');
         Route::get('bank/get','PayProviderController@getBank');

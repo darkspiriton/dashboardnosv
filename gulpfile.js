@@ -108,7 +108,9 @@ elixir(function(mix) {
         "app/controllers/auxProviderProductCtrl.js",
         "app/controllers/PartnerPanelCtrl.js",
         "app/controllers/PaymentCtrl.js",
-        "app/controllers/PaymentListCtrl.js"
+        "app/controllers/PaymentListCtrl.js",
+        "app/controllers/RequestProductCtrl.js",
+        "app/controllers/RequestApplicationCtrl.js"
         ], "public/app/controllers/compile/godControllers.js");
 
 
@@ -118,9 +120,9 @@ elixir(function(mix) {
      |
      */
 
-    // mix.browserify("app/app.js","public/app/app.js");
-    // mix.browserify("app/appLogin.js","public/app/appLogin.js");
-    // mix.browserify("app/controllers/loginCtrl.js","public/app/controllers/loginCtrl.js");
+    mix.browserify("app/app.js","public/app/app.js");
+    mix.browserify("app/appLogin.js","public/app/appLogin.js");
+    mix.browserify("app/controllers/loginCtrl.js","public/app/controllers/loginCtrl.js");
 
     /*
      |

@@ -139,6 +139,14 @@
             <a href="#" ui-sref="Comentarios"><i class="md md-messenger"></i> Gestionar comentarios</a>
         </li>
 
+        <li class="sub-menu">
+            <a href="#"><i class="md md-trending-up"></i> Gestion de Ventas Web </a>
+            <ul>
+                <li id="indicator1"><a ui-sref="Indicator1"> Gestion de Ventas Individuales </a></li>
+                <li id="indicator2"><a ui-sref="Indicator2"> Gestion de Ventas Empresas </a></li>               
+            </ul>
+        </li>
+
     </ul>
 @stop
 

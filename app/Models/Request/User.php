@@ -9,7 +9,7 @@ use Dashboard\Models\Request\Application;
 class User extends Model
 {
     protected $table = 'users_requests';
-    protected $id = 'id';
+    protected $fillable = ["name","email","phone"];
 
     public function requestAplications(){
         $this->hasMany(Application::class);

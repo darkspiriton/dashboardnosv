@@ -13,7 +13,7 @@
 <body ng-app="loginApp" ng-controller="loginCtrl">
 	<div class="body"></div>
 	<div class="grad"></div>
-	<div id="modal-info" class="modal-container info"></div>
+	<div class="modal-container info" ng-click="modalMaster = true" ng-hide="modalMaster"></div>
 	<div class="header">
 		<img src="img/logo.jpg">
 	</div>
@@ -23,8 +23,12 @@
 		<input type="password" placeholder="contraseña" ng-keyup="enterCase($event)" ng-model="user.password" required><br>
 		<input type="button" value="Login" ng-disabled="!loginForm.$valid || formSdg" ng-click="login()">
 		<div class="register-box">
-		  	<a class="float-l cursor" ng-click="registerBtn()">Registrarse</a>
-		    <a class="float-r cursor">Anónimo</a>
+	  		<div class="line">
+			  	<a class="float-l cursor" ng-click="registerBtn()">Registrarse</a>
+			  	<a class="cursor" ng-click="contactBtn()">Contacto</a>
+			    <a class="float-r cursor">Anónimo</a>
+	  		</div>
+			
 		</div>
 		<div class="error">
 		    <p class="msg-error"></p>
@@ -41,8 +45,11 @@
 		<input type="password" placeholder="contraseña" ng-model="newUser.password" ng-minlength="6" required><br>
 		<input type="button" value="Registrarse" ng-disabled="!registerForm.$valid || formSdg" ng-click="signup()">
 		<div class="register-box">
-		  	<a class="float-l cursor" ng-click="loginBtn()">Login</a>
-		    <a class="float-r cursor">Anónimo</a>
+	  		<div class="line">
+			  	<a class="float-l cursor" ng-click="loginBtn()">Login</a>
+			  	<a class="cursor" ng-click="contactBtn()">Contacto</a>
+			    <a class="float-r cursor">Anónimo</a>
+	  		</div>
 		</div>
 		<div class="error">
 		    <p class="msg-error"></p>
@@ -54,7 +61,13 @@
 		<input type="email" placeholder="correo" ng-model="contactUser.email" required><br>
 		<input type="tel" placeholder="telefono" ng-model="contactUser.phone"  ng-minlength="7" required><br>
 		<input type="button" value="Contactenme" ng-disabled="!contactForm.$valid || formSdg" ng-click="contact()">
-		<div class="register-box"></div>
+			<div class="register-box">
+		  		<div class="line">
+				  	<a class="float-l cursor" ng-click="loginBtn()">Login</a>
+				  	<a class="cursor" ng-click="registerBtn()">Registrarse</a>
+				    <a class="float-r cursor">Anónimo</a>
+		  		</div>
+			</div>
 		<div class="error">
 		    <p class="msg-error"></p>
 		</div>
@@ -63,31 +76,33 @@
 		</div>
 	</div>
 
-	<div class="modal info">
-		<div class="column-left">
-			<div class="m-title">
-				Individual
-			</div>
-			<div class="m-body">
-				<div>
-					<a href="#"><img src="img/logo.jpg"></a>
-				</div>
-				<div>
-					<a class="cursor" ng-click="registerBtn(true)"><img src="img/logo.jpg"></a>
+	<div class="modal info" ng-hide="modalInd || modalEmp || modalMaster">
+			<div class="column-left">
+				<div class="individual">
+					<a class="cursor" ng-click="modalInd = true"><img src="img/logo.jpg"></a>
 				</div>
 			</div>
+			<div class="column-right">
+				<div class="empresas">
+					<a class="cursor" ng-click="modalEmp = true"><img src="img/logo.jpg"></a>
+				</div>
+			</div>
+	</div>
+
+	<div class="modal m-individual ng-hide" ng-show="modalInd && !modalMaster">
+		<div class="m-body">
+			<img class="float-l cursor" src="img/logo.jpg" ng-click="registerBtn(true)">
+			<img class="cursor" src="img/logo.jpg">
 		</div>
-		<div class="column-right">
-			<div class="m-title">
-				Empresas
+	</div>
+
+	<div class="modal m-empresas ng-hide" ng-show="modalEmp && !modalMaster">
+		<div class="m-body">
+			<div>
+				<iframe width="650" height="340" src="https://www.youtube.com/embed/NtDG-Cnj-pw" frameborder="0" allowfullscreen=""></iframe>
 			</div>
-			<div class="m-body">
-				<div>
-					<iframe width="450" height="277" src="https://www.youtube.com/embed/NtDG-Cnj-pw" frameborder="0" allowfullscreen></iframe>
-				</div>
-				<div>
-					<a class="cursor" ng-click="contactBtn(true)"><img src="img/logo.jpg"></a>
-				</div>
+			<div>
+				<img class="cursor img-continue" src="img/logo.jpg" ng-click="contactBtn(true)">
 			</div>
 		</div>
 	</div>

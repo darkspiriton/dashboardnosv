@@ -2,9 +2,10 @@
 
 namespace Dashboard\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 use Dashboard\Http\Requests;
+use Dashboard\Http\Requests\RequestApplicationRequest;
+use Dashboard\Models\Request\User;
+use Illuminate\Http\Request;
 
 class RequestApplicationController extends Controller
 {
@@ -82,5 +83,18 @@ class RequestApplicationController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     *    Salvado de forumalrios de contacto
+     *
+     *    @param  Illuminate\Http\Request  $request
+     *    @return  Illuminate\Http\Response:json
+     */
+    public function contact(RequestApplicationRequest $request)
+    {
+        User::create($request->all());
+
+        return response()->json(["message" => "Se registro el formulario de contacto, nos estaremos comunicando con usted a la brevedad."]);
     }
 }

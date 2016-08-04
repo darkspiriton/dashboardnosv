@@ -294,7 +294,7 @@ Route::group(['prefix' => 'api'], function(){
      * Associate
      */
 
-    Route::post("associate/contact","@");
+    Route::post("associate/contact","RequestApplicationController@contact");
 
 });
 

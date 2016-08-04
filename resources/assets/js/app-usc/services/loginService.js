@@ -75,7 +75,7 @@ angular.module("loginApp")
 		var contact = function(user){
 			hideError();
 			var deferred = q.defer();
-			http.post(baseUrl("api/"), user)
+			http.post(baseUrl("api/associate/contact"), user)
 			    .then(function(response) {
 			        deferred.resolve(response.data);
 			    })

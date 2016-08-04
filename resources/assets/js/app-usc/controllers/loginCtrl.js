@@ -1,6 +1,8 @@
 angular.module('loginApp')
     .controller('loginCtrl', ["$scope", "loginService", function(vm, ls){
 
+        var msg = "Unos gatos ninja robaron algunos cables, intentelo mas tarde por favor.";
+
     	if(ls.isAuthenticated())
     		ls.validateKey().then(function(){
     			ls.redirect();
@@ -14,7 +16,7 @@ angular.module('loginApp')
         			ls.redirect();
         		}, function(error){
         			vm.formSdg = false;
-        			ls.showError(error.message || "Usuario y/o contraseña incorrecta");
+        			ls.showError(error.message || msg);
         		});
         };
 
@@ -27,7 +29,7 @@ angular.module('loginApp')
         			vm.formSdg = false;
         		}, function(error){
         			vm.formSdg = false;
-        			ls.showError(error.message || "Unos gatos ninja robaron algunos cables, intentelo mas tarde por favor.");
+        			ls.showError(error.message || msg);
         		});
         };
 
@@ -41,7 +43,7 @@ angular.module('loginApp')
         			vm.formSdg = false;
         		}, function(error){
         			vm.formSdg = false;
-        			ls.showError(error.message || "Unos gatos ninja robaron algunos cables, intentelo mas tarde por favor.");
+        			ls.showError(error.message || msg);
         		});
         };
 
@@ -51,39 +53,39 @@ angular.module('loginApp')
         };
 
         vm.loginBtn = function(){
-        	$("#register").fadeOut("fast", function(){
-        		$("#login").fadeIn("fast");
+        	$("#contact").fadeOut(100, function(){
+                $("#register").fadeOut(100, function(){
+        		    $("#login").fadeIn(100);
+                });
         	});
         };
 
         vm.registerBtn = function(m){
-        	if(m)$("#modal-info").click();
+        	if(m)vm.modalMaster = true;
         	vm.newUser = {};
         	vm.registerForm.$setPristine();
         	vm.registerForm.$setUntouched();
-        	$("#login").fadeOut("fast", function(){
-        		$("#register").fadeIn("fast");
-        		$(".error").hide();
-        		$(".success").hide();
+        	$("#contact").fadeOut(100, function(){
+                $("#login").fadeOut(100, function(){
+            		$("#register").fadeIn(100);
+            		$(".error").hide();
+            		$(".success").hide();
+                });
         	});
         };
 
         vm.contactBtn = function(m){
-        	if(m)$("#modal-info").click();
-        	vm.newUser = {};
+        	if(m)vm.modalMaster = true;
+        	vm.contactUser = {};
         	vm.contactForm.$setPristine();
         	vm.contactForm.$setUntouched();
-        	$("#login").fadeOut("fast", function(){
-        		$("#contact").fadeIn("fast");
-        		$(".error").hide();
-        		$(".success").hide();
+        	$("#register").fadeOut(100, function(){
+                $("#login").fadeOut(100, function(){
+            		$("#contact").fadeIn(100);
+            		$(".error").hide();
+            		$(".success").hide();
+                });
         	});
         };
-
-        angular.element(document).ready(function(){
-        	$("#modal-info").on("click", function(){
-        		$(".info").fadeOut("fast");
-        	});
-        });
 
     }]);

@@ -27,10 +27,10 @@
 		    <a class="float-r cursor">Anónimo</a>
 		</div>
 		<div class="error">
-		    <p id="login-error"></p>
+		    <p class="msg-error"></p>
 		</div>
 		<div class="success">
-		    <p id="register-success"></p>
+		    <p class="msg-success"></p>
 		</div>
 	</div>
 
@@ -45,7 +45,7 @@
 		    <a class="float-r cursor">Anónimo</a>
 		</div>
 		<div class="error">
-		    <p id="register-error"></p>
+		    <p class="msg-error"></p>
 		</div>
 	</div>
 
@@ -56,10 +56,10 @@
 		<input type="button" value="Contactenme" ng-disabled="!contactForm.$valid || formSdg" ng-click="contact()">
 		<div class="register-box"></div>
 		<div class="error">
-		    <p id="contact-error"></p>
+		    <p class="msg-error"></p>
 		</div>
 		<div class="success">
-		    <p id="contact-success"></p>
+		    <p class="msg-success"></p>
 		</div>
 	</div>
 

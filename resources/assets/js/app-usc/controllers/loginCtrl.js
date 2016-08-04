@@ -33,7 +33,7 @@ angular.module('loginApp')
 
         vm.contact = function() {
         	vm.formSdg = true;
-        	ls.signup(vm.contactUser)
+        	ls.contact(vm.contactUser)
         		.then(function(data){
         			ls.showSuccsess(data.message);
         			$("#contact").fadeOut("fast");

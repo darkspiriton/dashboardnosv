@@ -2,16 +2,13 @@ angular.module("loginApp")
 	.factory("loginService", ["$location","$auth","$http","$q", function(location, auth, http, q){
 
 		var showError = function (message){
-			$("#login-error").text(message);
-			$("#register-error").text(message);
-			$("#contact-error").text(message);
+			$(".msg-error").text(message);
 			$(".error").fadeIn("fast");
 			$(".success").hide();
 		};
 
 		var showSuccsess = function (message){
-			$("#register-success").text(message);
-			$("#contact-success").text(message);
+			$(".msg-success").text(message);
 			$(".success").fadeIn("fast");
 		};
 
@@ -75,6 +72,19 @@ angular.module("loginApp")
 			return deferred.promise;
 		};
 
+		var contact = function(user){
+			hideError();
+			var deferred = q.defer();
+			http.post(baseUrl("api/"), user)
+			    .then(function(response) {
+			        deferred.resolve(response.data);
+			    })
+			    .catch(function(error) {
+			        deferred.reject(error.data);
+			    });
+			return deferred.promise;
+		};
+
 		return {
 			isAuthenticated: isAuthenticated,
 			validateKey: validateKey,
@@ -83,6 +93,7 @@ angular.module("loginApp")
 			showError: showError,
 			hideError: hideError,
 			showSuccsess: showSuccsess,
-			signup: signup
+			signup: signup,
+			contact: contact
 		};
 	}]);

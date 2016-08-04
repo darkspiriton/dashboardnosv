@@ -13,14 +13,14 @@ class Product extends Model
     protected $id = 'id';  
 
     public function user(){
-        $this->belongsTo(User::class);
+        return $this->belongsTo(User::class,'user_request_id');
     }
 
     public function userR(){
-        $this->belongsTo('Dashboard\User');
+        return $this->belongsTo('Dashboard\User','user_id');
     }
 
     public function photos(){
-        $this->hasMany(Photo::class);
+        return $this->hasMany(Photo::class,'request_product_id');
     }
 }

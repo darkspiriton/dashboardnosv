@@ -8,15 +8,16 @@ use Dashboard\Models\Request\Application;
 
 class User extends Model
 {
+
     protected $table = 'users_requests';
     protected $id = 'id';
 
     public function requestAplications(){
-        $this->hasMany(Application::class);
+       return $this->hasMany(Application::class);
     }
 
     public function requestProducts(){
-        $this->hasMany(Product::class);
+        return $this->hasMany(Product::class);
     }
 
 }

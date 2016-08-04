@@ -17,8 +17,7 @@ class RequestProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with('user','photos')
-            ->where('user_id',null)->get();
+        $products = Product::with('photos','user','userR')->get();
 
         return response()->json(['products' => $products],200);
     }

@@ -15,13 +15,12 @@ angular.module('App')
         var s1 = {
             0: ['Nuevo','bgm-teal',false],
             1: ['Aceptado','bgm-green',false],
-            2: ['Rechazado','bgm-red',false],
-            'fail': ['otros','bgm-red',false]
+            2: ['Rechazado','bgm-red',false]
         };
 
         var a1 = [
                     ['Detalle', 'prdReturn' ,'bgm-blue'],
-                    ['Aceptar', 'prdSale' ,'bgm-green'],
+                    ['Estado', 'prdUpdate' ,'bgm-green'],
                     ['Eliminar', 'prdDelete' ,'bgm-red'],
                     // ['reprogramar', 'reprogramar' ,'bgm-purple']
                 ];
@@ -132,6 +131,78 @@ angular.module('App')
                     console.log(error);
                     toastr.error('Ups ocurrio un problema: ' + error.data.message);
                     $scope.updateList = false;
+                });
+        };
+
+        $scope.prdUpdate = function(i){
+            var $id=$scope.tableData[i].id;
+            alertConfig.title = '¿Todo es correcto?';
+            alertConfig.text=`<table class="table table-bordered w-100 table-attr text-center">
+                                        <thead>
+                                        <tr>
+                                            <th>Producto</th>
+                                            <th>Descripcion</th>
+                                            <th>Precio</th>
+                                            <th>Estado</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <th>${$scope.tableData[i].name}</th>
+                                            <th>${$scope.tableData[i].description}</th>
+                                            <td>${$scope.tableData[i].price}</td>
+                                            <td>${$scope.tableData[i].status}</td>                                            
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>`;
+            swal(alertConfig,
+                function () {
+                    petition.put('api/requestproduct/'+$id)
+                        .then(function (data) {
+                            toastr.success(data.message);
+                            $scope.formSubmit = false;
+                            $scope.list();
+                        }, function (error) {
+                            toastr.error('Huy Huy dice: ' + error.data.message);
+                            $scope.formSubmit = false;
+                        });
+                });
+        };
+
+        $scope.prdDelete = function(i){
+            var $id=$scope.tableData[i].id;
+            alertConfig.title = '¿Todo es correcto?';
+            alertConfig.text=`<table class="table table-bordered w-100 table-attr text-center">
+                                        <thead>
+                                        <tr>
+                                            <th>Producto</th>
+                                            <th>Descripcion</th>
+                                            <th>Precio</th>
+                                            <th>Estado</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <th>${$scope.tableData[i].name}</th>
+                                            <th>${$scope.tableData[i].description}</th>
+                                            <td>${$scope.tableData[i].price}</td>
+                                            <td>${$scope.tableData[i].status}</td>                                            
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>`;
+            swal(alertConfig,
+                function () {
+                    petition.delete('api/requestproduct/'+$id)
+                        .then(function (data) {
+                            toastr.success(data.message);
+                            $scope.formSubmit = false;
+                            $scope.list();
+                        }, function (error) {
+                            toastr.error('Huy Huy dice: ' + error.data.message);
+                            $scope.formSubmit = false;
+                        });
                 });
         };
 

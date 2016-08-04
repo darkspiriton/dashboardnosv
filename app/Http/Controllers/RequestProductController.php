@@ -81,7 +81,7 @@ class RequestProductController extends Controller
                 $product->name=$request->input('name');
                 $product->description=$request->input('description');
                 $product->price=$request->input('price');
-                $product->status=1;
+                $product->status=0;
 
                 if(!$user->isEmpty()){
                     $product->user_request_id=$user[0]->id;
@@ -116,7 +116,7 @@ class RequestProductController extends Controller
                 $product->name=$request->input('name');
                 $product->description=$request->input('description');
                 $product->price=$request->input('price');
-                $product->status=1;
+                $product->status=0;
                 $product->user_id=$user_id;
                 $product->save();
 
@@ -204,7 +204,32 @@ class RequestProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // $rules = [
+        //     status => "required|integer"
+        // ];
+        // $validator = \Validate::make($request->all(),$rules);
+
+        // if($validator->fails()){
+        //     return response()->json(['message' => 'Parametros recibidos no validos'],404);
+        // }
+
+        $product = Product::find($id);
+
+        if($product !== null){     
+            if($product->status==0)       {
+                $product->status=1;
+            }elseif($product->status==1){
+                $product->status=2;
+            }elseif($product->status==2){
+                $product->status=1;
+            }
+            $product->save();
+            return response()->json(['message'=>'Se actualizo correctamente el estado de la petición'],200);
+        }else{
+            return response()->json(['message'=>'No existe una peticion con ese identificador'],401);
+        }
+
+
     }
 
     /**
@@ -216,7 +241,9 @@ class RequestProductController extends Controller
     public function destroy($id)
     {
         $product = Product::find($id);
-        if(!$product->isEmpty()){
+
+        if($product !== null){            
+            $product->photos()->delete();
             $product->delete();
             return response()->json(['message'=>'La petición se elimino correctamente'],200);
         }else{
@@ -224,3 +251,4 @@ class RequestProductController extends Controller
         }
     }
 }
+;

@@ -62,7 +62,7 @@ angular.module('App')
 
         $scope.AddOption = function (i) {
             var count = 0;
-            for(i in  $scope.product.responses){
+            for(var i in  $scope.product.responses){
                 if($scope.questions[$scope.question_i].id == $scope.responsesView[i].question_id){
                     count++;
                     break;

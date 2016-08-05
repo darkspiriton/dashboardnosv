@@ -121,7 +121,6 @@ elixir(function(mix) {
      */
 
     mix.browserify([
-        "app/controllers/homeCtrl.js",
         "app/controllers/auxProductCtrl.js",
         "app/controllers/auxIndicator1Ctrl.js",
         "app/controllers/auxIndicator2Ctrl.js",

@@ -140,7 +140,7 @@
         </li>
 
         <li class="sub-menu">
-            <a href="#"><i class="md md-trending-up"></i> Gestion de Ventas Web </a>
+            <a href="#"><i class="md md-view-carousel"></i> Gestion de Ventas Web </a>
             <ul>
                 <li id="RequestProduct"><a ui-sref="RequestProduct"> Gestion de Ventas Individuales </a></li>
                 <li id="RequestApplication"><a ui-sref="RequestApplication"> Gestion de Ventas Empresas </a></li>               

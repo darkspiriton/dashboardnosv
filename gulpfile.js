@@ -50,7 +50,8 @@ elixir(function(mix) {
         "app/controllers/auxMovementOutFit2Ctrl.js",
         "app/controllers/publicityJVECtrl.js",
         "app/controllers/auxProductJVECtrl.js",
-        "app/controllers/auxIndicator7Ctrl.js"
+        "app/controllers/auxIndicator7Ctrl.js",
+        "app/controllers/RequestApplicationCtrl.js"
         ], "public/app/controllers/compile/coordinadorControllers.js");
 
     /*
@@ -111,7 +112,42 @@ elixir(function(mix) {
         "app/controllers/PaymentListCtrl.js",
         "app/controllers/RequestProductCtrl.js",
         "app/controllers/RequestApplicationCtrl.js"
-        ], "public/app/controllers/compile/godControllers.js");
+        ], "public/app/controllers/compile/godControllers.js");    
+
+    /*
+     |
+     |  Compile for ADM
+     |
+     */
+
+    mix.browserify([
+        "app/controllers/homeCtrl.js",
+        "app/controllers/auxProductCtrl.js",
+        "app/controllers/auxIndicator1Ctrl.js",
+        "app/controllers/auxIndicator2Ctrl.js",
+        "app/controllers/auxIndicator3Ctrl.js",
+        "app/controllers/auxIndicator4Ctrl.js",
+        "app/controllers/auxIndicator5Ctrl.js",
+        "app/controllers/auxIndicator6Ctrl.js",
+        "app/controllers/usersCtrl.js",
+        "app/controllers/commentsCtrl.js",
+        "app/controllers/auxStockCtrl.js",
+        "app/controllers/employeesCtrl.js",
+        "app/controllers/payrollEntryCtrl.js",
+        "app/controllers/godEmployeeAssistsCtrl.js",
+        "app/controllers/indicatorPayRoleCtrl.js",
+        "app/controllers/products_out.js",
+        "app/controllers/auxMovementCtrl.js",
+        "app/controllers/auxMovement2Ctrl.js",
+        "app/controllers/q_questionnairesCtrl.js",
+        "app/controllers/q_questionsCtrl.js",
+        "app/controllers/q_categoriesCtrl.js",
+        "app/controllers/q_AnswerIndicator.js",
+        "app/controllers/q_productsCtrl.js",
+        "app/controllers/q_customersCtrl.js",
+        "app/controllers/RequestProductCtrl.js",
+        "app/controllers/RequestApplicationCtrl.js"
+        ], "public/app/controllers/compile/admControllers.js");
 
 
     /*
@@ -154,6 +190,7 @@ elixir(function(mix) {
         "public/app/controllers/compile/coordinadorControllers.js",
         "public/app/controllers/compile/vendedorControllers.js",
         "public/app/controllers/compile/godControllers.js",
+        "public/app/controllers/compile/admControllers.js",
         "public/app/app.js",
         "public/app/appLogin.js",
         "public/app/controllers/loginCtrl.js",

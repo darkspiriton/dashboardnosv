@@ -9,6 +9,12 @@ use Illuminate\Http\Request;
 
 class RequestApplicationController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware("auth:GOD,ADM,JVE", ["except" => ["store"]]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -16,7 +22,7 @@ class RequestApplicationController extends Controller
      */
     public function index()
     {
-        //
+        return User::where("status", 0)->get();
     }
 
     /**
@@ -35,9 +41,11 @@ class RequestApplicationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(RequestApplicationRequest $request)
     {
-        //
+        User::create($request->all());
+
+        return response()->json(["message" => "Se registro el formulario de contacto, nos estaremos comunicando con usted a la brevedad."]);
     }
 
     /**
@@ -48,7 +56,7 @@ class RequestApplicationController extends Controller
      */
     public function show($id)
     {
-        //
+        return User::where("status", $id)->get();
     }
 
     /**
@@ -71,7 +79,18 @@ class RequestApplicationController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, ["status" => "required|integer|between:1,2"]);
+
+        $user = User::findOrFail($id);
+
+        if ($user->status == 0) {
+            $user->status = request("status");
+            $user->save();
+
+            return response()->json(["message" => "Se cambio estado de formulario de contacto."]);
+        }
+
+        return response()->json(["message" => "El formulario de contacto ya tiene un estado no puede ser modificado."], 422);
     }
 
     /**
@@ -86,15 +105,19 @@ class RequestApplicationController extends Controller
     }
 
     /**
-     *    Salvado de forumalrios de contacto
+     *    Retorno de estado de busqueda.
      *
      *    @param  Illuminate\Http\Request  $request
-     *    @return  Illuminate\Http\Response:json
+     *    @return  Illuminate\Http\Response
      */
-    public function contact(RequestApplicationRequest $request)
+    public function status()
     {
-        User::create($request->all());
+        $status = [
+            ["id" => 0, "name" => "Sin atender"],
+            ["id" => 1, "name" => "Atendido"],
+            ["id" => 2, "name" => "Rechazado"],
+        ];
 
-        return response()->json(["message" => "Se registro el formulario de contacto, nos estaremos comunicando con usted a la brevedad."]);
+        return $status;
     }
 }

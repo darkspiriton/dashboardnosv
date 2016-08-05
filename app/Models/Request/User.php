@@ -11,6 +11,7 @@ class User extends Model
 
     protected $table = 'users_requests';
     protected $fillable = ["name","email","phone"];
+    protected $hidden = ["updated_at"];
 
     public function requestAplications(){
        return $this->hasMany(Application::class);

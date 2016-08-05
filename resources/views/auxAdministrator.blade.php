@@ -70,33 +70,18 @@
         <li id="comments">
             <a href="#" ui-sref="Comentarios"><i class="md md-messenger"></i> Administrar comentarios</a>
         </li>
-
+        <li class="sub-menu">
+            <a href="#"><i class="md md-trending-up"></i> Gestion de Ventas Web </a>
+            <ul>
+                <li id="RequestProduct"><a ui-sref="RequestProduct"> Gestion de Ventas Individuales </a></li>
+                <li id="RequestApplication"><a ui-sref="RequestApplication"> Gestion de Ventas Empresas </a></li>               
+            </ul>
+        </li>
     </ul>
 @stop
 
 @section('dashCtrls')
-    <script src="app/controllers/homeCtrl.js"></script>
-    <script src="app/controllers/auxProductCtrl.js"></script>
-    <script src="app/controllers/auxIndicator1Ctrl.js"></script>
-    <script src="app/controllers/auxIndicator2Ctrl.js"></script>
-    <script src="app/controllers/auxIndicator3Ctrl.js"></script>
-    <script src="app/controllers/auxIndicator4Ctrl.js"></script>
-    <script src="app/controllers/auxIndicator5Ctrl.js"></script>
-    <script src="app/controllers/auxIndicator6Ctrl.js"></script>
-    <script src="app/controllers/usersCtrl.js"></script>
-    <script src="app/controllers/commentsCtrl.js"></script>
-    <script src="app/controllers/auxStockCtrl.js"></script>
-    <script src="app/controllers/employeesCtrl.js"></script>
-    <script src="app/controllers/payrollEntryCtrl.js"></script>
-    <script src="app/controllers/godEmployeeAssistsCtrl.js"></script>
-    <script src="app/controllers/indicatorPayRoleCtrl.js"></script>
-    <script src="app/controllers/products_out.js"></script>
-    <script src="app/controllers/auxMovementCtrl.js"></script>
-    <script src="app/controllers/auxMovement2Ctrl.js"></script>
-    <script src="app/controllers/q_questionnairesCtrl.js"></script>
-    <script src="app/controllers/q_questionsCtrl.js"></script>
-    <script src="app/controllers/q_categoriesCtrl.js"></script>
-    <script src="app/controllers/q_AnswerIndicator.js"></script>
-    <script src="app/controllers/q_productsCtrl.js"></script>
-    <script src="app/controllers/q_customersCtrl.js"></script>
+    <script src="app/lib/filesave.js"></script>
+    {{-- Dependencias en Resource/assets/js/app - Gulpfile.js --}}
+    <script src="{{ elixir('app/controllers/compile/admControllers.js') }}"></script>
 @stop

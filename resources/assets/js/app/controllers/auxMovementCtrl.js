@@ -161,7 +161,14 @@ angular.module('App')
 		function confirmationTable(){
 			var template = `<table class="table table-bordered w-100 table-attr text-center">
 								<thead>
-								<tr>                                            
+								<tr>
+								    <h5><label> Vendedor(a) : </label>${(function(){
+								    	for(var i in $scope.sellers){
+								    		if($scope.sellers[i].id == $scope.data.seller_id)
+								    			return $scope.sellers[i].name; 
+								    	}
+								    	return '';
+								    })()}</h5>
 									<h5><label> Código : </label>${setUpper($scope.data.codOrder)}</h5>                                            
 									<h5><label> F. Pedido : </label>${util.setDate($scope.data.requestDate)}</h5>                                           
 									<h5> <label> F. Salida : </label>${util.setDate($scope.data.shipmentDate)}</h5>                                                                      
@@ -262,7 +269,14 @@ angular.module('App')
 
 			var template = `<table class="table table-attr table-bordered text-center w-100">
 										<thead>
-										<tr>                                            
+										<tr>
+											<h5><label> Vendedor(a) : </label>${(function(){
+												for(var i in $scope.sellers){
+													if($scope.sellers[i].id == $scope.data.seller_id)
+														return $scope.sellers[i].name; 
+												}
+												return '';
+											})()}</h5>
 											<h5><label> Código : </label>${setUpper($scope.data.codOrder)}</h5>                                            
 											<h5><label> F. Pedido : </label>${util.setDate($scope.data.requestDate)}</h5>                                           
 											<h5> <label> F. Salida : </label>${util.setDate($scope.data.shipmentDate)}</h5>                                                                      

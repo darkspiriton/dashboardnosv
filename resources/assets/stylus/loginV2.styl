@@ -1,0 +1,335 @@
+body{
+	margin: 0;
+	padding: 0;
+	background: #fff;
+
+	color: #fff;
+	font-family: Arial;
+	font-size: 12px;
+}
+
+.body{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-image: url(../../img/background.jpg);
+	background-size: cover;
+	-webkit-filter: blur(5px);
+	z-index: 0;
+}
+
+.grad{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0)), color-stop(100%,rgba(0,0,0,0.65))); /* Chrome,Safari4+ */
+	z-index: 1;
+	opacity: 0.7;
+}
+	
+.header{
+	position: absolute;
+	top: calc(50% - 73px);
+	left: calc(50% - 220px);
+	z-index: 2;
+}
+
+.header img{
+	width: 150px
+}
+
+.header div{
+	float: left;
+	color: #fff;
+	font-family: 'Exo', sans-serif;
+	font-size: 35px;
+	font-weight: 200;
+}
+
+.header div span{
+	color: #5379fa !important;
+}
+
+.login{
+	position: absolute;
+	top: calc(50% - 75px);
+	left: calc(50% - 50px);
+	height: 150px;
+	width: 350px;
+	padding: 10px;
+	z-index: 2;
+}
+
+.login input[type=text]{
+	width: 250px;
+	height: 30px;
+	background: transparent;
+	border: 1px solid rgba(255,255,255,0.6);
+	border-radius: 2px;
+	color: #fff;
+	font-family: 'Exo', sans-serif;
+	font-size: 16px;
+	font-weight: 400;
+	padding: 4px;
+}
+
+.login input[type=password]{
+	width: 250px;
+	height: 30px;
+	background: transparent;
+	border: 1px solid rgba(255,255,255,0.6);
+	border-radius: 2px;
+	color: #fff;
+	font-family: 'Exo', sans-serif;
+	font-size: 16px;
+	font-weight: 400;
+	padding: 4px;
+	margin-top: 10px;
+}
+
+.login input[type=email]{
+	width: 250px;
+	height: 30px;
+	background: transparent;
+	border: 1px solid rgba(255,255,255,0.6);
+	border-radius: 2px;
+	color: #fff;
+	font-family: 'Exo', sans-serif;
+	font-size: 16px;
+	font-weight: 400;
+	padding: 4px;
+}
+
+.login input[type=tel]{
+	width: 250px;
+	height: 30px;
+	background: transparent;
+	border: 1px solid rgba(255,255,255,0.6);
+	border-radius: 2px;
+	color: #fff;
+	font-family: 'Exo', sans-serif;
+	font-size: 16px;
+	font-weight: 400;
+	padding: 4px;
+	margin-top: 10px;
+}
+
+.login input[type=button]{
+	width: 260px;
+	height: 35px;
+	background: #fff;
+	border: 1px solid #fff;
+	cursor: pointer;
+	border-radius: 2px;
+	color: #a18d6c;
+	font-family: 'Exo', sans-serif;
+	font-size: 16px;
+	font-weight: 400;
+	padding: 6px;
+	margin-top: 10px;
+}
+
+.login input[type=button]:hover{
+	opacity: 0.8;
+}
+
+.login input[type=button]:active{
+	opacity: 0.6;
+}
+
+.login input[type=email]:focus{
+	outline: none;
+	border: 1px solid rgba(255,255,255,0.9);
+}
+
+.login input[type=password]:focus{
+	outline: none;
+	border: 1px solid rgba(255,255,255,0.9);
+}
+
+.login input[type=text]:focus{
+	outline: none;
+	border: 1px solid rgba(255,255,255,0.9);
+}
+
+.login input[type=tel]:focus{
+	outline: none;
+	border: 1px solid rgba(255,255,255,0.9);
+}
+
+.login input[type=button]:focus{
+	outline: none;
+}
+
+::-webkit-input-placeholder{
+   color: rgba(255,255,255,0.6);
+}
+
+::-moz-input-placeholder{
+   color: rgba(255,255,255,0.6);
+}
+
+.register-box {
+	width: 230px;
+	padding: 15px;
+	font-size: 15px;
+	font-family: 'Exo', sans-serif;
+	text-align: center;
+	height: 20px;
+	line-height: 20px;
+}
+	
+.register-box .line {
+	height: 20px;
+	margin-bottom: 10px;
+}
+
+.float-l {
+	float: left;
+}
+	
+.float-r {
+	float: right;
+}
+
+.cursor {
+	cursor: pointer;
+}
+
+#register {
+	display: none;
+}
+
+#contact {
+	display: none;
+}
+
+#register input[type=email] {
+	margin-top: 10px;
+}
+
+#contact input[type=email] {
+	margin-top: 10px;
+}
+
+.error {
+	display: none;
+	padding: 5px 15px;
+	width: 230px;
+	color: #e10715;
+	font-size: 12px;
+	font-weight: 700;
+	background: rgba(255,255,255,.3);
+}
+
+.success {
+	display: none;
+	padding: 5px 15px;
+	width: 230px;
+	color: #0027f5;
+	font-size: 12px;
+	font-weight: 700;
+	background: rgba(255,255,255,.3);
+}
+
+input[type="button"]:disabled {
+	cursor: not-allowed;
+	pointer-events: none;
+	opacity: .8;
+}
+
+.css-form input.ng-invalid.ng-touched {
+  	border: 1px solid rgba(216,111,113,0.9);
+}
+
+.css-form input.ng-valid.ng-touched {
+  	border: 1px solid rgba(163,228,78,0.9);
+}
+
+.modal{
+	width: 800px;
+	height: 200px;
+	margin: auto;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 4;
+}
+
+.modal-container{
+	background: rgba(0,0,0,0.5);
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	z-index: 3;
+}
+
+.column-left {
+	width: 50%;
+	height: 100%;
+	display: inline-block;
+	float: left;
+}
+
+.column-right {
+	width: 50%;
+	height: 100%;
+	display: inline;
+	float: right;
+}
+
+.info img{
+	width: 380px;
+	height: 200px;
+}
+
+.individual {
+	margin-right: 20px;
+}
+
+.empresas {
+	margin-left: 20px;
+}
+
+.ng-hide {
+	display: none;
+}
+
+.m-title {
+	font-family: 'Exo', sans-serif;
+	font-size: 5.2rem;
+	text-align: center;
+	text-transform: uppercase;
+	margin-top: 20px;
+}
+
+.m-body img {
+	width: 50%;
+    margin: 0 auto;
+}
+
+.m-body iframe {
+	display: block;
+	margin: 0 auto;
+}
+
+.float-l {
+	float: left;
+}
+
+.m-individual {
+	height: 400px;
+}
+
+.m-empresas {
+	height: 500px;
+}
+
+.img-continue {
+	display: block;
+	width: 250px;
+	height: 75px;
+	margin-top: 20px !important;
+}

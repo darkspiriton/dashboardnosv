@@ -25,6 +25,7 @@ elixir(function(mix) {
     mix.stylus("loginStyles.styl" , "public/css/loginStyles.min.css");
     mix.stylus("styles.styl" , "public/css/styles.min.css");
     mix.stylus("toastr.styl" , "public/css/toastr.min.css");
+    mix.stylus("loginV2.styl" , "public/css/loginV2.min.css");
 });
 
 /*
@@ -125,6 +126,25 @@ elixir(function(mix) {
 
     /*
      |
+     |  Compile for APP-USC
+     |
+     */
+
+    /*
+     |
+     |  Compile for Login 
+     |
+     */
+
+    mix.browserify([
+        "app-usc/login.js",
+        "app-usc/controllers/loginCtrl.js",
+        "app-usc/services/loginService.js",
+        ], "public/app-usc/compiled/loginApp.js");
+
+
+    /*
+     |
      |  Versions
      |
      */
@@ -137,11 +157,13 @@ elixir(function(mix) {
         "public/app/app.js",
         "public/app/appLogin.js",
         "public/app/controllers/loginCtrl.js",
+        "public/app-usc/compiled/loginApp.js",
         //  CSS
         "css/app.min.1.css",
         "css/app.min.2.css",
         "css/styles.min.css",
         "css/loginStyles.min.css",
         "css/toastr.min.css",
+        "public/css/loginV2.min.css",
         ]);
 });

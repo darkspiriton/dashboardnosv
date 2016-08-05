@@ -31,9 +31,14 @@ Route::get('/',['middleware'=>'web', function () {
     return view('login');
 }]);
 
+Route::get('/asociados',['middleware'=>'web', function () {
+    return view('login_usc');
+}]);
+
 Route::group(['prefix'=>'auth','middleware' => ['web']],function(){
     Route::post('/login' ,'Auth\AuthTokenController@login');
     Route::post('/signup' ,'Auth\AuthTokenController@signup');
+    Route::post('/signup/usc' ,'Auth\AuthTokenController@signup_usc');
 });
 
 Route::group(['prefix'=>'dashboard'],function(){
@@ -289,6 +294,13 @@ Route::group(['prefix' => 'api'], function(){
     Route::get('partner/get/products/provider/sale','PartnerController@saleMonth');
 
     Route::get('partner/get/payments','PartnerController@infoPayment');
+
+    /**
+     * Associate
+     */
+
+    Route::post("associate/contact","RequestApplicationController@contact");
+
 });
 
 /**
@@ -297,8 +309,6 @@ Route::group(['prefix' => 'api'], function(){
  */
 
 Route::get('/test', function(\Illuminate\Http\Request $request){
-    $collect = collect([0,1,2,3,4,5]);
-    return $collect->toArray();
-
+    return request("name","=D");
 });
 

@@ -10,7 +10,7 @@ class User extends Model
 {
 
     protected $table = 'users_requests';
-    protected $id = 'id';
+    protected $fillable = ["name","email","phone"];
 
     public function requestAplications(){
        return $this->hasMany(Application::class);

@@ -5,6 +5,24 @@
                 data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
                 title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
     </div>
+    <div class="card-header bgm-lightblue">
+        <form name="form" class="form-horizontal" autocomplete="off">
+            <div class="form-group">
+               <h2 class="col-xs-2 col-sm-2 text-right">Filtro por estado</h2>
+
+                    <div class="col-xs-2 col-sm-2">
+                        <div class="fg-line select">
+                            <select ng-change="changeStatus()" class="form-control" ng-options="estado.id as estado.name for estado in estados" ng-model="status" required>
+                                <option  value="" disabled="disabled" select="true">Seleccione</option>
+                            </select>
+                        </div>
+                    </div>               
+            </div>
+            
+        </form>
+    </div>
+
+
 
     <div class="card-body card-padding table-responsive">
         <div class="col-sm-12" ng-show="updateList">
@@ -13,25 +31,6 @@
         <div class="col-sm-12" ng-hide="updateList">
             <table id="table" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
         </div><br>
-    </div><br>
-</div>
-
-<div class="card" >
-    <div class="card-header bgm-blue">
-        <h2>Hoja de despacho por dia</h2>
-    </div>
-    <div class="card-header bgm-lightblue">
-       <div ng-form="dates" class="row report-date">
-            <h2 class="col-xs-5 col-sm-3 text-right m-t-20">Fecha de despacho</h2>
-            <input type="date" class="btn btn-default col-xs-7 col-sm-2 m-t-20" ng-change="filter()" ng-model="dispatch" required>
-
-            <input type="button" ng-disabled="downloadBtn" ng-click="download()" class="btn bgm-purple m-l-20 m-t-20 col-sm-2" value="DESCARGAR">
-       </div>
-    </div>
-    <div class="card-body card-padding table-responsive">
-        <div class="col-sm-12" ng-hide="updateList">
-            <table id="dispatch" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
-        </div>
     </div><br>
 </div>
 

@@ -2,9 +2,10 @@
 
 namespace Dashboard\Http\Controllers;
 
+use Dashboard\User as UserR;
 use Dashboard\Http\Requests;
 use Illuminate\Http\Request;
-use Dashboard\Models\Request\User;
+use Dashboard\Models\Request\User as User;
 use Dashboard\Models\Request\Photo;
 use Dashboard\Models\Request\Product;
 
@@ -15,10 +16,31 @@ class RequestProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::with('photos','user','userR')->get();
+        if($request->has('status')){
+            $rules = [
+                'status' => 'integer|between:1,4',
+            ];
 
+            $validator = \Validator::make($request->all(),$rules);
+            if($validator->fails()){
+                return response()->json(['message' => 'Los valores de estado no estan permitidos'],404);
+            }
+            elseif($request->input('status') == 4){
+                $products = Product::with('photos','user','userR')->get();
+            }else{
+                $products = Product::with('photos','user','userR')
+                                ->where('status',$request->status)->get();
+            }
+
+       
+        }else{
+            $products = Product::with('photos','user','userR')
+                                ->where('status',1)
+                                ->orderby('created_at','desc')  ->get();    
+        }
+        
         return response()->json(['products' => $products],200);
     }
 
@@ -81,7 +103,7 @@ class RequestProductController extends Controller
                 $product->name=$request->input('name');
                 $product->description=$request->input('description');
                 $product->price=$request->input('price');
-                $product->status=0;
+                $product->status=1;
 
                 if(!$user->isEmpty()){
                     $product->user_request_id=$user[0]->id;
@@ -116,7 +138,7 @@ class RequestProductController extends Controller
                 $product->name=$request->input('name');
                 $product->description=$request->input('description');
                 $product->price=$request->input('price');
-                $product->status=0;
+                $product->status=1;
                 $product->user_id=$user_id;
                 $product->save();
 
@@ -134,10 +156,15 @@ class RequestProductController extends Controller
     }
 
     private function imageStore(Request $request,$img,$product){
-        $imageName = $request->file($img); // referencia a la imagen
-        $image= file_get_contents($request->file($img)->getRealPath());
-        $image_name = str_random(4).'_'.$imageName->getClientOriginalName();                
-        Storage::disk('public')->put('img/publicities/'.$image_name,$image);
+        // $imageName = $request->file($img); // referencia a la imagen
+        // $image= file_get_contents($request->file($img)->getRealPath());
+        // $image_name = str_random(4).'_'.$imageName->getClientOriginalName();                
+        // Storage::disk('public')->put('img/publicities/'.$image_name,$image);
+
+        $image = $request->file($img); // referencia a la imagen
+        $image_name = str_random(4).'_'.$image->getClientOriginalName();
+        $image_folder = 'img/request/';
+        $image->move(public_path($image_folder), $image_name); // moviendo imagen a images folder
 
         $photo = new Photo();
         $photo->url = $image_name;
@@ -175,10 +202,12 @@ class RequestProductController extends Controller
      */
     public function show($id)
     {
-        $product = Product::with('user','photos')
+        // return Photo::all();
+        $product = Product::with('photos')
                             ->where('id',$id)->get();
-        if(!$product->isEmpty()){
-            return response()->json(['product'=>$product],200);
+        return $product;
+        if(!$product->isEmpty()){       
+            return response()->json(['product'=>$product ],200);
         }else{
             return response()->json(['message'=>'No existe una peticion con ese identificador'],401);
         }
@@ -204,31 +233,21 @@ class RequestProductController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // $rules = [
-        //     status => "required|integer"
-        // ];
-        // $validator = \Validate::make($request->all(),$rules);
-
-        // if($validator->fails()){
-        //     return response()->json(['message' => 'Parametros recibidos no validos'],404);
-        // }
-
         $product = Product::find($id);
 
         if($product !== null){     
-            if($product->status==0)       {
-                $product->status=1;
-            }elseif($product->status==1){
+            if($product->status==1)       {
                 $product->status=2;
             }elseif($product->status==2){
-                $product->status=1;
+                $product->status=3;
+            }elseif($product->status==3){
+                return response()->json(['message' => 'No se puede cambiar el estado de un pedido rechazado'],401);
             }
             $product->save();
             return response()->json(['message'=>'Se actualizo correctamente el estado de la petición'],200);
         }else{
             return response()->json(['message'=>'No existe una peticion con ese identificador'],401);
         }
-
 
     }
 
@@ -250,5 +269,43 @@ class RequestProductController extends Controller
             return response()->json(['message'=>'No existe una peticion con ese identificador'],401);
         }
     }
+
+    public function status(){
+        $status = [
+            ['id' => 1, 'name' => 'Sin Atender'],
+            ['id' => 2, 'name' => 'Atendido'],
+            ['id' => 3, 'name' => 'Rechazado'],
+            ['id' => 4, 'name' => 'Todos']
+        ];
+        return response()->json(['estados' => $status],200);
+    }
+
+    public function getUser(Request $request, $id){
+        $rules = [
+            'status' => 'required|integer|between:0,1'            
+        ];
+
+        $validator = \Validator::make($request->all(),$rules);
+        if($validator->fails()){
+            return response()->json(['message' => 'No se cuanta con lo valores validos'],401);
+        }
+
+        if($request->status == 1){
+            $user = User::find($id);
+        }elseif($request->status == 0){
+            $userAux = UserR::find($id);
+
+            $user = new User();
+            $user->id = $id;
+            $user->name = $userAux->first_name.' '.$userAux->last_name;
+            $user->email= $userAux->email;
+            $user->phone = $userAux->phone;
+            $user->created_at= $userAux->created_at;
+            $user->updated_at=$userAux->updated_at;
+        }
+
+        return response()->json(['user' => $user ],200);
+    }
+
 }
 ;

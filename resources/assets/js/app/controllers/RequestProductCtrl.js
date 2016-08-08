@@ -3,7 +3,7 @@ angular.module('App')
         $stateProvider
             .state('RequestProduct', {
                 url: '/Pedidos-venta-productos',
-                templateUrl: 'app/partials/requestProduct.html',
+                templateUrl: 'http://' + location.hostname + '/app/partials/requestProduct.html',
                 controller : 'RequestProductCtrl'
             });
     }])

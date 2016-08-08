@@ -170,14 +170,14 @@ angular.module('App')
         function productValidate(){
             var grpAttTemp = removeQuantityValidate();
 
-            for(i in $scope.product.groupAttr){
+            for(var i in $scope.product.groupAttr){
                 if ($scope.product.groupAttr[i].quantity == undefined){
                     return "Falta ingresar cantidad";
                 }
             }
 
-            for(index in grpAttTemp){
-                for(index2 in  grpAttTemp){
+            for(var index in grpAttTemp){
+                for(var index2 in  grpAttTemp){
                     if( index2 <= index )continue;
                     if (angular.equals(grpAttTemp[index],grpAttTemp[index2])){
                         return "Se encontro grupo de attributos iguales";
@@ -190,7 +190,7 @@ angular.module('App')
 
         function removeQuantityValidate(){
             var temp = angular.copy($scope.product.groupAttr);
-            for(i in temp) {
+            for(var i in temp) {
                 temp[i].quantity = undefined;
                 temp[i].id = undefined;
             }
@@ -240,7 +240,7 @@ angular.module('App')
 
         $scope.addAttrGrp = function(){
             var count =0;
-            for(i in  $scope.product.groupAttr[$scope.index].attributes){
+            for(var i in  $scope.product.groupAttr[$scope.index].attributes){
                 if($scope.newAttr.id == $scope.product.groupAttr[$scope.index].attributes[i].id){
                     count++;
                     $scope.product.groupAttr[$scope.index].attributes[i] = angular.copy($scope.newAttr);
@@ -274,7 +274,7 @@ angular.module('App')
         };
 
         $scope.attrName = function( ind ){
-            for(i in  $scope.attributos){
+            for(var i in  $scope.attributos){
                 if(ind == $scope.attributos[i].id){
                     return $scope.attributos[i].name;
                 }
@@ -282,9 +282,9 @@ angular.module('App')
         };
 
         $scope.attrValueName = function( ind , ind2){
-            for(i in  $scope.attributos){
+            for(var i in  $scope.attributos){
                 if(ind == $scope.attributos[i].id){
-                    for(x in  $scope.attributos[i].att){
+                    for(var x in  $scope.attributos[i].att){
                         if(ind2 == $scope.attributos[i].att[x].id){
                             return $scope.attributos[i].att[x].valor;
                         }

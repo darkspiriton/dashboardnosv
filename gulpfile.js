@@ -56,7 +56,8 @@ elixir(function(mix) {
         "app/controllers/auxMovementOutFit2Ctrl.js",
         "app/controllers/publicityJVECtrl.js",
         "app/controllers/auxProductJVECtrl.js",
-        "app/controllers/auxIndicator7Ctrl.js"
+        "app/controllers/auxIndicator7Ctrl.js",
+        "app/controllers/RequestApplicationCtrl.js"
         ], "public/app/controllers/compile/coordinadorControllers.js");
 
     /*
@@ -117,7 +118,51 @@ elixir(function(mix) {
         "app/controllers/PaymentListCtrl.js",
         "app/controllers/RequestProductCtrl.js",
         "app/controllers/RequestApplicationCtrl.js"
-        ], "public/app/controllers/compile/godControllers.js");
+        ], "public/app/controllers/compile/godControllers.js");    
+
+    /*
+     |
+     |  Compile for ADM
+     |
+     */
+
+    mix.browserify([
+        "app/controllers/auxProductCtrl.js",
+        "app/controllers/auxIndicator1Ctrl.js",
+        "app/controllers/auxIndicator2Ctrl.js",
+        "app/controllers/auxIndicator3Ctrl.js",
+        "app/controllers/auxIndicator4Ctrl.js",
+        "app/controllers/auxIndicator5Ctrl.js",
+        "app/controllers/auxIndicator6Ctrl.js",
+        "app/controllers/usersCtrl.js",
+        "app/controllers/commentsCtrl.js",
+        "app/controllers/auxStockCtrl.js",
+        "app/controllers/employeesCtrl.js",
+        "app/controllers/payrollEntryCtrl.js",
+        "app/controllers/godEmployeeAssistsCtrl.js",
+        "app/controllers/indicatorPayRoleCtrl.js",
+        "app/controllers/products_out.js",
+        "app/controllers/auxMovementCtrl.js",
+        "app/controllers/auxMovement2Ctrl.js",
+        "app/controllers/q_questionnairesCtrl.js",
+        "app/controllers/q_questionsCtrl.js",
+        "app/controllers/q_categoriesCtrl.js",
+        "app/controllers/q_AnswerIndicator.js",
+        "app/controllers/q_productsCtrl.js",
+        "app/controllers/q_customersCtrl.js",
+        "app/controllers/RequestProductCtrl.js",
+        "app/controllers/RequestApplicationCtrl.js"
+        ], "public/app/controllers/compile/admControllers.js");
+
+    /*
+     |
+     |  Compile for ASSOCIATED
+     |
+     */
+
+    mix.browserify([
+        "app/controllers/RequestProductCtrl.js"
+        ], "public/app/controllers/compile/associatedControllers.js");
 
 
     /*
@@ -129,12 +174,6 @@ elixir(function(mix) {
     mix.browserify("app/app.js","public/app/app.js");
     mix.browserify("app/appLogin.js","public/app/appLogin.js");
     mix.browserify("app/controllers/loginCtrl.js","public/app/controllers/loginCtrl.js");
-
-    /*
-     |
-     |  Compile for APP-USC
-     |
-     */
 
     /*
      |
@@ -161,10 +200,12 @@ elixir(function(mix) {
         "public/app/controllers/compile/coordinadorControllers.js",
         "public/app/controllers/compile/vendedorControllers.js",
         "public/app/controllers/compile/godControllers.js",
+        "public/app/controllers/compile/admControllers.js",
         "public/app/app.js",
         "public/app/appLogin.js",
         "public/app/controllers/loginCtrl.js",
         "public/app-usc/compiled/loginApp.js",
+        "public/app/controllers/compile/associatedControllers.js",
         //  CSS
         "css/app.min.1.css",
         "css/app.min.2.css",

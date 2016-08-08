@@ -144,7 +144,7 @@ angular.module('App')
 
         $scope.addProduct = function(ind){
             var count = 0;
-            for(i in  $scope.products){
+            for(var i in  $scope.products){
                 if(angular.equals($scope.tableData[ind],$scope.products[i])){
                     count++;
                 }

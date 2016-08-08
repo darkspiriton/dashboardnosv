@@ -10,7 +10,7 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
         $stateProvider
             .state('Home', {
                 url: '/home',
-                templateUrl: 'app/partials/efecto.html',
+                templateUrl: 'http://' + location.hostname + '/app/partials/efecto.html',
                 controller: 'homeCtrl'
             });
 
@@ -376,14 +376,19 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
 
 
 
-    .controller('appCtrl', ["$state", "$log", "$scope", "$window", "$auth", "storage",
-        function AppCtrl($state, $log, $scope, $window, $auth, storage) {
+    .controller('appCtrl', ["$state", "$log", "$scope", "$window", "$auth", "storage", "$location",
+        function AppCtrl($state, $log, $scope, $window, $auth, storage, $location) {
         $scope.pageTitle = 'Home';
 
         if ($auth.isAuthenticated()) {
             $scope.logout = function () {
-                storage.removeStorage();
-                $window.location.href = "/";
+                if (storage.get("roleName") == "Asociado"){
+                    storage.removeStorage();
+                    $window.location.href = "/asociados";
+                } else {
+                    storage.removeStorage();
+                    $window.location.href = "/";
+                }
             };
 
             var role = storage.get('roleName');
@@ -402,6 +407,7 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
                 }
             });
         } else {
-            $window.location.href = '/';
+            if(location.pathname != "/asociados/dashboard")
+                $window.location.href = '/';
         }
     }]);

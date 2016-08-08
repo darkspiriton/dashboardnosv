@@ -26,7 +26,7 @@
 	  		<div class="line">
 			  	<a class="float-l cursor" ng-click="registerBtn()">Registrarse</a>
 			  	<a class="cursor" ng-click="contactBtn()">Contacto</a>
-			    <a class="float-r cursor">Anónimo</a>
+			    <a class="float-r cursor" href="/asociados/dashboard">Anónimo</a>
 	  		</div>
 			
 		</div>
@@ -48,7 +48,7 @@
 	  		<div class="line">
 			  	<a class="float-l cursor" ng-click="loginBtn()">Login</a>
 			  	<a class="cursor" ng-click="contactBtn()">Contacto</a>
-			    <a class="float-r cursor">Anónimo</a>
+			    <a class="float-r cursor" href="/asociados/dashboard">Anónimo</a>
 	  		</div>
 		</div>
 		<div class="error">
@@ -65,7 +65,7 @@
 		  		<div class="line">
 				  	<a class="float-l cursor" ng-click="loginBtn()">Login</a>
 				  	<a class="cursor" ng-click="registerBtn()">Registrarse</a>
-				    <a class="float-r cursor">Anónimo</a>
+				    <a class="float-r cursor" href="/asociados/dashboard">Anónimo</a>
 		  		</div>
 			</div>
 		<div class="error">
@@ -79,20 +79,20 @@
 	<div class="modal info" ng-hide="modalInd || modalEmp || modalMaster">
 			<div class="column-left">
 				<div class="individual">
-					<a class="cursor" ng-click="modalInd = true"><img src="img/logo.jpg"></a>
+					<a class="cursor" ng-click="modalInd = true"><img src="img/individual-default.jpg"></a>
 				</div>
 			</div>
 			<div class="column-right">
 				<div class="empresas">
-					<a class="cursor" ng-click="modalEmp = true"><img src="img/logo.jpg"></a>
+					<a class="cursor" ng-click="modalEmp = true"><img src="img/empresas-default.jpg"></a>
 				</div>
 			</div>
 	</div>
 
 	<div class="modal m-individual ng-hide" ng-show="modalInd && !modalMaster">
 		<div class="m-body">
-			<img class="float-l cursor" src="img/logo.jpg" ng-click="registerBtn(true)">
-			<img class="cursor" src="img/logo.jpg">
+			<img class="float-l cursor" src="img/registrarse-default.jpg" ng-click="registerBtn(true)">
+			<a href="asociados/dashboard"><img class="cursor" src="img/invitado-default.jpg"></a>
 		</div>
 	</div>
 
@@ -102,13 +102,12 @@
 				<iframe width="650" height="340" src="https://www.youtube.com/embed/NtDG-Cnj-pw" frameborder="0" allowfullscreen=""></iframe>
 			</div>
 			<div>
-				<img class="cursor img-continue" src="img/logo.jpg" ng-click="contactBtn(true)">
+				<img class="cursor img-continue" src="img/continuar-default.jpg" ng-click="contactBtn(true)">
 			</div>
 		</div>
 	</div>
 
-	<form id="frm" action="/dashboard" method="post" style="display: none;">
-	    <input type="text" name="Authorization" id="token">
+	<form id="frm" action="/asociados/dashboard" method="get" style="display: none;">
 	</form>
 
 	<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>

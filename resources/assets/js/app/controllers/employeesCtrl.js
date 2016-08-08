@@ -162,7 +162,7 @@ angular.module('App')
         }
 
         function resetDays(){
-            for(i in $scope.days){
+            for(var i in $scope.days){
                 $scope.days[i] = false;
             }
         }

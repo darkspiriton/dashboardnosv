@@ -122,7 +122,7 @@ angular.module('App')
                                             <td>${$scope.product}</td>
                                             <td>${( function(){
                                                 var code = "";
-                                                for(i in $scope.codes){
+                                                for(var i in $scope.codes){
                                                     if($scope.codes[i].id==$scope.liquidation.id){
                                                         code += $scope.codes[i].name+"<br>"    
                                                     }                                                   

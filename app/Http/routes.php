@@ -46,6 +46,10 @@ Route::group(['prefix'=>'dashboard'],function(){
     Route::get('/','Auth\AuthTokenController@getDashboard');
 });
 
+Route::group(['prefix'=>'asociados/dashboard'],function(){
+    Route::get('/','Auth\AuthTokenController@dashboard_associated');
+});
+
 Route::group(['prefix' => 'api'], function(){
 
     /**
@@ -299,7 +303,8 @@ Route::group(['prefix' => 'api'], function(){
      * Associate
      */
 
-    Route::post("associate/contact","RequestApplicationController@contact");
+    Route::resource("associate","RequestApplicationController", ["only" => ["index","store","show","update"]]);
+    Route::resource("associate/get/status","RequestApplicationController@status");
 
 });
 

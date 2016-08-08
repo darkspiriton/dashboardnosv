@@ -27,6 +27,9 @@
         <li id="indicator7">
             <a href="#" ui-sref="Indicator7"><i class="md md-assessment"></i>Reporte General de movimientos</a>
         </li>
+        <li id="RequestApplication">
+            <a ui-sref="RequestApplication"><i class="md md-assignment"></i>Atender formulario de contacto </a>
+        </li>               
     </ul>
 @stop
 

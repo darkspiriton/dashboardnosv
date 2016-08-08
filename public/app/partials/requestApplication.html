@@ -6,6 +6,17 @@
                 title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
     </div>
 
+    <div class="card-header bgm-lightblue">
+       <div ng-form="dates" class="row report-date">
+
+            <h2 class="col-xs-5 col-sm-1 text-right m-t-20">Estado</h2>
+            <select class="col-xs-7 col-sm-2 m-t-20" ng-options="status.id as status.name for status in statusResource" ng-change="filter(status)" ng-model="status">
+               <option value="" selected="selected" disabled="disabled">Seleccione</option>
+            </select>
+
+       </div>
+    </div>
+
     <div class="card-body card-padding table-responsive">
         <div class="col-sm-12" ng-show="updateList">
             <i class="fa fa-refresh fa-spin fa-5x" style="display: table;margin: 0 auto;"></i>
@@ -13,25 +24,6 @@
         <div class="col-sm-12" ng-hide="updateList">
             <table id="table" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
         </div><br>
-    </div><br>
-</div>
-
-<div class="card" >
-    <div class="card-header bgm-blue">
-        <h2>Hoja de despacho por dia</h2>
-    </div>
-    <div class="card-header bgm-lightblue">
-       <div ng-form="dates" class="row report-date">
-            <h2 class="col-xs-5 col-sm-3 text-right m-t-20">Fecha de despacho</h2>
-            <input type="date" class="btn btn-default col-xs-7 col-sm-2 m-t-20" ng-change="filter()" ng-model="dispatch" required>
-
-            <input type="button" ng-disabled="downloadBtn" ng-click="download()" class="btn bgm-purple m-l-20 m-t-20 col-sm-2" value="DESCARGAR">
-       </div>
-    </div>
-    <div class="card-body card-padding table-responsive">
-        <div class="col-sm-12" ng-hide="updateList">
-            <table id="dispatch" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
-        </div>
     </div><br>
 </div>
 
@@ -67,81 +59,6 @@
                             <button ng-disabled="!form.$valid" ng-click="submit()" type="button" class="btn btn-primary btn-sm waves-effect">Guardar</button>
                             <a ng-click="cancel()" class="btn btn-danger btn-sm waves-effect">Cancelar</a>
                         </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="reProgram" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header bgm-teal">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                <h3 class="modal-title c-white">Reprogramacion de salida</h3>
-            </div>
-            <div class="modal-body card-padding">
-                <form name="default" class="form-horizontal" autocomplete="off">
-                    <div class="form-group m-b-0">
-                        <label class="col-xs-12 col-sm-4 control-label">Fecha de salida</label>
-                        <div class="col-xs-12 col-sm-4 report-date">
-                             <input type="date" class="btn btn-block btn-default m-t-5" ng-model="programDate" required>
-                        </div>
-                        <div class="col-xs-12 col-sm-4">
-                            <a class="btn btn-block btn-primary m-t-5" ng-disabled="!default.$valid" ng-click="prdProgram()">guardar</a>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="discountUpdate" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header bgm-teal">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                <h3 class="modal-title c-white">Actualizar descuento de producto</h3>
-            </div>
-            <div class="modal-body card-padding">
-                <form name="default2" class="form-horizontal" autocomplete="off">
-                    <div class="form-group m-b-0">  
-                        <label class="col-xs-12 col-sm-4 control-label" style="padding-top: 0px;">Precio Final actual</label>
-                        <div class="col-xs-12 col-sm-6 report-date">
-                             <input disabled type="number" class="btn btn-block btn-default m-t-5" ng-model="priceAuxFinal">
-                        </div>                      
-                        <label class="col-xs-12 col-sm-4 control-label" style="padding-top: 0px;">Descuento actual</label>
-                        <div class="col-xs-12 col-sm-6 report-date">
-                             <input disabled type="number" class="btn btn-block btn-default m-t-5" ng-model="discountAux">
-                        </div>
-                                            
-                        <label class="col-xs-12 col-sm-4 control-label" style="padding-top: 0px;">Nuevo descuento</label>
-                        <div class="col-xs-12 col-sm-6 report-date">
-                             <input type="number" class="btn btn-block btn-default m-t-5" ng-model="discountNew" ng-change="validatePrice(discountNew)" min="0" required>
-                        </div>
-
-                        <label class="col-xs-12 col-sm-4 control-label">Nuevo Precio Final</label>
-                        <div class="col-xs-12 col-sm-6 report-date">
-                             <input disabled type="number" class="btn btn-block btn-default m-t-5" ng-model="priceAuxNew">
-                        </div>
-
-                        <div class="col-xs-12 col-sm-12">
-                            <a class="btn btn-block btn-primary m-t-5" ng-disabled="!default2.$valid || discountValid" ng-click="discountUpdate()">guardar</a>
-                        </div>
-
-
                     </div>
                 </form>
             </div>

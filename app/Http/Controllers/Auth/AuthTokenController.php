@@ -126,10 +126,11 @@ class AuthTokenController extends Controller
 
 
         $user = new User;
-        $user->first_name = $request->input('name');
-        $user->email = $request->input('email');
-        $user->phone = $request->input('phone');
-        $user->password = bcrypt($request->input('password'));
+        $user->first_name = ucwords(request('name'));
+        $user->last_name = "Asociado";
+        $user->email = request('email');
+        $user->phone = request('phone');
+        $user->password = bcrypt(request('password'));
         $user->role_id = 7;
         $user->save();
 
@@ -146,6 +147,7 @@ class AuthTokenController extends Controller
         
         try{
             if($user!= null) {
+
                 if ($user->role->abrev == 'GOD') {
                     return view('auxGod');
                 } else if ($user->role->abrev == 'ADM') {
@@ -170,7 +172,17 @@ class AuthTokenController extends Controller
             }
         }catch(\Exception $e){
             return "Error en login";
-        }   
+        }
+        
+    }
+
+    public function dashboard_associated(Request $request){
+        
+        try{
+            return view('associated');
+        }catch(\Exception $e){
+            return "Error en login";
+        }
         
     }
 

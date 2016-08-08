@@ -24,11 +24,7 @@ angular.module("loginApp")
 		}
 
 		var redirect = function (){
-		    var token = auth.getToken();
-		    if (token){
-		        $('#token').val(token);
-		        $('#frm').submit();
-		    }
+		    $('#frm').submit();
 		};
 
 		var validateKey = function(){
@@ -75,7 +71,7 @@ angular.module("loginApp")
 		var contact = function(user){
 			hideError();
 			var deferred = q.defer();
-			http.post(baseUrl("api/associate/contact"), user)
+			http.post(baseUrl("api/associate"), user)
 			    .then(function(response) {
 			        deferred.resolve(response.data);
 			    })

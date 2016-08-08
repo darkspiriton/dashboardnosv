@@ -60,7 +60,7 @@ angular.module('App')
 
         $scope.addOption = function(option){
             var count = 0;
-            for(i in  $scope.question.options){
+            for(var i in  $scope.question.options){
                 if(angular.equals(option,$scope.question.options[i])){
                     count++;
                     break;

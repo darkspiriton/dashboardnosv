@@ -75,7 +75,7 @@ angular.module('App')
         function productEdit(questionnaire,questions) {
             $scope.questionnaire = questionnaire;
             $scope.questionnaire.questions = [];
-            for(i in questions){
+            for(var i in questions){
                 $scope.questionnaire.questions.push({id: questions[i].id});
             }
             $scope.questionsView = questions;
@@ -83,7 +83,7 @@ angular.module('App')
         
         $scope.addQuestion = function (ind) {
             var count = 0;
-            for(i in  $scope.questionnaire.questions){
+            for(var i in  $scope.questionnaire.questions){
                 if($scope.questions[ind].id == $scope.questionnaire.questions[i].id){
                     count++;
                     $scope.question = null;

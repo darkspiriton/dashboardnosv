@@ -22,7 +22,7 @@ class Product extends Model
     }
 
     public function photos(){
-        return $this->hasMany(Photo::class,'request_product_id');
+        return $this->hasMany(Photo::class, "request_product_id");
     }
 
     public function getUserStatusAttribute(){

@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use Dashboard\Models\Request\User as User;
 use Dashboard\Models\Request\Photo;
 use Dashboard\Models\Request\Product;
+use Firebase\JWT\ExpiredException;
+use Firebase\JWT\JWT;
+use Config;
 
 class RequestProductController extends Controller
 {
@@ -62,22 +65,25 @@ class RequestProductController extends Controller
      */
     public function store(Request $request)
     {
+
         $rules = [
             'name' => 'required|string',
             'description' => 'required|string',
             'price' =>  'required|numeric',
-            // 'status' => 'required',
-            // 'user_request_id' => 'integer',
-            // 'user_id' => 'integer',
-            // 'photos' => 'required|array',
             'nameUser' => 'string',
             'email' => 'email',
-            'phone' => 'numeric'
+            'phone' => 'string'
         ];
+
         $validator = \Validator::make($request->all(),$rules);
+
+        // return $validator->messages();
+
         if($validator->fails()){
             return response()->json(['message'=>'Parametros recibidos no validos'],401);
         }
+
+
 
         if($request->has('nameUser') && $request->has('email') && $request->has('phone')){            
             $name = strtolower($request->input('nameUser'));
@@ -86,12 +92,12 @@ class RequestProductController extends Controller
 
             $user = User::where('name',$name)
                             ->where('email',$email)
-                            ->where('phone',$phone)->get();
+                            ->where('phone',$phone)->first();
 
             
             //Validar la cantidad de request creados por un usuario
-            if(!$user->isEmpty()){
-                $cantP = Product::where('user_request_id',$user[0]->id)
+            if($user != null){
+                $cantP = Product::where('user_request_id',$user->id)
                                         ->where('status',1)->count();
             }else{
                 $cantP = 0;     
@@ -105,18 +111,23 @@ class RequestProductController extends Controller
                 $product->price=$request->input('price');
                 $product->status=1;
 
-                if(!$user->isEmpty()){
-                    $product->user_request_id=$user[0]->id;
-                    // $product->user()->save($user[0]);
+                $product->save();
+
+                if($user != null){
+                    $product->user_request_id = $user->id;
+                    $product->save();
                 }else{
                     $user = new User();
-                    $user->name=$name;
-                    $user->email=$email;
-                    $user->phone=$phone;
+                    $user->name = $name;
+                    $user->email = $email;
+                    $user->phone = $phone;
+                    $user->status = 4;
                     $user->save();
-                    $product->user()->save($user);
+
+                    $product->user_request_id = $user->id;
+                    $product->save();
                 }      
-                $product->save();
+                
                 
                 $this->saveStorage($request,$product);
 
@@ -125,7 +136,33 @@ class RequestProductController extends Controller
                 return response()->json(['message' => 'No se registro porque posee muchos pedidos aun por validar'],404);
             }           
 
-        }elseif($request->has('user')['sub']){
+        }elseif($request->has('token')){
+
+        /** 
+            helper
+        */
+            try{
+                $payload = (array) JWT::decode(request("token"), Config::get('app.jwt_token'), array('HS256'));
+
+                if($payload == null)
+                    return response()->json(['message' => 'El Token Alterado'],401);
+
+                $request['user'] = $payload;
+            }catch( DomainException $e){
+                return response()->json(['message' => 'El formato de autorizacion no es valido'], 401);
+            }catch( ErrorException $e){
+                return response()->json(['message' => 'El formato de la cabecera de autorizacion no es valido'], 401);
+            }catch (ExpiredException $e){
+                return response()->json(['message' => 'El tiempo de autorizacion Expiro'],401);
+            }catch (\InvalidArgumentException $e){
+                return response()->json(['message' => 'Argumento invalido'],401);
+            }catch (\UnexpectedValueException $e){
+                return response()->json(['message' => 'Valor inesperado', "error" => $e->getMessage()],401);
+            }
+
+        /**
+            END
+        */
 
             //capturamos el id de usuario logueado
             $user_id = $request->input('user')['sub'];
@@ -168,8 +205,8 @@ class RequestProductController extends Controller
 
         $photo = new Photo();
         $photo->url = $image_name;
-        $photo->product()->save($product);
-        $photo->save();
+
+        $product->photos()->save($photo);
     }
 
     private function saveStorage(Request $request,$product){

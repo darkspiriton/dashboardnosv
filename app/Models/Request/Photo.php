@@ -11,13 +11,14 @@ class Photo extends Model
     protected $id = 'id';
     protected $appends = ['link'];
     protected $hidden = ['url'];
+    public $timestamps = false;
 
     public function product(){
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Product::class, "request_product_id");
     }
 
     public function getLinkAttribute(){
-        return url('/img/publicities/'.$this->attributes['url']);
+        return url('/img/request/'.$this->attributes['url']);
     }
 
 }

@@ -155,7 +155,7 @@ elixir(function(mix) {
      */
 
     mix.browserify([
-        "app/controllers/RequestProductCtrl.js"
+        "app/controllers/RequestProductAssociatedCtrl.js"
         ], "public/app/controllers/compile/associatedControllers.js");
 
 

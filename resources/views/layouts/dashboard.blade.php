@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title ng-bind-html="pageTitle"></title>
-    <link rel="icon" type="image/jpeg" href="img/favicon.jpg" />
+    <link rel="icon" type="image/jpeg" href="{{ asset('img/favicon.jpg') }}" />
     @include('layouts.dashHead')
     <!-- <base href="/dashboard"> -->
 </head>

@@ -164,7 +164,7 @@ class AuthTokenController extends Controller
                         return view('proveedor');
                     }
                 }else{
-                    return "Error en login";
+                    return view('logout');
                 }
             }else{
                 return view('logout');

@@ -380,16 +380,21 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
         function AppCtrl($state, $log, $scope, $window, $auth, storage, $location) {
         $scope.pageTitle = 'Home';
 
+        $scope.logout = function () {
+            if (storage.get("roleName") == "Asociado"){
+                storage.removeStorage();
+                $window.location.href = "/asociados";
+            } else if (storage.get("roleName") === null){
+                storage.removeStorage();
+                $window.location.href = "/asociados";
+            } else {
+                storage.removeStorage();
+                $window.location.href = "/";
+            }
+        };
+
+        
         if ($auth.isAuthenticated()) {
-            $scope.logout = function () {
-                if (storage.get("roleName") == "Asociado"){
-                    storage.removeStorage();
-                    $window.location.href = "/asociados";
-                } else {
-                    storage.removeStorage();
-                    $window.location.href = "/";
-                }
-            };
 
             var role = storage.get('roleName');
             var name = storage.get('fullName');

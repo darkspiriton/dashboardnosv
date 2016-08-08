@@ -26,7 +26,7 @@
 	  		<div class="line">
 			  	<a class="float-l cursor" ng-click="registerBtn()">Registrarse</a>
 			  	<a class="cursor" ng-click="contactBtn()">Contacto</a>
-			    <a class="float-r cursor">Anónimo</a>
+			    <a class="float-r cursor" href="/asociados/dashboard">Anónimo</a>
 	  		</div>
 			
 		</div>
@@ -48,7 +48,7 @@
 	  		<div class="line">
 			  	<a class="float-l cursor" ng-click="loginBtn()">Login</a>
 			  	<a class="cursor" ng-click="contactBtn()">Contacto</a>
-			    <a class="float-r cursor">Anónimo</a>
+			    <a class="float-r cursor" href="/asociados/dashboard">Anónimo</a>
 	  		</div>
 		</div>
 		<div class="error">
@@ -65,7 +65,7 @@
 		  		<div class="line">
 				  	<a class="float-l cursor" ng-click="loginBtn()">Login</a>
 				  	<a class="cursor" ng-click="registerBtn()">Registrarse</a>
-				    <a class="float-r cursor">Anónimo</a>
+				    <a class="float-r cursor" href="/asociados/dashboard">Anónimo</a>
 		  		</div>
 			</div>
 		<div class="error">
@@ -92,7 +92,7 @@
 	<div class="modal m-individual ng-hide" ng-show="modalInd && !modalMaster">
 		<div class="m-body">
 			<img class="float-l cursor" src="img/registrarse-default.jpg" ng-click="registerBtn(true)">
-			<img class="cursor" src="img/invitado-default.jpg">
+			<a href="asociados/dashboard"><img class="cursor" src="img/invitado-default.jpg"></a>
 		</div>
 	</div>
 
@@ -107,8 +107,7 @@
 		</div>
 	</div>
 
-	<form id="frm" action="/dashboard" method="post" style="display: none;">
-	    <input type="text" name="Authorization" id="token">
+	<form id="frm" action="/asociados/dashboard" method="get" style="display: none;">
 	</form>
 
 	<script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>

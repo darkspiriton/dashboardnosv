@@ -171,12 +171,6 @@ elixir(function(mix) {
 
     /*
      |
-     |  Compile for APP-USC
-     |
-     */
-
-    /*
-     |
      |  Compile for Login 
      |
      */

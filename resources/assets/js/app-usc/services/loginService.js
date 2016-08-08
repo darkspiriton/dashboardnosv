@@ -24,11 +24,7 @@ angular.module("loginApp")
 		}
 
 		var redirect = function (){
-		    var token = auth.getToken();
-		    if (token){
-		        $('#token').val(token);
-		        $('#frm').submit();
-		    }
+		    $('#frm').submit();
 		};
 
 		var validateKey = function(){

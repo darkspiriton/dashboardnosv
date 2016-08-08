@@ -147,26 +147,38 @@ class AuthTokenController extends Controller
         
         try{
             if($user!= null) {
-                if ($user->role->abrev == 'GOD') {
-                    return view('auxGod');
-                } else if ($user->role->abrev == 'ADM') {
-                    return view('auxAdministrator');
-                } else if ($user->role->abrev == 'VEN') {
-                    return view('vendedor');
-                } else if ($user->role->abrev == 'JVE') {
-                    return view('auxCoordinador');
-                } else if ($user->role->abrev == 'EMP') {
-                    return view('empleado');
-                } else if ($user->role->abrev == 'PUB') {
-                    return view('publicidad');
-                } else if ($user->role->abrev == 'PRO') {
-                    return view('proveedor');
-                } else if ($user->role->abrev == 'USC') {
-                    return view('associated');
+                if($user->role->abrev != 'USC') {
+                    if ($user->role->abrev == 'GOD') {
+                        return view('auxGod');
+                    } else if ($user->role->abrev == 'ADM') {
+                        return view('auxAdministrator');
+                    } else if ($user->role->abrev == 'VEN') {
+                        return view('vendedor');
+                    } else if ($user->role->abrev == 'JVE') {
+                        return view('auxCoordinador');
+                    } else if ($user->role->abrev == 'EMP') {
+                        return view('empleado');
+                    } else if ($user->role->abrev == 'PUB') {
+                        return view('publicidad');
+                    } else if ($user->role->abrev == 'PRO') {
+                        return view('proveedor');
+                    }
+                }else{
+                    return "Error en login";
                 }
             }else{
                 return view('logout');
             }
+        }catch(\Exception $e){
+            return "Error en login";
+        }
+        
+    }
+
+    public function dashboard_associated(Request $request){
+        
+        try{
+            return view('associated');
         }catch(\Exception $e){
             return "Error en login";
         }

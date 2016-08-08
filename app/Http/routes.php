@@ -46,6 +46,10 @@ Route::group(['prefix'=>'dashboard'],function(){
     Route::get('/','Auth\AuthTokenController@getDashboard');
 });
 
+Route::group(['prefix'=>'asociados/dashboard'],function(){
+    Route::get('/','Auth\AuthTokenController@dashboard_associated');
+});
+
 Route::group(['prefix' => 'api'], function(){
 
     /**

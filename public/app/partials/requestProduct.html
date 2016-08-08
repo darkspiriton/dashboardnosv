@@ -6,14 +6,14 @@
                 title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
     </div>
     <div class="card-header bgm-lightblue">
-        <div class="row report-date">
+       <div ng-form="dates" class="row report-date">
 
-             <h2 class="col-xs-5 col-sm-2 text-right m-t-20">Filtro por estado</h2>
-             <select class="col-xs-7 col-sm-2 m-t-20" ng-change="changeStatus()" ng-options="estado.id as estado.name for estado in estados" ng-model="status" required>
-                 <option  value="" disabled="disabled" select="true">Seleccione</option>
-             </select>
+            <h2 class="col-xs-5 col-sm-1 text-right m-t-20">Estado</h2>
+            <select class="col-xs-7 col-sm-2 m-t-20" ng-options="estado.id as estado.name for estado in estados" ng-change="changeStatus()" ng-model="status">
+               <option value="" selected="selected" disabled="disabled">Seleccione</option>
+            </select>
 
-        </div>
+       </div>
     </div>
 
     <div class="card-body card-padding table-responsive">

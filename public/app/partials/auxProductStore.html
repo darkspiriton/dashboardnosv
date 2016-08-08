@@ -1,0 +1,422 @@
+<div class="card" >
+    <div class="card-header bgm-blue">
+        <h2>Gestión de productos</h2>
+        <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="list()"
+                data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
+                title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
+    </div>
+    <div class="card-header bgm-lightblue">
+       <div ng-form="dates" class="row report-date">
+
+            <h2 class="col-xs-5 col-sm-1 text-right m-t-20">Tipo</h2>
+            <select class="col-xs-7 col-sm-2 m-t-20" ng-options="type.id as type.name for type in types" ng-model="data.type">
+               <option value="" selected="selected">Seleccione</option>
+            </select>
+
+            <h2 class="col-xs-5 col-sm-1 text-right  m-t-20">Proveedor</h2>
+            <select class="col-xs-7 col-sm-2 m-t-20" ng-options="provider.id as provider.name for provider in providers" ng-model="data.provider_id">
+               <option value="" selected="selected">Seleccione</option>
+            </select>
+
+            <h2 class="col-xs-5 col-sm-1 text-right m-t-20">Venta</h2>
+            <select class="col-xs-7 col-sm-2 m-t-20" ng-model="data.status_sale">
+               <option value="" selected="selected">Seleccione</option>
+               <option value="0" selected="selected">Normal</option>
+               <option value="1" selected="selected">Liquidacion</option>
+            </select>
+
+            <h2 class="col-xs-5 col-sm-1 text-right m-t-20">Estado</h2>
+            <select class="col-xs-7 col-sm-2 m-t-20" ng-model="data.status">
+                <option value="" selected="selected">Seleccione</option>
+                <option value="0">Salida</option>
+                <option value="1">Disponible</option>
+                <option value="2">Vendido</option>
+                <option value="3">Reservado</option>
+            </select>
+
+            <h2 class="col-xs-5 col-sm-1 m-t-20 text-right">Producto</h2>
+            <select class="col-xs-7 col-sm-2 m-t-20" ng-options="product.name as product.name for product in products" ng-model="data.product">
+               <option value=""  selected="selected">Seleccione</option>
+            </select>
+
+            <h2 class="col-xs-5 col-sm-1 m-t-20 text-right">Talla</h2>
+            <select class="col-xs-7 col-sm-2 m-t-20" ng-options="size.id as size.name for size in sizes" ng-model="data.size">
+               <option value=""  selected="selected">Seleccione</option>
+            </select>
+
+            <h2 class="col-xs-5 col-sm-1 m-t-20 text-right">Color</h2>
+            <select class="col-xs-7 col-sm-2 m-t-20" ng-options="color.id as color.name for color in colors" ng-model="data.color">
+               <option value="" selected="selected">Seleccione</option>
+            </select>
+
+            <div class="col-xs-offset-0 col-xs-12 col-sm-offset-1 col-sm-2 p-0 m-t-20">
+                <input type="button" ng-disabled="!dates.$valid" ng-click="searchList(data)" class="btn bgm-indigo col-sm-6" value="buscar">
+                <input type="button" ng-click="download(data)" ng-disabled="downloadBtn" class="btn bgm-purple col-sm-6" value="PDF">
+            </div>
+       </div>
+    </div>
+
+    <div class="card-body card-padding table-responsive">
+        <div class="col-sm-12" ng-show="updateList">
+            <i class="fa fa-refresh fa-spin fa-5x" style="display: table;margin: 0 auto;"></i>
+        </div><br>
+        <div class="col-sm-12" ng-hide="updateList">
+            <table id="table" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
+        </div><br>
+    </div><br>
+</div>
+
+<div class="card" id="formulariohide">
+    <div class="card-header bgm-blue">
+        <h2>Crear Producto</h2>
+    </div>
+
+    <div class="card-body card-padding" >
+
+        <div class="card-header">
+            <h2>Datos de Producto</h2>
+        </div>
+
+        <form name="formproduct" id="form" class="form-horizontal" autocomplete="off">
+            <div class="form-group">
+                <label class="col-xs-2 col-sm-2 control-label">Nombre</label>
+                <div class="col-xs-10 col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-person"></i></span>
+                        <div class="fg-line">
+                            <input ng-model="product.id" type="hidden">
+                            <input ng-model="product.name" type="text" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+
+                <label class="col-xs-2 col-sm-2 control-label">Proveedor</label>
+                <div class="col-xs-10 col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-list"></i></span>
+                        <div class="fg-line select">
+                            <select class="form-control" ng-change="eventProvider(product.provider_id)" ng-options="provider.id as provider.name for provider in providers" ng-model="product.provider_id" required>
+                                <option value="" disabled="disabled" select="true">Seleccione</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-xs-2 col-sm-2 control-label">Talla</label>
+                <div class="col-xs-10 col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-list"></i></span>
+                        <div class="fg-line select">
+                            <select class="form-control" ng-options="size.id as size.name for size in sizes" ng-model="product.size_id" required>
+                                <option value="" disabled="disabled" select="true">Seleccione</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <label class="col-xs-2 col-sm-2 control-label">Color</label>
+                <div class="col-xs-10 col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-list"></i></span>
+                        <div class="fg-line select">
+                            <select class="form-control" ng-change="eventColor(product.color_id)" ng-options="color.id as color.name for color in colors" ng-model="product.color_id" required>
+                                <option value="" disabled="disabled" select="true">Seleccione</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-xs-2 col-sm-2 control-label">Tipo</label>
+                <div class="col-xs-10 col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-list"></i></span>
+                        <div class="fg-line select">
+                            <select class="form-control" ng-change="addType(typeSelect)" ng-options="$index as type.name for ($index, type) in types" ng-model="typeSelect">
+                                <option value="" disabled="disabled" select="true">Seleccione</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--<div class="card-header">-->
+                <!--<h2>Tipos categorias</h2>-->
+            <!--</div>-->
+
+            <div class="row">
+                <div class="attr-group col-xs-10 col-xs-offset-2 product-types-label">
+                    <label ng-repeat="type in product.types">{{type.name}}<i ng-click="removeType($index)" class="md md-delete"></i></label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-xs-2 col-sm-2 control-label">Costo Proveedor S/.</label>
+                <div class="col-xs-10 col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-picture-in-picture"></i></span>
+                        <div class="fg-line">
+                            <input ng-model="product.cost" type="number" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+
+                <label class="col-xs-2 col-sm-2 control-label">Utilidad S/.</label>
+                <div class="col-xs-10 col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-picture-in-picture"></i></span>
+                        <div class="fg-line">
+                            <input ng-model="product.uti" type="number" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-xs-2 col-sm-2 control-label">Codigo</label>
+                <div class="col-xs-10 col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-picture-in-picture"></i></span>
+                        <div class="fg-line">
+                            <input ng-model="product.cod" type="number" class="form-control" required>
+                        </div>
+                    </div>
+                </div>
+
+                <label class="col-xs-2 col-sm-2 control-label">Cantidad</label>
+                <div class="col-xs-10 col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-picture-in-picture"></i></span>
+                        <div class="fg-line">
+                            <input ng-model="product.cant" type="number" class="form-control" ng-disabled="!productState" ng-required="productState">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-header">
+                <h2>Informacion de Alarma</h2>
+            </div>
+
+            <div class="form-group">
+                <label class="col-xs-2 col-sm-2 control-label">Dias</label>
+                <div class="col-xs-10 col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-picture-in-picture"></i></span>
+                        <div class="fg-line">
+                            <input ng-model="product.alarm.day" type="number" class="form-control"  ng-required="productState">
+                        </div>
+                    </div>
+                </div>
+
+                <label class="col-xs-2 col-sm-2 control-label">Cantidad</label>
+                <div class="col-xs-10 col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-picture-in-picture"></i></span>
+                        <div class="fg-line">
+                            <input ng-model="product.alarm.count" type="number" class="form-control" ng-required="productState">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </form>
+
+        <form class="form-horizontal">
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button ng-disabled="!formproduct.$valid || formSubmit" ng-click="submit()" type="button" class="btn btn-primary btn-sm waves-effect">Guardar</button>
+                    <a ng-click="cancel()" class="btn btn-danger btn-sm waves-effect">Cancelar</a>
+                </div>
+            </div>
+        </form>
+
+        <div class="card-header">
+            <h2>Disponibilidad</h2>
+        </div>
+
+        <form class="form-horizontal">
+            <div class="form-group">
+                <div class="col-xs-12 col-sm-offset-2 col-sm-10">
+                    <a ng-click="listCodes()" ng-disabled="btnCods" class="btn btn-success btn-sm waves-effect">Listar Codigos</a>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-xs-2 col-sm-2 control-label">Códigos: </label>
+                <div class="col-xs-10 m-t-15"><span ng-repeat="code in codes">{{ code + ',&nbsp;&nbsp;&nbsp;&nbsp;' }}</span>--></div>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<!-- Modal -->
+<!-- Nuevo Feature -->
+<div class="modal fade" id="feature" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bgm-teal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title c-white">{{ newFeature.tittle }}</h3>
+            </div>
+            <div class="modal-body card-padding">
+                <form name="form" class="form-horizontal" autocomplete="off">
+                    <div class="form-group">
+                        <label class="col-xs-2 col-sm-5 control-label">{{ newFeature.label }}</label>
+                        <div class="col-xs-10 col-sm-5">
+                            <input ng-model="newFeature.name" type="text" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button ng-disabled="!form.$valid" ng-click="addFeature()" type="button" class="btn btn-primary btn-sm waves-effect">Agregar</button>
+                            <button ng-click="cancelFeature()" type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="productMovements" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bgm-teal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title c-white">Detalle de movimientos</h3>
+            </div>
+            <div class="modal-body card-padding">
+                <form class="form-horizontal" autocomplete="off" submit="return false;">
+                    <div class="form-group">
+                        <div class="col-xs-12">
+                            <div class="row">
+                                <div class="attr-group col-xs-12">
+                                    <table class="table table-bordered w-100 table-attr text-center table-mediun">
+                                        <thead>
+                                        <tr>
+                                            <th style="padding: 10 5;">F. Pedido</th>
+                                            <th style="padding: 10 5;">F. Entrega</th>
+                                            <th style="padding: 10 5;">N° P.</th>
+                                            <th style="padding: 10 5;">Vendedor(a)</th>
+                                            <th style="padding: 10 5;">Codigo</th>
+                                            <th style="padding: 10 5;">Producto</th>
+                                            <th style="padding: 10 5;">Color</th>
+                                            <th style="padding: 10 5;">Talla</th>
+                                            <th style="padding: 10 5;">Estado</th>
+                                            <th style="padding: 10 5;">Estado V.</th>
+                                            <th style="padding: 10 5;">P. Real</th>
+                                            <th style="padding: 10 5;">Precio</th>
+                                            <th style="padding: 10 5;">Desc.</th>
+                                            <th style="padding: 10 5;">P. Final</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr ng-repeat="movement in productMovements">
+                                                <td style="display: table-cell;padding: 10 5;width:100px">{{ movement.pedido }}</td>
+                                                <td style="display: table-cell;padding: 10 5;">{{ movement.entrega }}</td>
+                                                <td style="display: table-cell;padding: 10 5;">{{ movement.cod_order }}</td>
+                                                <td style="display: table-cell;padding: 10 5;">{{ movement.seller }}</td>
+                                                <td style="display: table-cell;padding: 10 5;">{{ movement.codigo }}</td>
+                                                <td style="display: table-cell;padding: 10 5;">{{ movement.product }}</td>
+                                                <td style="display: table-cell;padding: 10 5;">{{ movement.color }}</td>
+                                                <td style="display: table-cell;padding: 10 5;">{{ movement.talla }}</td>
+                                                <td style="display: table-cell;padding: 10 5;" ng-bind-html="movementStatus(movement)"></td>
+                                                <td style="display: table-cell;padding: 10 5;" ng-bind-html="payStatus(movement.liquidation)"></td>
+                                                <td style="display: table-cell;padding: 10 5;">{{ movement.price_real }}</td>
+                                                <td style="display: table-cell;padding: 10 5;">{{ movement.price }}</td>
+                                                <td style="display: table-cell;padding: 10 5;">{{ movement.discount }}</td>
+                                                <td style="display: table-cell;padding: 10 5;">{{ movement.price_final }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="Modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bgm-teal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title c-white">Motivo de observación</h3>
+            </div>
+            <div class="modal-body card-padding">
+                <form name="form" class="form-horizontal" autocomplete="off">
+                    <div class="form-group">
+                        <label class="col-xs-2 col-sm-4 control-label">Seleccione motivo de observación</label>
+                        <div class="col-xs-10 col-sm-6">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="md md-list"></i></span>
+                                <div class="fg-line select">
+                                    <select class="form-control" ng-options="situation.name as situation.name for situation in situations" ng-model="productAux.situation" required>
+                                        <option value="" disabled="disabled" select="true">Seleccione</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button ng-disabled="!form.$valid" ng-click="changeObserve()" type="button" class="btn btn-primary btn-sm waves-effect">Guardar</button>
+                            <a ng-click="cancel()" class="btn btn-danger btn-sm waves-effect">Cancelar</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="ModalDetail" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bgm-teal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title c-white">Motivo de observación</h3>
+            </div>
+            <div class="modal-body card-padding">
+                <form name="form2" class="form-horizontal" autocomplete="off">
+                    <div class="form-group">
+                        <label class="col-xs-2 col-sm-4 control-label">{{observe_detail}}</label>
+                    </div>
+                </form>
+
+    
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

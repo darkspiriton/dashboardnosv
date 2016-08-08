@@ -35,6 +35,12 @@ elixir(function(mix) {
  */
 
 elixir(function(mix) {
+     
+
+    mix.browserify([
+        "app/controllers/auxProductStoreCtrl.js",
+        "app/controllers/auxStockVENCtrl.js",
+        ], "public/app/controllers/compile/almacenControllers.js");
     
     /*
      |
@@ -190,6 +196,7 @@ elixir(function(mix) {
 
     mix.version([
         //  JS
+        "public/app/controllers/compile/almacenControllers.js",
         "public/app/controllers/compile/coordinadorControllers.js",
         "public/app/controllers/compile/vendedorControllers.js",
         "public/app/controllers/compile/godControllers.js",

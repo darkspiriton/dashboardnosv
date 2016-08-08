@@ -30,7 +30,7 @@ angular.module('App')
 
         var a1 = [
                     ['Cliente', 'prdClient' ,'bgm-blue'],
-                    ['Detalle', 'prdPhoto' ,'bgm-blue'],
+                    ['Fotos', 'prdPhoto' ,'bgm-orange'],
                     ['Cambiar Estado', 'prdUpdate' ,'bgm-green'],
                     ['Eliminar', 'prdDelete' ,'bgm-red'],
                 ];
@@ -204,7 +204,19 @@ angular.module('App')
                                             <th>${$scope.tableData[i].name}</th>
                                             <th>${$scope.tableData[i].description}</th>
                                             <td>${$scope.tableData[i].price}</td>
-                                            <td>${$scope.tableData[i].status}</td>                                            
+                                            <td>${function(){
+                                                switch($scope.tableData[i].status) {
+                                                    case 1:
+                                                        return "No Atendido";
+                                                        
+                                                    case 2:
+                                                        return "Atendido";
+                                                        
+                                                    case 3:
+                                                        return "Rechazado";
+                                                        
+                                                }
+                                            }()}</td>                                             
                                         </tr>
                                         </tbody>
                                     </table>

@@ -148,6 +148,16 @@ elixir(function(mix) {
         "app/controllers/RequestApplicationCtrl.js"
         ], "public/app/controllers/compile/admControllers.js");
 
+    /*
+     |
+     |  Compile for ASSOCIATED
+     |
+     */
+
+    mix.browserify([
+        "app/controllers/RequestProductCtrl.js"
+        ], "public/app/controllers/compile/associatedControllers.js");
+
 
     /*
      |
@@ -194,6 +204,7 @@ elixir(function(mix) {
         "public/app/appLogin.js",
         "public/app/controllers/loginCtrl.js",
         "public/app-usc/compiled/loginApp.js",
+        "public/app/controllers/compile/associatedControllers.js",
         //  CSS
         "css/app.min.1.css",
         "css/app.min.2.css",

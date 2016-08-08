@@ -122,6 +122,7 @@ class AuthTokenController extends Controller
                 } else if ($user->role->abrev == 'STO') {
                     return view('auxStore');
                 }
+                
             }else{
                 return view('logout');
             }

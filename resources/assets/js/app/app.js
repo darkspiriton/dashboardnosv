@@ -382,8 +382,13 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
 
         if ($auth.isAuthenticated()) {
             $scope.logout = function () {
-                storage.removeStorage();
-                $window.location.href = "/";
+                if (storage.get("roleName") == "Asociado"){
+                    storage.removeStorage();
+                    $window.location.href = "/asociados";
+                } else {
+                    storage.removeStorage();
+                    $window.location.href = "/";
+                }
             };
 
             var role = storage.get('roleName');

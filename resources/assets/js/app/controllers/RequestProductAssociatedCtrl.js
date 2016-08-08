@@ -23,14 +23,17 @@ angular.module('App')
         util.liPage('RequestProduct');
 
         $scope.submit = function(product){
+            $scope.formSubmit = true;
             isAuthenticated();
             petition.post("api/requestproduct", toformData.dataFile(product), {headers: {'Content-Type': undefined}})
                 .then(function(data){
                     toastr.success(data.message || "No se pudo comprobar estado de publicación");
                     $scope.new();
                     util.ocultaformulario();
+                    $scope.formSubmit = false;
                 }, function(error){
                     toastr.error(error.data.message || "Ocurrio un problema al intentar guardar su publicación");
+                    $scope.formSubmit = false;
                 });
         };
 
@@ -53,8 +56,6 @@ angular.module('App')
         }
 
         angular.element(document).ready(function(){
-            $scope.list();
-            $scope.estados();
             isAuthenticated();
         });
     }]);

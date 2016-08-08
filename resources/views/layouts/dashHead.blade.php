@@ -1,10 +1,10 @@
 <!-- Vendor CSS -->
-<link href="vendors/bower_components/fullcalendar/dist/fullcalendar.min.css" rel="stylesheet">
-<link href="vendors/bower_components/animate.css/animate.min.css" rel="stylesheet">
-<link href="vendors/bower_components/sweetalert/dist/sweetalert-override.min.css" rel="stylesheet">
-<link href="vendors/bower_components/material-design-iconic-font/css/material-design-iconic-font.min.css" rel="stylesheet">
-<link href="vendors/socicon/socicon.min.css" rel="stylesheet">
-<link href="vendors/datatables/dataTables.bootstrap.css" rel="stylesheet" type="text/css">
+<link href="{{ asset('vendors/bower_components/fullcalendar/dist/fullcalendar.min.css') }}" rel="stylesheet">
+<link href="{{ asset('vendors/bower_components/animate.css/animate.min.css') }}" rel="stylesheet">
+<link href="{{ asset('vendors/bower_components/sweetalert/dist/sweetalert-override.min.css') }}" rel="stylesheet">
+<link href="{{ asset('vendors/bower_components/material-design-iconic-font/css/material-design-iconic-font.min.css') }}" rel="stylesheet">
+<link href="{{ asset('vendors/socicon/socicon.min.css') }}" rel="stylesheet">
+<link href="{{ asset('vendors/datatables/dataTables.bootstrap.css') }}" rel="stylesheet" type="text/css">
 
 <!-- CSS -->
 <link href="{{ elixir('css/app.min.1.css') }}" rel="stylesheet">

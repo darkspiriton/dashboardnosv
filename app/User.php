@@ -2,13 +2,15 @@
 
 namespace Dashboard;
 
-use Dashboard\Models\Interest\Interest;
 use Dashboard\Models\Order\Order;
-use Dashboard\Models\Sale\Commission;
 use Dashboard\Models\Scope\Scope;
+use Dashboard\Models\Request\Product;
+use Dashboard\Models\Sale\Commission;
 use Dashboard\Models\Shipment\Tracing;
-use Illuminate\Database\Eloquent\Model;
 use Dashboard\Models\Customer\Customer;
+use Dashboard\Models\Interest\Interest;
+use Illuminate\Database\Eloquent\Model;
+use Dashboard\Models\Request\Application;
 
 class User extends Model
 {
@@ -62,6 +64,14 @@ class User extends Model
 
     public function getFullNameAttribute(){
         return $this->last_name.','.' '.$this->first_name;
+    }
+
+    public function requestAplications(){
+        $this->hasMany(Application::class);
+    }
+
+    public function requestProducts(){
+        $this->hasMany(Product::class);
     }
 
 }

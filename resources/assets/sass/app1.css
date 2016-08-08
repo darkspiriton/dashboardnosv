@@ -10294,6 +10294,7 @@ body #content {
   color: #fff;
   margin-top: 20px;
   position: relative;
+  height: 32px;
 }
 
 #sidebar .profile-menu > a .profile-info > i {

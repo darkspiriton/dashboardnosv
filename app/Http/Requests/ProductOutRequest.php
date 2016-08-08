@@ -34,16 +34,6 @@ class ProductOutRequest extends Request
         ];
     }
 
-    public function messages(){
-        return [
-            'products.required'    => 'Producto(s) son requeridos',
-            'requestDate.required'  => 'Fecha de pedido es requerido',
-            'shipmentDate.required'  => 'Fecha de salida es requerido',
-            'codOrder.required'    => 'Codigo de orden es requerido',
-            'seller_id.required' => 'Vendedor(a) es requerido'
-        ];
-    }
-
     public function response(array $errors)
     {
         return response()->json(["message" => "Parametros recibidos invalidos.", "errors" => $errors], 422);

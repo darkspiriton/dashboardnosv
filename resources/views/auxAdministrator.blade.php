@@ -4,22 +4,22 @@
     <ul class="main-menu">
         <li class="active"><a href="#/"><i class="md md-home"></i> Inicio</a></li>
         <li id="outs">
-            <a ui-sref="outs"><i class="md md-shop-two"></i> Productos en stock-salida-ventas de hoy</a>
+            <a ui-sref="outs"><i class="md md-swap-horiz"></i> Productos en stock-salida-ventas de hoy</a>
         </li>
         <li id="products">
-            <a href="#" ui-sref="Productos"><i class="md md-shop-two"></i> Administrar Productos</a>
+            <a href="#" ui-sref="Productos"><i class="md md-shopping-cart"></i> Administrar Productos</a>
         </li>
         <li id="stock">
             <a href="#" ui-sref="Stock"><i class="md md-shop-two"></i>Stock de Productos</a>
         </li>
         <li id="movimientos">
-            <a href="#" ui-sref="Movimientos"><i class="md md-shop-two"></i>Generar Salida</a>
+            <a href="#" ui-sref="Movimientos"><i class="md md-trending-neutral"></i>Generar Salida</a>
         </li>
         <li id="movimientos2">
-            <a href="#" ui-sref="Movimientos2"><i class="md md-shop-two"></i>Generar Retorno - Venta</a>
+            <a href="#" ui-sref="Movimientos2"><i class="md md-swap-horiz"></i>Generar Retorno - Venta</a>
         </li>
         <li class="sub-menu">
-            <a href="#"><i class="md md-now-widgets"></i> Inidcadores </a>
+            <a href="#"><i class="md md-trending-up"></i> Inidcadores </a>
             <ul>
                 <li id="indicator1"><a  ui-sref="Indicator1"> Stock General  </a></li>
                 <li id="indicator2"><a  ui-sref="Indicator2"> Stock Por Talla  </a></li>
@@ -31,7 +31,7 @@
         </li>
 
         <li class="sub-menu">
-            <a href="#"><i class="md md-now-widgets"></i> Administracion de planilla </a>
+            <a href="#"><i class="md md-local-parking"></i> Administracion de planilla </a>
             <ul>
                 <li id="employees">
                     <a ui-sref="Employees"><i class="md md-security"></i> Administrar empleados</a>
@@ -45,7 +45,7 @@
             </ul>
         </li>
         <li class="sub-menu">
-            <a href="#"><i class="md md-now-widgets"></i> Gestión de Cuestionarios </a>
+            <a href="#"><i class="md md-assignment"></i> Gestión de Cuestionarios </a>
             <ul>
                 <li id="categories">
                     <a ui-sref="categories"><i class="md md-security"></i> Categorías de cuestionarios</a>
@@ -70,33 +70,18 @@
         <li id="comments">
             <a href="#" ui-sref="Comentarios"><i class="md md-messenger"></i> Administrar comentarios</a>
         </li>
-
+        <li class="sub-menu">
+            <a href="#"><i class="md md-view-carousel"></i> Gestion de Ventas Web </a>
+            <ul>
+                <li id="RequestProduct"><a ui-sref="RequestProduct"> Gestion de Ventas Individuales </a></li>
+                <li id="RequestApplication"><a ui-sref="RequestApplication"> Gestion de Ventas Empresas </a></li>               
+            </ul>
+        </li>
     </ul>
 @stop
 
 @section('dashCtrls')
-    <script src="app/controllers/homeCtrl.js"></script>
-    <script src="app/controllers/auxProductCtrl.js"></script>
-    <script src="app/controllers/auxIndicator1Ctrl.js"></script>
-    <script src="app/controllers/auxIndicator2Ctrl.js"></script>
-    <script src="app/controllers/auxIndicator3Ctrl.js"></script>
-    <script src="app/controllers/auxIndicator4Ctrl.js"></script>
-    <script src="app/controllers/auxIndicator5Ctrl.js"></script>
-    <script src="app/controllers/auxIndicator6Ctrl.js"></script>
-    <script src="app/controllers/usersCtrl.js"></script>
-    <script src="app/controllers/commentsCtrl.js"></script>
-    <script src="app/controllers/auxStockCtrl.js"></script>
-    <script src="app/controllers/employeesCtrl.js"></script>
-    <script src="app/controllers/payrollEntryCtrl.js"></script>
-    <script src="app/controllers/godEmployeeAssistsCtrl.js"></script>
-    <script src="app/controllers/indicatorPayRoleCtrl.js"></script>
-    <script src="app/controllers/products_out.js"></script>
-    <script src="app/controllers/auxMovementCtrl.js"></script>
-    <script src="app/controllers/auxMovement2Ctrl.js"></script>
-    <script src="app/controllers/q_questionnairesCtrl.js"></script>
-    <script src="app/controllers/q_questionsCtrl.js"></script>
-    <script src="app/controllers/q_categoriesCtrl.js"></script>
-    <script src="app/controllers/q_AnswerIndicator.js"></script>
-    <script src="app/controllers/q_productsCtrl.js"></script>
-    <script src="app/controllers/q_customersCtrl.js"></script>
+    <script src="app/lib/filesave.js"></script>
+    {{-- Dependencias en Resource/assets/js/app - Gulpfile.js --}}
+    <script src="{{ elixir('app/controllers/compile/admControllers.js') }}"></script>
 @stop

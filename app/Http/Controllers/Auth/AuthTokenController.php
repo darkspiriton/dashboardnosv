@@ -168,6 +168,7 @@ class AuthTokenController extends Controller
                 }else{
                     return view('logout');
                 }
+                
             }else{
                 return view('logout');
             }

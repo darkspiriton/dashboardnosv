@@ -22,7 +22,7 @@ class auxProductFiltersController extends Controller
      */
     public function __construct()
     {
-        $this->middleware("auth:GOD,ADM,JVE", ["only" => ["FilterForAll"]]);
+        $this->middleware("auth:GOD,ADM,JVE,STO", ["only" => ["FilterForAll"]]);
     }
 
     /**

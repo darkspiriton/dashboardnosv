@@ -205,7 +205,7 @@ class RequestProductController extends Controller
         // return Photo::all();
         $product = Product::with('photos')
                             ->where('id',$id)->get();
-        return $product;
+
         if(!$product->isEmpty()){       
             return response()->json(['product'=>$product ],200);
         }else{
@@ -287,7 +287,7 @@ class RequestProductController extends Controller
 
         $validator = \Validator::make($request->all(),$rules);
         if($validator->fails()){
-            return response()->json(['message' => 'No se cuanta con lo valores validos'],401);
+            return response()->json(['message' => 'No se cuenta con lo valores validos'],401);
         }
 
         if($request->status == 1){

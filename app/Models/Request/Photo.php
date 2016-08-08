@@ -9,7 +9,7 @@ class Photo extends Model
 {
     protected $table = 'photos_products';
     protected $id = 'id';
-    protected $appends = ['Link'];
+    protected $appends = ['link'];
     protected $hidden = ['url'];
 
     public function product(){

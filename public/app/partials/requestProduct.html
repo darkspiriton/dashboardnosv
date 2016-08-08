@@ -35,118 +35,98 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="Modal" tabindex="-1" role="dialog">
+<div class="modal fade" id="clientModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bgm-teal">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h3 class="modal-title c-white">Motivo de retorno</h3>
+                <h3 class="modal-title c-white">Detalle de cliente</h3>
             </div>
             <div class="modal-body card-padding">
                 <form name="form" class="form-horizontal" autocomplete="off">
                     <div class="form-group">
-                        <label class="col-xs-2 col-sm-4 control-label">Seleccione motivo de retorno</label>
-                        <div class="col-xs-10 col-sm-6">
+                        <label class="col-xs-2 col-sm-4 control-label">Nombre</label>
+                        <div class="col-xs-10 col-sm-8">
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="md md-list"></i></span>
-                                <div class="fg-line select">
-                                    <select class="form-control" ng-options="situation.id as situation.name for situation in situations" ng-model="product.situation" required>
-                                        <option value="" disabled="disabled" select="true">Seleccione</option>
-                                    </select>
+                                <div class="fg-line">
+                                    <label class="col-xs-6 col-sm-6 control-label">{{client.name}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-2 col-sm-4 control-label">Correo</label>
+                        <div class="col-xs-10 col-sm-8">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="md md-list"></i></span>
+                                <div class="fg-line">
+                                    <label class="col-xs-6 col-sm-6 control-label">{{client.email}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-2 col-sm-4 control-label">Teléfono</label>
+                        <div class="col-xs-10 col-sm-8">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="md md-list"></i></span>
+                                <div class="fg-line">
+                                    <label class="col-xs-6 col-sm-6 control-label">{{client.phone}}</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-xs-2 col-sm-4 control-label">Creación</label>
+                        <div class="col-xs-10 col-sm-8">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="md md-list"></i></span>
+                                <div class="fg-line">
+                                    <label class="col-xs-6 col-sm-6 control-label">{{client.created_at}}</label>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="cancel()">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-                <form class="form-horizontal">
+<!-- Modal -->
+<div class="modal fade" id="Photo" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header bgm-teal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title c-white">Vista de Fotos</h3>
+            </div>
+
+            <div class="modal-body card-padding" ng-repeat="photo in product.photos">
                     <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-10">
-                            <button ng-disabled="!form.$valid" ng-click="submit()" type="button" class="btn btn-primary btn-sm waves-effect">Guardar</button>
-                            <a ng-click="cancel()" class="btn btn-danger btn-sm waves-effect">Cancelar</a>
+                        <div class="col-xs-12" style="margin: 0 0 10px 0 ">
+                            <img ng-src="{{photo.link}}" class="w-100">
                         </div>
                     </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="reProgram" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header bgm-teal">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                <h3 class="modal-title c-white">Reprogramacion de salida</h3>
-            </div>
-            <div class="modal-body card-padding">
-                <form name="default" class="form-horizontal" autocomplete="off">
-                    <div class="form-group m-b-0">
-                        <label class="col-xs-12 col-sm-4 control-label">Fecha de salida</label>
-                        <div class="col-xs-12 col-sm-4 report-date">
-                             <input type="date" class="btn btn-block btn-default m-t-5" ng-model="programDate" required>
-                        </div>
-                        <div class="col-xs-12 col-sm-4">
-                            <a class="btn btn-block btn-primary m-t-5" ng-disabled="!default.$valid" ng-click="prdProgram()">guardar</a>
-                        </div>
+                    <div class="modal-footer">
+                        <a type="button" ng-href="{{photo.link}}" class="btn btn-success pull-left" download>Descargar</a>  
                     </div>
-                </form>
-            </div>
-            <div class="modal-footer">
+            </div> 
+
+            <div class="modal-footer">               
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
             </div>
-        </div>
-    </div>
-</div>
 
-<!-- Modal -->
-<div class="modal fade" id="discountUpdate" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header bgm-teal">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                <h3 class="modal-title c-white">Actualizar descuento de producto</h3>
-            </div>
-            <div class="modal-body card-padding">
-                <form name="default2" class="form-horizontal" autocomplete="off">
-                    <div class="form-group m-b-0">  
-                        <label class="col-xs-12 col-sm-4 control-label" style="padding-top: 0px;">Precio Final actual</label>
-                        <div class="col-xs-12 col-sm-6 report-date">
-                             <input disabled type="number" class="btn btn-block btn-default m-t-5" ng-model="priceAuxFinal">
-                        </div>                      
-                        <label class="col-xs-12 col-sm-4 control-label" style="padding-top: 0px;">Descuento actual</label>
-                        <div class="col-xs-12 col-sm-6 report-date">
-                             <input disabled type="number" class="btn btn-block btn-default m-t-5" ng-model="discountAux">
-                        </div>
-                                            
-                        <label class="col-xs-12 col-sm-4 control-label" style="padding-top: 0px;">Nuevo descuento</label>
-                        <div class="col-xs-12 col-sm-6 report-date">
-                             <input type="number" class="btn btn-block btn-default m-t-5" ng-model="discountNew" ng-change="validatePrice(discountNew)" min="0" required>
-                        </div>
-
-                        <label class="col-xs-12 col-sm-4 control-label">Nuevo Precio Final</label>
-                        <div class="col-xs-12 col-sm-6 report-date">
-                             <input disabled type="number" class="btn btn-block btn-default m-t-5" ng-model="priceAuxNew">
-                        </div>
-
-                        <div class="col-xs-12 col-sm-12">
-                            <a class="btn btn-block btn-primary m-t-5" ng-disabled="!default2.$valid || discountValid" ng-click="discountUpdate()">guardar</a>
-                        </div>
-
-
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-            </div>
         </div>
     </div>
 </div>

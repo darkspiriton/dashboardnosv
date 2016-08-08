@@ -20,7 +20,7 @@ angular.module('App')
 
         var a1 = [
                     ['Cliente', 'prdClient' ,'bgm-blue'],
-                    ['Detalle', 'prdReturn' ,'bgm-blue'],
+                    ['Detalle', 'prdPhoto' ,'bgm-blue'],
                     ['Cambiar Estado', 'prdUpdate' ,'bgm-green'],
                     ['Eliminar', 'prdDelete' ,'bgm-red'],
                     // ['reprogramar', 'reprogramar' ,'bgm-purple']
@@ -156,7 +156,7 @@ angular.module('App')
                                             <th>Producto</th>
                                             <th>Descripcion</th>
                                             <th>Precio</th>
-                                            <th>Estado</th>
+                                            <th>Nuevo Estado</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -164,7 +164,19 @@ angular.module('App')
                                             <th>${$scope.tableData[i].name}</th>
                                             <th>${$scope.tableData[i].description}</th>
                                             <td>${$scope.tableData[i].price}</td>
-                                            <td>${$scope.tableData[i].status}</td>                                            
+                                            <td>${function(){
+                                                switch($scope.tableData[i].status) {
+                                                    case 1:
+                                                        return "Atendido";
+                                                        
+                                                    case 2:
+                                                        return "Rechazado";
+                                                        
+                                                    case 3:
+                                                        return "Sin Cambios";
+                                                        
+                                                }
+                                            }()}</td>                                            
                                         </tr>
                                         </tbody>
                                     </table>
@@ -221,22 +233,38 @@ angular.module('App')
 
         
 
-        $scope.list = function() {
-            var $id=$scope.tableData[i].id;
-            $scope.updateList = true;
-            petition.get('/api/requestproduct'+$id)
+        $scope.prdClient = function(i) {
+            // var $id=$scope.tableData[i].id;
+            var userId;
+            if ($scope.tableData[i].userStatus === 1){
+                userId=$scope.tableData[i].user_request_id;
+            }else if($scope.tableData[i].userStatus === 0){
+                userId=$scope.tableData[i].user_id;
+            }
+            // $scope.updateList = true;
+            petition.get('api/requestproduct/user/get/'+userId , {params: {status:$scope.tableData[i].userStatus} })
                 .then(function(data){
-                    $scope.product = data.product;
-                    if($scope.product.userPrueba == 1){
-
-                    }else if($scope.product.userPrueba === 0){
-
-                    }
-                    $scope.updateList = false;
+                    $scope.client = data.user;
+                    console.log($scope.client);
+                    util.modal("clientModal");
+                    // $scope.updateList = false;
                 }, function(error){
                     console.log(error);
                     toastr.error('Ups ocurrio un problema: ' + error.data.message);
-                    $scope.updateList = false;
+                    // $scope.updateList = false;
+                });
+        };
+
+        $scope.prdPhoto = function(i){
+            var id=$scope.tableData[i].id;
+            petition.get('api/requestproduct/'+id)
+                .then(function(data){
+                    $scope.product = data.product[0];
+                    // console.log($scope.product[0]);
+                    util.modal("Photo");
+                }, function(error){
+                    console.log(error);
+                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
                 });
         };
 

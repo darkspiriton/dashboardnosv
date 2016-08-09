@@ -22,7 +22,8 @@ angular.module('App')
                     ['Retornado', 'prdReturn' ,'bgm-teal'],
                     ['Vendido', 'prdSale' ,'bgm-blue'],
                     ['Eliminar', 'prdDelete' ,'bgm-red'],
-                    ['reprogramar', 'reprogramar' ,'bgm-purple']
+                    ['reprogramar', 'reprogramar' ,'bgm-purple'],
+                    ['descuento', 'discountEdit' ,'bgm-red']
                 ];
 
         $scope.tableConfig 	= 	{

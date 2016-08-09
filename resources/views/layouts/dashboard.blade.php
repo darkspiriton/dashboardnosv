@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title ng-bind-html="pageTitle"></title>
-    <link rel="icon" type="image/jpeg" href="img/favicon.jpg" />.
+    <link rel="icon" type="image/jpeg" href="{{ asset('img/favicon.jpg') }}" />
     @include('layouts.dashHead')
     <!-- <base href="/dashboard"> -->
 </head>
@@ -22,7 +22,7 @@
         </li>
 
         <li class="logo hidden-xs">
-            <a href="#/" ng-bind-html="'Dashboard | ' + userInfo.role"></a>
+            <a href="#/" ng-bind-html="'Dashboard | ' + (userInfo.role || 'Asociados')"></a>
         </li>
 
         <li class="pull-right">
@@ -62,7 +62,7 @@
                     </div>
 
                     <div class="profile-info">
-                        <span ng-bind-html="userInfo.name"></span>
+                        <span ng-bind-html="userInfo.name || 'Invitado'"></span>
                         <i class="md md-arrow-drop-down"></i>
                     </div>
                 </a>
@@ -105,54 +105,53 @@
 </footer>
 
 <!-- Javascript Libraries -->
-<script src="vendors/bower_components/jquery/dist/jquery.min.js"></script>
-<script src="vendors/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="{{ asset('vendors/bower_components/jquery/dist/jquery.min.js') }}"></script>
+<script src="{{ asset('vendors/bower_components/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 
-<script src="vendors/bower_components/flot/jquery.flot.js"></script>
-<script src="vendors/bower_components/flot/jquery.flot.resize.js"></script>
-<script src="vendors/bower_components/flot/jquery.flot.pie.js"></script>
-<script src="vendors/bower_components/flot.tooltip/js/jquery.flot.tooltip.min.js"></script>
-<script src="vendors/bower_components/flot-orderBars/js/jquery.flot.orderBars.js"></script>
-<script src="vendors/bower_components/flot.curvedlines/curvedLines.js"></script>
-<script src="vendors/bower_components/flot-orderBars/js/jquery.flot.orderBars.js"></script>
+<script src="{{ asset('vendors/bower_components/flot/jquery.flot.js') }}"></script>
+<script src="{{ asset('vendors/bower_components/flot/jquery.flot.resize.js') }}"></script>
+<script src="{{ asset('vendors/bower_components/flot/jquery.flot.pie.js') }}"></script>
+<script src="{{ asset('vendors/bower_components/flot.tooltip/js/jquery.flot.tooltip.min.js') }}"></script>
+<script src="{{ asset('vendors/bower_components/flot-orderBars/js/jquery.flot.orderBars.js') }}"></script>
+<script src="{{ asset('vendors/bower_components/flot.curvedlines/curvedLines.js') }}"></script>
+<script src="{{ asset('vendors/bower_components/flot-orderBars/js/jquery.flot.orderBars.js') }}"></script>
 
-<script src="vendors/sparklines/jquery.sparkline.min.js"></script>
-<script src="vendors/bower_components/jquery.easy-pie-chart/dist/jquery.easypiechart.min.js"></script>
-<script src="vendors/bower_components/moment/min/moment.min.js"></script>
-<script src="vendors/bower_components/fullcalendar/dist/fullcalendar.min.js"></script>
-<script src="vendors/bower_components/simpleWeather/jquery.simpleWeather.min.js"></script>
-<script src="vendors/bower_components/jquery.nicescroll/jquery.nicescroll.min.js"></script>
-<script src="vendors/bower_components/Waves/dist/waves.min.js"></script>
-<script src="vendors/bower_components/sweetalert/dist/sweetalert.min.js"></script>
-<script src="vendors/bootstrap-growl/bootstrap-growl.min.js"></script>
-<script src="vendors/bower_components/sweetalert/dist/sweetalert.min.js"></script>
-<script src="vendors/datatables/jquery.dataTables.min.js" type="text/javascript"></script>
-<script src="vendors/datatables/dataTables.bootstrap.min.js" type="text/javascript"></script>
+<script src="{{ asset('vendors/sparklines/jquery.sparkline.min.js') }}"></script>
+<script src="{{ asset('vendors/bower_components/jquery.easy-pie-chart/dist/jquery.easypiechart.min.js') }}"></script>
+<script src="{{ asset('vendors/bower_components/moment/min/moment.min.js') }}"></script>
+<script src="{{ asset('vendors/bower_components/fullcalendar/dist/fullcalendar.min.js') }}"></script>
+<script src="{{ asset('vendors/bower_components/simpleWeather/jquery.simpleWeather.min.js') }}"></script>
+<script src="{{ asset('vendors/bower_components/jquery.nicescroll/jquery.nicescroll.min.js') }}"></script>
+<script src="{{ asset('vendors/bower_components/Waves/dist/waves.min.js') }}"></script>
+<script src="{{ asset('vendors/bower_components/sweetalert/dist/sweetalert.min.js') }}"></script>
+<script src="{{ asset('vendors/bootstrap-growl/bootstrap-growl.min.js') }}"></script>
+<script src="{{ asset('vendors/bower_components/sweetalert/dist/sweetalert.min.js') }}"></script>
+<script src="{{ asset('vendors/datatables/jquery.dataTables.min.js') }}" type="text/javascript"></script>
+<script src="{{ asset('vendors/datatables/dataTables.bootstrap.min.js') }}" type="text/javascript"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.6/Chart.min.js"></script>
 
-<script src="js/functions.js"></script>
+<script src="{{ asset('js/functions.js') }}"></script>
 
 <!-- Others Libraries -->
 <script type="text/javascript" src="http://s3.amazonaws.com/codecademy-content/courses/hour-of-code/js/alphabet.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.6/Chart.js"></script>
 
 <!-- Third-party Libraries -->
-<script src="app/lib/angular/angular.js"></script>
-<script src="app/lib/angular/angular-animate.js"></script>
-<script src="app/lib/angular/angular-messages.js"></script>
-<script src="app/lib/angular/angular-resource.js"></script>
-<script src="app/lib/angular/angular-sanitize.js"></script>
-<script src="app/lib/angular/angular-ui-router.js"></script>
-<script src="app/lib/angular/angular-toastr.tpls.js"></script>
-<script src="app/lib/angular-fb.js"></script>
-<script src="app/lib/satellizer.min.js"></script>
-<script src="app/lib/AJQtable.js"></script>
-<script src="app/lib/AJQtable2.js"></script>
+<script src="{{ asset('app/lib/angular/angular.js') }}"></script>
+<script src="{{ asset('app/lib/angular/angular-animate.js') }}"></script>
+<script src="{{ asset('app/lib/angular/angular-messages.js') }}"></script>
+<script src="{{ asset('app/lib/angular/angular-resource.js') }}"></script>
+<script src="{{ asset('app/lib/angular/angular-sanitize.js') }}"></script>
+<script src="{{ asset('app/lib/angular/angular-ui-router.js') }}"></script>
+<script src="{{ asset('app/lib/angular/angular-toastr.tpls.js') }}"></script>
+<script src="{{ asset('app/lib/angular-fb.js') }}"></script>
+<script src="{{ asset('app/lib/satellizer.min.js') }}"></script>
+<script src="{{ asset('app/lib/AJQtable.js') }}"></script>
+<script src="{{ asset('app/lib/AJQtable2.js') }}"></script>
 
 <!-- Application Code -->
-
 <script src="{{ elixir('app/app.js') }}"></script>
-<script src="app/controllers/homeCtrl.js"></script>
+<script src="{{ asset('app/controllers/homeCtrl.js') }}"></script>
 @yield('dashCtrls')
 
 

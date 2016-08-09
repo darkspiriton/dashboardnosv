@@ -12,8 +12,8 @@ class ReportPayRollController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:GOD,EMP');
-        $this->middleware('auth:GOD' , ['only' => ['get_payroll','get_assists_for_month_by_god']]);
+        $this->middleware('auth:GOD,ADM,EMP');
+        $this->middleware('auth:GOD,ADM' , ['only' => ['get_payroll','get_assists_for_month_by_god']]);
     }
 
     public function get_assists_for_month(Request $request){

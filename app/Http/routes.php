@@ -31,14 +31,23 @@ Route::get('/',['middleware'=>'web', function () {
     return view('login');
 }]);
 
+Route::get('/asociados',['middleware'=>'web', function () {
+    return view('login_usc');
+}]);
+
 Route::group(['prefix'=>'auth','middleware' => ['web']],function(){
     Route::post('/login' ,'Auth\AuthTokenController@login');
     Route::post('/signup' ,'Auth\AuthTokenController@signup');
+    Route::post('/signup/usc' ,'Auth\AuthTokenController@signup_usc');
 });
 
 Route::group(['prefix'=>'dashboard'],function(){
     Route::post('/','Auth\AuthTokenController@dashboard');
     Route::get('/','Auth\AuthTokenController@getDashboard');
+});
+
+Route::group(['prefix'=>'asociados/dashboard'],function(){
+    Route::get('/','Auth\AuthTokenController@dashboard_associated');
 });
 
 Route::group(['prefix' => 'api'], function(){
@@ -248,6 +257,17 @@ Route::group(['prefix' => 'api'], function(){
     Route::resource('payment','PayProviderController',
         ['only' => ['index','store','update','destroy']]);
 
+    /**
+     * REQUESTS PRODUCTS
+     */
+    Route::resource('requestproduct','RequestProductController',
+        ['only' => ['index','store','show','update','destroy']]);
+
+    Route::group(['prefix' => 'requestproduct' ], function(){
+        Route::get('/status/get','RequestProductController@status');
+        Route::get('/user/get/{id}','RequestProductController@getUser');
+    });
+
     Route::group(['prefix'=>'payment'],function(){
         Route::get('get','PayProviderController@getPayment');
         Route::get('bank/get','PayProviderController@getBank');
@@ -278,6 +298,14 @@ Route::group(['prefix' => 'api'], function(){
     Route::get('partner/get/products/provider/sale','PartnerController@saleMonth');
 
     Route::get('partner/get/payments','PartnerController@infoPayment');
+
+    /**
+     * Associate
+     */
+
+    Route::resource("associate","RequestApplicationController", ["only" => ["index","store","show","update"]]);
+    Route::resource("associate/get/status","RequestApplicationController@status");
+
 });
 
 /**
@@ -286,8 +314,6 @@ Route::group(['prefix' => 'api'], function(){
  */
 
 Route::get('/test', function(\Illuminate\Http\Request $request){
-    $collect = collect([0,1,2,3,4,5]);
-    return $collect->toArray();
-
+    return request("name","=D");
 });
 

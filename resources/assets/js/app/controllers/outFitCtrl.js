@@ -94,7 +94,7 @@ angular.module('App')
         $scope.addProduct = function (ind) {
             var count = 0;
             var name = $scope.products[ind].name;
-            for(i in  $scope.outfit.products){
+            for(var i in  $scope.outfit.products){
                 if(name == $scope.outfit.products[i].name){
                     count++;
                     $scope.product = null;
@@ -169,7 +169,7 @@ angular.module('App')
                                             <td>${$scope.outfit.code}</td>
                                             <td>${( function(){
                                                 var prd = ""; 
-                                                for(i in $scope.outfit.products){
+                                                for(var i in $scope.outfit.products){
                                                     prd += $scope.outfit.products[i].name+"<br>"
                                                 }
                                                 return prd; })()}
@@ -178,7 +178,7 @@ angular.module('App')
                                             <td>${( function(){
                                                 var type = "";
 
-                                                for(i in $scope.types){
+                                                for(var i in $scope.types){
                                                     if($scope.types[i].id == $scope.outfit.type){
                                                         type += $scope.types[i].name
                                                     }                                                  

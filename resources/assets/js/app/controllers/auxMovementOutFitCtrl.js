@@ -82,7 +82,7 @@ angular.module('App')
         $scope.addProduct = function (ind) {
             var count = 0;
             var name = $scope.codes[ind].n;
-            for(i in  $scope.movement.products){
+            for(var i in  $scope.movement.products){
                 if(name == $scope.productsView[i].n){
                     count++;
                     $scope.code = null;

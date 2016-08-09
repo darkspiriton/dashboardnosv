@@ -19,6 +19,7 @@ angular.module('App')
         };
 
         var a1 = [
+                    ['descuento', 'discountEdit' ,'bgm-orange'],
                     ['Retornado', 'prdReturn' ,'bgm-teal'],
                     ['Vendido', 'prdSale' ,'bgm-blue'],
                     ['Eliminar', 'prdDelete' ,'bgm-red'],

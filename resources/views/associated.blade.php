@@ -2,9 +2,9 @@
 
 @section('dashMenu')
     <ul class="main-menu">
-    	<li class="active"><a href="#/"><i class="md md-home"></i> Inicio</a></li>
+<!--     	<li class="active"><a href="#/"><i class="md md-home"></i> Inicio</a></li> -->
         <li id="RequestProduct">
-            <a ui-sref="RequestProduct"><i class="md md-shop-two"></i>Publica tus productos</a>
+            <a ui-sref="RequestProduct"><i class="md md-shop-two"></i>Publicar tus productos</a>
         </li>
     </ul>
 @stop

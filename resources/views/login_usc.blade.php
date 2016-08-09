@@ -76,6 +76,7 @@
 		</div>
 	</div>
 
+    <!-- Modal -->
 	<div class="modal info" ng-hide="modalInd || modalEmp || modalMaster">
 			<div class="column-left">
 				<div class="individual">
@@ -89,6 +90,7 @@
 			</div>
 	</div>
 
+    <!-- Modal -->
 	<div class="modal m-individual ng-hide" ng-show="modalInd && !modalMaster">
 		<div class="m-body">
 			<img class="float-l cursor" src="img/registrarse-default.jpg" ng-click="registerBtn(true)">
@@ -96,6 +98,7 @@
 		</div>
 	</div>
 
+    <!-- Modal -->
 	<div class="modal m-empresas ng-hide" ng-show="modalEmp && !modalMaster">
 		<div class="m-body">
 			<div>

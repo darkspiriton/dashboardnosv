@@ -283,7 +283,7 @@
                 <h3 class="modal-title c-white">{{ newFeature.tittle }}</h3>
             </div>
             <div class="modal-body card-padding">
-                <form name="form" class="form-horizontal" autocomplete="off">
+                <form name="form1" class="form-horizontal" autocomplete="off">
                     <div class="form-group">
                         <label class="col-xs-2 col-sm-5 control-label">{{ newFeature.label }}</label>
                         <div class="col-xs-10 col-sm-5">
@@ -293,7 +293,7 @@
 
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-10">
-                            <button ng-disabled="!form.$valid" ng-click="addFeature()" type="button" class="btn btn-primary btn-sm waves-effect">Agregar</button>
+                            <button ng-disabled="!form1.$valid" ng-click="addFeature()" type="button" class="btn btn-primary btn-sm waves-effect">Agregar</button>
                             <button ng-click="cancelFeature()" type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
                         </div>
                     </div>

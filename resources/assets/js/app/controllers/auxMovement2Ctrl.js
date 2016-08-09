@@ -23,7 +23,6 @@ angular.module('App')
                     ['Vendido', 'prdSale' ,'bgm-blue'],
                     ['Eliminar', 'prdDelete' ,'bgm-red'],
                     ['reprogramar', 'reprogramar' ,'bgm-purple'],
-                    ['descuento', 'discountEdit' ,'bgm-red']
                 ];
 
         $scope.tableConfig 	= 	{

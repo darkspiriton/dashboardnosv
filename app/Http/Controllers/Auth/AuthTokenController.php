@@ -131,7 +131,7 @@ class AuthTokenController extends Controller
         $user->email = request('email');
         $user->phone = request('phone');
         $user->password = bcrypt(request('password'));
-        $user->role_id = 7;
+        $user->role_id = 10;
         $user->save();
 
         $user->status = 1;

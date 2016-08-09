@@ -29,7 +29,8 @@ angular.module('App')
                 .then(function(data){
                     toastr.success(data.message || "No se pudo comprobar estado de publicación");
                     $scope.new();
-                    util.modal('Photo');
+                    // util.modal('Photo');
+                    swal("Se registro el pedido correctamente", "Muy pronto nos contactaremos con usted", "success");
                     util.ocultaformulario();
                     $scope.formSubmit = false;
                 }, function(error){

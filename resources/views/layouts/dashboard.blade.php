@@ -68,9 +68,9 @@
                 </a>
 
                 <ul class="main-menu">
-                    <li>
+<!--                     <li>
                         <a href="#/"><i class="md md-person"></i> Ver Perfil</a>
-                    </li>
+                    </li> -->
                     <li>
                         <a href="#" ng-click="logout()"><i class="md md-history"></i> Cerrar Sesion</a>
                     </li>

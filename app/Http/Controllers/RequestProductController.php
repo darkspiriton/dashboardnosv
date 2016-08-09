@@ -91,7 +91,8 @@ class RequestProductController extends Controller
 
             $user = User::where('name',$name)
                             ->where('email',$email)
-                            ->where('phone',$phone)->first();
+                            ->where('phone',$phone)
+                            ->where('status',4)->first();
 
             
             //Validar la cantidad de request creados por un usuario

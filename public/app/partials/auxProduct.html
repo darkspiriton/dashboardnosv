@@ -382,7 +382,7 @@
                 <h3 class="modal-title c-white">Motivo de observación</h3>
             </div>
             <div class="modal-body card-padding">
-                <form name="form2" class="form-horizontal" autocomplete="off">
+                <form name="formObserve" class="form-horizontal" autocomplete="off">
                     <div class="form-group">
                         <label class="col-xs-2 col-sm-4 control-label">Seleccione motivo de observación</label>
                         <div class="col-xs-10 col-sm-6">
@@ -401,7 +401,7 @@
                 <form class="form-horizontal">
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-10">
-                            <button ng-disabled="!form.$valid" ng-click="changeObserve()" type="button" class="btn btn-primary btn-sm waves-effect">Guardar</button>
+                            <button ng-disabled="!formObserve.$valid" ng-click="changeObserve()" type="button" class="btn btn-primary btn-sm waves-effect">Guardar</button>
                             <a ng-click="cancel()" class="btn btn-danger btn-sm waves-effect">Cancelar</a>
                         </div>
                     </div>

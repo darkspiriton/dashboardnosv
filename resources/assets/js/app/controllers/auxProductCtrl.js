@@ -670,8 +670,8 @@ angular.module('App')
             $scope.listColors();
             $scope.listTypes();
 
-            $scope.typesList();
-            $scope.providerList();
-            $scope.productList();
+            // $scope.typesList();
+            // $scope.providerList();
+            // $scope.productList();
         });
     }]);

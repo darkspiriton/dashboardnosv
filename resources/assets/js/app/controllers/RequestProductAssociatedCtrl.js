@@ -29,6 +29,7 @@ angular.module('App')
                 .then(function(data){
                     toastr.success(data.message || "No se pudo comprobar estado de publicación");
                     $scope.new();
+                    util.modal('Photo');
                     util.ocultaformulario();
                     $scope.formSubmit = false;
                 }, function(error){

@@ -65,6 +65,8 @@ class RequestProductController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
+        return $request->file()->all();
 
         $rules = [
             'name' => 'required|string',

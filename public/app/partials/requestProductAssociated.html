@@ -1,25 +1,25 @@
 
 <div class="card">
     <div class="card-header bgm-blue">
-        <h2>Crear Publicacion</h2>
+        <h2>Solicitar Publicación de Producto</h2>
     </div>
 
     <div class="card-body card-padding" >
 
         <div class="card-header">
-            <h2>Datos de Publicacion</h2>
+            <h2>Datos del Producto</h2>
         </div>
 
         <form name="formproduct" id="formproduct" class="form-horizontal" autocomplete="off">
             <div class="form-group">
-                <label class="col-xs-2 col-sm-2 control-label">Nombre</label>
+                <label class="col-xs-2 col-sm-2 control-label">Nombre de Producto:</label>
                 <div class="col-xs-10 col-sm-5">
                     <div class="fg-line">
                         <input ng-model="product.name" type="text" class="form-control" required>
                     </div>
                 </div>
 
-                <label class="col-xs-2 col-sm-2 control-label">Precio</label>
+                <label class="col-xs-2 col-sm-2 control-label">Precio de Producto S/.:</label>
                 <div class="col-xs-10 col-sm-3">
                     <div class="fg-line">
                         <input ng-model="product.price" type="numeric" class="form-control" required>
@@ -28,7 +28,7 @@
             </div>
 
             <div class="form-group">
-                <label class="col-xs-2 control-label">Descripcion</label>
+                <label class="col-xs-2 control-label">Descripción Producto:</label>
                 <div class="col-xs-10">
                     <div class="fg-line">
                         <input ng-model="product.description" type="text" class="form-control" required>
@@ -37,11 +37,11 @@
             </div>
 
             <div class="card-header">
-                <h2>Imagenes del producto</h2>
+                <h2>Imagenes del Producto</h2>
             </div>
 
             <div class="form-group">
-                <label class="col-xs-12 col-sm-2 control-label">Imagen 1</label>
+                <label class="col-xs-12 col-sm-2 control-label">Imagen 1:</label>
                 <div class="col-xs-12 col-sm-10">
                     <div class="input-group">
                         <div class="fg-line">
@@ -50,7 +50,7 @@
                     </div>
                 </div>
                 <div class="clearfix"></div>
-                <label class="col-xs-12 col-sm-2 control-label">Imagen 2</label>
+                <label class="col-xs-12 col-sm-2 control-label">Imagen 2:</label>
                 <div class="col-xs-12 col-sm-10">
                     <div class="input-group">
                         <div class="fg-line">
@@ -59,7 +59,7 @@
                     </div>
                 </div>
                 <div class="clearfix"></div>
-                <label class="col-xs-12 col-sm-2 control-label">Imagen 3</label>
+                <label class="col-xs-12 col-sm-2 control-label">Imagen 3:</label>
                 <div class="col-xs-12 col-sm-10">
                     <div class="input-group">
                         <div class="fg-line">
@@ -68,7 +68,7 @@
                     </div>
                 </div>
                 <div class="clearfix"></div>
-                <label class="col-xs-12 col-sm-2 control-label">Imagen 4</label>
+                <label class="col-xs-12 col-sm-2 control-label">Imagen 4:</label>
                 <div class="col-xs-12 col-sm-10">
                     <div class="input-group">
                         <div class="fg-line">
@@ -77,7 +77,7 @@
                     </div>
                 </div>
                 <div class="clearfix"></div>
-                <label class="col-xs-12 col-sm-2 control-label">Imagen 5</label>
+                <label class="col-xs-12 col-sm-2 control-label">Imagen 5:</label>
                 <div class="col-xs-12 col-sm-10">
                     <div class="input-group">
                         <div class="fg-line">
@@ -209,7 +209,9 @@
                 <h3 class="modal-title c-white">Vista de Fotos</h3>
             </div>
 
-            <div class="modal-body card-padding" ng-repeat="photo in product.photos">
+            Se envio el registro pronto se evaluara y se comunica con usted.
+
+<!--             <div class="modal-body card-padding" ng-repeat="photo in product.photos">
                     <div class="form-group">
                         <div class="col-xs-12" style="margin: 0 0 10px 0 ">
                             <img ng-src="{{photo.link}}" class="w-100">
@@ -218,7 +220,23 @@
                     <div class="modal-footer">
                         <a type="button" ng-href="{{photo.link}}" class="btn btn-success pull-left" download>Descargar</a>  
                     </div>
-            </div> 
+            </div>  -->
+
+            <div class="modal fade" id="formConfirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="frm_title">Delete</h4>
+                  </div>
+                  <div class="modal-body" id="frm_body"></div>
+                  <div class="modal-footer">
+                    <button style='margin-left:10px;' type="button" class="btn btn-primary col-sm-2 pull-right" id="frm_submit">Yes</button>
+                    <button type="button" class="btn btn-danger col-sm-2 pull-right" data-dismiss="modal" id="frm_cancel">No</button>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <div class="modal-footer">               
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>

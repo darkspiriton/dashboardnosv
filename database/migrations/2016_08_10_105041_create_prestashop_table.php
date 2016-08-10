@@ -22,7 +22,7 @@ class CreatePrestashopTable extends Migration
         Schema::create('requests_prestashop',function(Blueprint $table){
             $table->increments('id');                        
             $table->boolean('status');
-            $table->integer('total_price');
+            $table->float('total_price');
             $table->integer('user_id')->unsigned();            
             $table->timestamps();
 
@@ -33,7 +33,7 @@ class CreatePrestashopTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('url_image');
-            $table->string('url_prodcut');
+            $table->string('url_product');
             $table->integer('stock');
             $table->float('price');
             $table->integer('cant');

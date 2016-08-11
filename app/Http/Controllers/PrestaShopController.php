@@ -10,10 +10,10 @@ use Dashboard\Models\Prestashop\Request as RequestP;
 
 class PrestaShopController extends Controller
 {
-    // public function __constructor()
-    // {
-    //     $this->middleware('auth:GOD,ADM,JVE');
-    // }
+    public function __construct()
+    {
+        $this->middleware('auth:GOD,ADM,JVE' , ["except" => ["store"]]);
+    }
 
     /**
      * Display a listing of the resource.
@@ -60,26 +60,26 @@ class PrestaShopController extends Controller
             'name_user' => 'required|string',
             'email' => 'required|email',
             'phone' => 'required|string',
-            // 'total_price' => 'required|numeric',
             'products'  => 'required|array',
             'products.*.name_product' => 'required|string',
             'products.*.url_image' => 'required|string',
             'products.*.url_product' => 'required|string',
-            'products.*.stock' => 'required|integer',
-            'products.*.price' => 'required|price',
+            'products.*.stock' => 'required|string',
+            'products.*.price' => 'required|numeric',
             'products.*.quantity'  => 'required|integer',            
-        ];+
+        ];
 
         $validator = \Validator::make($request->all(),$rules);
+
         if($validator->fails()){
             return response()->json(['message' => 'No se cuenta con todos los campos necesarios para crear pedido ventas'],401);
         }
 
-        $total_price=0;
+        $total_price = 0;
         foreach($request->input('products') as $i => $product){
-           $price=$product->price;
-           $cant=$product->quantity;
-           $total_price=$total_price+$price*$cant;           
+           $price = $product["price"];
+           $cant = $product["quantity"];
+           $total_price = $total_price + $price * $cant;           
         }
 
         $name = strtolower($request->input('name_user'));
@@ -96,7 +96,6 @@ class PrestaShopController extends Controller
 
            $requestP = new RequestP();
            $requestP->status=0;
-           // $requestP->total_price=$request->input('total_price');
            $requestP->total_price=$total_price;
            $requestP->user_id=$user->id;
            $requestP->save();
@@ -111,8 +110,7 @@ class PrestaShopController extends Controller
 
             $request = new RequestP();
             $requestP->status=0;
-            // $request->total_price=$request->input('total_price');
-            $request->total_price=$total_price;
+            $request->total_price = $total_price;
             $requestP->user_id=$userAux->id;
             $requestP->save();  
 
@@ -120,18 +118,19 @@ class PrestaShopController extends Controller
 
         foreach($request->input('products') as $i => $product){
             $mProduct= new Product();
-            $mProduct->name=$product->name_product;
-            $mProduct->url_image=$product->url_image;
-            $mProduct->url_product=$product->url_product;
-            $mProduct->stock=$product->stock;
-            $mProduct->price=$product->price;
-            $mProduct->cant=$product->quantity;
-            $mProduct->request_id=$requestP->id;
+            $mProduct->name         =   $product["name_product"];
+            $mProduct->url_image    =   $product["url_image"];
+            $mProduct->url_product  =   $product["url_product"];
+            $mProduct->stock        =   $product["stock"];
+            $mProduct->price        =   $product["price"];
+            $mProduct->cant         =   $product["quantity"];
+            $mProduct->request_id   =   $requestP->id;
             $products[] = $mProduct;
         }
 
         $requestP->products()->saveMany($products);
 
+        return ["message" => "Su pedido se registro con exito, el mismo sera enviado a su correo y lo estaremos contactando a la brevedad."];
     }
 
     /**

@@ -50,7 +50,7 @@ angular.module('App')
                         ]
                     }
                 ],
-            data    :   ["created_at","id","cantProduct","totalPrice","user.name","user.email","user.phone","status","actions"],
+            data    :   ["created_at","id","cantProduct","total_price","user.name","user.email","user.phone","status","actions"],
         };
 
         vm.list = function(){

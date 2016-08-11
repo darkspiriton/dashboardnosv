@@ -311,7 +311,7 @@ Route::group(['prefix' => 'api'], function(){
      */
     Route::resource('prestashop','PrestaShopController',
         ["only" => ["index","store","show","update","destroy"]]);
-    Route::get('prestashop/products/{id}','PrestaShopContro@detailProduct');
+    Route::get('prestashop/products/{id}','PrestaShopController@detailProduct');
     Route::get('prestashop/get/status','PrestaShopController@status');
 
 

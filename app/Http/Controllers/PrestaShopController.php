@@ -196,7 +196,7 @@ class PrestaShopController extends Controller
         if ($products->isEmpty()){
             return response()->json(['message' => 'No existen productos asociados a este pedido'],401);
         }
-        return response()->json(['products'=>$products],200);
+        return response()->json(['products'=>$products,'message'=>'Detalle de producto correcto'],200);
     }
 
     public function status(){

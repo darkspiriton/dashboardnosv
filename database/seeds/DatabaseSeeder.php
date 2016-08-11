@@ -20,9 +20,9 @@ class DatabaseSeeder extends Seeder
 //        $this->call(PlanillaTableSeeder::class);
 //        $this->call(QuestionnairesTableSeeder::class);
        // $this->call(ProductsTableSeeder::class);
-       $this->call(PrestashopSeed::class);
+       // $this->call(PrestashopSeed::class);
 //        $this->call(GeneralTablesSeeder::class);
-       // $this->call(AuxProductsTableSeeder::class);
+       $this->call(AuxProductsTableSeeder::class);
         Model::reguard();
     }
 }

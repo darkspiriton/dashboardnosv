@@ -12,7 +12,7 @@
             <select class="col-xs-7 col-sm-2 m-t-20" ng-options="estado.id as estado.name for estado in estados" ng-change="filter()" ng-model="status">
                <option value="" selected="selected" disabled="disabled">Seleccione</option>
             </select>
-            
+
        </div>
     </div>
 
@@ -23,237 +23,26 @@
         <div class="col-sm-12" ng-hide="updateList">
             <table id="table" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
         </div><br>
-        <div class="card-footer">
+<!--         <div class="card-footer">
             <input  class="btn bgm-green waves-effect" type='submit' value='Nuevo registro' ng-click="new();">
-        </div>
+        </div> -->
     </div><br>
 </div>
 
 <div class="card" id="formulariohide">
     <div class="card-header bgm-blue">
-        <h2>Crear Publicacion</h2>
+        <h2>Detalle de Compra PrestaShop</h2>
     </div>
-
-    <div class="card-body card-padding" >
-
-        <div class="card-header">
-            <h2>Datos de Publicacion</h2>
-        </div>
-
-        <form name="formproduct" id="formproduct" class="form-horizontal" autocomplete="off">
-            <div class="form-group">
-                <label class="col-xs-2 col-sm-2 control-label">Nombre</label>
-                <div class="col-xs-10 col-sm-5">
-                    <div class="fg-line">
-                        <input ng-model="product.name" type="text" class="form-control" required>
-                    </div>
-                </div>
-
-                <label class="col-xs-2 col-sm-2 control-label">Precio</label>
-                <div class="col-xs-10 col-sm-3">
-                    <div class="fg-line">
-                        <input ng-model="product.price" type="numeric" class="form-control" required>
-                    </div>
-                </div>
+    <div  class="card-body card-padding" >
+        <div class="card-body card-padding table-responsive">
+            <div class="col-sm-12" ng-show="updateList2">
+                <i class="fa fa-refresh fa-spin fa-5x" style="display: table;margin: 0 auto;"></i>
+            </div><br>
+            <div class="col-sm-12" ng-hide="updateList2">
+                <table id="table2" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
+            </div><br>
+            <div class="card-footer">
+                <input  class="btn bgm-red waves-effect" type='submit' value='Cerrar' ng-click="close();">
             </div>
-
-            <div class="form-group">
-                <label class="col-xs-2 control-label">Descripcion</label>
-                <div class="col-xs-10">
-                    <div class="fg-line">
-                        <input ng-model="product.description" type="text" class="form-control" required>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card-header">
-                <h2>Imagenes del producto</h2>
-            </div>
-
-            <div class="form-group">
-                <label class="col-xs-12 col-sm-2 control-label">Imagen 1</label>
-                <div class="col-xs-12 col-sm-10">
-                    <div class="input-group">
-                        <div class="fg-line">
-                            <input file-model="product.img1" type="file" class="form-control m-t-15" required>
-                        </div>
-                    </div>
-                </div>
-                <div class="clearfix"></div>
-                <label class="col-xs-12 col-sm-2 control-label">Imagen 2</label>
-                <div class="col-xs-12 col-sm-10">
-                    <div class="input-group">
-                        <div class="fg-line">
-                            <input file-model="product.img2" type="file" class="form-control m-t-15">
-                        </div>
-                    </div>
-                </div>
-                <div class="clearfix"></div>
-                <label class="col-xs-12 col-sm-2 control-label">Imagen 3</label>
-                <div class="col-xs-12 col-sm-10">
-                    <div class="input-group">
-                        <div class="fg-line">
-                            <input file-model="product.img3" type="file" class="form-control m-t-15">
-                        </div>
-                    </div>
-                </div>
-                <div class="clearfix"></div>
-                <label class="col-xs-12 col-sm-2 control-label">Imagen 4</label>
-                <div class="col-xs-12 col-sm-10">
-                    <div class="input-group">
-                        <div class="fg-line">
-                            <input file-model="product.img4" type="file" class="form-control m-t-15">
-                        </div>
-                    </div>
-                </div>
-                <div class="clearfix"></div>
-                <label class="col-xs-12 col-sm-2 control-label">Imagen 5</label>
-                <div class="col-xs-12 col-sm-10">
-                    <div class="input-group">
-                        <div class="fg-line">
-                            <input file-model="product.img5" type="file" class="form-control m-t-15">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div ng-if="GuestUser">
-                <div class="card-header">
-                    <h2>Informacion de contacto</h2>
-                </div>
-
-                <div class="form-group">
-                    <label class="col-xs-2 col-sm-2 control-label">Nombre</label>
-                    <div class="col-xs-10 col-sm-4">
-                        <div class="fg-line">
-                            <input ng-model="product.nameUser" type="text" class="form-control" required>
-                        </div>
-                    </div>
-
-                    <label class="col-xs-2 col-sm-2 control-label">Correo</label>
-                    <div class="col-xs-10 col-sm-4">
-                        <div class="fg-line">
-                            <input ng-model="product.email" type="email" class="form-control" required>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label class="col-xs-2 col-sm-2 control-label">Teléfono</label>
-                    <div class="col-xs-10 col-sm-4">
-                        <div class="fg-line">
-                            <input ng-model="product.phone" type="text" class="form-control" required>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </form>
-
-        <form class="form-horizontal">
-            <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
-                    <button ng-disabled="!formproduct.$valid || formSubmit" ng-click="submit(product)" type="button" class="btn btn-primary btn-sm waves-effect">Guardar</button>
-                    <a ng-click="cancel()" class="btn btn-danger btn-sm waves-effect">Cancelar</a>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="clientModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header bgm-teal">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                <h3 class="modal-title c-white">Detalle de cliente</h3>
-            </div>
-            <div class="modal-body card-padding">
-                <form name="form" class="form-horizontal" autocomplete="off">
-                    <div class="form-group">
-                        <label class="col-xs-2 col-sm-4 control-label">Nombre</label>
-                        <div class="col-xs-10 col-sm-8">
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="md md-list"></i></span>
-                                <div class="fg-line">
-                                    <label class="col-xs-6 col-sm-6 control-label">{{client.name}}</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-xs-2 col-sm-4 control-label">Correo</label>
-                        <div class="col-xs-10 col-sm-8">
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="md md-list"></i></span>
-                                <div class="fg-line">
-                                    <label class="col-xs-6 col-sm-6 control-label">{{client.email}}</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-xs-2 col-sm-4 control-label">Teléfono</label>
-                        <div class="col-xs-10 col-sm-8">
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="md md-list"></i></span>
-                                <div class="fg-line">
-                                    <label class="col-xs-6 col-sm-6 control-label">{{client.phone}}</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-xs-2 col-sm-4 control-label">Creación</label>
-                        <div class="col-xs-10 col-sm-8">
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="md md-list"></i></span>
-                                <div class="fg-line">
-                                    <label class="col-xs-6 col-sm-6 control-label">{{client.created_at}}</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="cancel()">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="Photo" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-
-            <div class="modal-header bgm-teal">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                <h3 class="modal-title c-white">Vista de Fotos</h3>
-            </div>
-
-            <div class="modal-body card-padding" ng-repeat="photo in product.photos">
-                    <div class="form-group">
-                        <div class="col-xs-12" style="margin: 0 0 10px 0 ">
-                            <img ng-src="{{photo.link}}" class="w-100">
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <a type="button" ng-href="{{photo.link}}" class="btn btn-success pull-left" download>Descargar</a>  
-                    </div>
-            </div> 
-
-            <div class="modal-footer">               
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-            </div>
-
-        </div>
-    </div>
+        </div><br>        
 </div>

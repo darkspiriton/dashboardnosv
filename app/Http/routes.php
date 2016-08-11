@@ -306,6 +306,13 @@ Route::group(['prefix' => 'api'], function(){
     Route::resource("associate","RequestApplicationController", ["only" => ["index","store","show","update"]]);
     Route::resource("associate/get/status","RequestApplicationController@status");
 
+    /**
+     * PrestaShop
+     */
+    Route::resource('prestashop','PrestaShopController',
+        ["only" => ["index","store","show","update","destroy"]]);
+
+
 });
 
 /**

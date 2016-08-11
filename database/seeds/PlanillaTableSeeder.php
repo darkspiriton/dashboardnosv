@@ -12,7 +12,7 @@ class PlanillaTableSeeder extends Seeder
      */
     public function run()
     {
-        $faker = Faker::create();
+        $faker = Faker::create('es_ES');
 
         DB::transaction(function () {
             DB::table('days')->insert(['day' => 'Lunes']);

@@ -29,22 +29,19 @@ class CreatePrestashopTable extends Migration
             $table->foreign('user_id')->references('id')->on('users_prestashop');
         });
 
-        Schema:: create('products_prestahop', function(Blueprint $table){
+        Schema:: create('products_prestashop', function(Blueprint $table){
             $table->increments('id');
             $table->string('name');
             $table->string('url_image');
             $table->string('url_product');
-            $table->integer('stock');
+            $table->string('stock');
             $table->float('price');
             $table->integer('cant');
             $table->integer('request_id')->unsigned();
 
-            $table->foreign('request_id')->references('id')->on('products_prestahop');
+            $table->foreign('request_id')->references('id')->on('requests_prestashop');
         });
-
-
-
-
+        
     }
 
     /**

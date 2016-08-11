@@ -10,6 +10,7 @@ class Product extends Model
     protected $table='products_prestashop';
     protected $id='id';
     protected $appends = ['priceSubTotal'];
+    public $timestamps = false;
 
     public function request(){
         return $this->belognsTo(Request::class);

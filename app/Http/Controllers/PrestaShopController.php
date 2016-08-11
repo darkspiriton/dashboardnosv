@@ -22,10 +22,23 @@ class PrestaShopController extends Controller
      */
     public function index(Request $request)
     {
+
         if ($request->has('status')){
-           $requestP =  RequestP::with('user')->where('status',$request->input('status'))->get();
+            $rules = [
+                'status' => 'integer|between:0,2',
+            ];
+            $validator = \Validator::make($request->all(),$rules);
+            if($validator->fails()){
+                return response()->json(['message' => 'Los valores de estado no estan permitidos'],404);
+            }
+            if($request->input('status')==2){
+                $requestP =  RequestP::with('user')->get();
+            }else{
+                $requestP =  RequestP::with('user')->where('status',$request->input('status'))->get();
+            }
+           
         }else{
-           $requestP =  RequestP::with('user','products')->where('status',0)->get();
+           $requestP =  RequestP::with('user')->where('status',0)->get();
         }
 
         if($requestP == null){
@@ -33,16 +46,6 @@ class PrestaShopController extends Controller
         }else{
             return response()->json(['pedidos' => $requestP],200);
         }       
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -57,19 +60,26 @@ class PrestaShopController extends Controller
             'name_user' => 'required|string',
             'email' => 'required|email',
             'phone' => 'required|string',
-            'total_price' => 'required|numeric',
+            // 'total_price' => 'required|numeric',
             'products'  => 'required|array',
             'products.*.name_product' => 'required|string',
             'products.*.url_image' => 'required|string',
             'products.*.url_product' => 'required|string',
             'products.*.stock' => 'required|integer',
             'products.*.price' => 'required|price',
-            'products.*.cant'  => 'required|integer',            
-        ];
+            'products.*.quantity'  => 'required|integer',            
+        ];+
 
         $validator = \Validator::make($request->all(),$rules);
         if($validator->fails()){
             return response()->json(['message' => 'No se cuenta con todos los campos necesarios para crear pedido ventas'],401);
+        }
+
+        $total_price=0;
+        foreach($request->input('products') as $i => $product){
+           $price=$product->price;
+           $cant=$product->quantity;
+           $total_price=$total_price+$price*$cant;           
         }
 
         $name = strtolower($request->input('name_user'));
@@ -84,11 +94,12 @@ class PrestaShopController extends Controller
         $products = array();
         if($user != null){
 
-           $request = new RequestP();
-           $request->status=0;
-           $request->total_price=$request->input('total_price');
-           $request->user_id=$user->id;
-           $request->save();
+           $requestP = new RequestP();
+           $requestP->status=0;
+           // $requestP->total_price=$request->input('total_price');
+           $requestP->total_price=$total_price;
+           $requestP->user_id=$user->id;
+           $requestP->save();
 
         }else{
 
@@ -99,10 +110,11 @@ class PrestaShopController extends Controller
             $userAux->save();
 
             $request = new RequestP();
-            $request->status=0;
-            $request->total_price=$request->input('total_price');
-            $request->user_id=$userAux->id;
-            $request->save();  
+            $requestP->status=0;
+            // $request->total_price=$request->input('total_price');
+            $request->total_price=$total_price;
+            $requestP->user_id=$userAux->id;
+            $requestP->save();  
 
         }
 
@@ -113,12 +125,12 @@ class PrestaShopController extends Controller
             $mProduct->url_product=$product->url_product;
             $mProduct->stock=$product->stock;
             $mProduct->price=$product->price;
-            $mProduct->cant=$product->cant;
-            $mProduct->request_id=$request->id;
+            $mProduct->cant=$product->quantity;
+            $mProduct->request_id=$requestP->id;
             $products[] = $mProduct;
         }
 
-        $request->products()->saveMany($products);
+        $requestP->products()->saveMany($products);
 
     }
 
@@ -130,18 +142,11 @@ class PrestaShopController extends Controller
      */
     public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        $requestP = RequestP::with('user','products')->where('id',$id)->get();
+        if ($requestP->isEmpty()){
+            return response()->json(['message'=>'El pedido que usted busca no existe'],401);
+        }
+        return response()->json(['pedido' => $requestP],200);
     }
 
     /**
@@ -176,6 +181,30 @@ class PrestaShopController extends Controller
      */
     public function destroy($id)
     {
-            
+            $requestP = RequestP::find($id);
+            if($requestP==null){
+                return response()->json(['message'=>'No existe este pedido'],401);
+            }else{
+                $requestP->products()->delete();
+                $requestP->delete();                
+                return response()->json(['message'=>'El pedido fue eliminado correctamente'],200);
+            }
+    }
+
+    public function detailProduct($id){
+        $products=Product::where('request_id',$id)->get();
+        if ($products->isEmpty()){
+            return response()->json(['message' => 'No existen productos asociados a este pedido'],401);
+        }
+        return response()->json(['products'=>$products],200);
+    }
+
+    public function status(){
+        $status = [
+            ['id' => 0, 'name' => 'No Atendido'],
+            ['id' => 1, 'name' => 'Atendido'],            
+            ['id' => 2, 'name' => 'Todos']
+        ];
+        return response()->json(['estados' => $status],200);
     }
 }

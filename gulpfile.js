@@ -117,7 +117,8 @@ elixir(function(mix) {
         "app/controllers/PaymentCtrl.js",
         "app/controllers/PaymentListCtrl.js",
         "app/controllers/RequestProductCtrl.js",
-        "app/controllers/RequestApplicationCtrl.js"
+        "app/controllers/RequestApplicationCtrl.js",
+        "app/controllers/PrestaShopCtrl.js"
         ], "public/app/controllers/compile/godControllers.js");    
 
     /*

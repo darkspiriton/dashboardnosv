@@ -127,6 +127,8 @@ class PrestaShopController extends Controller
                                                 "total_price"   =>  "S/ ".number_format((float)$total_price, 2, '.', ''),
                                                 "order"         =>  $requestP
                                             ]));
+        // Evento de envio de SMS
+        // event(new PrestaShopWasCreated($requestP));
 
         return ["message" => "Su pedido se registro con exito, el mismo sera enviado a su correo y lo estaremos contactando a la brevedad."];
     }

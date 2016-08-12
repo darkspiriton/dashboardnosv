@@ -1,7 +1,7 @@
 <?php
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.2.42 on 2016-08-12.
+ * Generated for Laravel 5.2.43 on 2016-08-12.
  *
  * @author Barry vd. Heuvel <barryvdh@gmail.com>
  * @see https://github.com/barryvdh/laravel-ide-helper
@@ -11479,6 +11479,73 @@ namespace {
          */
         public static function stream($filename = 'document.pdf'){
             return \Barryvdh\DomPDF\PDF::stream($filename);
+        }
+        
+    }
+
+
+    class Twilio extends \Aloha\Twilio\Support\Laravel\Facade{
+        
+        /**
+         * 
+         *
+         * @param string $connection
+         * @return \Aloha\Twilio\TwilioInterface 
+         * @static 
+         */
+        public static function from($connection){
+            return \Aloha\Twilio\Manager::from($connection);
+        }
+        
+        /**
+         * 
+         *
+         * @param string $to
+         * @param string $message
+         * @param string $from
+         * @return \Services_Twilio_Rest_Message 
+         * @static 
+         */
+        public static function message($to, $message, $from = null){
+            return \Aloha\Twilio\Manager::message($to, $message, $from);
+        }
+        
+        /**
+         * 
+         *
+         * @param string $to
+         * @param string $message
+         * @param array $mediaUrls
+         * @param string $from
+         * @return \Services_Twilio_Rest_Message 
+         * @static 
+         */
+        public static function messageWithMedia($to, $message, $mediaUrls = null, $from = null){
+            return \Aloha\Twilio\Manager::messageWithMedia($to, $message, $mediaUrls, $from);
+        }
+        
+        /**
+         * 
+         *
+         * @param string $to
+         * @param string|callable $message
+         * @param array $options
+         * @param string $from
+         * @return \Services_Twilio_Rest_Call 
+         * @static 
+         */
+        public static function call($to, $message, $options = array(), $from = null){
+            return \Aloha\Twilio\Manager::call($to, $message, $options, $from);
+        }
+        
+        /**
+         * 
+         *
+         * @return \Aloha\Twilio\TwilioInterface 
+         * @static 
+         */
+        public static function defaultConnection(){
+            return \Aloha\Twilio\Manager::defaultConnection();
         }
         
     }

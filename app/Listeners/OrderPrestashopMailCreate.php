@@ -41,7 +41,5 @@ class OrderPrestashopMailCreate
             $message->to("luizhito.lp.4ever@gmail.com", $person->name);
         
         });
-
-        Log::info('test event success');
     }
 }

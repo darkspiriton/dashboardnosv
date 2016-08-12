@@ -2,11 +2,12 @@
 
 namespace Dashboard\Http\Controllers;
 
+use Dashboard\Events\OrderPrestashopWasCreated;
 use Dashboard\Http\Requests;
-use Illuminate\Http\Request;
-use Dashboard\Models\Prestashop\User;
 use Dashboard\Models\Prestashop\Product;
 use Dashboard\Models\Prestashop\Request as RequestP;
+use Dashboard\Models\Prestashop\User;
+use Illuminate\Http\Request;
 
 class PrestaShopController extends Controller
 {
@@ -118,6 +119,13 @@ class PrestaShopController extends Controller
         }
 
         $requestP->products()->saveMany($products);
+
+        event(new OrderPrestashopWasCreated([
+                                                "person"        =>  ($user)?$user:$userAux,
+                                                "products"      =>  $products,
+                                                "total_price"   =>  "S/ ".number_format((float)$total_price, 2, '.', ''),
+                                                "order"         =>  $requestP
+                                            ]));
 
         return ["message" => "Su pedido se registro con exito, el mismo sera enviado a su correo y lo estaremos contactando a la brevedad."];
     }

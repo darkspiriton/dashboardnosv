@@ -10,7 +10,8 @@
         "fzaninotto/faker": "~1.4",
         "firebase/php-jwt": "~3.0.0",
         "barryvdh/laravel-dompdf": "0.6.*",
-        "doctrine/dbal": "^2.5"
+        "doctrine/dbal": "^2.5",
+        "guzzlehttp/guzzle": "~5.3|~6.0"
     },
     "require-dev": {
         "mockery/mockery": "0.9.*",

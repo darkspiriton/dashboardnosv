@@ -1,7 +1,7 @@
 <?php
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.2.42 on 2016-08-09.
+ * Generated for Laravel 5.2.43 on 2016-08-11.
  *
  * @author Barry vd. Heuvel <barryvdh@gmail.com>
  * @see https://github.com/barryvdh/laravel-ide-helper
@@ -1630,17 +1630,6 @@ namespace {
         /**
          * Determine if the current user is authenticated.
          *
-         * @return \Dashboard\User 
-         * @throws \Illuminate\Auth\AuthenticationException
-         * @static 
-         */
-        public static function authenticate(){
-            return \Illuminate\Auth\SessionGuard::authenticate();
-        }
-        
-        /**
-         * Determine if the current user is authenticated.
-         *
          * @return bool 
          * @static 
          */
@@ -1656,6 +1645,17 @@ namespace {
          */
         public static function guest(){
             return \Illuminate\Auth\SessionGuard::guest();
+        }
+        
+        /**
+         * Determine if the current user is authenticated.
+         *
+         * @return \Dashboard\User 
+         * @throws \Illuminate\Auth\AuthenticationException
+         * @static 
+         */
+        public static function authenticate(){
+            return \Illuminate\Auth\SessionGuard::authenticate();
         }
         
     }
@@ -7281,7 +7281,7 @@ namespace {
          *
          * @param string $key
          * @param mixed $default
-         * @return \Symfony\Component\HttpFoundation\File\UploadedFile|array|null 
+         * @return \Illuminate\Http\UploadedFile|array|null 
          * @static 
          */
         public static function file($key = null, $default = null){

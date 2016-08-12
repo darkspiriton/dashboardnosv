@@ -77,6 +77,12 @@
                 <li id="RequestApplication"><a ui-sref="RequestApplication"> Gestion de Ventas Empresas </a></li>               
             </ul>
         </li>
+        <li class="sub-menu">
+            <a href="#"><i class="md md-view-carousel"></i> Gestion de PrestaShop </a>
+            <ul>
+                <li id="PrestaShop"><a ui-sref="PrestaShop"> Gestion Pedidos PrestaShop </a></li>            
+            </ul>
+        </li>
     </ul>
 @stop
 

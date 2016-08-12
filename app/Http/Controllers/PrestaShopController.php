@@ -5,6 +5,7 @@ namespace Dashboard\Http\Controllers;
 use Dashboard\Events\OrderPrestashopWasCreated;
 use Dashboard\Http\Requests;
 use Dashboard\Models\Prestashop\Product;
+use Dashboard\Events\PrestaShopWasCreated;
 use Dashboard\Models\Prestashop\Request as RequestP;
 use Dashboard\Models\Prestashop\User;
 use Illuminate\Http\Request;
@@ -40,9 +41,9 @@ class PrestaShopController extends Controller
             $requestP =  RequestP::with('user')->where('status', 0)->get();
         }
 
-        if ($requestP == null) {
+        if ($requestP->isEmpty()) {
             return response()->json(['message' => 'No se encontro pedidos disponibles'], 401);
-        } else {
+        } else {            
             return response()->json(['pedidos' => $requestP], 200);
         }
     }
@@ -193,7 +194,8 @@ class PrestaShopController extends Controller
         if ($products->isEmpty()) {
             return response()->json(['message' => 'No existen productos asociados a este pedido'], 401);
         }
-        return response()->json(['products'=>$products], 200);
+        return response()->json(['products'=>$products,'message'=>'Detalle de producto correcto'],200);
+
     }
 
     public function status()

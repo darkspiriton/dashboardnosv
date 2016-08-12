@@ -13,8 +13,8 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'Dashboard\Events\SomeEvent' => [
-            'Dashboard\Listeners\EventListener',
+        'Dashboard\Events\PrestaShopWasCreated' => [
+            'Dashboard\Listeners\SendSmsListener',
         ],
     ];
 

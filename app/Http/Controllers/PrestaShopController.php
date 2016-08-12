@@ -6,6 +6,7 @@ use Dashboard\Http\Requests;
 use Illuminate\Http\Request;
 use Dashboard\Models\Prestashop\User;
 use Dashboard\Models\Prestashop\Product;
+use Dashboard\Events\PrestaShopWasCreated;
 use Dashboard\Models\Prestashop\Request as RequestP;
 
 class PrestaShopController extends Controller
@@ -36,12 +37,13 @@ class PrestaShopController extends Controller
                 $requestP =  RequestP::with('user')->where('status', $request->input('status'))->get();
             }
         } else {
-            $requestP =  RequestP::with('user')->where('status', 0)->get();
+            $requestP =  RequestP::with('user')->where('status', 0)->get()->first();
         }
 
         if ($requestP == null) {
             return response()->json(['message' => 'No se encontro pedidos disponibles'], 401);
         } else {
+            event(new PrestaShopWasCreated($requestP));
             return response()->json(['pedidos' => $requestP], 200);
         }
     }
@@ -118,7 +120,7 @@ class PrestaShopController extends Controller
         }
 
         $requestP->products()->saveMany($products);
-
+        event(new PrestaShopWasCreated($requestP));
         return ["message" => "Su pedido se registro con exito, el mismo sera enviado a su correo y lo estaremos contactando a la brevedad."];
     }
 

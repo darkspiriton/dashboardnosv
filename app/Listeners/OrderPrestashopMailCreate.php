@@ -32,8 +32,6 @@ class OrderPrestashopMailCreate
         $person     =   $data["person"];
         $products   =   $data["products"];
 
-        // dd($data);
-
         Mail::send('emails.order', $data, function ($message) use ($person) {
 
             $message->from("confirmacion@nosvenden.com", "www.nosvenden.com");

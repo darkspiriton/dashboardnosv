@@ -58,7 +58,7 @@ angular.module('App')
                 {"sTitle": "Nombre", "bSortable" : true, "sWidth": "120px"},
                 {"sTitle": "Cantidad", "bSortable" : true },
                 {"sTitle": "Precio Unitario", "bSortable" : true },
-                {"sTitle": "Sub Total", "bSortable" : true },
+                {"sTitle": "Sub Total", "bSortable" : true },               
                 {"sTitle": "Stock", "bSortable" : true },
                 {"sTitle": "Imagen" , "bSortable" : true, "bSearchable": true },
                 // {"sTitle": "Link" , "bSortable" : true, "bSearchable": true }               
@@ -84,7 +84,7 @@ angular.module('App')
                         ]
                     }
                 ],
-            data    :   ["name","cant","price","total_price","stock","url_image","url_product"],
+            data    :   ["name","cant","price","priceSubTotal","stock","url_image","url_product"],
         };
 
         vm.list = function(){

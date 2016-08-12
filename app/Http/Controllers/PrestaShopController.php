@@ -37,13 +37,12 @@ class PrestaShopController extends Controller
                 $requestP =  RequestP::with('user')->where('status', $request->input('status'))->get();
             }
         } else {
-            $requestP =  RequestP::with('user')->where('status', 0)->get()->first();
+            $requestP =  RequestP::with('user')->where('status', 0)->get();
         }
 
         if ($requestP == null) {
             return response()->json(['message' => 'No se encontro pedidos disponibles'], 401);
-        } else {
-            event(new PrestaShopWasCreated($requestP));
+        } else {            
             return response()->json(['pedidos' => $requestP], 200);
         }
     }

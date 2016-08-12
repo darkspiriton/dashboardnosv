@@ -29,9 +29,9 @@ class SendSmsListener
     {
         $data=$event->getData();
         try{
-            dd(Twilio::message($data->user->phone,"Mensaje de Prueba"));
+            Twilio::message($data->user->phone,"Mensaje de Prueba");
         }catch(\Services_Twilio_RestException $e){
-            dd($e->getMessage());
+            $e->getMessage();
         }        
 
     }

@@ -24,18 +24,19 @@ class ProductOutRequest extends Request
     public function rules()
     {
         return [
-            'products'    => 'required|array',
-            'requestDate'  => 'required|date',
+            'products'      => 'required|array',
+            'requestDate'   => 'required|date',
             'shipmentDate'  => 'required|date',
-            'codOrder'    => 'required',
-            'products.*.id'    => 'required|integer|exists:auxproducts,id',
-            'products.*.discount'    => 'required|numeric',
-            'seller_id' => 'required|exists:users,id'
+            'codOrder'      => 'required',
+            'products.*.id' => 'required|integer|exists:auxproducts,id',
+            'products.*.discount'   => 'required|numeric',
+            'seller_id'     =>  'required|integer|exists:users,id',
+            'client_id'     =>  'required|integer|exists:auxclients,id'
         ];
     }
 
     public function response(array $errors)
     {
-        return response()->json(["message" => "Parametros recibidos invalidos.", "errors" => $errors], 422);
+        return response()->json(["message" => "Parametros recibidos invalidos."], 422);
     }
 }

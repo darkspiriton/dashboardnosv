@@ -9,6 +9,11 @@ use Validator;
 
 class AuxClientController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware("auth:GOD,ADM,JVE");
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -16,7 +21,7 @@ class AuxClientController extends Controller
      */
     public function index()
     {
-        return Client::all();
+        // return Client::all();
     }
 
 
@@ -58,18 +63,21 @@ class AuxClientController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int  $text
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($text)
     {
-        $client = Client::find($id);
+        $clients = Client::where("name","like", "%".$text."%")
+                            ->orWhere("email", $text)
+                                ->orWhere("phone", $text)
+                                    ->orWhere("dni", $text)->get();
 
-        if ($client == null) {
+        if ($clients == null) {
             return response()->json(['message' => 'No existe el cliente'], 401);
         }
 
-        return response()->json(['client' => $client], 200);
+        return $clients;
     }
 
     /**

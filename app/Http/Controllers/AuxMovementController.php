@@ -151,12 +151,13 @@ class AuxMovementController extends Controller
                 if ($prd->status == 1) {
                     $movement = new Movement();
 
-                    $movement->date_shipment    = substr($request->input('shipmentDate'), 0, 10);
-                    $movement->discount         = $product['discount'];
-                    $movement->status           = 'salida';
-                    $movement->date_request     = substr($request->input('requestDate'), 0, 10);
-                    $movement->cod_order        = strtoupper($request->input('codOrder'));
-                    $movement->user_id          = $request->input('seller_id');
+                    $movement->date_shipment    =   substr($request->input('shipmentDate'), 0, 10);
+                    $movement->discount         =   $product['discount'];
+                    $movement->status           =   'salida';
+                    $movement->date_request     =   substr($request->input('requestDate'), 0, 10);
+                    $movement->cod_order        =   strtoupper($request->input('codOrder'));
+                    $movement->user_id          =   $request->input('seller_id');
+                    $movement->client_id        =   $request->input('client_id');
 
                     $prd->movements()->save($movement);
                     $prd->status = 0;

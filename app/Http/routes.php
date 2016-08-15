@@ -322,8 +322,7 @@ Route::group(['prefix' => 'api'], function(){
     /**
      * Client
      */
-    Route::resource('auxclient','AuxClientController',
-        ["only"=>["index","store","show","update"]]);
+    Route::resource('auxclient','AuxClientController', ["only"=>["store","show","update"]]);
 
 });
 

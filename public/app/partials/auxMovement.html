@@ -26,47 +26,134 @@
         <h2>Crear movimiento de productos</h2>
     </div>
 
-    <div ng-form="orderDetail" class="card-header bgm-blue">
-        <div class="form-horizontal">
-            <div class="form-group">
-                <label class="col-sm-1 control-label c-white f-10 p-0">Cod. Pedido</label>
-                <div class="col-sm-3">
-                    <div class="input-group w-100">
-                        <div class="fg-line ">
-                            <input ng-model="data.codOrder" type="text" class="btn btn-block ng-pristine ng-untouched ng-valid" required>
-                        </div>
+    <div ng-form="orderDetail" class="card-header bgm-lightblue">
+        <div class="row report-date">
+            <div class="col-xs-5 col-sm-1 f-10 text-right">
+                <label class="control-label c-white ">Cod&nbsp;Pedido</label>
+            </div>
+
+            <div class="col-xs-7 col-sm-3">
+                <div class="input-group w-100">
+                    <input ng-model="data.codOrder" type="text" class="form-control input-sm p-l-20" required>
+                </div>
+            </div>
+
+            <div class="visible-xs clearfix"></div>
+
+            <div class="col-xs-5 col-sm-1 f-10 text-right">
+                <label class="control-label c-white f-10">F.&nbsp;Pedido</label>
+            </div>
+
+            <div class="col-xs-7 col-sm-3">
+                <div class="input-group w-100">
+                    <div class="report-date">
+                        <input ng-model="data.requestDate" type="date" class="btn btn-block" required>
                     </div>
                 </div>
+            </div>
 
-                <label class=" col-sm-1 control-label c-white f-5 p-0">F. Pedido</label>
-                <div class=" col-sm-3">
-                    <div class="input-group w-100">
-                        <div class="fg-line report-date">
-                            <input ng-model="data.requestDate" type="date" class="btn btn-block ng-pristine ng-untouched ng-valid" required>
-                        </div>
-                    </div>
-                </div>
+            <div class="visible-xs clearfix"></div>
 
-                <label class=" col-sm-1 control-label c-white f-5 p-0">F. Salida:</label>
-                <div class=" col-sm-3">
-                    <div class="input-group w-100">
-                        <div class="fg-line report-date">
-                            <input ng-model="data.shipmentDate" type="date" class="btn btn-block ng-pristine ng-untouched ng-valid" required>
-                        </div>
+            <div class="col-xs-5 col-sm-1 f-10 text-right">
+                <label class="control-label c-white f-10">F.&nbsp;Salida:</label>
+            </div>
+
+            <div class="col-xs-7 col-sm-3">
+                <div class="input-group w-100">
+                    <div class="report-date">
+                        <input ng-model="data.shipmentDate" type="date" class="btn btn-block" required>
                     </div>
                 </div>
             </div>
         </div>
 
         <div ng-form="dates" class="row report-date">
-             <h2 class="col-xs-5 col-sm-2 m-t-20 text-right">Vendedor(a)</h2>
-             <select class="col-xs-7 col-sm-3 m-t-20" ng-options="seller.id as seller.name for seller in sellers" ng-model="data.seller_id" required>
-                <option value="" selected="selected" disabled="disabled">Seleccione</option>
-             </select>
+            <div class="col-xs-5 col-sm-1 m-t-20 f-10 text-right">
+                <label class="control-label c-white">Venddor(a)</label>
+            </div>
+
+            <div class="col-xs-5 col-sm-3 m-t-20">
+                <input ng-model="data.client_id" type="hidden" required>
+                <select class="btn-block" ng-options="seller.id as seller.name for seller in sellers" ng-model="data.seller_id" required>
+                   <option value="" selected="selected" disabled="disabled">Seleccione</option>
+                </select>
+            </div>
+
+            <div class="visible-xs clearfix"></div>
+
+            <div class="col-xs-5 col-sm-1 m-t-20 f-10 text-right">
+               <label class="control-label c-white">Cliente</label>
+            </div>
+
+            <div class="col-xs-5 col-sm-3 m-t-20">
+                <input id="clientSearchText" ng-change="listView=false;client=null;clients=null;data.client_id=null" ng-model="clientSearchText" type="text" class="form-control input-sm p-l-20" required>
+            </div>
+
+            <div class="visible-xs clearfix"></div>
+
+            <div class="col-xs-offset-5 col-xs-7 col-sm-offset-0 col-sm-2 m-t-20">
+                <input type="button" ng-click="clientSearch(clientSearchText)" class="btn btn-block bgm-green" value="Buscar">
+            </div>
+
+            <div class="col-xs-offset-5 col-xs-7 col-sm-offset-0 col-sm-2 m-t-20">
+                <input type="button" class="btn btn-block bgm-purple" value="Nuevo Cliente">
+            </div>
         </div>
     </div>
 
     <div class="card-body card-padding" >
+        <div>
+            <div class="card-header">
+                <h2>Cliente</h2>
+            </div>
+
+            <form name="formproduct" id="form" class="form-horizontal" autocomplete="off">
+                <div class="form-group">
+                    <label class="col-xs-2 col-sm-2 control-label">Nombre: </label>
+                    <div class="col-xs-10 col-sm-4">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="md md-person"></i></span>
+                            <div class="fg-line">
+                                <input ng-model="client.name" type="text" class="form-control" disabled="dissabled">
+                            </div>
+                        </div>
+                    </div>
+
+                    <label class="col-xs-2 col-sm-2 control-label">Telefono: </label>
+                    <div class="col-xs-10 col-sm-4">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="md md-person"></i></span>
+                            <div class="fg-line">
+                                <input ng-model="client.phone" type="text" class="form-control" disabled="dissabled">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-xs-2 col-sm-2 control-label">DNI: </label>
+                    <div class="col-xs-10 col-sm-4">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="md md-person"></i></span>
+                            <div class="fg-line">
+                                <input ng-model="client.dni" type="text" class="form-control" disabled="dissabled">
+                            </div>
+                        </div>
+                    </div>
+
+                    <label class="col-xs-2 col-sm-2 control-label">Dirección: </label>
+                    <div class="col-xs-10 col-sm-4">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="md md-person"></i></span>
+                            <div class="fg-line">
+                                <input ng-model="client.address" type="text" class="form-control" disabled="dissabled">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
         <div class="card-header">
             <h2>Productos</h2>
         </div>
@@ -83,7 +170,6 @@
                         <th>Precio Venta</th>
                         <th>Descuento</th>
                         <th>Precio Final</th>
-<!--                         <th>F. Salida</th> -->
                         <th>Accion</th>
                     </tr>
                     </thead>
@@ -178,4 +264,12 @@
             </div>
         </div>
     </div>
+</div>
+
+<div id="list" class="search-list">
+    <ul ng-show="listView" class="dropdown-menu dm-icon">
+        <li ng-repeat="client in clients" ng-click="selectClient($index)">
+            <a ui-sref="Movimientos">{{ client.name + ' - Cel: ' + client.phone + ' - DNI: ' + client.dni  }}</a>
+        </li>
+    </ul>
 </div>

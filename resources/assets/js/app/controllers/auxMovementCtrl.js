@@ -169,6 +169,7 @@ angular.module('App')
 								    	}
 								    	return '';
 								    })()}</h5>
+								    <h5><label> Cliente : </label>${$scope.client.name + ' - DNI: ' + $scope.client.dni}</h5>
 									<h5><label> Código : </label>${setUpper($scope.data.codOrder)}</h5>                                            
 									<h5><label> F. Pedido : </label>${util.setDate($scope.data.requestDate)}</h5>                                           
 									<h5> <label> F. Salida : </label>${util.setDate($scope.data.shipmentDate)}</h5>                                                                      
@@ -277,9 +278,10 @@ angular.module('App')
 												}
 												return '';
 											})()}</h5>
-											<h5><label> Código : </label>${setUpper($scope.data.codOrder)}</h5>                                            
-											<h5><label> F. Pedido : </label>${util.setDate($scope.data.requestDate)}</h5>                                           
-											<h5> <label> F. Salida : </label>${util.setDate($scope.data.shipmentDate)}</h5>                                                                      
+											<h5><label> Cliente : </label>${$scope.client.name + ' - DNI: ' + $scope.client.dni}</h5>
+											<h5><label> Código : </label>${setUpper($scope.data.codOrder)}</h5>
+											<h5><label> F. Pedido : </label>${util.setDate($scope.data.requestDate)}</h5>
+											<h5> <label> F. Salida : </label>${util.setDate($scope.data.shipmentDate)}</h5>
 										<tr>
 										<tr>
 											<th>Cod</th>
@@ -320,9 +322,9 @@ angular.module('App')
 		};
 
 		function removeDetail(){
-			$scope.data.codOrder=null;
-			$scope.data.requestDate=null;
-			$scope.data.shipmentDate=null;
+			$scope.data = {};
+			$scope.clientSearchText = null;
+			$scope.client = null;
 		}
 
 
@@ -344,6 +346,7 @@ angular.module('App')
 			removeDetail();
 			resetProduct();
 			util.muestraformulario();
+			$scope.listPositiontion();
 		};
 
 		function resetProduct(){
@@ -369,10 +372,45 @@ angular.module('App')
 		 * END
 		 */
 
+
+		 /**
+		  *	Client search
+		  */
+
+		  $scope.clientSearch = function(text){
+		  	$scope.listView = true;
+		  	$scope.data.client_id = null;
+		  	$scope.client = null;
+		  	petition.get('api/auxclient/' + text)
+		  		.then(function(data){
+		  			console.log(data);
+		  			$scope.clients = data;
+		  		}, function(error){
+		  			toastr.error('Huy huy dice: ' + error.data.message);
+		  		});
+		  };
+
+		  $scope.selectClient = function(i) {
+		  	$scope.client = $scope.clients[i];
+		  	$scope.data.client_id = $scope.clients[i].id;
+		  	$scope.listView = false;
+		  };
+
+		  $scope.listPositiontion = function(){
+		      var pos = $('#clientSearchText').offset();
+		      $("#list").css({top: pos.top - 35, left: pos.left});
+		  };
+
+		 /**
+		  * END
+		  */
+
+
 		angular.element(document).ready(function(){
 			resetProduct();
 			$scope.list();
 
 			$scope.listSeller();
+			$scope.data = {};
 		});
 	}]);

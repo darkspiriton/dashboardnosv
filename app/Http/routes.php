@@ -323,7 +323,7 @@ Route::group(['prefix' => 'api'], function(){
      * Client
      */
     Route::resource('auxclient','AuxClientController',
-        ["only"=>["index","store","show","update","destroy"]]);
+        ["only"=>["index","store","show","update"]]);
 
 });
 

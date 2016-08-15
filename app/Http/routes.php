@@ -319,6 +319,11 @@ Route::group(['prefix' => 'api'], function(){
     Route::get('prestashop/products/{id}','PrestaShopController@detailProduct');
     Route::get('prestashop/get/status','PrestaShopController@status');
 
+    /**
+     * Client
+     */
+    Route::resource('auxclient','AuxClientController',
+        ["only"=>["index","store","show","update","destroy"]]);
 
 });
 

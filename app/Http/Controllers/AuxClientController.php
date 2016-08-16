@@ -37,14 +37,14 @@ class AuxClientController extends Controller
             'name'      =>  'required|string',
             'email'     =>  'required|email',
             'phone'     =>  'required|string',
-            'dni'       =>  'required|string',
+            'dni'       =>  'required|integer',
             'address'   =>  'required|string',
             'reference' =>  'required|string'
         ];
 
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json(['message' => 'No se posee todos los atributos necesarios para crear un cliente']);
+            return response()->json(['message' => 'No se posee todos los atributos necesarios para crear un cliente'], 401);
         }
 
         $client = Client::where('email', request("email"))

@@ -373,11 +373,11 @@ angular.module('App')
 		 */
 
 
-		 /**
-		  *	Client search
-		  */
+		/**
+		 *	Client search
+		 */
 
-		  $scope.clientSearch = function(text){
+		$scope.clientSearch = function(text){
 		  	$scope.listView = true;
 		  	$scope.data.client_id = null;
 		  	$scope.client = null;
@@ -388,22 +388,37 @@ angular.module('App')
 		  		}, function(error){
 		  			toastr.error('Huy huy dice: ' + error.data.message);
 		  		});
-		  };
+		};
 
-		  $scope.selectClient = function(i) {
+		$scope.selectClient = function(i) {
 		  	$scope.client = $scope.clients[i];
 		  	$scope.data.client_id = $scope.clients[i].id;
 		  	$scope.listView = false;
 		  };
 
-		  $scope.listPositiontion = function(){
-		      var pos = $('#clientSearchText').offset();
-		      $("#list").css({top: pos.top - 35, left: pos.left});
-		  };
+		$scope.listPositiontion = function(){
+		    var pos = $('#clientSearchText').offset();
+		    $("#list").css({top: pos.top - 35, left: pos.left});
+		};
 
-		 /**
-		  * END
-		  */
+		$scope.showNewClientModal = function(){
+			$scope.newClient = {};
+		  	util.modal("newClientModal");
+		};
+
+		$scope.saveClient = function(client){
+			petition.post("api/auxclient", client)
+				.then(function(data){
+					toastr.success(data.message);
+					util.modalClose("newClientModal");
+				}, function(error){
+					toastr.error("Huy Huy dice: " + error.data.message);
+				});
+		};
+
+		/**
+		 * END
+		 */
 
 
 		angular.element(document).ready(function(){

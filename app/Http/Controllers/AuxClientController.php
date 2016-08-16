@@ -34,10 +34,10 @@ class AuxClientController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'name'      =>  'required|string',
+            'name'      =>  'required|string|max:255',
             'email'     =>  'required|email',
-            'phone'     =>  'required|string',
-            'dni'       =>  'required|integer',
+            'phone'     =>  'required|string|max:25',
+            'dni'       =>  'required|max:8',
             'address'   =>  'required|string',
             'reference' =>  'required|string'
         ];
@@ -101,12 +101,12 @@ class AuxClientController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'name'      =>  'required|string',
+            'name'      =>  'required|string|max:255',
             'email'     =>  'required|email',
-            'phone'     =>  'required|string',
-            'dni'       =>  'required|string',
+            'phone'     =>  'required|string|max:25',
+            'dni'       =>  'required|max:8',
             'address'   =>  'required|string',
-            'reference' =>  'required|string',
+            'reference' =>  'required|string'
         ];
 
         $validator = Validator::make($request->all(), $rules);

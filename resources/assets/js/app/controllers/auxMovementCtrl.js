@@ -383,7 +383,6 @@ angular.module('App')
 		  	$scope.client = null;
 		  	petition.get('api/auxclient/' + text)
 		  		.then(function(data){
-		  			console.log(data);
 		  			$scope.clients = data;
 		  		}, function(error){
 		  			toastr.error('Huy huy dice: ' + error.data.message);
@@ -411,6 +410,28 @@ angular.module('App')
 				.then(function(data){
 					toastr.success(data.message);
 					util.modalClose("newClientModal");
+				}, function(error){
+					toastr.error("Huy Huy dice: " + error.data.message);
+				});
+		};
+
+		var clientOriginal;
+
+		$scope.btnEditClient = function(){
+			$scope.editImputClient = true;
+			clientOriginal = angular.copy($scope.client);
+		};
+
+		$scope.cancelEditClient = function(){
+			$scope.editImputClient = false;
+			$scope.client = clientOriginal;
+		};
+
+		$scope.editClient = function(client){
+			petition.put("api/auxclient/" + client.id, client)
+				.then(function(data){
+					toastr.success(data.message);
+					$scope.editImputClient = false;
 				}, function(error){
 					toastr.error("Huy Huy dice: " + error.data.message);
 				});

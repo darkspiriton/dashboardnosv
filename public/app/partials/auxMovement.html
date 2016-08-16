@@ -107,14 +107,14 @@
                 <h2>Cliente</h2>
             </div>
 
-            <form name="formproduct" id="form" class="form-horizontal" autocomplete="off">
+            <form name="formClient" id="form" class="form-horizontal" autocomplete="off">
                 <div class="form-group">
                     <label class="col-xs-2 col-sm-2 control-label">Nombre: </label>
                     <div class="col-xs-10 col-sm-4">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="md md-person"></i></span>
                             <div class="fg-line">
-                                <input ng-model="client.name" type="text" class="form-control" disabled="dissabled">
+                                <input ng-model="client.name" type="text" class="form-control" ng-disabled="!editImputClient">
                             </div>
                         </div>
                     </div>
@@ -124,7 +124,7 @@
                         <div class="input-group">
                             <span class="input-group-addon"><i class="md md-person"></i></span>
                             <div class="fg-line">
-                                <input ng-model="client.phone" type="text" class="form-control" disabled="dissabled">
+                                <input ng-model="client.phone" type="tel" class="form-control" minlength="8" ng-disabled="!editImputClient">
                             </div>
                         </div>
                     </div>
@@ -136,19 +136,59 @@
                         <div class="input-group">
                             <span class="input-group-addon"><i class="md md-person"></i></span>
                             <div class="fg-line">
-                                <input ng-model="client.dni" type="text" class="form-control" disabled="dissabled">
+                                <input ng-model="client.dni" type="text" class="form-control" minlength="8" maxlength="8" ng-disabled="!editImputClient">
                             </div>
                         </div>
                     </div>
 
-                    <label class="col-xs-2 col-sm-2 control-label">Dirección: </label>
+                    <label class="col-xs-2 col-sm-2 control-label">email: </label>
                     <div class="col-xs-10 col-sm-4">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="md md-person"></i></span>
                             <div class="fg-line">
-                                <input ng-model="client.address" type="text" class="form-control" disabled="dissabled">
+                                <input ng-model="client.email" type="email" class="form-control" ng-disabled="!editImputClient">
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-xs-2 col-sm-2 control-label">Dirección: </label>
+                    <div class="col-xs-10 col-sm-10">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="md md-person"></i></span>
+                            <div class="fg-line">
+                                <input ng-model="client.address" type="text" class="form-control" ng-disabled="!editImputClient">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-xs-2 col-sm-2 control-label">Referencia: </label>
+                    <div class="col-xs-10 col-sm-10">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="md md-person"></i></span>
+                            <div class="fg-line">
+                                <input ng-model="client.reference" type="text" class="form-control" ng-disabled="!editImputClient">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group" ng-hide="editImputClient">
+                    <div class="col-xs-12 col-sm-offset-2 col-sm-2">
+                        <a class="btn btn-block btn-info" ng-click="btnEditClient()">Editar</a>
+                    </div>
+                </div>
+
+                <div class="form-group" ng-show="editImputClient">
+                    <div class="col-xs-12 col-sm-offset-2 col-sm-2">
+                        <a class="btn btn-block btn-primary" ng-disabled="!formClient.$valid" ng-click="editClient(client)">Guardar</a>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-2">
+                        <a class="btn btn-block bgm-red" ng-click="cancelEditClient()">Cancelar</a>
                     </div>
                 </div>
             </form>
@@ -327,7 +367,7 @@
                             <div class="input-group">
                                 <span class="input-group-addon"><i class="md md-list"></i></span>
                                 <div class="fg-line">
-                                    <input ng-model="newClient.dni" type="number" class="form-control input-sm" minlength="8" maxlength="8" required>
+                                    <input ng-model="newClient.dni" type="text" class="form-control input-sm" minlength="8" maxlength="8" required>
                                 </div>
                             </div>
                         </div>

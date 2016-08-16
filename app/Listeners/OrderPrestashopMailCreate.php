@@ -36,7 +36,7 @@ class OrderPrestashopMailCreate
 
             $message->from("confirmacion@nosvenden.com", "www.nosvenden.com");
             $message->subject($person->name." - Confirmacion de recepción pedido.");
-            $message->to("luizhito.lp.4ever@gmail.com", $person->name);
+            $message->to($person->email, $person->name);
         
         });
     }

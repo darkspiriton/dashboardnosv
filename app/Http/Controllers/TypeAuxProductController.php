@@ -13,7 +13,7 @@ class TypeAuxProductController extends Controller
     
     public function __construct()
     {
-        $this->middleware('auth:GOD,NOS,STO');
+        $this->middleware('auth:GOD,NOS,ADM,STO');
     }
 
     /**

@@ -14,7 +14,7 @@ class OutFitController extends Controller
     public function __construct()
     {
         $this->middleware('auth:GOD,NOS,ADM,JVE');
-        $this->middleware('auth:GOD,NOS', ['only' => ['index','store','destroy']]);
+        $this->middleware('auth:GOD,NOS,ADM', ['only' => ['index','store','destroy']]);
     }
 
     /**

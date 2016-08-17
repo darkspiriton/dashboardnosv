@@ -121,8 +121,7 @@
                         </li>  
                         <li id="PrestaShop">
                             <a ui-sref="PrestaShop"><i class="md md-subtitles"></i>Pedidos Web</a>
-                        </li>      
-  
+                        </li>     
                     </ul>
                 </li>
 

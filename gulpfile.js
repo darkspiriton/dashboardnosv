@@ -41,6 +41,36 @@ elixir(function(mix) {
         "app/controllers/auxProductStoreCtrl.js",
         "app/controllers/auxStockVENCtrl.js",
         ], "public/app/controllers/compile/almacenControllers.js");
+
+    /*
+     |
+     |  Compile for ADMNOS
+     |
+     */
+
+    mix.browserify([
+        "app/controllers/auxIndicator1Ctrl.js",
+        "app/controllers/auxIndicator2Ctrl.js",
+        "app/controllers/auxIndicator3Ctrl.js",
+        "app/controllers/auxIndicator4Ctrl.js",
+        "app/controllers/auxIndicator5Ctrl.js",
+        "app/controllers/auxIndicator6Ctrl.js",
+        "app/controllers/usersCtrl.js",
+        "app/controllers/commentsCtrl.js",
+        "app/controllers/employeesCtrl.js",
+        "app/controllers/q_questionsCtrl.js",
+        "app/controllers/q_questionnairesCtrl.js",
+        "app/controllers/payrollEntryCtrl.js",
+        "app/controllers/indicatorPayRoleCtrl.js",
+        "app/controllers/products_out.js",
+        "app/controllers/q_categoriesCtrl.js",
+        "app/controllers/q_AnswerIndicator.js",
+        "app/controllers/q_productsCtrl.js",
+        "app/controllers/q_customersCtrl.js",
+        "app/controllers/PartnerPanelCtrl.js",
+        "app/controllers/PaymentCtrl.js",
+        "app/controllers/PaymentListCtrl.js",     
+        ], "public/app/controllers/compile/admNosControllers.js");
     
     /*
      |
@@ -57,7 +87,6 @@ elixir(function(mix) {
         "app/controllers/publicityJVECtrl.js",
         "app/controllers/auxProductJVECtrl.js",
         "app/controllers/auxIndicator7Ctrl.js",
-        "app/controllers/RequestApplicationCtrl.js",
         "app/controllers/PrestaShopCtrl.js",
         ], "public/app/controllers/compile/coordinadorControllers.js");
 
@@ -132,32 +161,20 @@ elixir(function(mix) {
      */
 
     mix.browserify([
-        "app/controllers/auxProductCtrl.js",
-        "app/controllers/auxIndicator1Ctrl.js",
-        "app/controllers/auxIndicator2Ctrl.js",
-        "app/controllers/auxIndicator3Ctrl.js",
-        "app/controllers/auxIndicator4Ctrl.js",
-        "app/controllers/auxIndicator5Ctrl.js",
-        "app/controllers/auxIndicator6Ctrl.js",
-        "app/controllers/usersCtrl.js",
-        "app/controllers/commentsCtrl.js",
         "app/controllers/auxStockCtrl.js",
-        "app/controllers/employeesCtrl.js",
-        "app/controllers/payrollEntryCtrl.js",
-        "app/controllers/godEmployeeAssistsCtrl.js",
-        "app/controllers/indicatorPayRoleCtrl.js",
-        "app/controllers/products_out.js",
+        "app/controllers/outFitCtrl.js",
+        "app/controllers/auxMovementOutFitCtrl.js",
+        "app/controllers/auxMovementOutFit2Ctrl.js",
+        "app/controllers/auxIndicator7Ctrl.js",
+        "app/controllers/liquidationCtrl.js",
+        "app/controllers/publicityJVECtrl.js",
         "app/controllers/auxMovementCtrl.js",
-        "app/controllers/auxMovement2Ctrl.js",
-        "app/controllers/q_questionnairesCtrl.js",
-        "app/controllers/q_questionsCtrl.js",
-        "app/controllers/q_categoriesCtrl.js",
-        "app/controllers/q_AnswerIndicator.js",
+        "app/controllers/auxMovement2Ctrl.js", 
         "app/controllers/q_productsCtrl.js",
-        "app/controllers/q_customersCtrl.js",
         "app/controllers/RequestProductCtrl.js",
         "app/controllers/RequestApplicationCtrl.js",
-        "app/controllers/PrestaShopCtrl.js"
+        "app/controllers/PrestaShopCtrl.js",
+        "app/controllers/auxProductCtrl.js",
         ], "public/app/controllers/compile/admControllers.js");
 
     /*
@@ -170,7 +187,42 @@ elixir(function(mix) {
         "app/controllers/RequestProductAssociatedCtrl.js"
         ], "public/app/controllers/compile/associatedControllers.js");
 
+    /*
+     |
+     |  Compile for Administrador Publicidad
+     |
+     */
 
+    mix.browserify([
+        "app/controllers/facebookPublicityCtrl.js",
+        "app/controllers/publicityCtrl.js",
+        "app/controllers/auxEsquemaCtrl.js",
+        ], "public/app/controllers/compile/adminPubControllers.js");
+
+
+    /*
+     |
+     |  Compile for Coordinador Publicidad
+     |
+     */
+
+    mix.browserify([
+        "app/controllers/facebookPublicityCtrl.js",
+        "app/controllers/publicityCtrl.js",
+        "app/controllers/auxEsquemaCtrl.js",
+        ], "public/app/controllers/compile/coorPubControllers.js");
+
+
+    /*
+     |
+     |  Compile for Equipo Publicidad
+     |
+     */
+
+    mix.browserify([
+        "app/controllers/facebookPublicityCtrl.js",
+        "app/controllers/publicityCtrl.js",
+        ], "public/app/controllers/compile/equiPubControllers.js");
     /*
      |
      |  Other Compiles
@@ -203,10 +255,14 @@ elixir(function(mix) {
     mix.version([
         //  JS
         "public/app/controllers/compile/almacenControllers.js",
+        "public/app/controllers/compile/admNosControllers.js",
         "public/app/controllers/compile/coordinadorControllers.js",
         "public/app/controllers/compile/vendedorControllers.js",
         "public/app/controllers/compile/godControllers.js",
         "public/app/controllers/compile/admControllers.js",
+        "public/app/controllers/compile/adminPubControllers.js",
+        "public/app/controllers/compile/coorPubControllers.js",
+        "public/app/controllers/compile/equiPubControllers.js",
         "public/app/app.js",
         "public/app/appLogin.js",
         "public/app/controllers/loginCtrl.js",

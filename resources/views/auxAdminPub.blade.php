@@ -16,5 +16,5 @@
 @stop
 
 @section('dashCtrls')
-    <script src="{{ elixir('app/controllers/compile/coorPubControllers.js') }}"></script>
+    <script src="{{ elixir('app/controllers/compile/adminPubControllers.js') }}"></script>
 @stop

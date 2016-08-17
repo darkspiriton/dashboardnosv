@@ -13,7 +13,7 @@ class AuxMovementOutFitController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:GOD,ADM,JVE');
+        $this->middleware('auth:GOD,NOS,ADM,JVE');
     }
 
     /**

@@ -12,7 +12,7 @@ class RequestApplicationController extends Controller
 
     public function __construct()
     {
-        $this->middleware("auth:GOD,ADM,JVE", ["except" => ["store"]]);
+        $this->middleware("auth:GOD,NOS,ADM,JVE", ["except" => ["store"]]);
     }
 
     /**

@@ -15,7 +15,7 @@ class UserController extends Controller
     
     public function __construct()
     {
-        $this->middleware('auth:GOD,ADM,JVE', ["only" => ["sellers"]]);
+        $this->middleware('auth:GOD,NOS,ADM,JVE', ["only" => ["sellers"]]);
         $this->middleware('auth:GOD', ["except" => ["sellers"]]);
     }
 

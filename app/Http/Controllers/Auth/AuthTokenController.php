@@ -164,6 +164,12 @@ class AuthTokenController extends Controller
                         return view('proveedor');
                     } else if ($user->role->abrev == 'STO') {
                         return view('auxStore');
+                    } else if ($user->role->abrev == 'NOS') {
+                        return view('auxAdminNos');
+                    } else if ($user->role->abrev == 'PUA') {
+                        return view('auxAdminPub');
+                    } else if ($user->role->abrev == 'EQU') {
+                        return view('auxEquiPub');
                     }
                 }else{
                     return view('logout');

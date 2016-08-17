@@ -12,30 +12,24 @@
         <li id="movimientos">
             <a href="#" ui-sref="Movimientos"><i class="md md-trending-neutral"></i>Generar Salida</a>
         </li>
-        <li id="movimientos2">
-            <a href="#" ui-sref="Movimientos2"><i class="md md-swap-horiz"></i>Generar Retorno - Venta</a>
+        <li id="Movimientos2JVE">
+            <a href="#" ui-sref="Movimientos2JVE"><i class="md md-swap-horiz"></i>Generar Retorno - Venta</a>
         </li>
         <li id="movimientos_outfit">
-            <a href="#" ui-sref="Movimientos Out Fit"><i class="md md-trending-neutral"></i>Generar Salida Out Fit</a>
+            <a href="#" ui-sref="Movimientos Out Fit"><i class="md md-trending-neutral"></i>Generar Salida de Combinaciones</a>
         </li>
         <li id="movimientos_outfit2">
-            <a href="#" ui-sref="Retorno Out Fit"><i class="md md-swap-horiz"></i>Generar Retorno - Venta de OutFit</a>
-        </li>
-        <li id="publicity">
-            <a href="#" ui-sref="Publicidad Ventas"><i class="md md-perm-media"></i>Gestionar publicidad</a>
+            <a href="#" ui-sref="Retorno Out Fit"><i class="md md-swap-horiz"></i>Generar Retorno - Venta de Combinaciones</a>
         </li>
         <li id="indicator7">
             <a href="#" ui-sref="Indicator7"><i class="md md-assessment"></i>Reporte General de movimientos</a>
         </li>
-        <li id="RequestApplication">
-            <a ui-sref="RequestApplication"><i class="md md-assignment"></i>Atender formulario de contacto </a>
-        </li>  
-        <li class="sub-menu">
-            <a href="#"><i class="md md-view-carousel"></i> Gestion de PrestaShop </a>
-            <ul>
-                <li id="PrestaShop"><a ui-sref="PrestaShop"> Gestion Pedidos PrestaShop </a></li>            
-            </ul>
-        </li>             
+        <li id="publicity">
+            <a href="#" ui-sref="Publicidad Ventas"><i class="md md-perm-media"></i>Gestionar publicidad</a>
+        </li>
+        <li id="PrestaShop">
+            <a ui-sref="PrestaShop"><i class="md md-perm-media"></i>Pedidos Web</a>
+        </li>            
     </ul>
 @stop
 

@@ -1,8 +1,8 @@
 angular.module('App')
     .config(["$stateProvider", function($stateProvider) {
         $stateProvider
-            .state('Movimientos2', {
-                url: '/Generar-retorno-y-ventas',
+            .state('Movimientos2JVE', {
+                url: '/Generar-retorno-y-ventas-JVE',
                 templateUrl: 'app/partials/auxMovement2.html',
                 controller : 'auxMovement2Ctrl'
             });

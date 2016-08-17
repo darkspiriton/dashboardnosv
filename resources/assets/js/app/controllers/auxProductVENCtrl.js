@@ -2,7 +2,7 @@ angular.module('App')
     .config(["$stateProvider", function($stateProvider) {
         $stateProvider
             .state('Productos Ventas', {
-                url: '/Vista-general-de-productos-KARDEX',
+                url: '/Vista-general-de-productos-KARDEX-VEN',
                 templateUrl: 'app/partials/auxProductVEN.html',
                 controller : 'productsVENCtrl'
             });

@@ -42,7 +42,7 @@ class PrestaShopController extends Controller
         }
 
         if ($requestP->isEmpty()) {
-            return response()->json(['message' => 'No se encontro pedidos disponibles'], 401);
+            return response()->json(['message' => 'No se encontro pedidos disponibles'], 404);
         } else {            
             return response()->json(['pedidos' => $requestP], 200);
         }
@@ -143,7 +143,7 @@ class PrestaShopController extends Controller
     {
         $requestP = RequestP::with('user', 'products')->where('id', $id)->get();
         if ($requestP->isEmpty()) {
-            return response()->json(['message'=>'El pedido que usted busca no existe'], 401);
+            return response()->json(['message'=>'El pedido que usted busca no existe'], 404);
         }
         return response()->json(['pedido' => $requestP], 200);
     }
@@ -182,7 +182,7 @@ class PrestaShopController extends Controller
     {
         $requestP = RequestP::find($id);
         if ($requestP==null) {
-            return response()->json(['message'=>'No existe este pedido'], 401);
+            return response()->json(['message'=>'No existe este pedido'], 404);
         } else {
             $requestP->products()->delete();
             $requestP->delete();
@@ -194,7 +194,7 @@ class PrestaShopController extends Controller
     {
         $products=Product::where('request_id', $id)->get();
         if ($products->isEmpty()) {
-            return response()->json(['message' => 'No existen productos asociados a este pedido'], 401);
+            return response()->json(['message' => 'No existen productos asociados a este pedido'], 404);
         }
         return response()->json(['products'=>$products,'message'=>'Detalle de producto correcto'],200);
 

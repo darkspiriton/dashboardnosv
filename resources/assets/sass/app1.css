@@ -1395,6 +1395,7 @@ th {
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
+  padding-right: 2px;
 }
 
 html {
@@ -1420,13 +1421,13 @@ textarea {
 }
 
 a {
-  color: #2196f3;
+  color: #7f7f7f;
   text-decoration: none;
 }
 
 a:hover,
 a:focus {
-  color: #0a6ebd;
+  color: black;
   text-decoration: none;
 }
 
@@ -1791,6 +1792,8 @@ ul,
 ol {
   margin-top: 0;
   margin-bottom: 9px;
+  list-style: none;
+  padding-left: 60px;
 }
 
 ul ul,

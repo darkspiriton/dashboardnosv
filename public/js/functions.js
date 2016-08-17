@@ -120,7 +120,7 @@ $(document).ready(function(){
                     }
                 });
             }
-        })
+        });
 
         //Submenu
         $('body').on('click', '.sub-menu > a', function(e){
@@ -128,6 +128,8 @@ $(document).ready(function(){
             $(this).next().slideToggle(200);
             $(this).parent().toggleClass('toggled');
         });
+
+        $('.sub-menu ul').hide();
     })();
 
     /*
@@ -154,7 +156,7 @@ $(document).ready(function(){
               z.remove();
           });
           }, w+=150);
-      })
+      });
 
 	//Popup empty message
 	setTimeout(function(){
@@ -178,7 +180,7 @@ $(document).ready(function(){
 		$animArray = $animation.split(',');
 		$animationIn = 'animated '+$animArray[0];
 		$animationOut = 'animated '+ $animArray[1];
-		$animationDuration = ''
+		$animationDuration = '';
 		if(!$animArray[2]) {
 		    $animationDuration = 500; //if duration is not defined, default is set to 500ms
 		}
@@ -186,7 +188,7 @@ $(document).ready(function(){
 		    $animationDuration = $animArray[2];
 		}
 
-		$(this).find('.dropdown-menu').removeClass($animationOut)
+		$(this).find('.dropdown-menu').removeClass($animationOut);
 		$(this).find('.dropdown-menu').addClass($animationIn);
 	    }
 	});
@@ -199,8 +201,7 @@ $(document).ready(function(){
 
     		$dropdownMenu.addClass($animationOut);
     		setTimeout(function(){
-    		    $this.removeClass('open')
-
+    		    $this.removeClass('open');
     		}, $animationDuration);
     	    }
     	});
@@ -397,14 +398,14 @@ $(document).ready(function(){
     if($('.fg-line')[0]) {
         $('body').on('focus', '.form-control', function(){
             $(this).closest('.fg-line').addClass('fg-toggled');
-        })
+        });
 
         $('body').on('blur', '.form-control', function(){
             var p = $(this).closest('.form-group');
             var i = p.find('.form-control').val();
 
             if (p.hasClass('fg-float')) {
-                if (i.length == 0) {
+                if (i.length === 0) {
                     $(this).closest('.fg-line').removeClass('fg-toggled');
                 }
             }
@@ -419,7 +420,7 @@ $(document).ready(function(){
         $('.fg-float .form-control').each(function(){
             var i = $(this).val();
 
-            if (!i.length == 0) {
+            if (i.length !== 0) {
                 $(this).closest('.fg-line').addClass('fg-toggled');
             }
 
@@ -525,7 +526,7 @@ $(document).ready(function(){
             focus: true
 	    });
 	    $('.hec-save').show();
-	})
+	});
 
 	//Save
 	$('body').on('click', '.hec-save', function(){
@@ -603,7 +604,7 @@ $(document).ready(function(){
                 y: 85
             }
         });
-    };
+    }
 
     /*
      * Waves Animation
@@ -708,7 +709,7 @@ $(document).ready(function(){
                 $(z).addClass('toggled');
             });
 
-        })
+        });
     }
 
     /*

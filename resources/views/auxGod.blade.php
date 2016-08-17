@@ -223,6 +223,6 @@
 
 @section('dashCtrls')
     <script src="app/lib/filesave.js"></script>
-    <!-- Dependencias en Resource/assets/js/app - Gulpfile.js -->
+    {{-- # Dependencias en Resource/assets/js/app - Gulpfile.js --}}
     <script src="{{ elixir('app/controllers/compile/godControllers.js') }}"></script>    
 @stop

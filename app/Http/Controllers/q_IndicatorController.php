@@ -13,7 +13,7 @@ class q_IndicatorController extends Controller
     
     public function __construct()
     {
-        $this->middleware('auth:GOD,ADM');
+        $this->middleware('auth:GOD,NOS');
     }
 
     public function showProducts(Request $request){

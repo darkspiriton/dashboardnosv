@@ -12,7 +12,7 @@ class QuestionnairesController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth:GOD,ADM');
+        $this->middleware('auth:GOD,NOS');
     }
 
     /**

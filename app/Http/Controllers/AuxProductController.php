@@ -26,8 +26,8 @@ class AuxProductController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth:GOD,ADM,JVE,PUB,PRO,VEN,STO');
-        $this->middleware('auth:GOD,ADM,JVE,STO', ['only' => 'movements_for_product']);
+        $this->middleware('auth:GOD,NOS,ADM,JVE,PUB,PRO,VEN,STO');
+        $this->middleware('auth:GOD,NOS,ADM,JVE,STO', ['only' => 'movements_for_product']);
     }
 
     /**

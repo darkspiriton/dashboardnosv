@@ -3,106 +3,7 @@ angular.module('App')
         $stateProvider
             .state('Stock', {
                 url: '/Stock-general-de-productos',
-                template: 
-                `<div class="card">
-                    <div class="card-header bgm-blue">
-                        <h2>Stock general de productos</h2>
-                        <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="list()"
-                                data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
-                                title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
-                    </div>
-                    <div class="card-header bgm-lightblue">
-                        <div ng-form="dates" class="row report-date">
-
-                            <h2 class="col-xs-5 col-sm-1 text-right m-t-20">Tipo</h2>
-                            <select class="col-xs-7 col-sm-2 m-t-20" ng-options="type.id as type.name for type in types" ng-model="data.type">
-                               <option value="" selected="selected">Seleccione</option>
-                            </select>
-
-                            <h2 class="col-xs-5 col-sm-1 text-right  m-t-20">Proveedor</h2>
-                            <select class="col-xs-7 col-sm-2 m-t-20" ng-options="provider.id as provider.name for provider in providers" ng-model="data.provider_id">
-                               <option value="" selected="selected">Seleccione</option>
-                            </select>
-
-                            <h2 class="col-xs-5 col-sm-1 text-right m-t-20">Venta</h2>
-                            <select class="col-xs-7 col-sm-2 m-t-20" ng-model="data.status_sale">
-                               <option value="" selected="selected">Seleccione</option>
-                               <option value="0" selected="selected">Normal</option>
-                               <option value="1" selected="selected">Liquidacion</option>
-                            </select>
-
-                            <div class="col-xs-12 col-sm-3 m-t-20" style="height:30px;"></div>
-
-                            <h2 class="col-xs-5 col-sm-1 m-t-20 text-right">Producto</h2>
-                            <select class="col-xs-7 col-sm-2 m-t-20" ng-options="product.name as product.name for product in products" ng-model="data.product">
-                               <option value=""  selected="selected">Seleccione</option>
-                            </select>
-
-                            <h2 class="col-xs-5 col-sm-1 m-t-20 text-right">Talla</h2>
-                            <select class="col-xs-7 col-sm-2 m-t-20" ng-options="size.id as size.name for size in sizes" ng-model="data.size">
-                               <option value=""  selected="selected">Seleccione</option>
-                            </select>
-
-                            <h2 class="col-xs-5 col-sm-1 m-t-20 text-right">Color</h2>
-                            <select class="col-xs-7 col-sm-2 m-t-20" ng-options="color.id as color.name for color in colors" ng-model="data.color">
-                               <option value="" selected="selected">Seleccione</option>
-                            </select>
-
-                            <div class="col-xs-offset-0 col-xs-12 col-sm-offset-1 col-sm-2 p-0 m-t-20">
-                                <input type="button" ng-disabled="!dates.$valid" ng-click="searchList(data)" class="btn btn-block bgm-indigo" value="buscar">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body card-padding table-responsive">
-                    <div class="col-sm-12" ng-show="updateList">
-                        <i class="fa fa-refresh fa-spin fa-5x" style="display: table;margin: 0 auto;"></i>
-                    </div><br>
-                        <div class="col-sm-12" ng-hide="updateList">
-                            <table id="table" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
-                        </div><br>
-                    </div><br>
-                </div>
-                <div class="card">
-                    <div class="card-header bgm-blue">
-                        <h2>Stock general de productos</h2>
-                        <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="list()"
-                                data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
-                                title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
-                    </div>
-                    <div class="card-body card-padding table-responsive">
-                    <div class="col-sm-12" ng-show="updateList">
-                        <i class="fa fa-refresh fa-spin fa-5x" style="display: table;margin: 0 auto;"></i>
-                    </div><br>
-                        <div class="col-sm-12" ng-hide="updateList">
-                            <table id="stockResume" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
-                        </div><br>
-                    </div><br>
-                </div>
-                <!-- Modal -->
-                <div class="modal fade" id="Modal" tabindex="-1" role="dialog">
-                    <div class="modal-dialog modal-lg" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header bgm-teal">
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                        aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title c-white">Caracteristicas</h4>
-                            </div>
-                            <div class="modal-body card-padding">
-                                <form class="form-horizontal" autocomplete="off" submit="return false;">
-                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label">caracteristicas: </label>
-                                        <div class="col-sm-10 m-t-15 imput-pad">
-                                            <div class="fg-line">
-                                                <div class="col-sm-10" ng-bind-html="types"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>`,
+                templateUrl: 'app/partials/auxStock.html',
                 controller : 'auxStockCtrl'
             });
     }])
@@ -150,13 +51,14 @@ angular.module('App')
                 {"sTitle": "P. Final", "bSortable" : true}
             ],
             data    :   ['create','provider.name','typesList','name','cantP','cost_provider','utility','price_final']
-        }
+        };
 
         $scope.list = function() {
             $scope.updateList = true;
             petition.get('api/auxproduct/get/stockProd')
                 .then(function(data){
                     $scope.tableData = data.stock;
+                    $scope.tableData2 = data.resume;
                     $('#table').AJQtable2('view2', $scope, $compile);
                     $('#stockResume').AJQtable2('view2', $scope, $compile, data.resume, resumeConfig);
                     $scope.updateList = false;
@@ -173,25 +75,25 @@ angular.module('App')
          */
 
         $scope.typesList = function(){
-            petition.get(`api/auxproduct/filter/get/types`)
+            petition.get('api/auxproduct/filter/get/types')
                 .then(function(data){
                     $scope.types = data.types;
                 }, function(error){
                     toastr.error('Huy Huy dice: ' + error.data.message);
                 });
-        }
+        };
 
         $scope.providerList = function(){
-            petition.get(`api/auxproduct/filter/get/providers`)
+            petition.get('api/auxproduct/filter/get/providers')
                 .then(function(data){
                     $scope.providers = data.providers;
                 }, function(error){
                     toastr.error('Huy Huy dice: ' + error.data.message);
                 });
-        }
+        };
 
         $scope.productList = function(){
-            petition.get(`api/auxproduct/filter/get/products`)
+            petition.get('api/auxproduct/filter/get/products')
                 .then(function(data){
                     $scope.products = data.products;
                     $scope.colors = data.colors;
@@ -199,21 +101,22 @@ angular.module('App')
                 }, function(error){
                     toastr.error('Huy Huy dice: ' + error.data.message);
                 });
-        }
+        };
 
         $scope.searchList = function(dataSearch){
             $scope.updateList = true;
             if(dataSearch.status_sale === "")dataSearch.status_sale = null;
-            petition.get(`api/auxproduct/filter/get/search/stock`, {params: dataSearch})
+            petition.get('api/auxproduct/filter/get/search/stock', {params: dataSearch})
                 .then(function(data){
                     $scope.tableData = data.stock;
+                    $scope.tableData2 = [];
                     $('#table').AJQtable2('view2', $scope, $compile);
                     $scope.updateList = false;
                 }, function(error){
                     toastr.error('Huy Huy dice: ' + error.data.message);
                     $scope.updateList = false;
                 });
-        }
+        };
 
         function resetProduct(){
             $scope.products = [];
@@ -240,7 +143,7 @@ angular.module('App')
 
         angular.element(document).ready(function(){
             $scope.product = angular.copy($scope.productClear);
-            $scope.list();
+            // $scope.list();
 
             $scope.typesList();
             $scope.providerList();

@@ -11,7 +11,7 @@ angular.module('App')
                 '                title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>'+
                 '    </div>'+
                 '    <div class="card-body card-padding table-responsive">'+
-                '       <div class="col-sm-12" ng-show="updateList">'+
+                '       <div class="col-sm-12" ng-hide="updateList || !(tableData.length > 0)">'+
                 '           <i class="fa fa-refresh fa-spin fa-5x" style="display: table;margin: 0 auto;"></i>'+
                 '        </div><br>'+
                 '        <div class="col-sm-12" ng-hide="updateList">'+
@@ -64,7 +64,7 @@ angular.module('App')
         };
 
         angular.element(document).ready(function(){
-            $scope.product = angular.copy($scope.productClear);
-            $scope.list();
+            // $scope.product = angular.copy($scope.productClear);
+            // $scope.list();
         });
     }]);

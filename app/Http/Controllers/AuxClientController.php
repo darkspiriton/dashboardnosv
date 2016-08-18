@@ -35,9 +35,9 @@ class AuxClientController extends Controller
     {
         $rules = [
             'name'      =>  'required|string|max:255',
-            'email'     =>  'required|email',
+            'email'     =>  'email',
             'phone'     =>  'required|string|max:25',
-            'dni'       =>  'required|max:8',
+            'dni'       =>  'max:8',
             'address'   =>  'required|string',
             'reference' =>  'required|string'
         ];

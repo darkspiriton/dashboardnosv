@@ -71,6 +71,9 @@
                         </li>
                         <li id="comments">
                             <a href="#" ui-sref="Comentarios"><i class="md md-comment"></i>Comentarios Web</a>
+                        </li>
+                        <li id="productsHELP">
+                            <a href="#" ui-sref="Productos Eliminados"><i class="md md-comment"></i>Productos eliminados</a>
                         </li>   
                     </ul>
                 </li>

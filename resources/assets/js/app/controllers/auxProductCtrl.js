@@ -229,7 +229,7 @@ angular.module('App')
             sweetAlert(alertConfig, function () {
                 petition.delete('api/auxproduct/' + $scope.tableData[i].id)
                     .then(function (data) {
-                        $scope.list();
+                        $scope.searchList($scope.data);
                         toastr.success(data.message);
                     }, function (error) {
                         toastr.error('Uyuyuy dice: ' + error.data.message);
@@ -319,7 +319,7 @@ angular.module('App')
                     petition.custom(config).then(function(data){
                         toastr.success(data.message);
                         $scope.formSubmit=false;
-                        $scope.list();
+                        $scope.searchList($scope.data);
                         $scope.listCodes();
                         util.ocultaformulario();
                     }, function(error){
@@ -561,7 +561,7 @@ angular.module('App')
                         toastr.error('Huy Huy dice: ' + data.message);
                     }
                 },function(error){
-                    $scope.list();
+                    $scope.searchList($scope.data);
                     toastr.error('Huy Huy dice: ' + error.data.message);
                 });
 
@@ -610,7 +610,7 @@ angular.module('App')
                      .then(function (data) {
                         util.modalClose();
                         toastr.success(data.message);
-                        $scope.list();
+                        $scope.searchList($scope.data);
                      }, function (error) {
                          toastr.error('Uyuyuy dice: ' + error.data.message);
                      });
@@ -629,7 +629,7 @@ angular.module('App')
                     $scope.observe_detail = data.observe_detail;
                     util.modal('ModalDetail');
                 },function(error){
-                    $scope.list();
+                    $scope.searchList($scope.data);
                     toastr.error('Huy Huy dice: ' + error.data.message);
                 });
          };

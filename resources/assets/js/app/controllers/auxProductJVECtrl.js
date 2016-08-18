@@ -183,7 +183,7 @@ angular.module('App')
                     $scope.searchList($scope.data);
                     toastr.success(data.message);
                 }, function(error){
-                    $scope.list();
+                    $scope.searchList($scope.data);
                     toastr.error('Huy Huy dice: ' + error.data.message);
                 });
         };
@@ -219,7 +219,7 @@ angular.module('App')
                         toastr.error('Huy Huy dice: ' + data.message);
                     }
                 },function(error){
-                    $scope.list();
+                    $scope.searchList($scope.data);
                     toastr.error('Huy Huy dice: ' + error.data.message);
                 });
 
@@ -268,7 +268,7 @@ angular.module('App')
                      .then(function (data) {
                         util.modalClose();
                         toastr.success(data.message);
-                        $scope.list();
+                        $scope.searchList($scope.data);
                      }, function (error) {
                          toastr.error('Uyuyuy dice: ' + error.data.message);
                      });
@@ -287,10 +287,10 @@ angular.module('App')
                     $scope.observe_detail = data.observe_detail;
                     util.modal('ModalDetail');
                 },function(error){
-                    $scope.list();
+                    $scope.searchList($scope.data);
                     toastr.error('Huy Huy dice: ' + error.data.message);
                 });
-         }
+         };
 
          $scope.cancel = function(){
            util.modalClose();

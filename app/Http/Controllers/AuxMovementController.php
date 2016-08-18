@@ -426,19 +426,18 @@ class AuxMovementController extends Controller
      */
     private function queryReportMovement(Request $request)
     {
-        $query = Product::from('auxproducts as p')
-        ->with('user')
+        $query = Product::with('user')
         ->select('m.created_at', 'm.date_shipment as fecha', 'm.status', 'm.situation', 'm.discount', 'cod_order', 'date_request')
-        ->addSelect('p.cod as codigo', 'p.name as product', 'p.cost_provider', 'p.utility')
+        ->addSelect('auxproducts.cod as codigo', 'auxproducts.name as product', 'auxproducts.cost_provider', 'auxproducts.utility')
         ->addSelect('c.name as color', 's.name as talla')
-        ->addSelect(DB::raw('p.cost_provider + p.utility  as price_real'))
-        ->addSelect(DB::raw('case when dc.price then dc.price else p.cost_provider + p.utility end as price'))
+        ->addSelect(DB::raw('auxproducts.cost_provider + auxproducts.utility  as price_real'))
+        ->addSelect(DB::raw('case when dc.price then dc.price else auxproducts.cost_provider + auxproducts.utility end as price'))
         ->addSelect(DB::raw('case when dc.price then 1 else 0 end liquidation'))
         ->addSelect('user_id')
-        ->join('auxmovements as m', 'p.id', '=', 'm.product_id')
-        ->join('colors as c', 'c.id', '=', 'p.color_id')
-        ->join('sizes as s', 's.id', '=', 'p.size_id')
-        ->leftJoin('settlements as dc', 'dc.product_id', '=', 'p.id')
+        ->join('auxmovements as m', 'auxproducts.id', '=', 'm.product_id')
+        ->join('colors as c', 'c.id', '=', 'auxproducts.color_id')
+        ->join('sizes as s', 's.id', '=', 'auxproducts.size_id')
+        ->leftJoin('settlements as dc', 'dc.product_id', '=', 'auxproducts.id')
         ->orderby('m.date_shipment', 'asc');
 
         if ($request->has('date1') && $request->has('date2')) {
@@ -461,19 +460,19 @@ class AuxMovementController extends Controller
         }
 
         if ($request->has('name')) {
-            $query->where('p.name', $request->input('name'));
+            $query->where('auxproducts.name', $request->input('name'));
         }
 
         if ($request->has('size')) {
-            $query->where('p.size_id', $request->input('size'));
+            $query->where('auxproducts.size_id', $request->input('size'));
         }
 
         if ($request->has('color')) {
-            $query->where('p.color_id', $request->input('color'));
+            $query->where('auxproducts.color_id', $request->input('color'));
         }
 
         if ($request->has('provider')) {
-            $query->where('p.provider_id', $request->input('provider'));
+            $query->where('auxproducts.provider_id', $request->input('provider'));
         }
 
         if ($request->has('order_date')) {

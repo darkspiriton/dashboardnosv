@@ -1,9 +1,6 @@
 <div class="card" >
     <div class="card-header bgm-blue">
         <h2>Gestión de productos</h2>
-        <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="list()"
-                data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
-                title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
     </div>
     <div class="card-header bgm-lightblue">
        <div ng-form="dates" class="row report-date">
@@ -57,10 +54,7 @@
     </div>
 
     <div class="card-body card-padding table-responsive">
-        <div class="col-sm-12" ng-show="updateList">
-            <i class="fa fa-refresh fa-spin fa-5x" style="display: table;margin: 0 auto;"></i>
-        </div><br>
-        <div class="col-sm-12" ng-hide="updateList">
+        <div class="col-sm-12" ng-hide="updateList || !(tableData.length > 0)">
             <table id="table" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
         </div><br>
         <div class="card-footer">
@@ -257,7 +251,7 @@
     </div>
 </div>
 
-<div class="card" >
+<!-- <div class="card" >
     <div class="card-header bgm-blue">
         <h2>Listado de productos</h2>
     </div>
@@ -270,7 +264,7 @@
             <table id="tableList" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
         </div><br>
     </div><br>
-</div>
+</div> -->
 
 <!-- Modal -->
 <!-- Nuevo Feature -->

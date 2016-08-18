@@ -370,7 +370,7 @@ angular.module('App')
          */ 
 
         angular.element(document).ready(function(){
-            $scope.list();
+            // $scope.list();
             $scope.typesList();
             $scope.providerList();
             $scope.productList();

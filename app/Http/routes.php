@@ -132,6 +132,7 @@ Route::group(['prefix' => 'api'], function(){
         Route::get('observe/{id}','AuxProductController@product_observe_status');
         Route::put('observe/update/{id}','AuxProductController@product_observe_update');
         Route::get('observe/detail/{id}','AuxProductController@product_observe_detail');
+        Route::post('delete/restore/{id}','AuxProductController@restore');
     });
 
     /**
@@ -145,6 +146,7 @@ Route::group(['prefix' => 'api'], function(){
         Route::get('get/search','auxProductFiltersController@FilterForAll');
         Route::post('get/search/download','auxProductFiltersController@FilterForAllDownload');
         Route::get('get/search/stock','auxProductFiltersController@FilterStockForAllByVEN');
+        Route::get('get/delete','auxProductFiltersController@FilterForSoftDelete');
     });
 
     /**

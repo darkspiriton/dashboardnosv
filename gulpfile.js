@@ -153,6 +153,7 @@ elixir(function(mix) {
         "app/controllers/auxMovement2_JVECtrl.js",
         "app/controllers/auxProductJVECtrl.js",
         "app/controllers/auxStockVENCtrl.js",
+        "app/controllers/auxProductHelpCtrl.js",
         ], "public/app/controllers/compile/godControllers.js");    
 
     /*

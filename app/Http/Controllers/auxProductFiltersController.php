@@ -2,6 +2,8 @@
 
 namespace Dashboard\Http\Controllers;
 
+use Carbon\Carbon;
+use DB;
 use Dashboard\Http\Requests;
 use Dashboard\Models\Experimental\Color;
 use Dashboard\Models\Experimental\Product;
@@ -9,9 +11,8 @@ use Dashboard\Models\Experimental\Provider;
 use Dashboard\Models\Experimental\Size;
 use Dashboard\Models\Experimental\Type;
 use Illuminate\Http\Request;
-use \Validator;
-use \DB;
-use \Log;
+use Log;
+use Validator;
 
 class auxProductFiltersController extends Controller
 {
@@ -329,5 +330,42 @@ class auxProductFiltersController extends Controller
     	}
 
     	return $data;
+    }
+
+    /**
+     * Listado de productos por filtro de busqueda
+     *
+     *  @param  Illuminate\Http\Request  $request
+     *  @return  Illuminate\Http\Response
+     */
+    public function FilterForSoftDelete(Request $request)
+    {
+        $end = Carbon::now();
+        $start = $end->copy()->addDays(-7);
+
+        // return [$start->toDateString(), $end->toDateString()];
+
+        $query = DB::table('auxproducts as p')
+                        ->select('p.status', DB::raw('DATE_FORMAT(p.created_at,\'%d-%m-%Y\') as date'), 'p.id', 'p.cod', 'p.name', 's.name as size', 'c.name as color', 'pv.name as provider', DB::raw('GROUP_CONCAT(t.name ORDER BY t.name ASC SEPARATOR \' - \') as types'), 'p.cost_provider', 'p.utility')
+                        ->addSelect(DB::raw('p.cost_provider + p.utility  as price_real'))
+                        ->addSelect(DB::raw('case when dc.price then dc.price else p.cost_provider + p.utility end as precio'))
+                        ->addSelect(DB::raw('case when dc.price then 1 else 0 end liquidation'))
+                        ->leftJoin('types_auxproducts as tp', 'tp.product_id', '=', 'p.id')
+                        ->leftJoin('types as t', 't.id', '=', 'tp.type_id')
+                        ->join('colors as c', 'c.id', '=', 'p.color_id')
+                        ->join('sizes as s', 's.id', '=', 'p.size_id')
+                        ->join('providers as pv', 'pv.id', '=', 'p.provider_id')
+                        ->leftJoin('settlements as dc', 'dc.product_id', '=', 'p.id')
+                        ->where('p.deleted_at', '<>', null)
+                        ->where('p.deleted_at', '>=', $start)
+                        ->where('p.deleted_at', '<=', $end)
+                        ->groupBy('cod')
+                        ->orderBy('id', 'desc');
+
+        $products = $query->get();
+
+        $products = $this->StatusSalesCase($request, $products);
+
+        return $products;
     }
 }

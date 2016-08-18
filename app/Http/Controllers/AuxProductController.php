@@ -277,6 +277,29 @@ class AuxProductController extends Controller
         }
     }
 
+    /**
+     * Restore the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function restore($id)
+    {
+        $auxproduct = Product::withTrashed()->find($id);
+
+        if ($auxproduct == null) {
+            return response()->json(["message" => "El producto a restaurar no existe."]);
+        }
+
+        if ($auxproduct->trashed()) {
+            $auxproduct->restore();
+            return response()->json(["message" => "El producto se restauro con exito."]);
+        } else {
+            return response()->json(["message" => "El producto no se encuentra eliminado."]);
+        }
+    }
+
+
     public function setProvider(Request $request)
     {
         // Creamos las reglas de validación
@@ -413,28 +436,28 @@ class AuxProductController extends Controller
 
     public function stockProd()
     {
-        $stock = Product::with('provider','types','color','size')
-                ->select('provider_id','id','name','color_id','size_id',DB::raw('count(name) as cantP'),'cost_provider','utility')
+        $stock = Product::with('provider', 'types', 'color', 'size')
+                ->select('provider_id', 'id', 'name', 'color_id', 'size_id', DB::raw('count(name) as cantP'), 'cost_provider', 'utility')
                 ->where('status', '=', 1)
-                ->groupby('name','color_id','size_id')->get();
+                ->groupby('name', 'color_id', 'size_id')->get();
 
-        $resume = Product::with('provider','types')
-                    ->select('created_at as create','provider_id','id', 'name',DB::raw('count(name) as cantP'),'cost_provider','utility')
+        $resume = Product::with('provider', 'types')
+                    ->select('created_at as create', 'provider_id', 'id', 'name', DB::raw('count(name) as cantP'), 'cost_provider', 'utility')
                     ->where('status', '=', 1)
                     ->orWhere('status', '=', 3)
                     ->groupby('name')->get();
 
         foreach ($stock as $product) {
-            if ($product->types){
-                $product->typesList = $product->types->implode("name"," | ");
+            if ($product->types) {
+                $product->typesList = $product->types->implode("name", " | ");
             }
 
             $product->price_final = $product->cost_provider + $product->utility;
-        }            
+        }
 
         foreach ($resume as $product) {
-            if ($product->types){
-                $product->typesList = $product->types->implode("name"," | ");
+            if ($product->types) {
+                $product->typesList = $product->types->implode("name", " | ");
             }
             $product->price_final = $product->cost_provider + $product->utility;
         }
@@ -786,7 +809,7 @@ class AuxProductController extends Controller
             //             ->find($id);
 
             $movements = DB::table('auxproducts as p')
-                ->select('m.date_request as pedido', 'm.cod_order', 'm.date_shipment as entrega', 'm.status','m.situation', 'm.discount')
+                ->select('m.date_request as pedido', 'm.cod_order', 'm.date_shipment as entrega', 'm.status', 'm.situation', 'm.discount')
                 ->addSelect('p.cod as codigo', 'p.name as product', 'p.cost_provider', 'p.utility')
                 ->addSelect('c.name as color', 's.name as talla')
                 ->addSelect(DB::raw('p.cost_provider + p.utility  as price_real'))
@@ -797,7 +820,7 @@ class AuxProductController extends Controller
                 ->join('colors as c', 'c.id', '=', 'p.color_id')
                 ->join('sizes as s', 's.id', '=', 'p.size_id')
                 ->leftJoin('settlements as dc', 'dc.product_id', '=', 'p.id')
-                ->leftJoin('users as u','u.id','=','m.user_id')
+                ->leftJoin('users as u', 'u.id', '=', 'm.user_id')
                 ->where('p.id', $id)
                 ->orderby('m.date_shipment', 'desc')
                 ->get();
@@ -829,7 +852,7 @@ class AuxProductController extends Controller
             $product->save();
 
             return response()->json(["message" => "Se reservo el producto exitosamente"]);
-        } else if($product->status == 3){
+        } elseif ($product->status == 3) {
             $product->status = 1;
             $product->save();
 
@@ -837,7 +860,6 @@ class AuxProductController extends Controller
         } else {
             return response()->json(["message" => "No se pudo cambiar el estado"], 401);
         }
-        
     }
 
     /**
@@ -850,56 +872,54 @@ class AuxProductController extends Controller
     {
         $product = Product::find($id);
 
-        if ($product == null){
-            return response()->json(['message' => 'El producto no existe'],404);
+        if ($product == null) {
+            return response()->json(['message' => 'El producto no existe'], 404);
         }
         $stat=$product->status;
-        if ($stat == 1){
-            return response()->json(['status' => false],200);
-        } else if($stat == 4){
-            return response()->json(['status' => true],200);
-        }else{
-            return response()->json(['status' => null,'message' => 'Solo se puede cambiar el estado a productos disponibles'],200);
+        if ($stat == 1) {
+            return response()->json(['status' => false], 200);
+        } elseif ($stat == 4) {
+            return response()->json(['status' => true], 200);
+        } else {
+            return response()->json(['status' => null, 'message' => 'Solo se puede cambiar el estado a productos disponibles'], 200);
         }
-
     }
 
-    public function product_observe_update(Request $request,$id)
+    public function product_observe_update(Request $request, $id)
     {
         $rules =[
             'situation'=>'string',
-        ];        
-        $validator = \Validator::make($request->all(),$rules);
-        if ($validator->fails()){
+        ];
+        $validator = \Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
             return response()->json(['message' => 'No posee todo los campos necesarios para actualizar producto']);
         };
 
         $product = Product::find($id);
-        if ($product == null){
-            return response()->json(['message' => 'El producto no existe'],404);
+        if ($product == null) {
+            return response()->json(['message' => 'El producto no existe'], 404);
         };
 
-        if ($product->status == 4){
+        if ($product->status == 4) {
             $product->status = 1;
             $product->observe_detail = null;
             $product->save();
             return response()->json(['message'=>'Se quito el estado de observado']);
-
-        } else if($product->status == 1) {
-            $product->status = 4;   
-            $product->observe_detail = $request->input('situation');         
+        } elseif ($product->status == 1) {
+            $product->status = 4;
+            $product->observe_detail = $request->input('situation');
             $product->save();
             return response()->json(['message'=>'Se actualizo el estado a observado']);
-
-        }     
-        return response()->json(['message'=>'No se pudo actualizar el estado del producto']);       
+        }
+        return response()->json(['message'=>'No se pudo actualizar el estado del producto']);
     }
 
-    public function product_observe_detail($id){
+    public function product_observe_detail($id)
+    {
         $product = Product::find($id);
-        if($product == null){
-            return response()->json(['message'=>'l producto no existe'],404);
+        if ($product == null) {
+            return response()->json(['message'=>'l producto no existe'], 404);
         }
-        return response()->json(['observe_detail'=>$product->observe_detail],200);
+        return response()->json(['observe_detail'=>$product->observe_detail], 200);
     }
 }

@@ -61,6 +61,8 @@ angular.module('App')
                 {"sTitle": "Talla", "bSortable" : true},
                 {"sTitle": "Color", "bSortable" : true, "bSearchable": true},
                 {"sTitle": "Tipos", "bSortable" : true, "bSearchable": true},
+                {"sTitle": "P. Prov" , "bSearchable": false},
+                {"sTitle": "Utilidad" , "bSearchable": false},
                 {"sTitle": "Estado V." , "bSearchable": false},
                 {"sTitle": "P. Real" , "bSearchable": false},
                 {"sTitle": "Precio" , "bSearchable": false},
@@ -83,7 +85,7 @@ angular.module('App')
                         ]
                     }
                 ],
-            data  	: 	['date','cod','name','provider','size','color','types','statusForSale','price_real','precio','obseveDetail','actions'],
+            data  	: 	['date','cod','name','provider','size','color','types','cost_provider','utility','statusForSale','price_real','precio','obseveDetail','actions'],
             configStatus : 'status'
         };
 

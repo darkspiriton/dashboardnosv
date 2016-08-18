@@ -30,6 +30,10 @@ class User extends Model
         'password','token'
     ];
 
+    public function setTokenAttribute($value){
+        if($value===null)return $this->attributes['token']=$value;
+    }
+
     public function role(){
         return $this->belongsTo(Role::class);
     }

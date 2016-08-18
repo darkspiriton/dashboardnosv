@@ -143,7 +143,10 @@ class UserController extends Controller
                 $user->phone= $request->input('phone');
                 $user->address= $request->input('address');
                 $user->sex= $request->input('sex');
-                $user->role_id= $request->input('role_id');
+                if($user->role_id != $request->input('role_id')){
+                    $user->role_id= $request->input('role_id');
+                    $user->token=null;
+                }
                 $user->status= $request->input('status');
                 //$user->user= $request->input('user');
                 if($request->input('password') !== null ){

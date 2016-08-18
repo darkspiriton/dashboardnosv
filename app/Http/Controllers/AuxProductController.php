@@ -12,8 +12,8 @@ use Faker\Test\Provider\ProviderOverrideTest;
 use Illuminate\Support\Facades\Event;
 use Dashboard\Models\Experimental\Product;
 use Illuminate\Http\Request;
-use \DB;
-use \Exception;
+use DB;
+use Exception;
 use Dashboard\Models\Experimental\Alarm;
 use Dashboard\User;
 use Dashboard\Http\Requests;
@@ -48,6 +48,7 @@ class AuxProductController extends Controller
                         ->join('sizes as s', 's.id', '=', 'p.size_id')
                         ->join('providers as pv', 'pv.id', '=', 'p.provider_id')
                         ->leftJoin('settlements as dc', 'dc.product_id', '=', 'p.id')
+                        ->whereNull('p.deleted_at')
                         ->groupBy('cod')
                         ->orderBy('id', 'desc');
 
@@ -267,7 +268,7 @@ class AuxProductController extends Controller
             } elseif ($liquidation !== null) {
                 return response()->json(['message'=>'No se puede eliminar este producto esta en liquidacion'], 401);
             } else {
-                $auxproduct->types()->detach();
+                // $auxproduct->types()->detach();
                 $auxproduct->delete();
                 return response()->json(['message'=>'Se elimino el producto correctamente'], 200);
             }

@@ -5,12 +5,17 @@ namespace Dashboard\Models\Experimental;
 use Dashboard\Models\Publicity\Publicity;
 use Dashboard\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
+
+    use SoftDeletes;
+
     protected $table = "auxproducts";
     protected $hidden = ['pivot', 'updated_at'];
     protected $casts = ["utility" => "float", "cost_provider" => "float"];
+    protected $dates = ['deleted_at'];
 
     public function size(){
         return $this->belongsTo(Size::class);

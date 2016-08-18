@@ -108,6 +108,7 @@ class auxProductFiltersController extends Controller
                         ->join('sizes as s', 's.id', '=', 'p.size_id')
                         ->join('providers as pv', 'pv.id', '=', 'p.provider_id')
                         ->leftJoin('settlements as dc', 'dc.product_id', '=', 'p.id')
+                        ->whereNull('p.deleted_at')
                         ->groupBy('cod')
                         ->orderBy('id', 'desc');
 
@@ -153,6 +154,7 @@ class auxProductFiltersController extends Controller
                         ->join('sizes as s', 's.id', '=', 'p.size_id')
                         ->join('providers as pv', 'pv.id', '=', 'p.provider_id')
                         ->leftJoin('settlements as dc', 'dc.product_id', '=', 'p.id')
+                        ->whereNull('p.deleted_at')
                         ->groupBy('cod')
                         ->orderBy('id', 'desc');
 
@@ -220,20 +222,20 @@ class auxProductFiltersController extends Controller
      *	@return  Illuminate\Http\Response
      */	
     public function FilterStockForAllByVEN(Request $request){
-    	$query = Product::from( 'auxproducts as p' )
-    			->with('provider','types','color','size')
-    	        ->select('provider_id','p.id','p.name','color_id','size_id',DB::raw('count(p.name) as cantP'),'cost_provider','utility')
+    	$query = Product::with('provider','types','color','size')
+    	        ->select('provider_id','auxproducts.id','auxproducts.name','color_id','size_id',DB::raw('count(auxproducts.name) as cantP'),'cost_provider','utility')
     	        ->addSelect(DB::raw('case when dc.price then 1 else 0 end liquidation'))
-    	        ->leftJoin('types_auxproducts as tp', 'tp.product_id', '=', 'p.id')
+    	        ->leftJoin('types_auxproducts as tp', 'tp.product_id', '=', 'auxproducts.id')
     	        ->leftJoin('types as t', 't.id', '=', 'tp.type_id')
-    	        ->join('colors as c', 'c.id', '=', 'p.color_id')
-    	        ->join('sizes as s', 's.id', '=', 'p.size_id')
-    	        ->join('providers as pv', 'pv.id', '=', 'p.provider_id')
-    	        ->leftJoin('settlements as dc', 'dc.product_id', '=', 'p.id')
+    	        ->join('colors as c', 'c.id', '=', 'auxproducts.color_id')
+    	        ->join('sizes as s', 's.id', '=', 'auxproducts.size_id')
+    	        ->join('providers as pv', 'pv.id', '=', 'auxproducts.provider_id')
+    	        ->leftJoin('settlements as dc', 'dc.product_id', '=', 'auxproducts.id')
     	        ->where('status', '=', 1)
+                // ->whereNull('p.deleted_at')
     	        ->groupby('name','color_id','size_id');
 
-    	$query = $this->QueryRequest($request, $query);
+    	$query = $this->QueryRequest($request, $query, 1);
 
     	$stock = $query->get();
 
@@ -262,33 +264,44 @@ class auxProductFiltersController extends Controller
      *	@param  Illuminate\Database\Eloquent\Model  $query
      *	@return  Illuminate\Database\Eloquent\Model 	    
      */
-    private function QueryRequest(Request $request, $query){
+    private function QueryRequest(Request $request, $query, $aux = null){
     	if ($request->has('type')) {
     	    $query->where('tp.type_id', $request->input('type'));
     	}
 
     	if ($request->has('provider_id')) {
-    	    $query->where('p.provider_id', $request->input('provider_id'));
-    	}
+            if($aux)
+    	        $query->where('auxproducts.provider_id', $request->input('provider_id'));
+    	    else
+                $query->where('p.provider_id', $request->input('provider_id'));
+        }
 
     	if ($request->has('product')) {
-    	    $query->where('p.name', $request->input('product'));
+            if($aux)
+    	        $query->where('auxproducts.name', $request->input('product'));
+            else
+                $query->where('p.name', $request->input('product'));
     	}
 
     	if ($request->has('color')) {
-    	    $query->where('p.color_id', $request->input('color'));
+            if($aux)
+                $query->where('auxproducts.color_id', $request->input('color'));
+            else
+                $query->where('p.color_id', $request->input('color'));
     	}
 
     	if ($request->has('size')) {
-    	    $query->where('p.size_id', $request->input('size'));
+            if($aux)
+                $query->where('auxproducts.size_id', $request->input('size'));
+            else
+    	       $query->where('p.size_id', $request->input('size'));
     	}
 
     	if ($request->has('status')) {
-    	    $query->where('p.status', $request->input('status'));
-    	}
-
-    	if ($request->has('status')) {
-    	    $query->where('p.status', $request->input('status'));
+            if($aux)
+                $query->where('auxproducts.status', $request->input('status'));
+            else
+    	        $query->where('p.status', $request->input('status'));
     	}
 
     	return $query;

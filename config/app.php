@@ -168,7 +168,6 @@ return [
         Dashboard\Providers\RouteServiceProvider::class,
 
         /* Personal provider */
-        Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
 
         /* Twilio */

@@ -35,7 +35,8 @@ angular.module('App')
                         ['eliminar', 'delete' ,'bgm-red'],
                         ['editar', 'edit' ,'btn-primary'],
                         ['movimientos','movements','bgm-teal'],
-                        ['observar','observe','bgm-lime']
+                        ['observar','observe','bgm-lime'],
+                        ['transición','transi','bgm-red']
                     ];
 
         var status = {
@@ -164,7 +165,7 @@ angular.module('App')
 
         function otherView(data){
             for(var i in data){
-                if (data[i].status == 0){
+                if (data[i].status === 0){
                     data[i].statusSale = "salida";
                 } else if (data[i].status == 1){
                     data[i].statusSale = "disponible";
@@ -207,6 +208,10 @@ angular.module('App')
             data.alarm.count=parseInt(data.alarm.count);
             $scope.product = data;
         }
+
+        $scope.transi = function(){
+
+        };
 
         $scope.delete = function (i) {
             alertConfig.title = "¿Desea eliminar?";
@@ -422,7 +427,7 @@ angular.module('App')
 
         $scope.movements = function(i){
             var id = $scope.tableData[i].id;
-            petition.get(`api/auxproduct/get/movements/${id}`)
+            petition.get('api/auxproduct/get/movements/${id}')
                 .then(function(data){
                     $scope.productMovements = data.movements;
                     util.modal('productMovements');
@@ -447,9 +452,9 @@ angular.module('App')
             };
             if(movement.status == 'salida'){
                 if(movement.situation == 'reprogramado')
-                    return `<a class="btn btn-xs disabled ${info.reprogramado[1]}">${info.reprogramado[0]}</a>`;
+                    return '<a class="btn btn-xs disabled ${info.reprogramado[1]}">${info.reprogramado[0]}</a>';
             }
-            return `<a class="btn btn-xs disabled ${info[movement.status][1]}">${info[movement.status][0]}</a>`;
+            return '<a class="btn btn-xs disabled ${info[movement.status][1]}">${info[movement.status][0]}</a>';
         };
 
         /*
@@ -465,7 +470,7 @@ angular.module('App')
                 1: ['Liquidacion','btn-info',false],
             };
 
-            return `<a class="btn btn-xs disabled ${info[status][1]}">${info[status][0]}</a>`;
+            return '<a class="btn btn-xs disabled ${info[status][1]}">${info[status][0]}</a>';
         };
 
                 /*
@@ -475,7 +480,7 @@ angular.module('App')
          */
 
         $scope.typesList = function(){
-            petition.get(`api/auxproduct/filter/get/types`)
+            petition.get('api/auxproduct/filter/get/types')
                 .then(function(data){
                     $scope.types = data.types;
                 }, function(error){
@@ -484,7 +489,7 @@ angular.module('App')
         };
 
         $scope.providerList = function(){
-            petition.get(`api/auxproduct/filter/get/providers`)
+            petition.get('api/auxproduct/filter/get/providers')
                 .then(function(data){
                     $scope.providers = data.providers;
                 }, function(error){
@@ -493,7 +498,7 @@ angular.module('App')
         };
 
         $scope.productList = function(){
-            petition.get(`api/auxproduct/filter/get/products`)
+            petition.get('api/auxproduct/filter/get/products')
                 .then(function(data){
                     $scope.products = data.products;
                     $scope.colors = data.colors;
@@ -550,17 +555,17 @@ angular.module('App')
                 .then(function(data){
                     //Validar si el producto esta observado o no
                     $scope.status=data.status;
-                    if($scope.status == false){
+                    if($scope.status === false){
                         util.modal('Modal');                        
                         //Mostrar modal y poder elegir el motivo de la observacion
                         //Luego mostrar detalle de modificacion
                         //Luego mostrar detalle de confirmacion
                         //changeObserve(productAux,id);
-                    }else if ($scope.status == true){
+                    }else if ($scope.status === true){
                         //Mostrar detalle de modificacion
                         //Luego mostrar detalle de confirmacion
                         $scope.changeObserve();
-                    } else if ($scope.status == null){
+                    } else if ($scope.status === null){
                         toastr.error('Huy Huy dice: ' + data.message);
                     }
                 },function(error){

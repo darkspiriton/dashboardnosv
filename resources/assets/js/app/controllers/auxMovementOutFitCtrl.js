@@ -90,7 +90,7 @@ angular.module('App')
                 }
             }
 
-            if (count == 0){
+            if (count === 0){
                 toastr.success('se añadio');
                 $scope.movement.products.push({id: $scope.codes[ind].id});
                 $scope.productsView.push($scope.codes[ind]);
@@ -104,7 +104,7 @@ angular.module('App')
         };
 
         $scope.ListCodes = function(name) {
-            if(name == undefined)return;
+            if(name === undefined)return;
             $scope.codes = [];
             petition.get('api/outfit/get/products/'+ name)
                 .then(function(data){
@@ -173,12 +173,12 @@ angular.module('App')
                     }, function(error){
                         toastr.error('Huy Huy dice: ' + error.data.message);
                         $scope.formSubmit=false;
-                    })
+                    });
                 });
         };
 
         $scope.nameStatus = function (e) {
-            if(e == 0)
+            if(e === 0)
                 return 'Inactivo';
             else
                 return 'Activo';
@@ -217,7 +217,7 @@ angular.module('App')
             petition.get('api/outfit/' + id )
                 .then(function(data){
                     $scope.products = data.outfit.products;
-                    for(y in data.outfit.products){
+                    for(var y in data.outfit.products){
                         $scope.OutFitList += '/' + data.outfit.products[y].name;
                     }
                 }, function(error){

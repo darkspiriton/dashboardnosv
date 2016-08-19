@@ -31,7 +31,7 @@ class User extends Model
     ];
 
     public function setTokenAttribute($value){
-        if($value===null)return $this->attributes['token']=$value;
+        return $this->attributes['token']=$value;
     }
 
     public function role(){

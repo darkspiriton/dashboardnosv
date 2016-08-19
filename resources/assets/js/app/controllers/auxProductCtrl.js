@@ -29,6 +29,7 @@ angular.module('App')
         /*
          |  END
          */
+        util.liPage('productsADM');
 
         var actions = [
                         ['eliminar', 'delete' ,'bgm-red'],

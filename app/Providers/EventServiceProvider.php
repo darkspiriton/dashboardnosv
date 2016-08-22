@@ -22,6 +22,9 @@ class EventServiceProvider extends ServiceProvider
         'Dashboard\Events\NotificationPusher' => [
             'Dashboard\Listeners\NotificationPusherListener',
         ],
+        'Dashboard\Events\NotificationPusherWasCheck' => [
+            'Dashboard\Listeners\NotificationPusherWasCheckListener',
+        ],
     ];
 
     /**

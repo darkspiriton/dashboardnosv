@@ -455,8 +455,20 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
                });
         };
 
-        Pusher.subscribe('productChannel', 'create', function (item) {
+        Pusher.subscribe('notification', 'create', function (item) {
             $scope.notifications.unshift(item);
+        });
+
+        Pusher.subscribe('notification', 'update', function (data) {
+            var notifications = $scope.notifications;
+            for(var i in data){
+                for(var n in notifications){
+                    if(data[i].id == notifications[n].id){
+                        notifications[n] = data[i];
+                        break;
+                    }
+                }
+            }
         });
 
         $scope.formatDate = function(date){

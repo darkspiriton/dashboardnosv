@@ -2,6 +2,7 @@
 
 namespace Dashboard\Http\Controllers;
 
+use Dashboard\Events\NotificationPusherWasCheck;
 use Dashboard\Http\Requests;
 use Dashboard\Models\notification\Notification;
 use Illuminate\Http\Request;
@@ -83,6 +84,8 @@ class NotificationController extends Controller
         $notification->status = 1;
         $notification->save();
 
+        event(new NotificationPusherWasCheck($notification));
+
         return $notification;
     }
 
@@ -98,7 +101,7 @@ class NotificationController extends Controller
     }
 
     /**
-     * Update last 20 notification
+     * Update last notification check
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -111,8 +114,10 @@ class NotificationController extends Controller
             Notification::take(20)->update(["status" => 1]);
         }
 
-        $notification = Notification::orderBy("created_at", "desc")->take(20)->get();
+        $notifications = Notification::orderBy("created_at", "desc")->take(20)->get();
 
-        return $notification;
+        event(new NotificationPusherWasCheck($notifications));
+
+        return $notifications;
     }
 }

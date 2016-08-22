@@ -412,12 +412,31 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
         });
     };
 
-    Pusher.subscribe('productChannel', 'all', function (item) {
-        $scope.notifications.push(item);
-    });
+    $scope.checkNotification = function (i) {
+        var id = $scope.notifications[i].id;
+        petition.put("api/notification/" + id).then(function (data) {
+            $scope.notifications[i] = data;
+        }, function (error) {
+            toastr.error("Ocurrio un problema al listar las notificaciones");
+        });
+    };
 
     $scope.clearNotification = function () {
-        $scope.notifications = [];
+        var count = $scope.notifications.length;
+        petition.put("api/notification/update/all", { count: count }).then(function (data) {
+            $scope.notifications = data;
+        }, function (error) {
+            toastr.error("Ocurrio un problema al listar las notificaciones");
+        });
+    };
+
+    Pusher.subscribe('productChannel', 'all', function (item) {
+        $scope.notifications.unshift(item);
+    });
+
+    $scope.formatDate = function (date) {
+        var dateOut = new Date(date);
+        return dateOut;
     };
 
     angular.element(document).ready(function () {

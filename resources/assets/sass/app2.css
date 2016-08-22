@@ -1527,3 +1527,7 @@ div.fc-row {
 .table-mediun tr th {
     font-size: 12px !important;
 }
+
+.ws-normal {
+  white-space: normal !important;
+}

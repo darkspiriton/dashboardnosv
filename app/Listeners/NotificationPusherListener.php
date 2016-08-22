@@ -30,6 +30,6 @@ class NotificationPusherListener
     public function handle(NotificationPusher $event)
     {
         $notification = Notification::create($event->getData());
-        Pusher::trigger('productChannel','all', $notification->toArray());
+        Pusher::trigger('productChannel','create', $notification->toArray());
     }
 }

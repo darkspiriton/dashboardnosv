@@ -3,7 +3,7 @@
     <div class="dropdown-menu dropdown-menu-lg pull-right">
         <div class="listview" id="notifications">
             <div class="lv-header">
-                Notification
+                Notificaciones
 
                 <ul class="actions">
                     <li class="dropdown">
@@ -17,12 +17,20 @@
                 <a class="lv-item" ng-repeat="notification in notifications">
                     <div class="media">
                         <div class="pull-left">
-                            <img class="lv-img-sm" src="img/profile-pics/1.jpg" alt="">
+                            <img class="lv-img-sm" ng-src="img/check@{{ notification.status }}.jpg" alt="">
                         </div>
                         <div class="media-body">
                             <div class="lv-title" ng-bind="notification.title"></div>
-                            <small class="lv-small" ng-bind="notification.body"></small>
+                            <small class="lv-small ws-normal" ng-bind="notification.body"></small>
+                            <small class="lv-small" ng-bind="formatDate(notification.created_at) | date:'dd-MM-yyyy HH:mm:ss'"></small>
                         </div>
+                        <ul class="actions pull-right">
+                            <li class="dropdown">
+                                <div ng-click="checkNotification($index)">
+                                    <i class="md md-done-all"></i>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                 </a>
             </div>

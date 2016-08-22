@@ -361,7 +361,7 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
             return datestring.concat(' ', day, '-', month, '-', year);
         }
     };
-}]).controller('appCtrl', ["$state", "$log", "$scope", "$window", "$auth", "storage", "$location", "Pusher", function AppCtrl($state, $log, $scope, $window, $auth, storage, $location, Pusher) {
+}]).controller('appCtrl', ["$state", "$log", "$scope", "$window", "$auth", "storage", "$location", "Pusher", "petition", "toastr", function AppCtrl($state, $log, $scope, $window, $auth, storage, $location, Pusher, petition, toastr) {
     $scope.pageTitle = 'Home';
 
     $scope.notifications = [];
@@ -404,13 +404,25 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
      *  Pusher Application
      */
 
-    Pusher.subscribe('demoChannel', 'userLikedPost', function (item) {
+    $scope.listNotification = function () {
+        petition.get("api/notification").then(function (data) {
+            $scope.notifications = data;
+        }, function (error) {
+            toastr.error("Ocurrio un problema al listar las notificaciones");
+        });
+    };
+
+    Pusher.subscribe('productChannel', 'all', function (item) {
         $scope.notifications.push(item);
     });
 
     $scope.clearNotification = function () {
         $scope.notifications = [];
     };
+
+    angular.element(document).ready(function () {
+        $scope.listNotification();
+    });
 }]);
 
 },{}]},{},[1]);

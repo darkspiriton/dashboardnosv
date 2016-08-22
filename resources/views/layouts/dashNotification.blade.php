@@ -21,7 +21,7 @@
                         </div>
                         <div class="media-body">
                             <div class="lv-title" ng-bind="notification.title"></div>
-                            <small class="lv-small" ng-bind="notification.message"></small>
+                            <small class="lv-small" ng-bind="notification.body"></small>
                         </div>
                     </div>
                 </a>

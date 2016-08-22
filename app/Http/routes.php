@@ -326,6 +326,10 @@ Route::group(['prefix' => 'api'], function(){
      */
     Route::resource('auxclient','AuxClientController', ["only"=>["store","show","update"]]);
 
+    /**
+     * Notification
+     */
+    Route::resource('notification','NotificationController', ["only"=>["index"]]);
 });
 
 /**
@@ -334,9 +338,10 @@ Route::group(['prefix' => 'api'], function(){
  */
 
 use Vinkla\Pusher\Facades\Pusher;
+use Dashboard\Events\NotificationPusher;
 
 Route::get('/test', function(\Illuminate\Http\Request $request){
-    Pusher::trigger('demoChannel','userLikedPost',['title' => 'Producto eliminado', 'message' => 'Blusa Miranda color:rojo talla:L eliminado 25-08-2016 15:16:26']);
+    event(new NotificationPusher("Testing event", "all", "none", 1));
 
     return 'Done';
 });

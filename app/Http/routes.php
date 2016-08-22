@@ -333,7 +333,11 @@ Route::group(['prefix' => 'api'], function(){
  *  @return Collection test
  */
 
+use Vinkla\Pusher\Facades\Pusher;
+
 Route::get('/test', function(\Illuminate\Http\Request $request){
-    return request("name","=D");
+    Pusher::trigger('demoChannel','userLikedPost',['title' => 'Producto eliminado', 'message' => 'Blusa Miranda color:rojo talla:L eliminado 25-08-2016 15:16:26']);
+
+    return 'Done';
 });
 

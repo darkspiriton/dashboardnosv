@@ -1501,7 +1501,8 @@ div.fc-row {
   display: inline-block;
 }
 
-.pointer li a{
+.a-pointer a,
+.pointer li a {
   cursor: pointer;
 }
 

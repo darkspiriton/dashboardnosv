@@ -1,0 +1,14 @@
+{
+  "name": "nosvenden.com dashboard",
+  "description": "notification in real time",
+  "authors": [
+    "Luis Vasquez <contact@luisdev.me>"
+  ],
+  "license": "MIT",
+  "install": {
+    "path": "public/app/lib"
+  },
+  "dependencies": {
+    "angular-pusher": "latest"
+  }
+}

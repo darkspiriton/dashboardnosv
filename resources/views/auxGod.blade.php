@@ -1,4 +1,4 @@
-@extends('layouts.dashboard')
+@extends('layouts.dashboardBoss')
 
 @section('dashMenu')
     <ul class="main-menu">

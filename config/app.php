@@ -170,6 +170,7 @@ return [
         /* Personal provider */
         Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
+        Vinkla\Pusher\PusherServiceProvider::class,
 
         /* Twilio */
         'Aloha\Twilio\Support\Laravel\ServiceProvider',

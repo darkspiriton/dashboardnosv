@@ -232,6 +232,7 @@ elixir(function(mix) {
      */
 
     mix.browserify("app/app.js","public/app/app.js");
+    mix.browserify("app/appBoss.js","public/app/appBoss.js");
     mix.browserify("app/appLogin.js","public/app/appLogin.js");
     mix.browserify("app/controllers/loginCtrl.js","public/app/controllers/loginCtrl.js");
 
@@ -266,6 +267,7 @@ elixir(function(mix) {
         "public/app/controllers/compile/coorPubControllers.js",
         "public/app/controllers/compile/equiPubControllers.js",
         "public/app/app.js",
+        "public/app/appBoss.js",
         "public/app/appLogin.js",
         "public/app/controllers/loginCtrl.js",
         "public/app-usc/compiled/loginApp.js",

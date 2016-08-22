@@ -37,7 +37,7 @@ class AuxClientController extends Controller
             'name'      =>  'required|string|max:255',
             'email'     =>  'email',
             'phone'     =>  'required|string|max:25',
-            'dni'       =>  'max:8',
+            'dni'       =>  'min:8,max:8',
             'address'   =>  'required|string',
             'reference' =>  'required|string'
         ];
@@ -48,8 +48,8 @@ class AuxClientController extends Controller
         }
 
         $client = Client::where('email', request("email"))
-                            ->OrWhere('phone', request("phone"))
-                                ->Orwhere('dni', request("dni"))->first();
+                                ->where("phone", request("phone"))
+                                    ->where("dni", request("dni"))->first();
 
         if ($client !== null) {
             return response()->json(['message' => 'El cliente ya se encuentra registrado'], 401);

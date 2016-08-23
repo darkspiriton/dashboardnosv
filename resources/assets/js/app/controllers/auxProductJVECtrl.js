@@ -130,7 +130,7 @@ angular.module('App')
 
         $scope.movements = function(i){
             var id = $scope.tableData[i].id;
-            petition.get('api/auxproduct/get/movements/${id}')
+            petition.get('api/auxproduct/get/movements/'+id)
                 .then(function(data){
                     $scope.productMovements = data.movements;
                     util.modal('productMovements');
@@ -155,9 +155,9 @@ angular.module('App')
             };
             if(movement.status == 'salida'){
                 if(movement.situation == 'reprogramado')
-                    return '<a class="btn btn-xs disabled ${info.reprogramado[1]}">${info.reprogramado[0]}</a>';
+                    return `<a class="btn btn-xs disabled ${info.reprogramado[1]}">${info.reprogramado[0]}</a>`;
             }
-            return '<a class="btn btn-xs disabled ${info[movement.status][1]}">${info[movement.status][0]}</a>';
+            return `<a class="btn btn-xs disabled ${info[movement.status][1]}">${info[movement.status][0]}</a>`;
         };
 
         /*
@@ -173,7 +173,7 @@ angular.module('App')
                 1: ['Liquidacion','btn-info',false],
             };
 
-            return '<a class="btn btn-xs disabled ${info[status][1]}">${info[status][0]}</a>';
+            return `<a class="btn btn-xs disabled ${info[status][1]}">${info[status][0]}</a>`;
         };
 
         /*

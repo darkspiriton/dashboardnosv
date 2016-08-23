@@ -3,20 +3,21 @@
 namespace Dashboard\Http\Controllers;
 
 use Carbon\Carbon;
+use DB;
+use Dashboard\Events\NotificationPusher;
 use Dashboard\Events\ProductWasCreated;
+use Dashboard\Http\Requests;
+use Dashboard\Models\Experimental\Alarm;
 use Dashboard\Models\Experimental\Color;
+use Dashboard\Models\Experimental\Product;
 use Dashboard\Models\Experimental\Provider;
 use Dashboard\Models\Experimental\Size;
 use Dashboard\Models\Experimental\Type;
-use Faker\Test\Provider\ProviderOverrideTest;
-use Illuminate\Support\Facades\Event;
-use Dashboard\Models\Experimental\Product;
-use Illuminate\Http\Request;
-use DB;
-use Exception;
-use Dashboard\Models\Experimental\Alarm;
 use Dashboard\User;
-use Dashboard\Http\Requests;
+use Exception;
+use Faker\Test\Provider\ProviderOverrideTest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Event;
 
 class AuxProductController extends Controller
 {
@@ -255,25 +256,36 @@ class AuxProductController extends Controller
      */
     public function destroy($id)
     {
-        $auxproduct= Product::find($id);
-        if ($auxproduct->exists) {
-            $movements = $auxproduct->movements;
-            $publicity = $auxproduct->publicities;
-            $liquidation = $auxproduct->settlement;
+        $auxproduct = Product::find($id);
 
-            if ($movements->count() > 0) {
+        if ($auxproduct != null){
+            $product = Product::with(["movements", "publicities", "settlement", "color", "size"])->find($id);
+
+            if ($product->movements->count() > 0) {
                 return response()->json(['message'=>'No se puede eliminar este producto porque posee movimiento asociados'], 401);
-            } elseif ($publicity->count() > 0) {
+            } elseif ($product->publicities->count() > 0) {
                 return response()->json(['message'=>'No se puede eliminar este producto tiene publicidad asociada'], 401);
-            } elseif ($liquidation !== null) {
+            } elseif ($product->settlement !== null) {
                 return response()->json(['message'=>'No se puede eliminar este producto esta en liquidacion'], 401);
             } else {
-                // $auxproduct->types()->detach();
-                $auxproduct->delete();
+                // $product->types()->detach();
+                $product->delete();
+
+                $user_id = request("user")["sub"];
+                $user = User::find($user_id);
+
+                $body = "Usuario: ".$user->first_name
+                            ." Elimino el codigo: ".$product->cod
+                                .", modelo: ".$product->name
+                                    .", color: ".$product->color->name
+                                        .", size: ".$product->size->name;
+
+                event(new NotificationPusher("Eliminacion de producto", $body, 2, "productDelete"));
+
                 return response()->json(['message'=>'Se elimino el producto correctamente'], 200);
             }
         } else {
-            return response()->json(['message'=>'No existe este producto']);
+            return response()->json(['message'=>'El producto selecciona no existe o ya fue elimiando']);
         }
     }
 
@@ -285,14 +297,25 @@ class AuxProductController extends Controller
      */
     public function restore($id)
     {
-        $auxproduct = Product::withTrashed()->find($id);
+        $product = Product::withTrashed()->find($id);
 
-        if ($auxproduct == null) {
+        if ($product == null) {
             return response()->json(["message" => "El producto a restaurar no existe."]);
         }
 
-        if ($auxproduct->trashed()) {
-            $auxproduct->restore();
+        if ($product->trashed()) {
+            $product->restore();
+
+
+            $user_id = request("user")["sub"];
+            $user = User::find($user_id);
+
+            $body = "Usuario: ".$user->first_name
+                        ." Restauro el codigo: ".$product->cod
+                            .", modelo: ".$product->name;
+
+            event(new NotificationPusher("Restauracion de producto", $body, 4, "productRestore"));
+
             return response()->json(["message" => "El producto se restauro con exito."]);
         } else {
             return response()->json(["message" => "El producto no se encuentra eliminado."]);

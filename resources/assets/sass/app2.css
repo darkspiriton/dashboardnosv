@@ -1501,7 +1501,8 @@ div.fc-row {
   display: inline-block;
 }
 
-.pointer li a{
+.a-pointer a,
+.pointer li a {
   cursor: pointer;
 }
 
@@ -1525,4 +1526,29 @@ div.fc-row {
 .table-mediun tr td,
 .table-mediun tr th {
     font-size: 12px !important;
+}
+
+.ws-normal {
+  white-space: normal !important;
+}
+
+.nv-border-img {
+  border-style: solid;
+  border-width: 2px;
+}
+
+.bc-green {
+  border-color: #4CAF50;
+}
+
+.bc-red {
+  border-color: #F44336;
+}
+
+.bc-lightblue {
+  border-color: #03A9F4;
+}
+
+.bc-amber {
+  border-color: #FFC107;
 }

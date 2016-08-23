@@ -19,8 +19,11 @@ class EventServiceProvider extends ServiceProvider
         'Dashboard\Events\OrderPrestashopWasCreated' => [
             'Dashboard\Listeners\OrderPrestashopMailCreate',
         ],
-        'Dashboard\Events\PrestaShopWasCreated' => [
-            'Dashboard\Listeners\SendSmsListener',
+        'Dashboard\Events\NotificationPusher' => [
+            'Dashboard\Listeners\NotificationPusherListener',
+        ],
+        'Dashboard\Events\NotificationPusherWasCheck' => [
+            'Dashboard\Listeners\NotificationPusherWasCheckListener',
         ],
     ];
 

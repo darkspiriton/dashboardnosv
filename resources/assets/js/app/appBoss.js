@@ -1,6 +1,6 @@
-angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 'toastr', 'ui.router', 'satellizer','angular-fb'])
-    .config(["$stateProvider", "$urlRouterProvider", "$authProvider", "$fbProvider", "$locationProvider",
-        function ($stateProvider, $urlRouterProvider, $authProvider, $fbProvider, $locationProvider) {
+angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 'toastr', 'ui.router', 'satellizer','angular-fb','doowb.angular-pusher'])
+    .config(["$stateProvider", "$urlRouterProvider", "$authProvider", "$fbProvider", "$locationProvider", "PusherServiceProvider", 
+        function ($stateProvider, $urlRouterProvider, $authProvider, $fbProvider, $locationProvider, PusherServiceProvider) {
         $authProvider.tokenName = "token";
         $authProvider.tokenPrefix = "DB_NV";
 
@@ -16,6 +16,10 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
 
         $urlRouterProvider.otherwise('/home');
         // $locationProvider.html5Mode(true);
+
+        PusherServiceProvider
+        .setToken('3af9472db014da6465ce')
+        .setOptions({});
 
     }])
     .directive('fileModel', function () {
@@ -247,32 +251,57 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
 
             get: function (URL, data) {
                 data = data || {};
-                var promise = $http.get(baseUrl(URL), data);
+                var deferred = $q.defer();
+                $http.get(baseUrl(URL), data).then(function (response) {
+                    deferred.resolve(response.data);
+                }, function(error){
+                    deferred.reject(error);
+                });
 
-                return promise;
+                return deferred.promise;
             },
             post: function (URL, data, config) {
                 data = data || {};
                 config = config || {};
-                var promise = $http.post(baseUrl(URL), data, config);
+                var deferred = $q.defer();
+                $http.post(baseUrl(URL), data, config).then(function (response) {
+                    deferred.resolve(response.data);
+                }, function(error){
+                    deferred.reject(error);
+                });
 
-                return promise;
+                return deferred.promise;
             },
             put: function (URL, data) {
                 data = data || {};
-                var promise = $http.put(baseUrl(URL), data);
+                var deferred = $q.defer();
+                $http.put(baseUrl(URL), data).then(function (response) {
+                    deferred.resolve(response.data);
+                }, function(error){
+                    deferred.reject(error);
+                });
 
-                return promise;
+                return deferred.promise;
             },
             delete: function (URL, data) {
                 data = data || {};
-                var promise = $http.delete(baseUrl(URL), data);
+                var deferred = $q.defer();
+                $http.delete(baseUrl(URL), data).then(function (response) {
+                    deferred.resolve(response.data);
+                }, function(error){
+                    deferred.reject(error);
+                });
 
-                return promise;
+                return deferred.promise;
             },
             custom: function (config) {
-                var promise = $http(config);
-                return promise;
+                var deferred = $q.defer();
+                $http(config).then(function (response) {
+                    deferred.resolve(response.data);
+                }, function(error){
+                    deferred.reject(error);
+                });
+                return deferred.promise;
             }
         };
     }])
@@ -351,9 +380,11 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
 
 
 
-    .controller('appCtrl', ["$state", "$log", "$scope", "$window", "$auth", "storage", "$location",
-        function AppCtrl($state, $log, $scope, $window, $auth, storage, $location) {
+    .controller('appCtrl', ["$state", "$log", "$scope", "$window", "$auth", "storage", "$location", "Pusher", "petition", "toastr",
+        function AppCtrl($state, $log, $scope, $window, $auth, storage, $location, Pusher, petition, toastr) {
         $scope.pageTitle = 'Home';
+
+        $scope.notifications = [];
 
         $scope.logout = function () {
             if (storage.get("roleName") == "Asociado"){
@@ -368,7 +399,6 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
             }
         };
 
-        
         if ($auth.isAuthenticated()) {
 
             var role = storage.get('roleName');
@@ -390,4 +420,85 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
             if(location.pathname != "/asociados/dashboard")
                 $window.location.href = '/';
         }
+
+        /**
+         *  Pusher Application
+         */
+
+        $scope.listNotification = function(){
+            petition.get("api/notification")
+                .then(function(data){
+                    $scope.notifications = data;
+                }, function(error){
+                    toastr.error("Ocurrio un problema al listar las notificaciones");
+                });
+        };
+
+        $scope.checkNotification = function(i){
+            var notification = $scope.notifications[i];
+            if (notification.status) return eventFire(notification);
+
+            var id = notification.id;
+            petition.put("api/notification/" + id)
+                .then(function(data){
+                    $scope.notifications[i] = data;
+                    eventFire(notification);
+                }, function(error){
+                    toastr.error("Ocurrio un problema al listar las notificaciones");
+                });
+        };
+
+        $scope.clearNotification = function()
+        {
+            var count = $scope.notifications.length;
+            petition.put("api/notification/update/all", {count: count})
+               .then(function(data){
+                   $scope.notifications = data;
+               }, function(error){
+                   toastr.error("Ocurrio un problema al listar las notificaciones");
+               });
+        };
+
+        function eventFire(notification){
+            if (typeof notification.event == "string"){
+                if (notification.event == "productDelete"){
+                    $state.go("Productos Eliminados");
+                } else if ("productRestore"){
+                    $state.go("Productos");
+                }
+            }
+        }
+
+        Pusher.subscribe('notification', 'create', function (item) {
+            $scope.notifications.unshift(item);
+        });
+
+        Pusher.subscribe('notification', 'update', function (data) {
+            var notifications = $scope.notifications;
+            for(var i in data){
+                for(var n in notifications){
+                    if(data[i].id == notifications[n].id){
+                        notifications[n] = data[i];
+                        break;
+                    }
+                }
+            }
+        });
+
+        $scope.formatDate = function(date){
+              var dateOut = new Date(date);
+              return dateOut;
+        };
+
+        $scope.$watch("notifications", function(notifications , oldVal) {
+            var count = 0;
+            for(var n in notifications){
+                if(notifications[n].status === 0)count++;
+            }
+            $scope.numNotif = count;
+        }, true);
+
+        angular.element(document).ready(function(){
+            $scope.listNotification();
+        });
     }]);

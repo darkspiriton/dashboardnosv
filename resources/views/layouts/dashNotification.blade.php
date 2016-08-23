@@ -1,77 +1,34 @@
-<li class="dropdown">
-    <a data-toggle="dropdown" class="tm-notification" href="#"><i class="tmn-counts">9</i></a>
+<li class="dropdown a-pointer">
+    <a data-toggle="dropdown" class="tm-notification"><i class="tmn-counts" ng-show="numNotif > 0" ng-bind="numNotif"></i></a>
     <div class="dropdown-menu dropdown-menu-lg pull-right">
         <div class="listview" id="notifications">
             <div class="lv-header">
-                Notification
+                Notificaciones
 
-                <ul class="actions">
+                <ul class="actions" ng-show="notifications.length">
                     <li class="dropdown">
-                        <a href="#" data-clear="notification">
+                        <a ng-click="clearNotification()">
                             <i class="md md-done-all"></i>
                         </a>
                     </li>
                 </ul>
             </div>
             <div class="lv-body c-overflow">
-                <a class="lv-item" href="#">
+                <a class="lv-item" ng-repeat="notification in notifications" ng-click="checkNotification($index)">
                     <div class="media">
                         <div class="pull-left">
-                            <img class="lv-img-sm" src="img/profile-pics/1.jpg" alt="">
+                            <img class="lv-img-sm nv-border-img" ng-class="{'bc-green': notification.type_id == 1, 'bc-red': notification.type_id == 2, 'bc-amber': notification.type_id == 3, 'bc-lightblue': notification.type_id == 4}" ng-src="img/check@{{ notification.status }}.jpg" alt="">
                         </div>
                         <div class="media-body">
-                            <div class="lv-title">David Belle</div>
-                            <small class="lv-small">Cum sociis natoque penatibus et magnis dis parturient montes</small>
-                        </div>
-                    </div>
-                </a>
-                <a class="lv-item" href="#">
-                    <div class="media">
-                        <div class="pull-left">
-                            <img class="lv-img-sm" src="img/profile-pics/2.jpg" alt="">
-                        </div>
-                        <div class="media-body">
-                            <div class="lv-title">Jonathan Morris</div>
-                            <small class="lv-small">Nunc quis diam diamurabitur at dolor elementum, dictum turpis vel</small>
-                        </div>
-                    </div>
-                </a>
-                <a class="lv-item" href="#">
-                    <div class="media">
-                        <div class="pull-left">
-                            <img class="lv-img-sm" src="img/profile-pics/3.jpg" alt="">
-                        </div>
-                        <div class="media-body">
-                            <div class="lv-title">Fredric Mitchell Jr.</div>
-                            <small class="lv-small">Phasellus a ante et est ornare accumsan at vel magnauis blandit turpis at augue ultricies</small>
-                        </div>
-                    </div>
-                </a>
-                <a class="lv-item" href="#">
-                    <div class="media">
-                        <div class="pull-left">
-                            <img class="lv-img-sm" src="img/profile-pics/4.jpg" alt="">
-                        </div>
-                        <div class="media-body">
-                            <div class="lv-title">Glenn Jecobs</div>
-                            <small class="lv-small">Ut vitae lacus sem ellentesque maximus, nunc sit amet varius dignissim, dui est consectetur neque</small>
-                        </div>
-                    </div>
-                </a>
-                <a class="lv-item" href="#">
-                    <div class="media">
-                        <div class="pull-left">
-                            <img class="lv-img-sm" src="img/profile-pics/4.jpg" alt="">
-                        </div>
-                        <div class="media-body">
-                            <div class="lv-title">Bill Phillips</div>
-                            <small class="lv-small">Proin laoreet commodo eros id faucibus. Donec ligula quam, imperdiet vel ante placerat</small>
+                            <div class="lv-title" ng-bind="notification.title"></div>
+                            <small class="lv-small ws-normal" ng-bind="notification.body"></small>
+                            <small class="lv-small" ng-bind="formatDate(notification.created_at) | date:'dd-MM-yyyy HH:mm:ss'"></small>
                         </div>
                     </div>
                 </a>
             </div>
 
-            <a class="lv-footer" href="#">View Previous</a>
+            <a class="lv-footer" ng-bind="(notifications.length || 0) + ' Notificaciones'"></a>
         </div>
 
     </div>

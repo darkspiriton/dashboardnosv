@@ -5,7 +5,7 @@
             <div class="lv-header">
                 Notificaciones
 
-                <ul class="actions">
+                <ul class="actions" ng-show="notifications.length">
                     <li class="dropdown">
                         <a ng-click="clearNotification()">
                             <i class="md md-done-all"></i>
@@ -17,20 +17,13 @@
                 <a class="lv-item" ng-repeat="notification in notifications">
                     <div class="media">
                         <div class="pull-left">
-                            <img class="lv-img-sm" ng-src="img/check@{{ notification.status }}.jpg" alt="">
+                            <img class="lv-img-sm nv-border-img" ng-class="{'bc-green': notification.type_id == 1, 'bc-red': notification.type_id == 2, 'bc-lightblue': notification.type_id == 3, 'bc-amber': notification.type_id == 4}" ng-src="img/check@{{ notification.status }}.jpg" alt="">
                         </div>
                         <div class="media-body">
                             <div class="lv-title" ng-bind="notification.title"></div>
                             <small class="lv-small ws-normal" ng-bind="notification.body"></small>
-                            <small class="lv-small" ng-bind="formatDate(notification.created_at) | date:'dd-MM-yyyy HH:mm:ss'"></small>
+                            <small class="lv-small" >@{{ formatDate(notification.created_at) | date:'dd-MM-yyyy HH:mm:ss' }} <i class="md md-done-all pull-right" ng-click="checkNotification($index)"></i></small>
                         </div>
-                        <ul class="actions pull-right">
-                            <li class="dropdown">
-                                <div ng-click="checkNotification($index)">
-                                    <i class="md md-done-all"></i>
-                                </div>
-                            </li>
-                        </ul>
                     </div>
                 </a>
             </div>

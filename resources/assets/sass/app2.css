@@ -1531,3 +1531,24 @@ div.fc-row {
 .ws-normal {
   white-space: normal !important;
 }
+
+.nv-border-img {
+  border-style: solid;
+  border-width: 2px;
+}
+
+.bc-green {
+  border-color: #4CAF50;
+}
+
+.bc-red {
+  border-color: #F44336;
+}
+
+.bc-lightblue {
+  border-color: #03A9F4;
+}
+
+.bc-amber {
+  border-color: #FFC107;
+}

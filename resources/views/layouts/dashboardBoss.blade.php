@@ -36,7 +36,7 @@
                 {{--<li id="top-search">--}}
                     {{--<a class="tm-search" href="#"></a>--}}
                 {{--</li>--}}
-                @include('layouts.dashMessages')
+                {{--@include('layouts.dashMessages')--}}
                 @include('layouts.dashNotification')
                 {{--@include('layouts.dashTask')--}}
                 @include('layouts.dashOthers')

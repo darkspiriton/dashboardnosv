@@ -8,10 +8,7 @@
             <a href="#" ng-click="logout()"><i class="md md-history"></i> Cerrar sesion</a>
         </li>
         <li>
-            <a href="#"><i class="md md-person"></i> Mi perifl</a>
-        </li>
-        <li>
-            <a href="#"><i class="md md-settings"></i> Administrar usuarios</a>
+            <a href="#" ui-sref="Usuarios"><i class="md md-settings"></i> Administrar usuarios</a>
         </li>
     </ul>
 </li>

@@ -3,7 +3,7 @@
 namespace Dashboard\Listeners;
 
 use Dashboard\Events\NotificationPusherWasCheck;
-use Dashboard\Models\notification\Notification;
+use Dashboard\Models\Notification\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Queue\InteractsWithQueue;

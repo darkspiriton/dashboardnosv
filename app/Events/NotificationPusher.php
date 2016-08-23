@@ -17,7 +17,7 @@ class NotificationPusher extends Event
      *
      * @return void
      */
-    public function __construct($title, $body, $event, $type_id)
+    public function __construct($title, $body, $type_id, $event = null)
     {
         $this->data["title"]    = $title;
         $this->data["body"]     = $body;

@@ -413,9 +413,13 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
     };
 
     $scope.checkNotification = function (i) {
-        var id = $scope.notifications[i].id;
+        var notification = $scope.notifications[i];
+        if (notification.status) return;
+
+        var id = notification.id;
         petition.put("api/notification/" + id).then(function (data) {
             $scope.notifications[i] = data;
+            eventFire(notification);
         }, function (error) {
             toastr.error("Ocurrio un problema al listar las notificaciones");
         });
@@ -429,6 +433,16 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
             toastr.error("Ocurrio un problema al listar las notificaciones");
         });
     };
+
+    function eventFire(notification) {
+        if (typeof notification.event == "string") {
+            if (notification.event == "productDelete") {
+                $state.go("Productos Eliminados");
+            } else if ("productRestore") {
+                $state.go("Productos");
+            }
+        }
+    }
 
     Pusher.subscribe('notification', 'create', function (item) {
         $scope.notifications.unshift(item);
@@ -452,7 +466,6 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
     };
 
     $scope.$watch("notifications", function (notifications, oldVal) {
-        console.log(notifications, oldVal);
         var count = 0;
         for (var n in notifications) {
             if (notifications[n].status === 0) count++;

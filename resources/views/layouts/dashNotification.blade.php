@@ -14,7 +14,7 @@
                 </ul>
             </div>
             <div class="lv-body c-overflow">
-                <a class="lv-item" ng-repeat="notification in notifications">
+                <a class="lv-item" ng-repeat="notification in notifications" ng-click="checkNotification($index)">
                     <div class="media">
                         <div class="pull-left">
                             <img class="lv-img-sm nv-border-img" ng-class="{'bc-green': notification.type_id == 1, 'bc-red': notification.type_id == 2, 'bc-amber': notification.type_id == 3, 'bc-lightblue': notification.type_id == 4}" ng-src="img/check@{{ notification.status }}.jpg" alt="">
@@ -22,7 +22,7 @@
                         <div class="media-body">
                             <div class="lv-title" ng-bind="notification.title"></div>
                             <small class="lv-small ws-normal" ng-bind="notification.body"></small>
-                            <small class="lv-small" >@{{ formatDate(notification.created_at) | date:'dd-MM-yyyy HH:mm:ss' }} <i class="md md-done-all pull-right" ng-click="checkNotification($index)" ng-hide="notification.status"></i></small>
+                            <small class="lv-small" ng-bind="formatDate(notification.created_at) | date:'dd-MM-yyyy HH:mm:ss'"></small>
                         </div>
                     </div>
                 </a>

@@ -414,7 +414,7 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
 
     $scope.checkNotification = function (i) {
         var notification = $scope.notifications[i];
-        if (notification.status) return;
+        if (notification.status) return eventFire(notification);
 
         var id = notification.id;
         petition.put("api/notification/" + id).then(function (data) {

@@ -25,6 +25,11 @@ angular.module('App')
             {id: 2, name:'Producto no esta en el almacen' }
         ];
 
+        $scope.transitions = [
+            {id: 1, name:'Producto esta en transición' },
+            {id: 2, name:'Otros' }
+        ];
+
         /*
          |  END
          */
@@ -33,7 +38,8 @@ angular.module('App')
         var actions = [                            
                             ['movimientos','movements','bgm-blue'],
                             ['reservar','reserve','bgm-purple'],
-                            ['observar','observe','bgm-lime']
+                            ['observar','observe','bgm-lime'],
+                            ['transición','transition','bgm-orange']
                         ];
 
         var status = {
@@ -41,7 +47,8 @@ angular.module('App')
                     1 : ['disponible', 'btn-success', false],
                     2 : ['vendido', 'bgm-teal', false],
                     3 : ['reservado', 'bgm-black', false],                    
-                    4 : ['observado', 'bgm-black']
+                    4 : ['observado', 'bgm-black'],
+                    5 : ['transición', 'bgm-black']
                 };
 
         var statusForSale = {
@@ -63,7 +70,7 @@ angular.module('App')
                 {"sTitle": "P. Real" , "bSearchable": false},
                 {"sTitle": "Precio" , "bSearchable": false},
                 {"sTitle": "Status", "bSortable" : false, "bSearchable": true},
-                {"sTitle": "Accion", "bSortable" : false, "bSearchable": false, "sWidth" : "230px"}
+                {"sTitle": "Accion", "bSortable" : false, "bSearchable": false, "sWidth" : "400px"}
             ],
             buttons :
                 [
@@ -123,7 +130,7 @@ angular.module('App')
 
         $scope.movements = function(i){
             var id = $scope.tableData[i].id;
-            petition.get(`api/auxproduct/get/movements/${id}`)
+            petition.get('api/auxproduct/get/movements/'+id)
                 .then(function(data){
                     $scope.productMovements = data.movements;
                     util.modal('productMovements');
@@ -178,7 +185,7 @@ angular.module('App')
 
         $scope.reserve = function(i){
             var id = $scope.tableData[i].id;
-            petition.put(`api/auxproduct/reserve/${id}`)
+            petition.put('api/auxproduct/reserve/'+id)
                 .then(function(data){
                     $scope.searchList($scope.data);
                     toastr.success(data.message);
@@ -205,17 +212,17 @@ angular.module('App')
                 .then(function(data){
                     //Validar si el producto esta observado o no
                     $scope.status=data.status;
-                    if($scope.status == false){
+                    if($scope.status === false){
                         util.modal('Modal');                        
                         //Mostrar modal y poder elegir el motivo de la observacion
                         //Luego mostrar detalle de modificacion
                         //Luego mostrar detalle de confirmacion
                         //changeObserve(productAux,id);
-                    }else if ($scope.status == true){
+                    }else if ($scope.status === true){
                         //Mostrar detalle de modificacion
                         //Luego mostrar detalle de confirmacion
                         $scope.changeObserve();
-                    } else if ($scope.status == null){
+                    } else if ($scope.status === null){
                         toastr.error('Huy Huy dice: ' + data.message);
                     }
                 },function(error){
@@ -224,7 +231,6 @@ angular.module('App')
                 });
 
          };
-
 
          /**{
                    *    Método de modificacion de estatus}
@@ -304,7 +310,7 @@ angular.module('App')
          */
 
         $scope.typesList = function(){
-            petition.get(`api/auxproduct/filter/get/types`)
+            petition.get('api/auxproduct/filter/get/types')
                 .then(function(data){
                     $scope.types = data.types;
                 }, function(error){
@@ -313,7 +319,7 @@ angular.module('App')
         };
 
         $scope.providerList = function(){
-            petition.get(`api/auxproduct/filter/get/providers`)
+            petition.get('api/auxproduct/filter/get/providers')
                 .then(function(data){
                     $scope.providers = data.providers;
                 }, function(error){
@@ -322,7 +328,7 @@ angular.module('App')
         };
 
         $scope.productList = function(){
-            petition.get(`api/auxproduct/filter/get/products`)
+            petition.get('api/auxproduct/filter/get/products')
                 .then(function(data){
                     $scope.products = data.products;
                     $scope.colors = data.colors;
@@ -335,7 +341,7 @@ angular.module('App')
         $scope.searchList = function(dataSearch){
             $scope.updateList = true;
             if(dataSearch.status_sale === "")dataSearch.status_sale = null;
-            petition.get(`api/auxproduct/filter/get/search`, {params: dataSearch})
+            petition.get('api/auxproduct/filter/get/search', {params: dataSearch})
                 .then(function(data){
                     $scope.tableData = data.products;
                     $('#table').AJQtable2('view2', $scope, $compile);
@@ -345,6 +351,93 @@ angular.module('App')
                     $scope.updateList = false;
                 });
         };
+
+        /**
+         *    Helper para transicion un producto en el kardex
+         *
+         *    @param  Int  id
+         *    @return  Object:String    Confirmation
+         */
+         $scope.transition = function (i){
+            $scope.productId = $scope.tableData[i].id;
+            $scope.productAux.cod = $scope.tableData[i].cod;
+            $scope.productAux.name = $scope.tableData[i].name;
+            $scope.productAux.size = $scope.tableData[i].size;
+            $scope.productAux.color = $scope.tableData[i].color;
+            $scope.productAux.transition = null;
+            petition.get('api/auxproduct/transition/' +  $scope.productId)
+                .then(function(data){
+                    //Validar si el producto esta en transición o no
+                    $scope.status=data.status;
+                    if($scope.status === false){
+                        util.modal('Transition2');                        
+                        //Mostrar modal y poder elegir el motivo de la observacion
+                        //Luego mostrar detalle de modificacion
+                        //Luego mostrar detalle de confirmacion
+                        //changeObserve(productAux,id);
+                    }else if ($scope.status === true){
+                        //Mostrar detalle de modificacion
+                        //Luego mostrar detalle de confirmacion
+                        $scope.changeTransition();
+                    } else if ($scope.status === null){
+                        toastr.error('Huy Huy dice: ' + data.message);
+                    }
+                },function(error){
+                    $scope.searchList($scope.data);
+                    toastr.error('Huy Huy dice: ' + error.data.message);
+                });
+
+         };
+
+
+         /**
+          *    Método de modificación de estatus de transición
+          *
+          *    @param  Int  Id
+          *    @return  Object:String    Confirmation
+          */
+         $scope.changeTransition = function (id) {
+             alertConfig.title = "¡Cuidado este proceso no se puede revertir!";
+             alertConfig.text = `<table class="table table-bordered w-100 table-attr text-center">
+                                         <thead>
+                                         <tr>
+                                             <th>Codigo</th>
+                                             <th>Nombre</th>
+                                             <th>Talla</th>
+                                             <th>Color</th>
+                                             <th>Motivo</th>
+                                         </tr>
+                                         </thead>
+                                         <tbody>
+                                         <tr>
+                                             <td>${$scope.productAux.cod}</td>
+                                             <td>${$scope.productAux.name}</td>
+                                             <td>${$scope.productAux.size}</td>
+                                             <td>${$scope.productAux.color}</td>
+                                             <td>${(function(){
+                                                if ($scope.productAux.transition === null){
+                                                    return 'Desactivar estado transición';
+                                                }else{
+                                                    return  $scope.productAux.transition;
+                                                }
+                                             })()}
+                                            </td>
+                                         </tr>
+                                         </tbody>
+                                     </table>
+                                     </div>`;
+
+             sweetAlert(alertConfig, function () {
+                 petition.put('api/auxproduct/transition/update/'+ $scope.productId , {situation:$scope.productAux.transition} )
+                     .then(function (data) {
+                        util.modalClose('Transition2');
+                        toastr.success(data.message);
+                        $scope.searchList($scope.data);
+                     }, function (error) {
+                         toastr.error('Uyuyuy dice: ' + error.data.message);
+                     });
+             });
+         };
 
         function resetProduct(){
             $scope.products = [];

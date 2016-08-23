@@ -127,12 +127,16 @@ Route::group(['prefix' => 'api'], function () {
         Route::get('/get/uniques', 'AuxProductController@UniqueProduct');
         Route::get('/get/uniques/{name}/codes', 'AuxProductController@CodesLists');
         
-        Route::get('get/movements/{id}', 'AuxProductController@movements_for_product');
-        Route::put('reserve/{id}', 'AuxProductController@product_reserve');
-        Route::get('observe/{id}', 'AuxProductController@product_observe_status');
-        Route::put('observe/update/{id}', 'AuxProductController@product_observe_update');
-        Route::get('observe/detail/{id}', 'AuxProductController@product_observe_detail');
-        Route::post('delete/restore/{id}', 'AuxProductController@restore');
+        Route::get('get/movements/{id}','AuxProductController@movements_for_product');
+        Route::put('reserve/{id}','AuxProductController@product_reserve');
+        Route::get('observe/{id}','AuxProductController@product_observe_status');
+        Route::put('observe/update/{id}','AuxProductController@product_observe_update');
+        Route::get('observe/detail/{id}','AuxProductController@product_observe_detail');
+        Route::post('delete/restore/{id}','AuxProductController@restore');
+
+        //Transition Product Movement
+        Route::get('transition/{id}','AuxProductController@product_transition_status');
+        Route::put('transition/update/{id}','AuxProductController@product_transition_update');        
     });
 
     /**
@@ -342,7 +346,7 @@ use Vinkla\Pusher\Facades\Pusher;
 use Dashboard\Events\NotificationPusher;
 
 Route::get('/test', function (\Illuminate\Http\Request $request) {
-    event(new NotificationPusher("Producto Eliminado", "Juanito elimino product: Clarissa Color:5 Talla:L", 2));
+    // event(new NotificationPusher("Producto Eliminado", "Juanito elimino product: Clarissa Color:5 Talla:L", 2));
 
     return 'Done';
 });

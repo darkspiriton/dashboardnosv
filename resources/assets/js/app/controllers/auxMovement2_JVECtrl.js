@@ -19,10 +19,10 @@ angular.module('App')
         };
 
         var a1 = [
-                    ['descuento', 'discountEdit' ,'bgm-orange'],
+                    ['Descuento', 'discountEdit' ,'bgm-orange'],
                     ['Retornado', 'prdReturn' ,'bgm-teal'],
                     ['Vendido', 'prdSale' ,'bgm-blue'],
-                    ['reprogramar', 'reprogramar' ,'bgm-purple']
+                    ['Reprogramar', 'reprogramar' ,'bgm-purple'],
                 ];
 
         $scope.tableConfig  =   {
@@ -32,7 +32,7 @@ angular.module('App')
                 {"sTitle": "Vendedor(a)", "bSortable" : true},
                 {"sTitle": "Fecha de Pedido", "bSortable" : true, "sWidth": "90px"},                
                 {"sTitle": "Fecha de salida", "bSortable" : true, "sWidth": "90px"},
-                {"sTitle": "Codigo", "bSortable" : true},
+                {"sTitle": "Código", "bSortable" : true},
                 {"sTitle": "Producto", "bSortable" : true},
                 {"sTitle": "Talla", "bSortable" : true},
                 {"sTitle": "Color", "bSortable" : true},

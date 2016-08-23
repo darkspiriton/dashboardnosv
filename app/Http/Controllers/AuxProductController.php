@@ -941,8 +941,67 @@ class AuxProductController extends Controller
     {
         $product = Product::find($id);
         if ($product == null) {
-            return response()->json(['message'=>'l producto no existe'], 404);
+            return response()->json(['message'=>'el producto no existe'], 404);
         }
         return response()->json(['observe_detail'=>$product->observe_detail], 200);
+    }
+
+    public function product_transition_status($id){
+        $product = Product::find($id);
+
+        if ($product == null) {
+            return response()->json(['message' => 'El producto no existe'], 404);
+        }
+        $stat=$product->status;
+        if ($stat == 2) {
+            return response()->json(['status' => false], 200);
+        } elseif ($stat == 5) {
+            return response()->json(['status' => true], 200);
+        } else {
+            return response()->json(['status' => null, 'message' => 'Solo se puede cambiar el estado de transicion a productos vendidos'], 200);
+        }
+    }
+
+    public function product_transition_update(Request $request, $id)
+    {
+        $rules =[
+            'situation'=>'string',
+        ];
+        $validator = \Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return response()->json(['message' => 'No posee todo los campos necesarios para actualizar producto']);
+        };
+
+        $product = Product::find($id);
+        if ($product == null) {
+            return response()->json(['message' => 'El producto no existe'], 404);
+        };
+
+        if ($product->status == 5) {
+
+            $product->status = 1;
+            $product->save();
+            
+            $movement = $product->movements->first();
+            $movement->situation='Transición';
+            $movement->status="Retornado";
+            $movement->save();
+
+            //Actualizar estado de movimiento de ventas            
+
+            return response()->json(['message'=>'Se quito el estado de transición'],200);
+        } elseif ($product->status == 2) {
+
+            $product->status = 5;
+            $product->save();
+
+            $movement = $product->movements->first();            
+            $movement->situation=$request->input('situation');
+            $movement->status="Transición";
+            $movement->save();                                
+
+            return response()->json(['message'=>'Se actualizo el estado a transición'],200);
+        }
+        return response()->json(['message'=>'No se pudo actualizar el estado del producto'],404);
     }
 }

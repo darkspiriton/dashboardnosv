@@ -21,7 +21,7 @@ class Client extends Model
 
     public function setEmailAttribute($value)
     {
-        $this->attributes['email'] = strtolower($value);
+        $this->attributes['email'] = strlen($value)?null:strtolower($value);
     }
 
     public function setPhoneAttribute($value)
@@ -29,9 +29,9 @@ class Client extends Model
         $this->attributes['phone'] = strtolower($value);
     }
 
-    public function setDniNameAttribute($value)
+    public function setDniAttribute($value)
     {
-        $this->attributes['dni'] = strtolower($value);
+        $this->attributes['dni'] = strlen($value)?null:strtolower($value);
     }
 
     public function setAddressAttribute($value)
@@ -44,4 +44,13 @@ class Client extends Model
         $this->attributes['reference'] = strtolower($value);
     }
 
+    public function getEmailAttribute($value)
+    {
+        return is_null($value)?"No tiene":$value;
+    }
+
+    public function getDniAttribute($value)
+    {
+        return is_null($value)?"No tiene":$value;
+    }
 }

@@ -84,7 +84,7 @@ class NotificationController extends Controller
         $notification->status = 1;
         $notification->save();
 
-        event(new NotificationPusherWasCheck($notification));
+        // event(new NotificationPusherWasCheck($notification));
 
         return $notification;
     }
@@ -116,7 +116,7 @@ class NotificationController extends Controller
 
         $notifications = Notification::orderBy("created_at", "desc")->take(20)->get();
 
-        event(new NotificationPusherWasCheck($notifications));
+        // event(new NotificationPusherWasCheck($notifications));
 
         return $notifications;
     }

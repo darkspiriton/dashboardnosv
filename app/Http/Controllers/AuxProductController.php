@@ -280,7 +280,7 @@ class AuxProductController extends Controller
                                     .", color: ".$product->color->name
                                         .", size: ".$product->size->name;
 
-                event(new NotificationPusher("Eliminacion de producto", $body, 2, "productDelete"));
+                // event(new NotificationPusher("Eliminacion de producto", $body, 2, "productDelete"));
 
                 return response()->json(['message'=>'Se elimino el producto correctamente'], 200);
             }
@@ -314,7 +314,7 @@ class AuxProductController extends Controller
                         ." Restauro el codigo: ".$product->cod
                             .", modelo: ".$product->name;
 
-            event(new NotificationPusher("Restauracion de producto", $body, 4, "productRestore"));
+            // event(new NotificationPusher("Restauracion de producto", $body, 4, "productRestore"));
 
             return response()->json(["message" => "El producto se restauro con exito."]);
         } else {

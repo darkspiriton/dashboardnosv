@@ -412,6 +412,48 @@
 </div>
 
 <!-- Modal -->
+<div class="modal fade" id="Transition2" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bgm-teal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title c-white">Motivo de transición</h3>
+            </div>
+            <div class="modal-body card-padding">
+                <form name="formTransition2" class="form-horizontal" autocomplete="off">
+                    <div class="form-group">
+                        <label class="col-xs-2 col-sm-4 control-label">Seleccione motivo de transición</label>
+                        <div class="col-xs-10 col-sm-6">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="md md-list"></i></span>
+                                <div class="fg-line select">
+                                    <select class="form-control" ng-options="transition.name as transition.name for transition in transitions" ng-model="productAux.transition" required>
+                                        <option value="" disabled="disabled" select="true">Seleccione</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button ng-disabled="!formTransition2.$valid" ng-click="changeTransition()" type="button" class="btn btn-primary btn-sm waves-effect">Guardar</button>
+                            <a ng-click="cancel()" class="btn btn-danger btn-sm waves-effect">Cancelar</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
 <div class="modal fade" id="ModalDetail" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">

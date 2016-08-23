@@ -242,6 +242,8 @@ class AuxMovementController extends Controller
             $move = $product->movements->first();
 
             if ($move->status != 'Vendido') {
+                // $move->situation = 'Vendido';
+                // $move->save();
                 $movement = $move->replicate();
                 $movement->status = 'Vendido';
 

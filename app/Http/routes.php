@@ -133,6 +133,10 @@ Route::group(['prefix' => 'api'], function(){
         Route::put('observe/update/{id}','AuxProductController@product_observe_update');
         Route::get('observe/detail/{id}','AuxProductController@product_observe_detail');
         Route::post('delete/restore/{id}','AuxProductController@restore');
+
+        //Transition Product Movement
+        Route::get('transition/{id}','AuxProductController@product_transition_status');
+        Route::put('transition/update/{id}','AuxProductController@product_transition_update');        
     });
 
     /**

@@ -451,6 +451,15 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
         return dateOut;
     };
 
+    $scope.$watch("notifications", function (notifications, oldVal) {
+        console.log(notifications, oldVal);
+        var count = 0;
+        for (var n in notifications) {
+            if (notifications[n].status === 0) count++;
+        }
+        $scope.numNotif = count;
+    }, true);
+
     angular.element(document).ready(function () {
         $scope.listNotification();
     });

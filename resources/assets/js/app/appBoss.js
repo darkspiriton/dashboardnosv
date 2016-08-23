@@ -477,7 +477,6 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
         };
 
         $scope.$watch("notifications", function(notifications , oldVal) {
-            console.log(notifications , oldVal);
             var count = 0;
             for(var n in notifications){
                 if(notifications[n].status === 0)count++;

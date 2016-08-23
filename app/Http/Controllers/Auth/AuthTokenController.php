@@ -51,9 +51,11 @@ class AuthTokenController extends Controller
         }
 
         if (Hash::check($password, $user->password) && $user->status == 1) {
+            // dd(!$user->token);            
             if(!$user->token){
                 unset($user->password);
                 $token = $this->createToken($user);
+                // dd($token);
                 $user->token = $token;
                 $user->save();
             } else {

@@ -79,7 +79,7 @@ angular.module('App')
         };
 
         $scope.ListCodes = function(name) {
-            if(name == undefined)return;
+            if(name === undefined)return;
             $scope.codes = [];
             petition.get('api/auxproduct/get/uniques/'+ name +'/codes')
                 .then(function(data){
@@ -144,7 +144,7 @@ angular.module('App')
                     }, function(error){
                         toastr.error('Huy Huy dice: ' + error.data.message);
                         $scope.formSubmit=false;
-                    })
+                    });
                 });
         };
 

@@ -349,7 +349,7 @@ class auxProductFiltersController extends Controller
         // return [$start->toDateString(), $end->toDateString()];
 
         $query = DB::table('auxproducts as p')
-                        ->select('p.status', DB::raw('DATE_FORMAT(p.created_at,\'%d-%m-%Y\') as date'), 'p.id', 'p.cod', 'p.name', 's.name as size', 'c.name as color', 'pv.name as provider', DB::raw('GROUP_CONCAT(t.name ORDER BY t.name ASC SEPARATOR \' - \') as types'), 'p.cost_provider', 'p.utility')
+                        ->select('p.status', DB::raw('DATE_FORMAT(p.created_at,\'%d-%m-%Y\') as date'), 'p.id', 'p.cod', 'p.name', 's.name as size', 'c.name as color', 'pv.name as provider', DB::raw('GROUP_CONCAT(t.name ORDER BY t.name ASC SEPARATOR \' - \') as types'), 'p.cost_provider', 'p.utility', 'p.deleted_at')
                         ->addSelect(DB::raw('p.cost_provider + p.utility  as price_real'))
                         ->addSelect(DB::raw('case when dc.price then dc.price else p.cost_provider + p.utility end as precio'))
                         ->addSelect(DB::raw('case when dc.price then 1 else 0 end liquidation'))

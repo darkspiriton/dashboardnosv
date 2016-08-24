@@ -1,5 +1,7 @@
 /controllers/compile
 app.js
 app.js.map
+appBoss.js
+appBoss.js.map
 appLogin.js
 appLogin.js.map

@@ -12,4 +12,4 @@ homestead
 /public/img/products
 /public/img/publicities
 /public/img/request
-bower_components
+/bower_components

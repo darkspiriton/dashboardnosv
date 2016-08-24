@@ -4,8 +4,8 @@
         <li id="productsJVE">
             <a ui-sref="Productos JVE"><i class="md md-content-paste"></i>Kardex</a>
         </li>
-        <li id="stock">
-            <a ui-sref="Stock"><i class="md md-local-offer"></i>Stock de Productos</a>
+        <li id="stockVEN">
+            <a ui-sref="Stock Ventas"><i class="md md-local-offer"></i>Stock de Productos</a>
         </li>
         <li id="movimientos">
             <a href="#" ui-sref="Movimientos"><i class="md md-remove-circle-outline"></i>Generar Salida</a>

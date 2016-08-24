@@ -1,3 +1,5 @@
 /build
 /css
 /app-usc
+/app/*.js
+/app/*.map

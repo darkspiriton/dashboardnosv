@@ -4,13 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-<<<<<<< HEAD
-    "hash": "cb97c04b80f178de972a04f17fe70b4e",
-    "content-hash": "77f1338667366fa212a905a8376396f7",
-=======
-    "hash": "d11ca826c5845932677bcf0ec1b7cb88",
-    "content-hash": "17df69a330f2145eb3908bff54026942",
->>>>>>> pusher
+    "hash": "1c8a9cb2b0702b7e94eb92b31c95244d",
+    "content-hash": "fff4c3884009e0b6910e0fee1581b941",
     "packages": [
         {
             "name": "aloha/twilio",
@@ -1179,16 +1174,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v5.2.43",
+            "version": "v5.2.44",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "5490b8f00564bb60839002f86828e27edd1e5610"
+                "reference": "f24b7acfb494437ef00bdd062bed61eb21535546"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/5490b8f00564bb60839002f86828e27edd1e5610",
-                "reference": "5490b8f00564bb60839002f86828e27edd1e5610",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/f24b7acfb494437ef00bdd062bed61eb21535546",
+                "reference": "f24b7acfb494437ef00bdd062bed61eb21535546",
                 "shasum": ""
             },
             "require": {
@@ -1269,7 +1264,7 @@
                 "pusher/pusher-php-server": "Required to use the Pusher broadcast driver (~2.0).",
                 "symfony/css-selector": "Required to use some of the crawler integration testing tools (2.8.*|3.0.*).",
                 "symfony/dom-crawler": "Required to use most of the crawler integration testing tools (2.8.*|3.0.*).",
-                "symfony/psr-http-message-bridge": "Required to psr7 bridging features (0.2.*)."
+                "symfony/psr-http-message-bridge": "Required to use psr7 bridging features (0.2.*)."
             },
             "type": "library",
             "extra": {
@@ -1305,7 +1300,7 @@
                 "framework",
                 "laravel"
             ],
-            "time": "2016-08-10 12:23:59"
+            "time": "2016-08-23 13:03:29"
         },
         {
             "name": "league/flysystem",
@@ -1854,16 +1849,16 @@
         },
         {
             "name": "pusher/pusher-php-server",
-            "version": "v2.5.0",
+            "version": "v2.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pusher/pusher-http-php.git",
-                "reference": "04535a46f8133fbeef656646846e1a4c43eeaa6f"
+                "reference": "cdc11530c6f97eab76850d8ead6c513eeeccc37a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pusher/pusher-http-php/zipball/04535a46f8133fbeef656646846e1a4c43eeaa6f",
-                "reference": "04535a46f8133fbeef656646846e1a4c43eeaa6f",
+                "url": "https://api.github.com/repos/pusher/pusher-http-php/zipball/cdc11530c6f97eab76850d8ead6c513eeeccc37a",
+                "reference": "cdc11530c6f97eab76850d8ead6c513eeeccc37a",
                 "shasum": ""
             },
             "require": {
@@ -1894,7 +1889,7 @@
                 "rest",
                 "trigger"
             ],
-            "time": "2016-08-15 16:34:36"
+            "time": "2016-08-23 09:07:29"
         },
         {
             "name": "swiftmailer/swiftmailer",

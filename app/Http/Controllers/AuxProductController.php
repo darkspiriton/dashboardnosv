@@ -1004,4 +1004,25 @@ class AuxProductController extends Controller
         }
         return response()->json(['message'=>'No se pudo actualizar el estado del producto'],404);
     }
+
+    public function product_inProvider_status($id)
+    {
+        $product = Product::find($id);
+
+        if ($product == null) {
+            return response()->json(['message' => 'El producto no existe'], 404);
+        }
+        $stat=$product->status;
+        if ($stat == 1) {
+            $product->status=6;
+            $product->save();            
+            return response()->json(['message' => 'El producto regreso al proveedor'], 200);
+        } elseif ($stat == 6) {
+            $product->status=1;
+            $product->save();
+        return response()->json(['message' => 'El producto esta disponible nuevamente'], 200);
+        } else {
+            return response()->json(['message' => '', 'message' => 'Solo se puede cambiar el estado de este producto'], 401);
+        }
+    }
 }

@@ -104,6 +104,8 @@ Route::group(['prefix' => 'api'], function () {
         ['only'=>['index', 'store', 'update', 'show']]);
 
     Route::group(['prefix'=>'auxproduct/'], function () {
+        Route::get('/get/status/provider/{id}', 'AuxProductController@product_inProvider_status');
+
         Route::post('/set/movement', 'AuxProductController@addressUpdate');
         Route::post('/set/color', 'AuxProductController@setColor');
         Route::post('/set/provider', 'AuxProductController@setProvider');
@@ -323,7 +325,7 @@ Route::group(['prefix' => 'api'], function () {
     Route::resource('prestashop', 'PrestaShopController',
         ["only" => ["index", "store", "show", "update", "destroy"]]);
     Route::get('prestashop/products/{id}', 'PrestaShopController@detailProduct');
-    Route::get('prestashop/get/status', 'PrestaShopController@status');
+    Route::get('prestashop/get/status', 'PrestaShopController@status');    
 
     /**
      * Client
@@ -335,6 +337,8 @@ Route::group(['prefix' => 'api'], function () {
      */
     Route::resource('notification', 'NotificationController', ["only"=>["index", "update"]]);
     Route::put('notification/update/all', 'NotificationController@updateAll');
+
+
 });
 
 /**

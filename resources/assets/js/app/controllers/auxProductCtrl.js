@@ -42,7 +42,8 @@ angular.module('App')
                         ['movimientos','movements','bgm-teal'],
                         ['reservar','reserve','bgm-purple'],
                         ['observar','observe','bgm-lime'],
-                        ['transición','transition','bgm-orange']
+                        ['transición','transition','bgm-orange'],
+                        ['en proveedor','inProvider','bgm-red']
                     ];
 
         var status = {
@@ -51,7 +52,8 @@ angular.module('App')
                     2 : ['vendido', 'bgm-teal', false],
                     3 : ['reservado', 'bgm-black', false],
                     4 : ['observado', 'bgm-black'],
-                    5 : ['transición', 'bgm-black']
+                    5 : ['transición', 'bgm-black'],
+                    6 : ['en proveedor', 'bgm-red']
                 };
 
         var statusForSale = {
@@ -590,6 +592,57 @@ angular.module('App')
 
          };
 
+         $scope.inProvider = function (i){
+            $scope.productId = $scope.tableData[i].id;
+            $scope.productAux.cod = $scope.tableData[i].cod;
+            $scope.productAux.name = $scope.tableData[i].name;
+            $scope.productAux.size = $scope.tableData[i].size;
+            $scope.productAux.color = $scope.tableData[i].color; 
+            $scope.productAux.situation = $scope.tableData[i].status;          
+            $scope.inProviderChange();
+         };
+
+         $scope.inProviderChange = function (id) {
+             alertConfig.title = "¿Desea cambiar el estado?";
+             alertConfig.text = `<table class="table table-bordered w-100 table-attr text-center">
+                                         <thead>
+                                         <tr>
+                                             <th>Codigo</th>
+                                             <th>Nombre</th>
+                                             <th>Talla</th>
+                                             <th>Color</th>
+                                             <th>Motivo</th>
+                                         </tr>
+                                         </thead>
+                                         <tbody>
+                                         <tr>
+                                             <td>${$scope.productAux.cod}</td>
+                                             <td>${$scope.productAux.name}</td>
+                                             <td>${$scope.productAux.size}</td>
+                                             <td>${$scope.productAux.color}</td>
+                                             <td>${(function(){
+                                                if ($scope.productAux.situation === 1){
+                                                    return 'El producto regresa al proveedor';
+                                                }else{
+                                                    return  'El producto regresara al almacen';
+                                                }
+                                             })()}
+                                            </td>
+                                         </tr>
+                                         </tbody>
+                                     </table>
+                                     </div>`;
+
+             sweetAlert(alertConfig, function () {
+                 petition.get('api/auxproduct/get/status/provider/'+ $scope.productId)
+                     .then(function (data) {                        
+                        toastr.success(data.message);                                       
+                        $scope.searchList($scope.data);
+                     }, function (error) {
+                         toastr.error('Uyuyuy dice: ' + error.data.message);
+                     });
+             });
+         };
 
          /**{
                    *    Método de modificacion de estatus}

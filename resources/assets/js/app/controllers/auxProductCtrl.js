@@ -50,9 +50,9 @@ angular.module('App')
                     0 : ['salida','btn-danger', false],
                     1 : ['disponible', 'btn-success', false],
                     2 : ['vendido', 'bgm-teal', false],
-                    3 : ['reservado', 'bgm-black', false],
-                    4 : ['observado', 'bgm-black'],
-                    5 : ['transición', 'bgm-black'],
+                    3 : ['reservado', 'bgm-purple', false],
+                    4 : ['observado', 'bgm-lime'],
+                    5 : ['transición', 'bgm-orange'],
                     6 : ['en proveedor', 'bgm-red']
                 };
 

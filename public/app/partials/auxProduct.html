@@ -1,28 +1,40 @@
 <div class="card" >
     <div class="card-header bgm-blue">
         <h2>Gestión de productos</h2>
+        <button class="btn bgm-red btn-float waves-effect btnLista" data-trigger="hover" data-toggle="popover"
+                 data-placement="top" ng-click="resetFilter()"><i class="md md-close"></i></button>
     </div>
     <div class="card-header bgm-lightblue">
        <div ng-form="dates" class="row report-date">
+            <h2 class="col-xs-5 col-sm-1 text-right m-t-20">Codigo: </h2>
+            <div class="col-xs-7 col-sm-1 m-t-20 p-0">
+                <div class="form-group m-b-0">
+                    <div class="fg-line">
+                        <input type="text" class="form-control p-l-10 uppercase" ng-model="data.order">
+                    </div>
+                </div>
+            </div>
 
-            <h2 class="col-xs-5 col-sm-1 text-right m-t-20">Tipo</h2>
+            <div class="clearfix"></div>
+
+            <h2 class="col-xs-5 col-sm-1 text-right m-t-20">Tipo: </h2>
             <select class="col-xs-7 col-sm-2 m-t-20" ng-options="type.id as type.name for type in types" ng-model="data.type">
                <option value="" selected="selected">Seleccione</option>
             </select>
 
-            <h2 class="col-xs-5 col-sm-1 text-right  m-t-20">Proveedor</h2>
+            <h2 class="col-xs-5 col-sm-1 text-right  m-t-20">Proveedor: </h2>
             <select class="col-xs-7 col-sm-2 m-t-20" ng-options="provider.id as provider.name for provider in providers" ng-model="data.provider_id">
                <option value="" selected="selected">Seleccione</option>
             </select>
 
-            <h2 class="col-xs-5 col-sm-1 text-right m-t-20">Venta</h2>
+            <h2 class="col-xs-5 col-sm-1 text-right m-t-20">Venta: </h2>
             <select class="col-xs-7 col-sm-2 m-t-20" ng-model="data.status_sale">
                <option value="" selected="selected">Seleccione</option>
                <option value="0" selected="selected">Normal</option>
                <option value="1" selected="selected">Liquidacion</option>
             </select>
 
-            <h2 class="col-xs-5 col-sm-1 text-right m-t-20">Estado</h2>
+            <h2 class="col-xs-5 col-sm-1 text-right m-t-20">Estado: </h2>
             <select class="col-xs-7 col-sm-2 m-t-20" ng-model="data.status">
                 <option value="" selected="selected">Seleccione</option>
                 <option value="0">Salida</option>
@@ -31,24 +43,23 @@
                 <option value="3">Reservado</option>
             </select>
 
-            <h2 class="col-xs-5 col-sm-1 m-t-20 text-right">Producto</h2>
+            <h2 class="col-xs-5 col-sm-1 m-t-20 text-right">Producto: </h2>
             <select class="col-xs-7 col-sm-2 m-t-20" ng-options="product.name as product.name for product in products" ng-model="data.product">
                <option value=""  selected="selected">Seleccione</option>
             </select>
 
-            <h2 class="col-xs-5 col-sm-1 m-t-20 text-right">Talla</h2>
+            <h2 class="col-xs-5 col-sm-1 m-t-20 text-right">Talla: </h2>
             <select class="col-xs-7 col-sm-2 m-t-20" ng-options="size.id as size.name for size in sizes" ng-model="data.size">
                <option value=""  selected="selected">Seleccione</option>
             </select>
 
-            <h2 class="col-xs-5 col-sm-1 m-t-20 text-right">Color</h2>
+            <h2 class="col-xs-5 col-sm-1 m-t-20 text-right">Color: </h2>
             <select class="col-xs-7 col-sm-2 m-t-20" ng-options="color.id as color.name for color in colors" ng-model="data.color">
                <option value="" selected="selected">Seleccione</option>
             </select>
 
             <div class="col-xs-offset-0 col-xs-12 col-sm-offset-1 col-sm-2 p-0 m-t-20">
-                <input type="button" ng-disabled="!dates.$valid || updateList" ng-click="searchList(data)" class="btn bgm-indigo col-sm-6" value="buscar">
-                <input type="button" ng-click="download(data)" ng-disabled="downloadBtn" class="btn bgm-purple col-sm-6" value="PDF">
+                <input type="button" class="btn btn-block bgm-indigo" value="buscar" ng-disabled="btnDisable" ng-click="searchList(data)">
             </div>
        </div>
     </div>

@@ -1552,3 +1552,7 @@ div.fc-row {
 .bc-amber {
   border-color: #FFC107;
 }
+
+.uppercase {
+  text-transform: uppercase;
+}

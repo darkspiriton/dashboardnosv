@@ -104,20 +104,6 @@ angular.module('App')
             html: true
         };
 
-        $scope.list = function(s) {
-            $scope.updateList = true;
-            petition.get('api/auxproduct')
-                .then(function(data){
-                    $scope.tableData = data.products;
-                    $('#table').AJQtable2('view2', $scope, $compile);
-                    $scope.updateList = false;
-                }, function(error){
-                    console.log(error);
-                    toastr.error('Ups ocurrio un problema: ' + error.data.message);
-                    $scope.updateList = false;
-                });
-        };
-
         // End events
 
 
@@ -462,8 +448,25 @@ angular.module('App')
          *  END
          */ 
 
+        $scope.resetFilter = function(){
+            return void($scope.data = {});
+        };
+
+        $scope.$watch("data", function(nValue){
+           if(Object.keys(nValue).lenght){
+               return void($scope.btnDisable = true);
+           }
+
+           for (var i in nValue) {
+               if(nValue[i]){
+                   return void($scope.btnDisable = false);
+               }
+           }
+           return void($scope.btnDisable = true);
+        }, true);
+
         angular.element(document).ready(function(){
-            // $scope.list();
+
             $scope.typesList();
             $scope.providerList();
             $scope.productList();

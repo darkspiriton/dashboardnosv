@@ -233,7 +233,6 @@ class auxProductFiltersController extends Controller
     	        ->join('providers as pv', 'pv.id', '=', 'auxproducts.provider_id')
     	        ->leftJoin('settlements as dc', 'dc.product_id', '=', 'auxproducts.id')
     	        ->where('status', '=', 1)
-                // ->whereNull('p.deleted_at')
     	        ->groupby('name','color_id','size_id');
 
     	$query = $this->QueryRequest($request, $query, 1);
@@ -266,43 +265,47 @@ class auxProductFiltersController extends Controller
      *	@return  Illuminate\Database\Eloquent\Model 	    
      */
     private function QueryRequest(Request $request, $query, $aux = null){
+        if ($request->has('order')) {
+            $query->where('p.cod', request('order'));
+        }
+
     	if ($request->has('type')) {
-    	    $query->where('tp.type_id', $request->input('type'));
+    	    $query->where('tp.type_id', request('type'));
     	}
 
     	if ($request->has('provider_id')) {
             if($aux)
-    	        $query->where('auxproducts.provider_id', $request->input('provider_id'));
+    	        $query->where('auxproducts.provider_id', request('provider_id'));
     	    else
-                $query->where('p.provider_id', $request->input('provider_id'));
+                $query->where('p.provider_id', request('provider_id'));
         }
 
     	if ($request->has('product')) {
             if($aux)
-    	        $query->where('auxproducts.name', $request->input('product'));
+    	        $query->where('auxproducts.name', request('product'));
             else
-                $query->where('p.name', $request->input('product'));
+                $query->where('p.name', request('product'));
     	}
 
     	if ($request->has('color')) {
             if($aux)
-                $query->where('auxproducts.color_id', $request->input('color'));
+                $query->where('auxproducts.color_id', request('color'));
             else
-                $query->where('p.color_id', $request->input('color'));
+                $query->where('p.color_id', request('color'));
     	}
 
     	if ($request->has('size')) {
             if($aux)
-                $query->where('auxproducts.size_id', $request->input('size'));
+                $query->where('auxproducts.size_id', request('size'));
             else
-    	       $query->where('p.size_id', $request->input('size'));
+    	       $query->where('p.size_id', request('size'));
     	}
 
     	if ($request->has('status')) {
             if($aux)
-                $query->where('auxproducts.status', $request->input('status'));
+                $query->where('auxproducts.status', request('status'));
             else
-    	        $query->where('p.status', $request->input('status'));
+    	        $query->where('p.status', request('status'));
     	}
 
     	return $query;

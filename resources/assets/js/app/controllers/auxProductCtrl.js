@@ -153,23 +153,6 @@ angular.module('App')
             name: '>>---> (Nuevo Tipo) <---<<'
         };
 
-        $scope.list = function(s) {
-            $scope.updateList = true;
-            var obj = { params: {}};
-            if(typeof s !== 'undefined')
-                obj.params.search = s;
-            petition.get('api/auxproduct', obj)
-                .then(function(data){
-                    $scope.tableData = data.products;
-                    $('#table').AJQtable2('view2', $scope, $compile);
-                    otherView(data.products);
-                    $scope.updateList = false;
-                }, function(error){
-                    toastr.error('Huy Huy dice: ' + error.data.message);
-                    $scope.updateList = false;
-                });
-        };
-
         function otherView(data){
             for(var i in data){
                 if (data[i].status === 0){
@@ -771,11 +754,28 @@ angular.module('App')
          *  END
          */ 
 
+         $scope.resetFilter = function(){
+             return void($scope.data = {});
+         };
+
+         $scope.$watch("data", function(nValue){
+            if(Object.keys(nValue).lenght){
+                return void($scope.btnDisable = true);
+            }
+
+            for (var i in nValue) {
+                if(nValue[i]){
+                    return void($scope.btnDisable = false);
+                }
+            }
+            return void($scope.btnDisable = true);
+         }, true);
+
         angular.element(document).ready(function(){
             util.resetTable($scope, $compile);
             $scope.product = angular.copy($scope.productClear);
             $scope.newFeature = {};
-            // $scope.list();
+
             $scope.productList();
             $scope.listProviders();
             $scope.listSizes();

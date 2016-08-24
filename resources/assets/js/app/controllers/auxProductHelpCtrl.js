@@ -45,7 +45,7 @@ angular.module('App')
 
         $scope.tableConfig 	= 	{
             columns :	[
-                {"sTitle": "Fecha", "bSortable" : true, 'sWidth': '80px'},
+                {"sTitle": "Fecha", "bSortable" : true, 'sWidth': '160px'},
                 {"sTitle": "Codigo", "bSortable" : true, 'sWidth': '1px'},
                 {"sTitle": "Nombre", "bSortable" : true, 'sWidth': '250px'},
                 {"sTitle": "Proveedor", "bSortable" : true},
@@ -74,7 +74,7 @@ angular.module('App')
                         ]
                     }
                 ],
-            data  	: 	['date','cod','name','provider','size','color','types','statusForSale','price_real','precio','obseveDetail','actions'],
+            data  	: 	['deleted_at','cod','name','provider','size','color','types','statusForSale','price_real','precio','obseveDetail','actions'],
         };
 
         var alertConfig = {
@@ -113,15 +113,19 @@ angular.module('App')
          */
 
         $scope.restore = function(i){
-            var id = $scope.tableData[i].id;
-            petition.post('api/auxproduct/delete/restore/' + id)
-                .then(function(data){
-                    $scope.list();
-                    toastr.success(data.message);
-                }, function(error){
-                    $scope.list();
-                    toastr.error('Huy Huy dice: ' + error.data.message);
-                });
+            alertConfig.title = '¿Esta seguro?';
+            swal(alertConfig ,
+                function() {
+                    var id = $scope.tableData[i].id;
+                    petition.post('api/auxproduct/delete/restore/' + id)
+                        .then(function(data){
+                            $scope.list();
+                            toastr.success(data.message);
+                        }, function(error){
+                            $scope.list();
+                            toastr.error('Huy Huy dice: ' + error.data.message);
+                        });
+            });
         };
 
         angular.element(document).ready(function(){

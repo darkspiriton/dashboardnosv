@@ -247,32 +247,57 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
 
             get: function (URL, data) {
                 data = data || {};
-                var promise = $http.get(baseUrl(URL), data);
+                var deferred = $q.defer();
+                $http.get(baseUrl(URL), data).then(function (response) {
+                    deferred.resolve(response.data);
+                }, function(error){
+                    deferred.reject(error);
+                });
 
-                return promise;
+                return deferred.promise;
             },
             post: function (URL, data, config) {
                 data = data || {};
                 config = config || {};
-                var promise = $http.post(baseUrl(URL), data, config);
+                var deferred = $q.defer();
+                $http.post(baseUrl(URL), data, config).then(function (response) {
+                    deferred.resolve(response.data);
+                }, function(error){
+                    deferred.reject(error);
+                });
 
-                return promise;
+                return deferred.promise;
             },
             put: function (URL, data) {
                 data = data || {};
-                var promise = $http.put(baseUrl(URL), data);
+                var deferred = $q.defer();
+                $http.put(baseUrl(URL), data).then(function (response) {
+                    deferred.resolve(response.data);
+                }, function(error){
+                    deferred.reject(error);
+                });
 
-                return promise;
+                return deferred.promise;
             },
             delete: function (URL, data) {
                 data = data || {};
-                var promise = $http.delete(baseUrl(URL), data);
+                var deferred = $q.defer();
+                $http.delete(baseUrl(URL), data).then(function (response) {
+                    deferred.resolve(response.data);
+                }, function(error){
+                    deferred.reject(error);
+                });
 
-                return promise;
+                return deferred.promise;
             },
             custom: function (config) {
-                var promise = $http(config);
-                return promise;
+                var deferred = $q.defer();
+                $http(config).then(function (response) {
+                    deferred.resolve(response.data);
+                }, function(error){
+                    deferred.reject(error);
+                });
+                return deferred.promise;
             }
         };
     }])

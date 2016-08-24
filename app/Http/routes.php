@@ -350,7 +350,7 @@ use Vinkla\Pusher\Facades\Pusher;
 use Dashboard\Events\NotificationPusher;
 
 Route::get('/test', function (\Illuminate\Http\Request $request) {
-    // event(new NotificationPusher("Producto Eliminado", "Juanito elimino product: Clarissa Color:5 Talla:L", 2));
+    event(new NotificationPusher("Producto Eliminado", "Juanito elimino product: Clarissa Color:5 Talla:L", 2, "productDelete"));
 
     return 'Done';
 });

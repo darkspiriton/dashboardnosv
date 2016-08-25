@@ -1556,3 +1556,21 @@ div.fc-row {
 .uppercase {
   text-transform: uppercase;
 }
+
+.group-actions {
+  padding: 0;
+  min-width: 80px;
+  background: #eee;
+  left: -110px;
+  top: 0;
+  margin: 0;
+  display: none;
+}
+
+.group-actions li a {
+  cursor: pointer;
+}
+
+.btn-open {
+  min-width: 80px;
+}

@@ -30,6 +30,7 @@ class ProductOutRequest extends Request
             'codOrder'      => 'required',
             'products.*.id' => 'required|integer|exists:auxproducts,id',
             'products.*.discount'   => 'required|numeric',
+            'products.*.priceOut'   => 'required|numeric',
             'seller_id'     =>  'required|integer|exists:users,id',
             'client_id'     =>  'required|integer|exists:auxclients,id'
         ];

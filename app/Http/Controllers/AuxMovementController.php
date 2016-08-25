@@ -30,6 +30,7 @@ class AuxMovementController extends Controller
         try {
             $products = DB::table('auxproducts AS p')
             ->select('p.name', 'c.name AS color', 's.name AS size', 'p.id', 'p.cod', DB::raw('count(p.cod) as cant'),
+                DB::raw('case when d.price then d.price else p.cost_provider end as priceProvider'),'p.utility',
                 DB::raw('case when d.price then d.price else p.cost_provider + p.utility end as price'),
                 DB::raw('case when d.price then 1 else 0 end as status'))
             ->join('colors AS c', 'c.id', '=', 'p.color_id')
@@ -147,7 +148,12 @@ class AuxMovementController extends Controller
             $movementsRes = array();
 
             foreach ($products as $product) {
-                $prd = Product::with(["color", "size", "settlement"])->find($product['id']);
+                $prd = Product::with(["color", "size", "settlement"])->find($product['id']); 
+
+                if($product['priceOut']< $prd->cost_provider){
+                    return reponse()->json(['message'=>'No se puede registrar un precio menor al costo de proveedor']);
+                }             
+
                 if ($prd->status == 1) {
                     $movement = new Movement();
 
@@ -159,13 +165,20 @@ class AuxMovementController extends Controller
                     $movement->user_id          =   $request->input('seller_id');
                     $movement->client_id        =   $request->input('client_id');
 
+                    if ($product['priceOut'] != $prd->cost_provider+$prd->utility){                                     
+                        $newUtility = $product['priceOut']-$prd->cost_provider;
+                        $prd->utility=$newUtility;
+                        $prd->save();                   
+                    }
+
                     $prd->movements()->save($movement);
                     $prd->status = 0;
                     $prd->save();
-
+  
                     $response[] = $prd;
                     $movementsRes[] = $movement;
                 };
+
             }
 
             return response()->json(['message' => 'Se genero la salida de los productos correctamente',

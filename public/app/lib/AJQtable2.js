@@ -76,12 +76,12 @@
                     var btns = '';
 
                     for (var x in button.render) {
-                        btns = btns + ` <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="${button.render[x][1]}('{i}','$event')">${button.render[x][0]}</a></li>`;
+                        btns = btns + ` <li role="presentation"><a class="${button.render[x][2]}-h" role="menuitem" tabindex="-1" ng-click="${button.render[x][1]}('{i}','$event')">${button.render[x][0]}</a></li>`;
                     }
 
                     var template = `<div class="dropdown" data-animation="fadeInRight,fadeOutRight,600">
                                         <button type="button" class="btn btn-primary btn-xs btn-open" data-toggle="dropdown">Acción<i class="caret"></i></button>
-                                        <ul class="dropdown-menu bgm-blue group-actions">
+                                        <ul class="dropdown-menu bgm-lightblue group-actions">
                                             ${btns}
                                         </ul>
                                     </div>`;

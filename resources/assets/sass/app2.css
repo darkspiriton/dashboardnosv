@@ -1560,11 +1560,10 @@ div.fc-row {
 .group-actions {
   padding: 0;
   min-width: 80px;
-  background: #eee;
-  left: -110px;
+  left: -95px;
   top: 0;
   margin: 0;
-  display: none;
+  border: none;
 }
 
 .group-actions li a {
@@ -1573,4 +1572,100 @@ div.fc-row {
 
 .btn-open {
   min-width: 80px;
+}
+
+.group-actions > li > a {
+  padding: 2px 10px !important;
+}
+
+.dropdown-menu > li > a.bgm-red-h:focus, .dropdown-menu>li>a.bgm-red-h:hover {
+  background-color: #f44336!important;
+}
+
+.dropdown-menu > li > a.bgm-pink-h:focus, .dropdown-menu>li>a.bgm-pink-h:hover {
+  background-color: #E91E63!important;
+}
+
+.dropdown-menu > li > a.bgm-purple-h:focus, .dropdown-menu>li>a.bgm-purple-h:hover {
+  background-color: #9C27B0!important;
+}
+
+.dropdown-menu > li > a.bgm-deeppurple-h:focus, .dropdown-menu>li>a.bgm-deeppurple-h:hover {
+  background-color: #673AB7!important;
+}
+
+.dropdown-menu > li > a.bgm-indigo-h:focus, .dropdown-menu>li>a.bgm-indigo-h:hover {
+  background-color: #3F51B5!important;
+}
+
+.dropdown-menu > li > a.bgm-blue-h:focus, .dropdown-menu>li>a.bgm-blue-h:hover {
+  background-color: #2196F3!important;
+}
+
+.dropdown-menu > li > a.bgm-lightblue-h:focus, .dropdown-menu>li>a.bgm-lightblue-h:hover {
+  background-color: #03A9F4!important;
+}
+
+.dropdown-menu > li > a.bgm-cyan-h:focus, .dropdown-menu>li>a.bgm-cyan-h:hover {
+  background-color: #00BCD4!important;
+}
+
+.dropdown-menu > li > a.bgm-teal-h:focus, .dropdown-menu>li>a.bgm-teal-h:hover {
+  background-color: #009688!important;
+}
+
+.dropdown-menu > li > a.bgm-green-h:focus, .dropdown-menu>li>a.bgm-green-h:hover {
+  background-color: #4CAF50!important;
+}
+
+.dropdown-menu > li > a.bgm-lightgreen-h:focus, .dropdown-menu>li>a.bgm-lightgreen-h:hover {
+  background-color: #8BC34A!important;
+}
+
+.dropdown-menu > li > a.bgm-lime-h:focus, .dropdown-menu>li>a.bgm-lime-h:hover {
+  background-color: #CDDC39!important;
+}
+
+.dropdown-menu > li > a.bgm-yellow-h:focus, .dropdown-menu>li>a.bgm-yellow-h:hover {
+  background-color: #FFEB3B!important;
+}
+
+.dropdown-menu > li > a.bgm-amber-h:focus, .dropdown-menu>li>a.bgm-amber-h:hover {
+  background-color: #FFC107!important;
+}
+
+.dropdown-menu > li > a.bgm-orange-h:focus, .dropdown-menu>li>a.bgm-orange-h:hover {
+  background-color: #FF9800!important;
+}
+
+.dropdown-menu > li > a.bgm-deeporange-h:focus, .dropdown-menu>li>a.bgm-deeporange-h:hover {
+  background-color: #FF5722!important;
+}
+
+.dropdown-menu > li > a.bgm-brown-h:focus, .dropdown-menu>li>a.bgm-brown-h:hover {
+  background-color: #795548!important;
+}
+
+.dropdown-menu > li > a.bgm-gray-h:focus, .dropdown-menu>li>a.bgm-gray-h:hover {
+  background-color: #9E9E9E!important;
+}
+
+.dropdown-menu > li > a.bgm-bluegray-h:focus, .dropdown-menu>li>a.bgm-bluegray-h:hover {
+  background-color: #607D8B!important;
+}
+
+.dropdown-menu > li > a.bgm-black-h:focus, .dropdown-menu>li>a.bgm-black-h:hover {
+  background-color: #000000!important;
+}
+
+.dropdown-menu > li > a.btn-primary-h:focus, .dropdown-menu>li>a.btn-primary-h:hover {
+  background-color: #2196F3!important;
+}
+
+.dropdown-menu > li > a.btn-error-h:focus, .dropdown-menu>li>a.btn-error-h:hover {
+  background-color: #f44336!important;
+}
+
+.dropdown-menu > li > a.btn-info-h:focus, .dropdown-menu>li>a.btn-info-h:hover {
+  background-color: #03A9F4!important;
 }

@@ -1552,3 +1552,21 @@ div.fc-row {
 .bc-amber {
   border-color: #FFC107;
 }
+
+.group-actions {
+  padding: 0;
+  min-width: 80px;
+  background: #eee;
+  left: -110px;
+  top: 0;
+  margin: 0;
+  display: none;
+}
+
+.group-actions li a {
+  cursor: pointer;
+}
+
+.btn-open {
+  min-width: 80px;
+}

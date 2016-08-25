@@ -76,7 +76,7 @@ angular.module('App')
                 {"sTitle": "P. Real" , "bSearchable": false},
                 {"sTitle": "Precio" , "bSearchable": false},
                 {"sTitle": "Status", "bSortable" : false, "bSearchable": true},
-                {"sTitle": "Accion", "bSortable" : false, "bSearchable": false, "sWidth" : "400px"}
+                {"sTitle": "Accion", "bSortable" : false, "bSearchable": false, "sWidth" : "90px"}
             ],
             buttons :
                 [
@@ -192,7 +192,6 @@ angular.module('App')
         $scope.edit = function (i) {
             petition.get('api/auxproduct/' + $scope.tableData[i].id)
                 .then(function (data) {
-                    console.log(data);
                     productEdit(data.product);
                     $scope.productState = false;
                     util.muestraformulario();
@@ -341,9 +340,7 @@ angular.module('App')
 
         };
 
-        $scope.cancel = function () {
-            $scope.product = angular.copy($scope.productClear);
-            $scope.productState = true;
+        $scope.cancelForm = function (){
             util.ocultaformulario();
         };
 

@@ -74,11 +74,36 @@
             if(obj.type == 'actions'){
                 $.each(obj.list, function(l , button){
                     var btns = '';
+                    // for (var x in button.render) {
+                    //     btns = btns + ` <li role="presentation"><a class="btn btn-block btn-actions btn-xs ${button.render[x][2]}" ng-click="${button.render[x][1]}('{i}','$event')" style="min-width: 82px;">${button.render[x][0]}</a></li>`;
+                    // }
+
                     for (var x in button.render) {
-                        btns = btns + `<a class="btn btn-xs ${button.render[x][2]}" ng-click="${button.render[x][1]}('{i}','$event')" style="min-width: 82px;">${button.render[x][0]}</a>`;
+                        btns = btns + ` <li role="presentation"><a role="menuitem" tabindex="-1" ng-click="${button.render[x][1]}('{i}','$event')">${button.render[x][0]}</a></li>`;
                     }
+
+                    var template = `<div class="dropdown" data-animation="fadeInRight,fadeOutRight,600">
+                                        <button type="button" class="btn btn-primary btn-xs btn-open" data-toggle="dropdown">Acción<i class="caret"></i></button>
+                                        <ul class="dropdown-menu bgm-blue group-actions">
+                                            ${btns}
+                                        </ul>
+                                    </div>`;
+
+
+                                    // <div class="dropdown" data-animation="fadeInRight,fadeOutRight,600">
+                                    //     <button type="button" class="btn btn-primary" data-toggle="dropdown">Fade In Right <i class="caret"></i></button>
+                                        
+                                    //     <ul class="dropdown-menu">
+                                    //         <li><a href="#">Action</a></li>
+                                    //         <li><a href="#">Another action</a></li>
+                                    //         <li><a href="#">Something else here</a></li>
+                                    //         <li class="divider"></li>
+                                    //         <li><a href="#">Separated link</a></li>
+                                    //     </ul>
+                                    // </div>
+
                     AJQactions2[button.name] = {};
-                    AJQactions2[button.name].render = btns;
+                    AJQactions2[button.name].render = template;
                     AJQactions2[button.name].run = function (i) {
                         return this.render.replace(new RegExp("{i}",'g'), i);
                     };

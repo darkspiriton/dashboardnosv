@@ -13,4 +13,8 @@ class Color extends Model
     public function products(){
         return $this->hasMany(Product::class);
     }
+
+    public function getNameAttribute(){
+    	return ucwords($this->attributes["name"]);
+    }
 }

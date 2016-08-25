@@ -21,7 +21,7 @@ class Client extends Model
 
     public function setEmailAttribute($value)
     {
-        $this->attributes['email'] = strlen($value)?null:strtolower($value);
+        $this->attributes['email'] = strlen($value)?strtolower($value):null;
     }
 
     public function setPhoneAttribute($value)
@@ -31,7 +31,7 @@ class Client extends Model
 
     public function setDniAttribute($value)
     {
-        $this->attributes['dni'] = strlen($value)?null:strtolower($value);
+        $this->attributes['dni'] = strlen($value)?strtolower($value):null;
     }
 
     public function setAddressAttribute($value)

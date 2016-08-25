@@ -36,6 +36,7 @@ class AuxMovementController extends Controller
             ->join('sizes AS s', 's.id', '=', 'p.size_id')
             ->leftJoin('settlements AS d', 'd.product_id', '=', 'p.id')
             ->where('p.status', '=', 1)
+            ->where('p.deleted_at', null)
             ->groupBy('p.name', 's.name', 'c.name')
             ->orderBy('p.id', 'asc')
             ->get();

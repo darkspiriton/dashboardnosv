@@ -523,7 +523,7 @@ angular.module('App')
         };
 
         $scope.download = function(dataSearch){
-            $scope.btnDisable = true;
+            $scope.btnDownload = true;
             if(dataSearch.status_sale === "")dataSearch.status_sale = null;
             petition.post('api/auxproduct/filter/get/search/download', dataSearch, {responseType:'arraybuffer'})
                 .then(function(data){
@@ -531,10 +531,10 @@ angular.module('App')
                     var name = date + '-reporte-de-kardex.xls';
                     var file = new Blob([data],{ type : 'application/vnd.ms-excel; charset=UTF-8'});
                     saveAs(file, name);
-                    $scope.btnDisable = false;
+                    $scope.btnDownload = false;
                 }, function(error){
                     toastr.error("El archivo es demasiado grande, no se pudo descargar");
-                    $scope.btnDisable = false;
+                    $scope.btnDownload = false;
                 });
         };
 

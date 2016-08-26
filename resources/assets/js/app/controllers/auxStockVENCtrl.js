@@ -10,28 +10,28 @@ angular.module('App')
                     </div>
                     <div class="card-header bgm-lightblue">
                         <div ng-form="dates" class="row report-header">
-                            <div class="col-xs-5 col-sm-1 m-t-20">
+                            <div class="col-xs-5 col-sm-1 m-t-20"">
                                 <h2 class="text-right">Tipo: </h2>
                             </div>
-                            <div class="col-xs-7 col-sm-2 m-t-20 p-0">
+                            <div class="col-xs-7 col-sm-3 m-t-20 p-0">
                                 <select ng-options="type.id as type.name for type in types" ng-model="data.type">
                                    <option value="" selected="selected">Seleccione</option>
                                 </select>
                             </div>
 
-                            <div class="col-xs-5 col-sm-1 m-t-20">
+                            <div class="col-xs-5 col-sm-1 m-t-20"">
                                 <h2 class="text-right">Proveedor: </h2>
                             </div>
-                            <div class="col-xs-7 col-sm-2 m-t-20 p-0">
+                            <div class="col-xs-7 col-sm-3 m-t-20 p-0">
                                 <select ng-options="provider.id as provider.name for provider in providers" ng-model="data.provider_id">
                                    <option value="" selected="selected">Seleccione</option>
                                 </select>
                             </div>
 
-                            <div class="col-xs-5 col-sm-1 m-t-20">
+                            <div class="col-xs-5 col-sm-1 m-t-20"">
                                 <h2 class="text-right">Venta: </h2>
                             </div>
-                            <div class="col-xs-7 col-sm-2 m-t-20 p-0">
+                            <div class="col-xs-7 col-sm-3 m-t-20 p-0">
                                 <select ng-model="data.status_sale">
                                    <option value="" selected="selected">Seleccione</option>
                                    <option value="0" selected="selected">Normal</option>
@@ -41,32 +41,34 @@ angular.module('App')
 
                             <div class="clearfix"></div>
 
-                            <div class="col-xs-5 col-sm-1 m-t-20">
+                            <div class="col-xs-5 col-sm-1 m-t-20"">
                                 <h2 class="text-right">Producto: </h2>
                             </div>
-                            <div class="col-xs-7 col-sm-2 m-t-20 p-0">
-                                <select class="bgm-white selectpicker" data-live-search="true" ng-options="product.name as product.name for product in products" ng-model="data.product">
+                            <div class="col-xs-7 col-sm-3 m-t-20 p-0">
+                                <select class="bgm-white selectpicker" selectpicker data-live-search="true" ng-options="product.name as product.name for product in products" ng-model="data.product">
                                    <option value=""  selected="selected">Seleccione</option>
-                                </select>
+                                </select>            
                             </div>
 
-                            <div class="col-xs-5 col-sm-1 m-t-20">
+                            <div class="col-xs-5 col-sm-1 m-t-20"">
                                 <h2 class="text-right">Talla: </h2>
                             </div>
-                            <div class="col-xs-7 col-sm-2 m-t-20 p-0">
+                            <div class="col-xs-7 col-sm-3 m-t-20 p-0">
                                 <select ng-options="size.id as size.name for size in sizes" ng-model="data.size">
                                    <option value=""  selected="selected">Seleccione</option>
                                 </select>
                             </div>
 
-                            <div class="col-xs-5 col-sm-1 m-t-20">
+                            <div class="col-xs-5 col-sm-1 m-t-20"">
                                 <h2 class="text-right">Color: </h2>
                             </div>
-                            <div class="col-xs-7 col-sm-2 m-t-20 p-0">
-                                <select class="bgm-white selectpicker" data-live-search="true" ng-options="color.id as color.name for color in colors" ng-model="data.color">
+                            <div class="col-xs-7 col-sm-3 m-t-20 p-0">
+                                <select class="bgm-white selectpicker" selectpicker data-live-search="true" ng-options="color.id as color.name for color in colors" ng-model="data.color">
                                    <option value="" selected="selected">Seleccione</option>
                                 </select>
                             </div>
+
+                            <div class="clearfix"></div>
 
                             <div class="col-xs-offset-0 col-xs-12 col-sm-offset-1 col-sm-2 p-0 m-t-20">
                                 <input type="button" class="btn btn-block bgm-indigo" value="buscar" ng-disabled="btnDisable" ng-click="searchList(data)" >

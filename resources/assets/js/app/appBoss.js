@@ -22,6 +22,17 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
         .setOptions({});
 
     }])
+    .directive("selectpicker", ["$timeout", function($timeout){
+        return {
+            link: function(scope, element, attrs, ctrl){
+                var $el = $(element);
+
+                $timeout(function () {
+                    $(element).selectpicker();
+                }, 3000);
+            }
+        };
+    }])
     .directive('fileModel', function () {
         return {
             controller: function ($parse, $element, $attrs, $scope) {

@@ -1678,6 +1678,8 @@ div.fc-row {
    line-height: 30px !important;
    font-size: 14px !important;
  }
+
+ .report-header input,
  .report-header select{
    height: 30px;
    border: 0;

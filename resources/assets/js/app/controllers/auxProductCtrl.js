@@ -237,6 +237,7 @@ angular.module('App')
             petition.get('api/auxproviders')
                 .then(function(data){
                     $scope.providers = data.providers;
+                    $scope.providersFilter = angular.copy(data.providers);
                     $scope.providers.push(newProvider);
                 }, function(error){
                     toastr.error('Huy Huy dice: ' + error.data.message);
@@ -256,6 +257,7 @@ angular.module('App')
             petition.get('api/colors')
                 .then(function(data){
                     $scope.colors = data.colors;
+                    $scope.colorsFilter = angular.copy(data.colors);
                     $scope.colors.push(newColor);
                 }, function(error){
                     toastr.error('Huy Huy dice: ' + error.data.message);
@@ -266,6 +268,7 @@ angular.module('App')
             petition.get('api/auxproduct/get/type')
                 .then(function(data){
                     $scope.types = data.types;
+                    $scope.typesFilter = angular.copy(data.types);
                     $scope.types.push(newType);
                 }, function(error){
                     toastr.error('Huy Huy dice: ' + error.data.message);

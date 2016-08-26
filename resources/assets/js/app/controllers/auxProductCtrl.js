@@ -528,8 +528,8 @@ angular.module('App')
             petition.post('api/auxproduct/filter/get/search/download', dataSearch, {responseType:'arraybuffer'})
                 .then(function(data){
                     var date = new Date().getTime();
-                    var name = date + '-reporte-de-kardex.pdf';
-                    var file = new Blob([data],{ type : 'application/pdf'});
+                    var name = date + '-reporte-de-kardex.xls';
+                    var file = new Blob([data],{ type : 'application/vnd.ms-excel; charset=UTF-8'});
                     saveAs(file, name);
                     $scope.downloadBtn = false;
                 }, function(error){

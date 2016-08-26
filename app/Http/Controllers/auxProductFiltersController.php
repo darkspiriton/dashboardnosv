@@ -11,8 +11,8 @@ use Dashboard\Models\Experimental\Provider;
 use Dashboard\Models\Experimental\Size;
 use Dashboard\Models\Experimental\Type;
 use Illuminate\Http\Request;
-use Log;
 use Validator;
+use Excel;
 
 class auxProductFiltersController extends Controller
 {
@@ -145,9 +145,9 @@ class auxProductFiltersController extends Controller
         }
 
         $query = DB::table('auxproducts as p')
-                        ->select('p.status', DB::raw('DATE_FORMAT(p.created_at,\'%d-%m-%Y\') as date'), 'p.id', 'p.cod', 'p.name', 's.name as size', 'c.name as color', 'pv.name as provider', DB::raw('GROUP_CONCAT(t.name ORDER BY t.name ASC SEPARATOR \' - \') as types'), 'p.cost_provider', 'p.utility')
-                        ->addSelect(DB::raw('p.cost_provider + p.utility  as price_real'))
-                        ->addSelect(DB::raw('case when dc.price then dc.price else p.cost_provider + p.utility end as precio'))
+                        ->select('p.name as Nombre', 'p.status','p.cod as Codigo', 's.name as Talla', 'c.name as Color', 'pv.name as Proveedor', DB::raw('GROUP_CONCAT(t.name ORDER BY t.name ASC SEPARATOR \' - \') as Tipos'), 'p.cost_provider as Costo_proveedor', 'p.utility as Utilidad')
+                        ->addSelect(DB::raw('p.cost_provider + p.utility as Precio_real'))
+                        ->addSelect(DB::raw('case when dc.price then dc.price else p.cost_provider + p.utility end as Precio'))
                         ->addSelect(DB::raw('case when dc.price then 1 else 0 end liquidation'))
                         ->leftJoin('types_auxproducts as tp', 'tp.product_id', '=', 'p.id')
                         ->leftJoin('types as t', 't.id', '=', 'tp.type_id')
@@ -157,63 +157,46 @@ class auxProductFiltersController extends Controller
                         ->leftJoin('settlements as dc', 'dc.product_id', '=', 'p.id')
                         ->whereNull('p.deleted_at')
                         ->groupBy('cod')
-                        ->orderBy('id', 'desc');
-
-        $query = $this->QueryRequest($request, $query);
+                        ->orderBy('p.name', 'asc');
 
         $products = $query->get();
 
-        $products = $this->StatusSalesCase($request, $products);
+        $data = array();
 
         foreach ($products as $product) {
             if($product->liquidation == 0){
-                $product->status_sale = "normal";
+                $product->Venta = "normal";
             } else if($product->liquidation == 1){
-                $product->status_sale = "liquidacion";
+                $product->Venta = "liquidacion";
             } else {
-                $product->status_sale = "Otros";
+                $product->Venta = "Otros";
             }
 
             if($product->status == 0){
-                $product->status_prd = "salida";
+                $product->Estado = "salida";
             } else if($product->status == 1){
-                $product->status_prd = "disponible";
+                $product->Estado = "disponible";
             } else if($product->status == 2){
-                $product->status_prd = "vendido";
+                $product->Estado = "vendido";
             } else if($product->status == 3){
-                $product->status_prd = "reservado";
+                $product->Estado = "reservado";
             } else if($product->status == 4){
-                $product->status_prd = "observado";
+                $product->Estado = "observado";
             }
+
+            unset($product->liquidation);
+            unset($product->status);
+
+            $data[] = (array)$product;
         }
-        $collect = collect($products);
-        $collect->sortBy("name");
 
-        $data = $collect->toArray();
+        $excelSheet = Excel::create('kardex', function ($excel) use ($data) {
+            $excel->sheet('Sheetname', function ($sheet) use ($data) {
+                $sheet->fromArray($data, null, 'A1', true);
+            });
+        });
 
-        $date = date('Y-m-d');
-
-        $title = 'Reporte de kardex para el día: '.$date;
-
-        $columns = ['Fecha' => 'date',
-            'Codigo' => 'cod',
-            'Nombre' => 'name',
-            'Proveedor' => 'provider',
-            'Talla' => 'size',
-            'Color' => 'color',
-            'Tipos' => 'types',
-            'Estado V.' => 'status_sale',
-            'Precio R.' => 'price_real',
-            'Precio.' => 'precio',
-            'Estado' => 'status_prd',
-        ];
-
-        $view =  \View::make('pdf.templatePDF', compact('data', 'columns', 'title', 'date'))->render();
-
-        $pdf = \PDF::loadHTML($view);
-        $pdf->setOrientation('landscape');
-
-        return $pdf->download();
+        return $excelSheet->download('xls');
     }
 
     /**

@@ -68,7 +68,7 @@
                 <h2 class="text-right">Producto: </h2>
             </div>
             <div class="col-xs-7 col-sm-2 m-t-20 p-0">
-                <select class="bgm-white selectpicker" selectpicker selectpicker-options="User" data-live-search="true" ng-options="product.name as product.name for product in productsFilter" ng-model="data.product">
+                <select class="bgm-white selectpicker" selectpicker selectpicker-options="User" data-live-search="true" ng-options="product.name as product.name for product in products" ng-model="data.product">
                    <option value="" selected="selected">Seleccione</option>
                 </select>
             </div>
@@ -93,6 +93,10 @@
 
             <div class="col-xs-offset-0 col-xs-12 col-sm-offset-1 col-sm-2 p-0 m-t-20">
                 <input type="button" class="btn btn-block bgm-indigo" value="buscar" ng-disabled="btnDisable" ng-click="searchList(data)">
+            </div>
+
+            <div class="col-xs-offset-0 col-xs-12 col-sm-offset-1 col-sm-2 p-0 m-t-20">
+                <input type="button" class="btn btn-block bgm-green" value="Descargar" ng-click="download(data)">
             </div>
        </div>
     </div>

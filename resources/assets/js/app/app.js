@@ -17,6 +17,16 @@ angular.module('App', ['ngResource', 'ngMessages', 'ngSanitize', 'ngAnimate', 't
         $urlRouterProvider.otherwise('/home');
         // $locationProvider.html5Mode(true);
 
+    }]).directive("selectpicker", ["$timeout", function($timeout){
+        return {
+            link: function(scope, element, attrs, ctrl){
+                var $el = $(element);
+
+                $timeout(function () {
+                    $(element).selectpicker();
+                }, 3000);
+            }
+        };
     }])
     .directive('fileModel', function () {
         return {

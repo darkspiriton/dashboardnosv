@@ -1,6 +1,6 @@
 <div class="card" >
     <div class="card-header bgm-blue">
-        <h2>Gestionar Combinaciones</h2>
+        <h2>Gestionar Promociones</h2>
         <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="list()"
                 data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
                 title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
@@ -9,10 +9,10 @@
     <div class="card-body card-padding table-responsive">
 
         <ul class="tab-nav" role="tablist" tabindex="1" style="overflow: hidden; outline: none;">
-            <li class="active"><a ng-click="searchView = 1" aria-controls="home11" role="tab" data-toggle="tab" aria-expanded="true">Combinaciones</a></li>
-            <li class=""><a ng-click="searchView = 2" aria-controls="profile11" role="tab" data-toggle="tab" aria-expanded="false">Saldo</a></li>
-            <li class=""><a ng-click="searchView = 3" aria-controls="messages11" role="tab" data-toggle="tab" aria-expanded="false">Descuento</a></li>
-            <li class=""><a ng-click="searchView = 4;" aria-controls="settings11" role="tab" data-toggle="tab" aria-expanded="false">Otros</a></li>
+            <li ng-class="{active : searchView = 1}"><a ng-click="searchView = 1" role="tab" data-toggle="tab" aria-expanded="true">Combinaciones</a></li>
+            <li ng-class="{active : searchView = 2}"><a ng-click="searchView = 2" role="tab" data-toggle="tab" aria-expanded="false">Saldo</a></li>
+            <li ng-class="{active : searchView = 3}"><a ng-click="searchView = 3" role="tab" data-toggle="tab" aria-expanded="false">Descuento</a></li>
+            <li ng-class="{active : searchView = 4}"><a ng-click="searchView = 4;" role="tab" data-toggle="tab" aria-expanded="false">Otros</a></li>
         </ul>
 
         <div class="tab-content">
@@ -36,12 +36,20 @@
                     <table id="table2" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
                 </div><br>
                 <div class="card-footer">
-                    <a  class="btn bgm-green waves-effect" ng-click="new2();">Crear nueva liquidacion</a>
+                    <a  class="btn bgm-green waves-effect" ng-click="new2();">Crear nuevo saldo</a>
                 </div>
             </div>
 
             <div role="tabpanel" class="tab-pane active" ng-show="(searchView == 3)">
-
+                <div class="col-sm-12" ng-show="updateList">
+                    <i class="fa fa-refresh fa-spin fa-5x" style="display: table;margin: 0 auto;"></i>
+                </div><br>
+                <div class="col-sm-12" ng-hide="updateList">
+                    <table id="table3" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
+                </div><br>
+                <div class="card-footer">
+                    <a  class="btn bgm-green waves-effect" ng-click="new2();">Crear nuevo descuento</a>
+                </div>
             </div>
             <div role="tabpanel" class="tab-pane" ng-show="(searchView == 4)">
 

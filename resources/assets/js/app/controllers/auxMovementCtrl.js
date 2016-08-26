@@ -309,7 +309,7 @@ angular.module('App')
 
 
 		$scope.preciofinal=function (i){
-			if($scope.products[i].discount>$scope.products[i].utility ){
+			if($scope.products[i].discount<0 ){
 				$scope.products[i].discount = 0;
                 if($scope.products[i].price < 0){
                     $scope.products[i].price=0;

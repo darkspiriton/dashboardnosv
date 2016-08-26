@@ -11,7 +11,7 @@
             <a href="#" ui-sref="Movimientos2JVE"><i class="md md-swap-vert-circle"></i>Generar Retorno - Venta</a>
         </li>
         <li id="out_fit">
-            <a href="#" ui-sref="out_fit"><i class="md md-settings-input-component"></i>Gestionar Combinaciones</a>
+            <a href="#" ui-sref="out_fit"><i class="md md-settings-input-component"></i>Gestionar Promociones</a>
         </li>
         <li id="movimientos_outfit">
             <a href="#" ui-sref="Movimientos Out Fit"><i class="md md-remove-circle-outline"></i>Generar Salida de Combinaciones</a>

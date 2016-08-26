@@ -2,7 +2,7 @@ angular.module('App')
     .config(["$stateProvider", function($stateProvider) {
         $stateProvider
             .state('out_fit', {
-                url: '/Gestion-de-outfit',
+                url: '/Gestion-de-promociones',
                 templateUrl: 'app/partials/outFit.html',
                 controller : 'out_fitCtrl'
             });

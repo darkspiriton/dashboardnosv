@@ -136,10 +136,12 @@ angular.module('App')
 			}
 
 			if (count == 0 && $scope.anadir){
-				$scope.dataProducts.push({id: product.id, discount:0});
+
+				$scope.dataProducts.push({id: product.id, discount:0, priceOut:product.price});
 
 				product.discount = 0;
 				product.preciofinal = product.price - product.discount;
+                product.backupPrice = product.price;
 				$scope.products.push(angular.copy(product));
 
 				toastr.success('se añadio');
@@ -307,17 +309,35 @@ angular.module('App')
 
 
 		$scope.preciofinal=function (i){
-			if($scope.products[i].discount>$scope.products[i].price ){
+			if($scope.products[i].discount < 0){
 				$scope.products[i].discount = 0;
-				$scope.products[i].preciofinal=$scope.products[i].price;
+                if($scope.products[i].price < 0){
+                    $scope.products[i].price=0;
+                }	
+                $scope.products[i].preciofinal=$scope.products[i].price;			
 				return ;
-			} else if($scope.products[i].discount == undefined){
+			} else if($scope.products[i].discount === undefined){
+                $scope.products[i].discount=0;
 				$scope.products[i].preciofinal = $scope.products[i].price;
 				return ;
-			}
+			} else if($scope.products[i].price<0){
+                $scope.products[i].price=0;
+                return ;
+            }else if($scope.products[i].price === undefined){
+                $scope.products[i].price=0;
+                return ;
+            }
 
 			$scope.products[i].preciofinal = Math.round(($scope.products[i].price - $scope.products[i].discount)*100)/100;
+            if($scope.products[i].preciofinal<$scope.products[i].priceProvider){
+                $scope.products[i].price=$scope.products[i].backupPrice;
+                $scope.products[i].preciofinal=$scope.products[i].price;
+                $scope.products[i].discount=0;
+                toastr.error('El valor minimo del Precio de Venta deberia ser: '+'S/.'+$scope.products[i].priceProvider);                
+            }
+
 			$scope.dataProducts[i].discount = angular.copy($scope.products[i].discount);
+            $scope.dataProducts[i].priceOut = angular.copy($scope.products[i].price);
 			
 		};
 
@@ -333,6 +353,13 @@ angular.module('App')
 			$scope.dataProducts.splice(i,1);
 			$scope.products.splice(i,1);
 		};
+
+        $scope.restoreProduct = function(i){
+            console.log($scope.products[i].backupPrice);
+            $scope.products[i].price=$scope.products[i].backupPrice;
+            $scope.products[i].discount=0; 
+            $scope.preciofinal(i);           
+        };
 
 		$scope.cancel = function () {
 			$scope.anadir = false;            

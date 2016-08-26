@@ -219,12 +219,18 @@
                         <td style="display: table-cell;">{{ product.name }}</td>
                         <td style="display: table-cell;">{{ product.size }}</td>
                         <td style="display: table-cell;">{{ product.color }}</td>
-                        <td style="display: table-cell;">{{ product.price }}</td>
+                        <!-- <td style="display: table-cell;">{{ product.price }}</td> -->
+                        <td style="display: table-cell; width: 160px">
+                            <input class="form-control input-sm" type="number"  ng-blur="preciofinal($index)" ng-model="product.price" required>
+                        </td>
                         <td style="display: table-cell; width: 160px">
                             <input class="form-control input-sm" type="number"  ng-change="preciofinal($index)" ng-model="product.discount" required>
                         </td>
                         <td style="display: table-cell;">{{ product.preciofinal }}</td>
-                        <td style="width: 80px"><button ng-click="removeProduct($index)" class="btn btn-danger btn-sm waves-effect">Eliminar</button></td>
+                        <td style="width: 80px">
+                            <button ng-click="removeProduct($index)" class="btn btn-danger btn-sm waves-effect">Eliminar</button>
+                            <button ng-click="restoreProduct($index)" class="btn bgm-green btn-sm waves-effect">Restaurar</button>
+                        </td>
                     </tr>
                     </tbody>
                 </table>

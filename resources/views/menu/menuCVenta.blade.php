@@ -2,10 +2,7 @@
     <a href="#"><i class="md md-redeem"></i> Coordinador </a>
     <ul>
         <li id="productsJVE">
-            <a ui-sref="Productos JVE"><i class="md md-content-paste"></i>Kardex</a>
-        </li>
-        <li id="stockVEN">
-            <a ui-sref="Stock Ventas"><i class="md md-local-offer"></i>Stock de Productos</a>
+            <a ui-sref="Productos JVE"><i class="md md-content-paste"></i>Kardex - Coordinador</a>
         </li>
         <li id="movimientos">
             <a href="#" ui-sref="Movimientos"><i class="md md-remove-circle-outline"></i>Generar Salida</a>

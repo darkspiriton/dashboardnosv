@@ -5,3 +5,4 @@ appBoss.js
 appBoss.js.map
 appLogin.js
 appLogin.js.map
+/controllers/loginCtrl.js

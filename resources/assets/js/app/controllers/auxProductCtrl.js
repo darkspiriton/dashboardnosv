@@ -509,21 +509,21 @@ angular.module('App')
         };
 
         $scope.searchList = function(dataSearch){
-            $scope.updateList = true;
+            $scope.btnDisable = true;
 
             petition.get('api/auxproduct/filter/get/search', {params: dataSearch})
                 .then(function(data){
                     $scope.tableData = data.products;
                     $('#table').AJQtable2('view2', $scope, $compile);
-                    $scope.updateList = false;
+                    $scope.btnDisable = false;
                 }, function(error){
                     toastr.error('Huy Huy dice: ' + error.data.message);
-                    $scope.updateList = false;
+                    $scope.btnDisable = false;
                 });
         };
 
         $scope.download = function(dataSearch){
-            $scope.downloadBtn = true;
+            $scope.btnDisable = true;
             if(dataSearch.status_sale === "")dataSearch.status_sale = null;
             petition.post('api/auxproduct/filter/get/search/download', dataSearch, {responseType:'arraybuffer'})
                 .then(function(data){
@@ -531,10 +531,10 @@ angular.module('App')
                     var name = date + '-reporte-de-kardex.xls';
                     var file = new Blob([data],{ type : 'application/vnd.ms-excel; charset=UTF-8'});
                     saveAs(file, name);
-                    $scope.downloadBtn = false;
+                    $scope.btnDisable = false;
                 }, function(error){
                     toastr.error("El archivo es demasiado grande, no se pudo descargar");
-                    $scope.downloadBtn = false;
+                    $scope.btnDisable = false;
                 });
         };
 

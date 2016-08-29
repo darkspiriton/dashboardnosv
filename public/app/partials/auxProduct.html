@@ -191,10 +191,6 @@
                 </div>
             </div>
 
-            <!--<div class="card-header">-->
-                <!--<h2>Tipos categorias</h2>-->
-            <!--</div>-->
-
             <div class="row">
                 <div class="attr-group col-xs-10 col-xs-offset-2 product-types-label">
                     <label ng-repeat="type in product.types">{{type.name}}<i ng-click="removeType($index)" class="md md-delete"></i></label>
@@ -302,20 +298,6 @@
     </div>
 </div>
 
-<!-- <div class="card" >
-    <div class="card-header bgm-blue">
-        <h2>Listado de productos</h2>
-    </div>
-
-    <div class="card-body card-padding table-responsive">
-        <div class="col-sm-12" ng-show="updateList">
-            <i class="fa fa-refresh fa-spin fa-5x" style="display: table;margin: 0 auto;"></i>
-        </div><br>
-        <div class="col-sm-12" ng-hide="updateList">
-            <table id="tableList" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
-        </div><br>
-    </div><br>
-</div> -->
 
 <!-- Modal -->
 <!-- Nuevo Feature -->
@@ -361,46 +343,50 @@
                 <h3 class="modal-title c-white">Detalle de movimientos</h3>
             </div>
             <div class="modal-body card-padding">
+
+                <div class="arrowText arrowRight" ng-class="movementClass(movement)" ng-repeat="movement in productMovements | orderBy: 'created_at'">{{ movement.status | lowercase }} <small>{{ movement.entrega }}</small></div>
+
+                <div class="clearfix"></div>
                 <form class="form-horizontal" autocomplete="off" submit="return false;">
                     <div class="form-group">
                         <div class="col-xs-12">
                             <div class="row">
                                 <div class="attr-group col-xs-12">
-                                    <table class="table table-bordered w-100 table-attr text-center table-mediun">
+                                    <table class="table table-bordered w-100 table-attr text-center table-mediun table-detail">
                                         <thead>
                                         <tr>
-                                            <th style="padding: 10 5;">F. Pedido</th>
-                                            <th style="padding: 10 5;">F. Entrega</th>
-                                            <th style="padding: 10 5;">N° P.</th>
-                                            <th style="padding: 10 5;">Vendedor(a)</th>
-                                            <th style="padding: 10 5;">Codigo</th>
-                                            <th style="padding: 10 5;">Producto</th>
-                                            <th style="padding: 10 5;">Color</th>
-                                            <th style="padding: 10 5;">Talla</th>
-                                            <th style="padding: 10 5;">Estado</th>
-                                            <th style="padding: 10 5;">Estado V.</th>
-                                            <th style="padding: 10 5;">P. Real</th>
-                                            <th style="padding: 10 5;">Precio</th>
-                                            <th style="padding: 10 5;">Desc.</th>
-                                            <th style="padding: 10 5;">P. Final</th>
+                                            <th>F. Pedido</th>
+                                            <th>F. Entrega</th>
+                                            <th>N° P.</th>
+                                            <th>Vendedor(a)</th>
+                                            <th>Codigo</th>
+                                            <th>Producto</th>
+                                            <th>Color</th>
+                                            <th>Talla</th>
+                                            <th>Estado</th>
+                                            <th>Estado V.</th>
+                                            <th>P. Real</th>
+                                            <th>Precio</th>
+                                            <th>Desc.</th>
+                                            <th>P. Final</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                             <tr ng-repeat="movement in productMovements">
-                                                <td style="display: table-cell;padding: 10 5;width:100px">{{ movement.pedido }}</td>
-                                                <td style="display: table-cell;padding: 10 5;">{{ movement.entrega }}</td>
-                                                <td style="display: table-cell;padding: 10 5;">{{ movement.cod_order }}</td>
-                                                <td style="display: table-cell;padding: 10 5;">{{ movement.seller }}</td>
-                                                <td style="display: table-cell;padding: 10 5;">{{ movement.codigo }}</td>
-                                                <td style="display: table-cell;padding: 10 5;">{{ movement.product }}</td>
-                                                <td style="display: table-cell;padding: 10 5;">{{ movement.color }}</td>
-                                                <td style="display: table-cell;padding: 10 5;">{{ movement.talla }}</td>
-                                                <td style="display: table-cell;padding: 10 5;" ng-bind-html="movementStatus(movement)"></td>
-                                                <td style="display: table-cell;padding: 10 5;" ng-bind-html="payStatus(movement.liquidation)"></td>
-                                                <td style="display: table-cell;padding: 10 5;">{{ movement.price_real }}</td>
-                                                <td style="display: table-cell;padding: 10 5;">{{ movement.price }}</td>
-                                                <td style="display: table-cell;padding: 10 5;">{{ movement.discount }}</td>
-                                                <td style="display: table-cell;padding: 10 5;">{{ movement.price_final }}</td>
+                                                <td>{{ movement.pedido }}</td>
+                                                <td>{{ movement.entrega }}</td>
+                                                <td>{{ movement.cod_order }}</td>
+                                                <td>{{ movement.seller }}</td>
+                                                <td>{{ movement.codigo }}</td>
+                                                <td>{{ movement.product }}</td>
+                                                <td>{{ movement.color }}</td>
+                                                <td>{{ movement.talla }}</td>
+                                                <td ng-bind-html="movementStatus(movement)"></td>
+                                                <td ng-bind-html="payStatus(movement.liquidation)"></td>
+                                                <td>{{ movement.price_real }}</td>
+                                                <td>{{ movement.price }}</td>
+                                                <td>{{ movement.discount }}</td>
+                                                <td>{{ movement.price_final }}</td>
                                             </tr>
                                         </tbody>
                                     </table>

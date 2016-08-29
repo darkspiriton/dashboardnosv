@@ -832,7 +832,7 @@ class AuxProductController extends Controller
             //             ->find($id);
 
             $movements = DB::table('auxproducts as p')
-                ->select('m.date_request as pedido', 'm.cod_order', 'm.date_shipment as entrega', 'm.status', 'm.situation', 'm.discount')
+                ->select('m.created_at','m.date_request as pedido', 'm.cod_order', 'm.date_shipment as entrega', 'm.status', 'm.situation', 'm.discount')
                 ->addSelect('p.cod as codigo', 'p.name as product', 'p.cost_provider', 'p.utility')
                 ->addSelect('c.name as color', 's.name as talla')
                 ->addSelect(DB::raw('p.cost_provider + p.utility  as price_real'))

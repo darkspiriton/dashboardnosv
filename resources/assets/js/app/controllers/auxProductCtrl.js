@@ -444,6 +444,23 @@ angular.module('App')
             return `<a class="btn btn-xs disabled ${info[movement.status][1]}">${info[movement.status][0]}</a>`;
         };
 
+        $scope.movementClass = function(movement){
+            var classname = '';
+            switch(movement.status) {
+                case 'salida':
+                    classname = 'arrow-purple';
+                    break;
+                case 'Vendido':
+                    classname = 'arrow-teal';
+                    break;
+                case 'Retornado':
+                    classname = 'arrow-red';
+                    break;
+            }
+
+            return classname;
+        };
+
         /*
          * Helper para vista de detalle de movimientos
          *

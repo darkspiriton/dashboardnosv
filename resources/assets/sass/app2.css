@@ -1704,3 +1704,107 @@ div.fc-row {
 .card-padding {
     /*overflow: inherit;*/
 }
+
+.table-detail thead tr th {
+  padding: 10 5;
+}
+
+.table-detail thead tr th:first-child {
+  padding: 10 5 !important;
+}
+
+.table-detail thead tr th:last-child {
+  padding: 10 5 !important;
+}
+
+.table-detail tbody tr td {
+  display: table-cell;
+  padding: 5 5;
+  font-size: 11px !important;
+}
+
+.table-detail tbody tr td:first-child {
+  padding: 5 5 !important;
+}
+
+.table-detail tbody tr td:last-child {
+  padding: 5 5 !important;
+}
+
+.arrowText {
+  position:relative;
+  margin: 5 20 5 0;
+  width:100px;
+  height: 48px;
+/*  background: #C7E0E5;
+  border:solid 1px #0cceff;*/
+  float: left;
+  color: #FFF;
+  text-align: center;
+  line-height: 25px;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.arrowText small {
+  display: block;
+}
+
+.arrowText:before, .arrowText:after {
+  content: " ";
+  position: absolute;
+  display: block;
+  width: 0;
+  height: 0;
+}
+
+/* RIGHT ARROW */
+ .arrowRight:before, .arrowRight:after {
+  border-bottom: 23px solid transparent;
+  border-top: 25px solid transparent;
+  top:-1px;
+}
+ .arrowRight:after {
+  z-index: 2;
+}
+ 
+.arrowRight:before {
+  right: -18px;
+  z-index: 1;
+}
+
+.arrow-red {
+  background: #F44336;
+}
+
+.arrow-red:after {
+  border-left: 16px solid #FFF;
+}
+
+.arrow-red:before {
+  border-left: 16px solid #F44336;
+}
+
+.arrow-teal {
+  background: #009688;
+}
+
+.arrow-teal:after {
+  border-left: 16px solid #FFF;
+}
+
+.arrow-teal:before {
+  border-left: 16px solid #009688;
+}
+
+.arrow-purple {
+  background: #9C27B0;
+}
+
+.arrow-purple:after {
+  border-left: 16px solid #FFF;
+}
+
+.arrow-purple:before {
+  border-left: 16px solid #9C27B0;
+}

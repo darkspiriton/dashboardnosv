@@ -1670,26 +1670,26 @@ div.fc-row {
   background-color: #03A9F4!important;
 }
  
- .report-header input{
-   height: 30px !important;
- }
+.report-header input{
+  height: 30px !important;
+}
 
- .report-header h2{
-   line-height: 30px !important;
-   font-size: 14px !important;
- }
+.report-header h2{
+  line-height: 30px !important;
+  font-size: 14px !important;
+}
 
- .report-header input,
- .report-header select{
+.report-header input,
+.report-header select{
    height: 30px;
    border: 0;
    box-shadow: 0 5px 11px 0 rgba(0, 0, 0, 0.18), 0 4px 15px 0 rgba(0, 0, 0, 0.15);
    color: #000000;
    display: block;
    width: 100%;
- }
+}
 
- .report-header button.dropdown-toggle{
+.report-header button.dropdown-toggle{
     height: 30px;
     border: 0 !important;
     box-shadow: 0 5px 11px 0 rgba(0,0,0,.18),0 4px 15px 0 rgba(0,0,0,.15) !important;
@@ -1699,4 +1699,8 @@ div.fc-row {
     text-transform: none;
     padding: 0 4;
     margin: 0 !important;
- }
+}
+
+.card-padding {
+    /*overflow: inherit;*/
+}

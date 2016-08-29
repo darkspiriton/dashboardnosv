@@ -59,7 +59,6 @@ angular.module('App')
 
         $scope.tableConfig 	= 	{
             columns :	[
-                {"sTitle": "Fecha", "bSortable" : true, 'sWidth': '80px'},
                 {"sTitle": "Codigo", "bSortable" : true, 'sWidth': '1px'},
                 {"sTitle": "Nombre", "bSortable" : true, 'sWidth': '250px'},
                 {"sTitle": "Proveedor", "bSortable" : true},
@@ -88,7 +87,7 @@ angular.module('App')
                         ]
                     }
                 ],
-            data  	: 	['date','cod','name','provider','size','color','types','statusForSale','price_real','precio','obseveDetail','actions'],
+            data  	: 	['cod','name','provider','size','color','types','statusForSale','price_real','precio','obseveDetail','actions'],
         };
 
         var alertConfig = {

@@ -134,7 +134,7 @@ Route::group(['prefix' => 'api'], function () {
         Route::get('observe/{id}','AuxProductController@product_observe_status');
         Route::put('observe/update/{id}','AuxProductController@product_observe_update');
         Route::get('observe/detail/{id}','AuxProductController@product_observe_detail');
-        Route::post('delete/restore/{id}','AuxProductController@restore');
+        
 
         //Transition Product Movement
         Route::get('transition/{id}','AuxProductController@product_transition_status');
@@ -330,7 +330,9 @@ Route::group(['prefix' => 'api'], function () {
     /**
      * Client
      */
-    Route::resource('auxclient', 'AuxClientController', ["only"=>["store", "show", "update"]]);
+    Route::resource('auxclient', 'AuxClientController', ["only"=>["index","store", "show", "update","destroy"]]);
+    Route::get('auxclient/get/delete/','AuxClientController@FilterForSoftDelete');
+    Route::post('auxclient/delete/restore/{id}','AuxClientController@restore');
 
     /**
      * Notification

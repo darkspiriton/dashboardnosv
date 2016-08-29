@@ -22,5 +22,8 @@
         <li id="RequestApplication">
             <a ui-sref="RequestApplication"><i class="md md-web"></i>Ventas Empresas Web</a>
         </li> 
+        <li id="auxClient">
+            <a ui-sref="auxClient"><i class="md md-web"></i>Historial de Clientes</a>
+        </li>
     </ul>
 </li>

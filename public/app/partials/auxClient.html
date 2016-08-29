@@ -1,0 +1,230 @@
+<div class="card" >
+    <div class="card-header bgm-blue">
+        <h2>Gestionar Clientes</h2>
+        <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="update()"
+                data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
+                title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
+    </div>
+
+    <div class="card-body card-padding table-responsive">
+
+        <ul class="tab-nav" role="tablist" tabindex="1" style="overflow: hidden; outline: none;">
+            <li ng-class="{active : searchView == 1}"><a ng-click="searchView = 1" role="tab" data-toggle="tab" aria-expanded="true">Clientes</a></li>
+            <li ng-class="{active : searchView == 2}"><a ng-click="searchView = 2" role="tab" data-toggle="tab" aria-expanded="false">Eliminados</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" ng-show="(searchView == 1)">
+                <div class="col-sm-12" ng-show="updateList">
+                    <i class="fa fa-refresh fa-spin fa-5x" style="display: table;margin: 0 auto;"></i>
+                </div><br>
+                <div class="col-sm-12" ng-hide="updateList">
+                    <table id="table" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
+                </div><br>
+                <div class="card-footer">
+                    <a  class="btn bgm-green waves-effect" ng-click="showNewClientModal();">Crear nuevo cliente</a>
+                </div>
+            </div>
+            
+            <div role="tabpanel" class="tab-pane active" ng-show="(searchView == 2)">
+                <div class="col-sm-12" ng-show="updateList">
+                    <i class="fa fa-refresh fa-spin fa-5x" style="display: table;margin: 0 auto;"></i>
+                </div><br>
+                <div class="col-sm-12" ng-hide="updateList">
+                    <table id="table2" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
+                </div><br>
+            </div>
+        </div>
+        
+    </div><br>
+</div>
+
+
+<div class="card" id="formulariohide" ng-show="(searchView == 1)" > 
+    <div class="card-header bgm-blue">
+        <h2>Cliente</h2>
+    </div>
+
+    <div class="card-body card-padding" >
+        <div class="card-header">
+            <h2>Información de cliente</h2>
+        </div>
+
+        <form name="formClient" id="form" class="form-horizontal" autocomplete="off">
+            <div class="form-group">
+                <label class="col-xs-2 col-sm-2 control-label">Nombre: </label>
+                <div class="col-xs-10 col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-person"></i></span>
+                        <div class="fg-line">
+                            <input ng-model="client.name" type="text" class="form-control" ng-disabled="!editImputClient" required>
+                        </div>
+                    </div>
+                </div>
+
+                <label class="col-xs-2 col-sm-2 control-label">Telefono: </label>
+                <div class="col-xs-10 col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-person"></i></span>
+                        <div class="fg-line">
+                            <input ng-model="client.phone" type="tel" class="form-control" minlength="9" ng-disabled="!editImputClient" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-xs-2 col-sm-2 control-label">DNI: </label>
+                <div class="col-xs-10 col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-person"></i></span>
+                        <div class="fg-line">
+                            <input ng-model="client.dni" type="text" class="form-control" ng-disabled="!editImputClient">
+                        </div>
+                    </div>
+                </div>
+
+                <label class="col-xs-2 col-sm-2 control-label">email: </label>
+                <div class="col-xs-10 col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-person"></i></span>
+                        <div class="fg-line">
+                            <input ng-model="client.email" type="text" class="form-control" ng-disabled="!editImputClient">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-xs-2 col-sm-2 control-label">Dirección: </label>
+                <div class="col-xs-10 col-sm-10">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-person"></i></span>
+                        <div class="fg-line">
+                            <input ng-model="client.address" type="text" class="form-control" ng-disabled="!editImputClient" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-xs-2 col-sm-2 control-label">Referencia: </label>
+                <div class="col-xs-10 col-sm-10">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-person"></i></span>
+                        <div class="fg-line">
+                            <input ng-model="client.reference" type="text" class="form-control" ng-disabled="!editImputClient" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group" ng-show="editImputClient">
+                <div class="col-xs-12 col-sm-offset-2 col-sm-2">
+                    <a class="btn btn-block btn-primary" ng-disabled="!formClient.$valid" ng-click="updateClient(client)">Guardar</a>
+                </div>
+
+                <div class="col-xs-12 col-sm-2">
+                    <a class="btn btn-block bgm-red" ng-click="cancelEditClient()">Cancelar</a>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<!-- New Client -->
+<div class="modal fade" id="newClientModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bgm-teal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title c-white">Crear nuevo cliente</h3>
+            </div>
+            <div class="modal-body card-padding">
+                <form name="clientValidate" class="form-horizontal" autocomplete="off">
+                    <div class="form-group m-b-0">
+                        <label class="col-xs-2 col-sm-4 control-label">Nombre: </label>
+                        <div class="col-xs-10 col-sm-5">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="md md-list"></i></span>
+                                <div class="fg-line">
+                                    <input ng-model="newClient.name" type="text" class="form-control input-sm" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-b-0">
+                        <label class="col-xs-2 col-sm-4 control-label">Correo: </label>
+                        <div class="col-xs-10 col-sm-5">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="md md-list"></i></span>
+                                <div class="fg-line">
+                                    <input ng-model="newClient.email" type="text" class="form-control input-sm">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-b-0">
+                        <label class="col-xs-2 col-sm-4 control-label">Telefono: </label>
+                        <div class="col-xs-10 col-sm-4">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="md md-list"></i></span>
+                                <div class="fg-line">
+                                    <input ng-model="newClient.phone" type="tel" class="form-control input-sm" minlength="9" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-b-0">
+                        <label class="col-xs-2 col-sm-4 control-label">DNI: </label>
+                        <div class="col-xs-10 col-sm-4">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="md md-list"></i></span>
+                                <div class="fg-line">
+                                    <input ng-model="newClient.dni" type="text" class="form-control input-sm">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-b-0">
+                        <label class="col-xs-2 col-sm-4 control-label">Dirección: </label>
+                        <div class="col-xs-10 col-sm-7">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="md md-list"></i></span>
+                                <div class="fg-line">
+                                    <input ng-model="newClient.address" type="text" class="form-control input-sm" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-b-0">
+                        <label class="col-xs-2 col-sm-4 control-label">Referencia: </label>
+                        <div class="col-xs-10 col-sm-7">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="md md-list"></i></span>
+                                <div class="fg-line">
+                                    <input ng-model="newClient.reference" type="text" class="form-control input-sm" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group m-b-0">
+                        <div class="col-xs-offset-2 col-xs-9 col-sm-offset-4 col-sm-7">
+                            <a class="btn btn-primary m-t-5" ng-disabled="!clientValidate.$valid" ng-click="saveClient(newClient)">Guardar</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>

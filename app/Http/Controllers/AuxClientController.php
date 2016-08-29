@@ -2,10 +2,12 @@
 
 namespace Dashboard\Http\Controllers;
 
+use Validator;
+use Dashboard\User;
 use Dashboard\Http\Requests;
 use Illuminate\Http\Request;
+use Dashboard\Events\NotificationPusher;
 use Dashboard\Models\Experimental\Client;
-use Validator;
 
 class AuxClientController extends Controller
 {
@@ -21,7 +23,7 @@ class AuxClientController extends Controller
      */
     public function index()
     {
-        // return Client::all();
+        return response()->json(['clients'=>Client::all()],200);
     }
 
 
@@ -34,12 +36,12 @@ class AuxClientController extends Controller
     public function store(Request $request)
     {
         $rules = [
-            'name'      =>  'required|string|max:255',
-            'email'     =>  'email',
-            'phone'     =>  'required|string|max:25',
-            'dni'       =>  'min:8,max:8',
-            'address'   =>  'required|string',
-            'reference' =>  'required|string'
+        'name'      =>  'required|string|max:255',
+        'email'     =>  'email',
+        'phone'     =>  'required|string|max:25',
+        'dni'       =>  'min:8,max:8',
+        'address'   =>  'required|string',
+        'reference' =>  'required|string'
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -48,8 +50,8 @@ class AuxClientController extends Controller
         }
 
         $client = Client::where('email', request("email"))
-                                ->where("phone", request("phone"))
-                                    ->where("dni", request("dni"))->first();
+        ->where("phone", request("phone"))
+        ->where("dni", request("dni"))->first();
 
         if ($client !== null) {
             return response()->json(['message' => 'El cliente ya se encuentra registrado'], 401);
@@ -69,9 +71,9 @@ class AuxClientController extends Controller
     public function show($text)
     {
         $clients = Client::where("name","like", "%".$text."%")
-                            ->orWhere("email", $text)
-                                ->orWhere("phone", $text)
-                                    ->orWhere("dni", $text)->get();
+        ->orWhere("email", $text)
+        ->orWhere("phone", $text)
+        ->orWhere("dni", $text)->get();
 
         if ($clients == null) {
             return response()->json(['message' => 'No existe el cliente'], 401);
@@ -101,17 +103,17 @@ class AuxClientController extends Controller
     public function update(Request $request, $id)
     {
         $rules = [
-            'name'      =>  'required|string|max:255',
-            'email'     =>  'email',
-            'phone'     =>  'required|string|max:25',
-            'dni'       =>  'max:8',
-            'address'   =>  'required|string',
-            'reference' =>  'required|string'
+        'name'      =>  'required|string|max:255',
+        'email'     =>  'email',
+        'phone'     =>  'required|string|max:25',
+        'dni'       =>  'max:8',
+        'address'   =>  'required|string',
+        'reference' =>  'required|string'
         ];
 
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json(['message' => 'No se posee todos los atributos necesarios para crear un cliente']);
+            return response()->json(['message' => 'No se posee todos los atributos necesarios para crear un cliente'],401);
         }
 
         $client = Client::find($id);
@@ -132,6 +134,62 @@ class AuxClientController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $client = Client::find($id);
+
+        if ($client == null){
+            return response()->json(['message' => 'No se encontro el cliente a eliminar'],401);
+        }
+
+
+        //eliminar cliente
+        $client->delete();
+
+        //notificar eliminacion de archivo
+
+        // $user_id = request("user")["sub"];
+        // $user = User::find($user_id);
+        // $body = "Usuario: ".$user->first_name
+        // ." Elimino el codigo: ".$client->id
+        // .", nombre: ".$client->name
+        // .", email: ".$client->email
+        // .", phone: ".$client->phone;
+
+        // event(new NotificationPusher("Eliminacion de cliente", $body, 2, "clientDelete"));
+        return response()->json(['message'=>'Se elimino el cliente correctamente'],200);
+    }
+
+    public function restore($id)
+    {
+        $client = Client::withTrashed()->find($id);
+
+        if ($client == null) {
+            return response()->json(["message" => "El cliente a restaurar no existe."]);
+        }
+
+        if ($client->trashed()) {
+            $client->restore();
+
+
+            $user_id = request("user")["sub"];
+            $user = User::find($user_id);
+
+            // $body = "Usuario: ".$user->first_name
+            //             ." Restauro el codigo: ".$client->id
+            //                 .", nombre: ".$client->name;
+
+            // event(new NotificationPusher("Restauracion de producto", $body, 4, "productRestore"));
+
+            return response()->json(["message" => "El cliente se restauro con exito."]);
+        } else {
+            return response()->json(["message" => "El cliente no se encuentra eliminado."]);
+        }
+    }
+
+    public function FilterForSoftDelete(){
+        $client = Client::onlyTrashed()->get();
+        if($client==null){
+            return response()->json(['message' => 'No hay productos eliminados'],401);
+        }
+        return response()->json([ 'clients' => $client ],200);
     }
 }

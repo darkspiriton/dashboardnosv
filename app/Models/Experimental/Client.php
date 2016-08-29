@@ -3,12 +3,15 @@
 namespace Dashboard\Models\Experimental;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Client extends Model
 {
+    use SoftDeletes;
+    
     protected $table="auxclients";
     protected $fillable = ["name","email","phone","dni","address","reference"];
-    public $timestamps = false;
+    public $timestamps = true;
 
     public function movements(){
         return $this->hasMany(Movement::class)->orderby('created_at','desc');        

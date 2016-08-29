@@ -9,10 +9,10 @@
     <div class="card-body card-padding table-responsive">
 
         <ul class="tab-nav" role="tablist" tabindex="1" style="overflow: hidden; outline: none;">
-            <li ng-class="{active : searchView = 1}"><a ng-click="searchView = 1" role="tab" data-toggle="tab" aria-expanded="true">Combinaciones</a></li>
-            <li ng-class="{active : searchView = 2}"><a ng-click="searchView = 2" role="tab" data-toggle="tab" aria-expanded="false">Saldo</a></li>
-            <li ng-class="{active : searchView = 3}"><a ng-click="searchView = 3" role="tab" data-toggle="tab" aria-expanded="false">Descuento</a></li>
-            <li ng-class="{active : searchView = 4}"><a ng-click="searchView = 4;" role="tab" data-toggle="tab" aria-expanded="false">Otros</a></li>
+            <li ng-class="{active : searchView == 1}"><a ng-click="searchView = 1" role="tab" data-toggle="tab" aria-expanded="true">Combinaciones</a></li>
+            <li ng-class="{active : searchView == 2}"><a ng-click="searchView = 2" role="tab" data-toggle="tab" aria-expanded="false">Saldo</a></li>
+            <li ng-class="{active : searchView == 3}"><a ng-click="searchView = 3" role="tab" data-toggle="tab" aria-expanded="false">Descuento</a></li>
+            <li ng-class="{active : searchView == 4}"><a ng-click="searchView = 4;" role="tab" data-toggle="tab" aria-expanded="false">Otros</a></li>
         </ul>
 
         <div class="tab-content">

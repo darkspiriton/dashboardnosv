@@ -346,19 +346,29 @@ Route::group(['prefix' => 'api'], function () {
  *  @return Collection test
  */
 
-use Vinkla\Pusher\Facades\Pusher;
-use Dashboard\Events\NotificationPusher;
+// use Vinkla\Pusher\Facades\Pusher;
+// use Dashboard\Events\NotificationPusher;
+// use Dashboard\Models\Experimental\ProductStatus;
+use Dashboard\Events\ProductStatusWasChanged;
+use Dashboard\Models\Experimental\Product;
 
 Route::get('/test', function (\Illuminate\Http\Request $request) {
-    // event(new NotificationPusher("Producto Eliminado", "Juanito elimino product: Clarissa Color:5 Talla:L", 2, "productDelete"));
-    // return 'Done';
+    // return ProductStatus::with(["status_details" => function($query){
+    //     $query->with(["product_detail_statuses" => function($query){
+    //         return $query->with("product");
+    //     }]);
+    // }])->get();
 
-    // $data = Dashboard\Models\Experimental\Product::with("color")->get();
-    // \Excel::create('FirstExcel', function ($excel) use ($data) {
-    //     $excel->sheet('Sheetname', function ($sheet) use ($data) {
-    //         $sheet->fromArray($data, null, 'A1', true);
-    //     });
-    // })->download('xls');
+    // return Product::with(["detail_statuses" => function($query){
+    //     $query->with(["Product_status_detail" => function($query){
+    //         return $query->with("Product_status");
+    //     }]);
+    // }])->get();
+
+    // $product = Product::find(522);
+
+    // event(new ProductStatusWasChanged($product, 7));
+    // event(new ProductStatusWasChanged($product));
 
     return "=)";
 });

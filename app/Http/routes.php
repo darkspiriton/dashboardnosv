@@ -333,6 +333,8 @@ Route::group(['prefix' => 'api'], function () {
     Route::resource('auxclient', 'AuxClientController', ["only"=>["index","store", "show", "update","destroy"]]);
     Route::get('auxclient/get/delete/','AuxClientController@FilterForSoftDelete');
     Route::post('auxclient/delete/restore/{id}','AuxClientController@restore');
+    Route::get('auxclient/get/movement/{id}','AuxClientController@getMovement');
+    // Route::get('auxclient/get/movement/month/{id}','AuxClientController@getMovementMonth');
 
     /**
      * Notification

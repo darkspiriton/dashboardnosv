@@ -8,6 +8,7 @@ use Dashboard\Http\Requests;
 use Illuminate\Http\Request;
 use Dashboard\Events\NotificationPusher;
 use Dashboard\Models\Experimental\Client;
+use Carbon\Carbon;
 
 class AuxClientController extends Controller
 {
@@ -192,4 +193,44 @@ class AuxClientController extends Controller
         }
         return response()->json([ 'clients' => $client ],200);
     }
+
+    public function getMovement(Request $request,$id){
+        $rules = [
+            'status'=>'required|string',
+            'year' => 'integer',
+            'month' => 'integer'
+        ];
+        $validate = Validator::make($request->all(),$rules);
+        if($validate->fails()){
+            return response()->json(['message' => 'No posee todos los parametros para la busqueda'],404);
+        }     
+        $status = $request->input('status');
+
+        if ($request->has('year') && $request->has('month') && $request->input('status')!="Todo"){
+            $dateIni=Carbon::create($request->input('year'), $request->input('month'), 1,0,0,0);
+            $dateFin=$dateIni->copy()->addMonth();
+
+            $client = Client::with(['movements' => function($query) use ($status,$dateIni,$dateFin){
+                $query->where('status',$status)
+                    ->where('date_shipment','>=',$dateIni)
+                    ->where('date_shipment','<',$dateFin);
+            },'movements.product','movements.product.size','movements.product.color'])
+                ->where('id',$id)->get();
+        } else if ($request->input('status') != 'Todo'){
+            $client = Client::with(['movements' => function($query) use ($status){
+                $query->where('status',$status);
+            },'movements.product','movements.product.size','movements.product.color'])
+                ->where('id',$id)->get();
+        }else if ($request->input('status') == 'Todo'){
+            $client = Client::with('movements','movements.product','movements.product.size','movements.product.color')
+                ->where('id',$id)->get();
+        }
+
+        foreach ($client[0]->movements as $movement) {
+            $movement->total_price=$movement->product->final_price-$movement->discount;
+        };       
+        
+        return response()->json(['movements'=>$client[0]->movements],200);
+    }
+
 }

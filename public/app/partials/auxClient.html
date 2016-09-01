@@ -1,16 +1,93 @@
 <div class="card" >
     <div class="card-header bgm-blue">
         <h2>Gestionar Clientes</h2>
-        <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="update()"
+        <button ng-disabled="updateList || searchView == 3" class="btn bgm-green btn-float waves-effect btnLista" ng-click="update()"
                 data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
                 title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
     </div>
+    <div role="tabpanel" class="tab-pane active" ng-show="(searchView == 3)">
+        <div class="card-header bgm-blue">
+                <div class="row report-date p-l-15 p-r-15">
+                    <div class="row report-date p-l-15 p-r-15">
+                        <div class="col-xs-12 col-sm-3 btn-group p-0 box-s">
+                            <button type="button" class="btn btn-block dropdown-toggle bgm-white c-black" data-toggle="dropdown">
+                                Filtro
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu pointer w-100" style="text-align: center;" role="menu">                            
+                                <li><a ng-click="filter(4)">Por mes</a></li>                            
+                                <li><a ng-click="filter(5)">Histórico</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                    <div ng-form="filterMensual" ng-show="searchView2 == 4" class="card-header bgm-blue p-t-0" style="margin-top: 18px;">
+
+                        <div  class="row report-date p-l-15 p-r-15">
+                            <h2 class="col-xs-6 col-sm-2 text-right m-t-5">Cliente</h2>
+                            <select class="btn btn-default col-sm-2" ng-options="client.id as client.name for client in listClients" ng-model="client_id" required>
+                                <option value="" disabled="disabled" select="true">Seleccione</option>
+                            </select>
+                        </div>
+
+                        <div ng-show="searchView2 == 4" class="row report-date p-l-15 p-r-15">
+                            <h2 class="col-xs-5 col-sm-2 text-right m-t-5">Año</h2>
+                            <select class="col-xs-7 col-sm-2 btn btn-default m-t-5" ng-options="year as year for year in years" ng-model="year" required>
+                                <option value="" disabled="disabled" selected="selected">Seleccione</option>
+                            </select>
+                            <h2 class="col-xs-5 col-sm-2 text-right m-t-5">Mensual</h2>
+                            <select class="col-xs-7 col-sm-2 btn btn-default m-t-5" ng-options="month.id as month.name for month in months" ng-model="month" required>
+                                <option value="" disabled="disabled" select="true">Seleccione</option>
+                            </select>
+                        </div>
+                        <div class="row report-date p-l-15 p-r-15">
+                            <h2 class="col-xs-5 col-sm-2 text-right m-t-5">Estado</h2>
+                           <select class="col-xs-7 col-sm-2 btn btn-default m-t-5" ng-options="state.id as state.name for state in status" ng-model="status_id" required>
+                                <option value="" disabled="disabled" selected="selected">Seleccione</option>
+                            </select>
+                        </div>
+
+                        <div class="row m-t-15 p-15">
+                            <div class="col-xs-12 col-sm-3 p-0 box-s">
+                                <input type="button" ng-disabled="!filterMensual.$valid" ng-click="list3()" class="btn btn-block bgm-indigo m-t-5" value="buscar">
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div ng-form="filterHistorico" ng-show="searchView2 == 5" class="card-header bgm-blue p-t-0" style="margin-top: 18px;">
+                        <div  class="row report-date p-l-15 p-r-15">
+                            <h2 class="col-xs-6 col-sm-2 text-right m-t-5">Cliente</h2>
+                            <select class="btn btn-default col-sm-2" ng-options="client.id as client.name for client in listClients" ng-change="clientChange()" ng-model="client_id" required>
+                                <option value="" disabled="disabled" select="true">Seleccione</option>
+                            </select>
+                        </div>
+
+                        <div class="row report-date p-l-15 p-r-15">
+                            <h2 class="col-xs-5 col-sm-2 text-right m-t-5">Estado</h2>
+                            <select class="col-xs-7 col-sm-2 btn btn-default m-t-5" ng-options="state.id as state.name for state in status" ng-change="statusChange()" ng-model="status_id" required>
+                                <option value="" disabled="disabled" selected="selected">Seleccione</option>
+                            </select>
+                        </div>
+
+                        <div class="row m-t-15 p-15">
+                            <div class="col-xs-12 col-sm-3 p-0 box-s">
+                                <input type="button" ng-disabled="!filterHistorico.$valid" ng-click="list3()" class="btn btn-block bgm-indigo m-t-5" value="buscar">
+                            </div>
+                        </div>
+                    </div>
+            </div>
+    </div>
+
+    
 
     <div class="card-body card-padding table-responsive">
 
         <ul class="tab-nav" role="tablist" tabindex="1" style="overflow: hidden; outline: none;">
             <li ng-class="{active : searchView == 1}"><a ng-click="searchView = 1" role="tab" data-toggle="tab" aria-expanded="true">Clientes</a></li>
             <li ng-class="{active : searchView == 2}"><a ng-click="searchView = 2" role="tab" data-toggle="tab" aria-expanded="false">Eliminados</a></li>
+            <li ng-class="{active : searchView == 3}"><a ng-click="searchView = 3" role="tab" data-toggle="tab" aria-expanded="false">Historial Clientes</a></li>
         </ul>
 
         <div class="tab-content">
@@ -26,7 +103,12 @@
                 </div>
             </div>
             
-            <div role="tabpanel" class="tab-pane active" ng-show="(searchView == 2)">
+            <div role="tabpanel" class="tab-pane active" ng-show="(searchView == 2 && vacio == true)">
+                <div class="col-sm-12">
+                    <h3>No hay clientes eliminados</h3>
+                </div><br>               
+            </div>
+            <div role="tabpanel" class="tab-pane active" ng-show="(searchView == 2 && vacio == false)">
                 <div class="col-sm-12" ng-show="updateList">
                     <i class="fa fa-refresh fa-spin fa-5x" style="display: table;margin: 0 auto;"></i>
                 </div><br>
@@ -34,6 +116,22 @@
                     <table id="table2" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
                 </div><br>
             </div>
+
+            <div role="tabpanel" class="tab-pane active" ng-show="(searchView == 3 && vacio3 == true)">
+                <div class="col-sm-12">
+                    <h3>No hay información registrada</h3>
+                </div><br>               
+            </div>
+            <div role="tabpanel" class="tab-pane active" ng-show="(searchView == 3 && vacio3 == false)">
+                <div class="col-sm-12" ng-show="updateList3">
+                    <i class="fa fa-refresh fa-spin fa-5x" style="display: table;margin: 0 auto;"></i>
+                </div><br>
+                <div class="col-sm-12" ng-hide="updateList3">
+                    <table id="table3" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
+                </div><br>
+            </div>
+
+            
         </div>
         
     </div><br>

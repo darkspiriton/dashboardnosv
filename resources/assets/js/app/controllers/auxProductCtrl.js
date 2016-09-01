@@ -566,30 +566,18 @@ angular.module('App')
                 });
         };
 
-        /**
-         *    Helper para observar un producto en el kardex
-         *
-         *    @param  Int  id
-         *    @return  Object:String    Confirmation
-         */
-         $scope.observe = function (i){
+        $scope.observe = function (i){
             msg = messages.observe;
             listReasons(4, i);
             util.modal();
-         };
+        };
 
-         $scope.inProvider = function (i) {
+        $scope.inProvider = function (i) {
             msg = messages.inProvider;
             listReasons(6, i);
             util.modal();
-         };
+        };
 
-        /**
-         *    Helper para transicion un producto en el kardex
-         *
-         *    @param  Int  id
-         *    @return  Object:String    Confirmation
-         */
         $scope.transition = function (i){
             msg = messages.transition;
             listReasons(5, i);

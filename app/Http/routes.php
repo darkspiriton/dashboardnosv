@@ -104,7 +104,7 @@ Route::group(['prefix' => 'api'], function () {
         ['only'=>['index', 'store', 'update', 'show']]);
 
     Route::group(['prefix'=>'auxproduct/'], function () {
-        Route::get('/get/status/provider/{id}', 'AuxProductController@product_inProvider_status');
+        // Route::get('/get/status/provider/{id}', 'AuxProductController@product_inProvider_status');
 
         Route::post('/set/movement', 'AuxProductController@addressUpdate');
         Route::post('/set/color', 'AuxProductController@setColor');
@@ -130,15 +130,19 @@ Route::group(['prefix' => 'api'], function () {
         Route::get('/get/uniques/{name}/codes', 'AuxProductController@CodesLists');
         
         Route::get('get/movements/{id}', 'AuxProductController@movements_for_product');
-        Route::put('reserve/{id}', 'AuxProductController@product_reserve');
-        Route::get('observe/{id}', 'AuxProductController@product_observe_status');
-        Route::put('observe/update/{id}', 'AuxProductController@product_observe_update');
+        // Route::put('reserve/{id}', 'AuxProductController@product_reserve');
+        // Route::get('observe/{id}', 'AuxProductController@product_observe_status');
+        // Route::put('observe/update/{id}', 'AuxProductController@product_observe_update');
         Route::get('observe/detail/{id}', 'AuxProductController@product_observe_detail');
         Route::post('delete/restore/{id}', 'AuxProductController@restore');
 
         //Transition Product Movement
-        Route::get('transition/{id}', 'AuxProductController@product_transition_status');
-        Route::put('transition/update/{id}', 'AuxProductController@product_transition_update');
+        // Route::get('transition/{id}', 'AuxProductController@product_transition_status');
+        // Route::put('transition/update/{id}', 'AuxProductController@product_transition_update');
+
+        Route::get("get/reasons/{id}", "AuxProductController@reasonsList");
+        Route::post("{id}/status/change", "AuxProductController@productStatusChange");
+        Route::post("{id}/status/detail", "AuxProductController@LastPruductStatusDetail");
     });
 
     /**
@@ -367,7 +371,7 @@ Route::get('/test', function (\Illuminate\Http\Request $request) {
 
     // $product = Product::find(522);
 
-    // event(new ProductStatusWasChanged($product, 7));
+    // event(new ProductStatusWasChanged($product, 4));
     // event(new ProductStatusWasChanged($product));
 
     return "=)";

@@ -10,7 +10,7 @@ class ProductDetailStatus extends Model
 
     public function Product_status_detail()
     {
-    	return $this->belongsTo(ProductStatusDetail::class, "id");
+    	return $this->belongsTo(ProductStatusDetail::class, "status_id");
     }
 
     public function product()

@@ -3,9 +3,10 @@
 namespace Dashboard\Events;
 
 use Dashboard\Events\Event;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Dashboard\Models\Experimental\Product;
+use Dashboard\Models\Experimental\ProductStatusDetail;
+use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Queue\SerializesModels;
 
 class ProductStatusWasChanged extends Event
 {
@@ -19,7 +20,7 @@ class ProductStatusWasChanged extends Event
      *
      * @return void
      */
-    public function __construct(Product $product, $status_detail = false)
+    public function __construct(Product $product, ProductStatusDetail $status_detail = null)
     {
         $this->product = $product;
         $this->status_detail = $status_detail;

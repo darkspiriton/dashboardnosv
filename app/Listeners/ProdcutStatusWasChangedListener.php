@@ -29,19 +29,15 @@ class ProdcutStatusWasChangedListener
     public function handle(ProductStatusWasChanged $event)
     {
         $product = $event->getProduct();
-        $status_detail = $event->getStatusDetail();
+        $product_status_detail = $event->getStatusDetail();
 
-        if ($status_detail) {
-            $product_status = ProductStatusDetail::find($status_detail);
+        if ($product_status_detail != null) {
+            $detail_status = new ProductDetailStatus();
+            $detail_status->status_id = $product_status_detail->id;
+            $product->detail_statuses()->save($detail_status);
 
-            if ($product_status) {
-                $detail_status = new ProductDetailStatus();
-                $detail_status->status_id = $status_detail;
-                $product->detail_statuses()->save($detail_status);
-
-                $product->status = $product_status->product_status_id;
-                $product->save();
-            }
+            $product->status = $product_status_detail->product_status_id;
+            $product->save();
         } else {
             $last_detail_status = ProductDetailStatus::orderBy("created_at", "desc")->first();
             $last_detail_status->resolved = 1;

@@ -7,8 +7,8 @@ angular.module('App')
                 controller : 'productsCtrl'
             });
     }])
-    .controller('productsCtrl', ["$scope", "$compile", "$state", "$log", "util", "petition", "toastr",
-        function($scope, $compile, $state, $log, util, petition, toastr){
+    .controller('productsCtrl', ["$scope", "$compile", "$state", "$log", "util", "petition", "toastr", "$injector",
+        function($scope, $compile, $state, $log, util, petition, toastr, $injector){
 
         /*
          |
@@ -20,6 +20,24 @@ angular.module('App')
         $scope.product = {};
         $scope.data = {};
         $scope.productAux = [];
+
+        $scope.stsCase = false;
+
+        var messages = {
+            reserve: {title: "¿Esta seguro de cambiar estado a reservado?", response: "Se cambio el estado a reservado."},
+            transition: {title: "¡Cuidado este proceso no se puede revertir!", response: "El producto esta en transición."},
+            observe: {title: "¿Esta seguro de cambiar el estado a observado?", response: "Se cambio el estado a observado"},
+            inProvider: {title: "¿Esta seguro de cambiar el estado?", response: "Se cambio el estado a en proveedor"},
+        };
+
+        var reasonsMsg = {
+            3: "Reservado",
+            4: "Observado",
+            5: "Transición",
+            6: "Devolucion Proveedor"
+        };
+
+        var msg;
 
         $scope.situations = [
             {id: 1, name:'Producto dañado' },
@@ -50,7 +68,7 @@ angular.module('App')
                     0 : ['salida','btn-danger', false],
                     1 : ['disponible', 'btn-success', false],
                     2 : ['vendido', 'bgm-teal', false],
-                    3 : ['reservado', 'bgm-purple', false],
+                    3 : ['reservado', 'bgm-purple'],
                     4 : ['observado', 'bgm-lime'],
                     5 : ['transición', 'bgm-orange'],
                     6 : ['en proveedor', 'bgm-red']
@@ -84,7 +102,7 @@ angular.module('App')
                     {
                         type: 'status',
                         list:  [
-                            { name: 'obseveDetail', column: 'status', render: status},                            
+                            { name: 'productStatusDetail', column: 'status', render: status},                            
                             { name: 'statusForSale', column: 'liquidation', render: statusForSale},
                         ]
                     },
@@ -95,7 +113,7 @@ angular.module('App')
                         ]
                     }
                 ],
-            data  	: 	['cod','name','provider','size','color','types','cost_provider','utility','statusForSale','price_real','precio','obseveDetail','actions'],
+            data  	: 	['cod','name','provider','size','color','types','cost_provider','utility','statusForSale','price_real','precio','productStatusDetail','actions'],
             configStatus : 'status'
         };
 
@@ -478,18 +496,12 @@ angular.module('App')
         };
 
         $scope.reserve = function(i){
-            var id = $scope.tableData[i].id;
-            petition.put('api/auxproduct/reserve/'+id)
-                .then(function(data){
-                    $scope.searchList($scope.data);
-                    toastr.success(data.message);
-                }, function(error){
-                    $scope.searchList($scope.data);
-                    toastr.error('Huy Huy dice: ' + error.data.message);
-                });
+            msg = messages.reserve;
+            listReasons(3, i);
+            util.modal();
         };
 
-                /*
+        /*
          *
          * Helper para filtro
          *
@@ -561,244 +573,32 @@ angular.module('App')
          *    @return  Object:String    Confirmation
          */
          $scope.observe = function (i){
-            $scope.productId = $scope.tableData[i].id;
-            $scope.productAux.cod = $scope.tableData[i].cod;
-            $scope.productAux.name = $scope.tableData[i].name;
-            $scope.productAux.size = $scope.tableData[i].size;
-            $scope.productAux.color = $scope.tableData[i].color;
-            $scope.productAux.situation = null;
-            petition.get('api/auxproduct/observe/' +  $scope.productId)
-                .then(function(data){
-                    //Validar si el producto esta observado o no
-                    $scope.status=data.status;
-                    if($scope.status === false){
-                        util.modal('Modal');                        
-                        //Mostrar modal y poder elegir el motivo de la observacion
-                        //Luego mostrar detalle de modificacion
-                        //Luego mostrar detalle de confirmacion
-                        //changeObserve(productAux,id);
-                    }else if ($scope.status === true){
-                        //Mostrar detalle de modificacion
-                        //Luego mostrar detalle de confirmacion
-                        $scope.changeObserve();
-                    } else if ($scope.status === null){
-                        toastr.error('Huy Huy dice: ' + data.message);
-                    }
-                },function(error){
-                    $scope.searchList($scope.data);
-                    toastr.error('Huy Huy dice: ' + error.data.message);
-                });
-
+            msg = messages.observe;
+            listReasons(4, i);
+            util.modal();
          };
 
-         $scope.inProvider = function (i){
-            $scope.productId = $scope.tableData[i].id;
-            $scope.productAux.cod = $scope.tableData[i].cod;
-            $scope.productAux.name = $scope.tableData[i].name;
-            $scope.productAux.size = $scope.tableData[i].size;
-            $scope.productAux.color = $scope.tableData[i].color; 
-            $scope.productAux.situation = $scope.tableData[i].status;          
-            $scope.inProviderChange();
+         $scope.inProvider = function (i) {
+            msg = messages.inProvider;
+            listReasons(6, i);
+            util.modal();
          };
 
-         $scope.inProviderChange = function (id) {
-             alertConfig.title = "¿Desea cambiar el estado?";
-             alertConfig.text = `<table class="table table-bordered w-100 table-attr text-center">
-                                         <thead>
-                                         <tr>
-                                             <th>Codigo</th>
-                                             <th>Nombre</th>
-                                             <th>Talla</th>
-                                             <th>Color</th>
-                                             <th>Motivo</th>
-                                         </tr>
-                                         </thead>
-                                         <tbody>
-                                         <tr>
-                                             <td>${$scope.productAux.cod}</td>
-                                             <td>${$scope.productAux.name}</td>
-                                             <td>${$scope.productAux.size}</td>
-                                             <td>${$scope.productAux.color}</td>
-                                             <td>${(function(){
-                                                if ($scope.productAux.situation === 1){
-                                                    return 'El producto regresa al proveedor';
-                                                }else{
-                                                    return  'El producto regresara al almacen';
-                                                }
-                                             })()}
-                                            </td>
-                                         </tr>
-                                         </tbody>
-                                     </table>
-                                     </div>`;
+        /**
+         *    Helper para transicion un producto en el kardex
+         *
+         *    @param  Int  id
+         *    @return  Object:String    Confirmation
+         */
+        $scope.transition = function (i){
+            msg = messages.transition;
+            listReasons(5, i);
+            util.modal();
+        };
 
-             sweetAlert(alertConfig, function () {
-                 petition.get('api/auxproduct/get/status/provider/'+ $scope.productId)
-                     .then(function (data) {                        
-                        toastr.success(data.message);                                       
-                        $scope.searchList($scope.data);
-                     }, function (error) {
-                         toastr.error('Uyuyuy dice: ' + error.data.message);
-                     });
-             });
-         };
-
-         /**{
-                   *    Método de modificacion de estatus}
-          *
-          *    @param  Int  Id
-          *    @return  Object:String    Confirmation
-          */
-         $scope.changeObserve = function (id) {
-             alertConfig.title = "¿Desea cambiar el estado?";
-             alertConfig.text = `<table class="table table-bordered w-100 table-attr text-center">
-                                         <thead>
-                                         <tr>
-                                             <th>Codigo</th>
-                                             <th>Nombre</th>
-                                             <th>Talla</th>
-                                             <th>Color</th>
-                                             <th>Motivo</th>
-                                         </tr>
-                                         </thead>
-                                         <tbody>
-                                         <tr>
-                                             <td>${$scope.productAux.cod}</td>
-                                             <td>${$scope.productAux.name}</td>
-                                             <td>${$scope.productAux.size}</td>
-                                             <td>${$scope.productAux.color}</td>
-                                             <td>${(function(){
-                                                if ($scope.productAux.situation === null){
-                                                    return 'Desactivar estado observado';
-                                                }else{
-                                                    return  $scope.productAux.situation;
-                                                }
-                                             })()}
-                                            </td>
-                                         </tr>
-                                         </tbody>
-                                     </table>
-                                     </div>`;
-
-             sweetAlert(alertConfig, function () {
-                 petition.put('api/auxproduct/observe/update/'+ $scope.productId , {situation:$scope.productAux.situation} )
-                     .then(function (data) {                        
-                        toastr.success(data.message);
-                        util.modalClose();
-                        $scope.searchList($scope.data);
-                     }, function (error) {
-                         toastr.error('Uyuyuy dice: ' + error.data.message);
-                     });
-             });
-         };
-         /**
-          *    Se obtiene el detalle de la observacion
-          *
-          *    @param  int  Id
-          *    @return  String
-          */
-         $scope.obseveDetail=function(i){
-            var id = $scope.tableData[i].id;
-            petition.get('api/auxproduct/observe/detail/'+id)
-                .then(function(data){
-                    $scope.observe_detail = data.observe_detail;
-                    util.modal('ModalDetail');
-                },function(error){
-                    $scope.searchList($scope.data);
-                    toastr.error('Huy Huy dice: ' + error.data.message);
-                });
-         };
-
-         /**
-          *    Helper para transicion un producto en el kardex
-          *
-          *    @param  Int  id
-          *    @return  Object:String    Confirmation
-          */
-          $scope.transition = function (i){
-             $scope.productId = $scope.tableData[i].id;
-             $scope.productAux.cod = $scope.tableData[i].cod;
-             $scope.productAux.name = $scope.tableData[i].name;
-             $scope.productAux.size = $scope.tableData[i].size;
-             $scope.productAux.color = $scope.tableData[i].color;
-             $scope.productAux.transition = null;
-             petition.get('api/auxproduct/transition/' +  $scope.productId)
-                 .then(function(data){
-                     //Validar si el producto esta en transición o no
-                     $scope.status=data.status;
-                     if($scope.status === false){
-                         util.modal('Transition2');                        
-                         //Mostrar modal y poder elegir el motivo de la observacion
-                         //Luego mostrar detalle de modificacion
-                         //Luego mostrar detalle de confirmacion
-                         //changeObserve(productAux,id);
-                     }else if ($scope.status === true){
-                         //Mostrar detalle de modificacion
-                         //Luego mostrar detalle de confirmacion
-                         $scope.changeTransition();
-                     } else if ($scope.status === null){
-                         toastr.error('Huy Huy dice: ' + data.message);
-                     }
-                 },function(error){
-                     $scope.searchList($scope.data);
-                     toastr.error('Huy Huy dice: ' + error.data.message);
-                 });
-
-          };
-
-
-          /**
-           *    Método de modificación de estatus de transición
-           *
-           *    @param  Int  Id
-           *    @return  Object:String    Confirmation
-           */
-          $scope.changeTransition = function (id) {
-              alertConfig.title = "¡Cuidado este proceso no se puede revertir!";
-              alertConfig.text = `<table class="table table-bordered w-100 table-attr text-center">
-                                          <thead>
-                                          <tr>
-                                              <th>Codigo</th>
-                                              <th>Nombre</th>
-                                              <th>Talla</th>
-                                              <th>Color</th>
-                                              <th>Motivo</th>
-                                          </tr>
-                                          </thead>
-                                          <tbody>
-                                          <tr>
-                                              <td>${$scope.productAux.cod}</td>
-                                              <td>${$scope.productAux.name}</td>
-                                              <td>${$scope.productAux.size}</td>
-                                              <td>${$scope.productAux.color}</td>
-                                              <td>${(function(){
-                                                 if ($scope.productAux.transition === null){
-                                                     return 'Desactivar estado transición';
-                                                 }else{
-                                                     return  $scope.productAux.transition;
-                                                 }
-                                              })()}
-                                             </td>
-                                          </tr>
-                                          </tbody>
-                                      </table>
-                                      </div>`;
-
-              sweetAlert(alertConfig, function () {
-                  petition.put('api/auxproduct/transition/update/'+ $scope.productId , {situation:$scope.productAux.transition} )
-                      .then(function (data) {
-                         util.modalClose('Transition2');
-                         toastr.success(data.message);
-                         $scope.searchList($scope.data);
-                      }, function (error) {
-                          toastr.error('Uyuyuy dice: ' + error.data.message);
-                      });
-              });
-          };
-
-         $scope.cancel = function(){
-           util.modalClose();
-         };
+        $scope.cancel = function(){
+            util.modalClose();
+        };
 
         function resetProduct(){
             $scope.products = [];
@@ -839,6 +639,103 @@ angular.module('App')
             }
             return void($scope.btnDisable = true);
          }, true);
+
+        function listReasons(id, i){
+            var product = $scope.tableData[i];
+            if(product.status != 1 && product.status != 2){
+                $scope.stsCase = true;
+            } else {
+                $scope.stsCase = false;
+            }
+
+            $scope.product_i = i;
+            $scope.reasons = [];
+            petition.get('api/auxproduct/get/reasons/' + parseInt(id))
+                .then(function(response){
+                    $scope.reasons = response;
+                },function(error){
+                    toastr.error('Huy Huy dice: ' + error.data.message || "Error inesperado =(");
+                });
+        }
+
+        $scope.confirmChangeStatus = function(reason_i, product_i){
+            var data = {};
+            var product = $scope.tableData[product_i];
+            var reason = $scope.reasons[reason_i];
+
+            data.reason_id = reason.id;
+            data.response = msg.response;
+
+            alertConfig.title = msg.title;
+            alertConfig.text = confirmTemplate(reason.description, product);
+
+            sweetAlert(alertConfig, function () {
+                petition.post('api/auxproduct/' + product.id + '/status/change', data)
+                    .then(function (response) {
+                       util.modalClose('Modal');
+                       toastr.success(response.message);
+                       $scope.searchList($scope.data);
+                    }, function (error) {
+                        toastr.error('Huy Huy dice: ' + error.data.message || "Error inesperado =(");
+                    });
+            });
+        };
+
+        $scope.confirmRestoreStatus = function (reason_i, product_i){
+            var product = $scope.tableData[product_i];
+            var reason = reasonsMsg[product.status];
+
+            alertConfig.title = "¿Esta seguro de restaurar el estado del producto, estado actual sera resuelto?";
+            alertConfig.text = confirmTemplate(reason, product);
+
+            sweetAlert(alertConfig, function () {
+                petition.post('api/auxproduct/' + product.id + '/status/change')
+                    .then(function (response) {
+                       util.modalClose('Modal');
+                       toastr.success(response.message);
+                       $scope.searchList($scope.data);
+                    }, function (error) {
+                        toastr.error('Huy Huy dice: ' + error.data.message || "Error inesperado =(");
+                    });
+            });
+        };
+
+        function confirmTemplate(reason, product) {
+            var template = `<table class="table table-bordered w-100 table-attr text-center">
+                                <thead>
+                                <tr>
+                                    <th>Codigo</th>
+                                    <th>Nombre</th>
+                                    <th>Talla</th>
+                                    <th>Color</th>
+                                    <th>Motivo</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>${product.cod}</td>
+                                    <td>${product.name}</td>
+                                    <td>${product.size}</td>
+                                    <td>${product.color}</td>
+                                    <td>${reason}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            </div>`;
+
+            return template;
+        }
+
+        $scope.productStatusDetail = function(i){
+            var product = $scope.tableData[i];
+            petition.post('api/auxproduct/' + product.id + '/status/detail')
+                .then(function (response) {
+                    $scope.statusDetail = response;
+                    util.modal('ModalDetail');
+                }, function (error) {
+                    toastr.error('Huy Huy dice: ' + error.data.message || "Error inesperado =(");
+                });
+        };
 
         angular.element(document).ready(function(){
             util.resetTable($scope, $compile);

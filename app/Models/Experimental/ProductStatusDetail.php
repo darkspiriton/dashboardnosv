@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProductStatusDetail extends Model
 {
-	protected $hidden = ["created_at", "updated_at","product_status_id"];
+	protected $hidden = ["created_at", "updated_at"];
 
     public function product_status()
     {

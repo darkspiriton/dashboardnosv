@@ -1808,3 +1808,7 @@ div.fc-row {
 .arrow-purple:before {
   border-left: 16px solid #9C27B0;
 }
+
+.text-left-f {
+  text-align: left !important;
+}

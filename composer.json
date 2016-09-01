@@ -13,7 +13,9 @@
         "doctrine/dbal": "^2.5",
         "guzzlehttp/guzzle": "~5.3|~6.0",
         "aloha/twilio": "^2.1",
-        "vinkla/pusher": "^2.4"
+        "vinkla/pusher": "^2.4",
+        "maatwebsite/excel": "~2.1.0",
+        "laravelcollective/bus": "^5.2"
     },
     "require-dev": {
         "mockery/mockery": "0.9.*",

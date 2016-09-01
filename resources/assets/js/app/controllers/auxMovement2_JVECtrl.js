@@ -40,7 +40,7 @@ angular.module('App')
                 {"sTitle": "Descuento (S/)", "bSortable" : false},
                 {"sTitle": "Precio Final (S/)", "bSortable" : false},
                 {"sTitle": "Venta", "bSortable" : true, "sWidth": "80px"},
-                {"sTitle": "Acción" , "bSortable" : false, "bSearchable": false , "sWidth": "420px"}
+                {"sTitle": "Acción" , "bSortable" : false, "bSearchable": false , "sWidth": "90px"}
             ],
             buttons :
                 [

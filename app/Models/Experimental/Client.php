@@ -37,16 +37,6 @@ class Client extends Model
         $this->attributes['dni'] = strlen($value)?strtolower($value):null;
     }
 
-    public function setAddressAttribute($value)
-    {
-        $this->attributes['address'] = strtolower($value);
-    }
-
-    public function setReferenceAttribute($value)
-    {
-        $this->attributes['reference'] = strtolower($value);
-    }
-
     public function getEmailAttribute($value)
     {
         return is_null($value)?"No tiene":$value;

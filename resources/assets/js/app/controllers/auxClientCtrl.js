@@ -170,10 +170,22 @@ angular.module('App')
             $scope.client.id=$scope.tableData[i].id;
             $scope.client.name=$scope.tableData[i].name;
             $scope.client.phone=$scope.tableData[i].phone;
-            $scope.client.dni=$scope.tableData[i].dni;
-            $scope.client.email=$scope.tableData[i].email;
+            
+            if ($scope.tableData[i].dni != "No tiene"){
+                $scope.client.dni=$scope.tableData[i].dni;
+            } else {
+                $scope.client.dni=null;
+            }
+           
+            if ($scope.tableData[i].email != "No tiene"){
+                $scope.client.email=$scope.tableData[i].email;
+            } else {
+                $scope.client.email=null;
+            }    
+
             $scope.client.address=$scope.tableData[i].address;
-            $scope.client.reference=$scope.tableData[i].reference;                        
+            $scope.client.reference=$scope.tableData[i].reference;   
+            $scope.close();                     
             util.muestraformulario();
             
         };
@@ -350,8 +362,24 @@ angular.module('App')
             $scope.year=null;
         };
 
+        $scope.updateLinkFacebook = function(){
+            util.modal("newLinkFacebook");
+        };
+
+        $scope.linkChange = function(){
+            $scope.showSearchLink=true;            
+        };
+
+        $scope.linkSearch = function(){
+            $scope.showLinkInfo=true;
+        };
+
+        $scope.close = function(){
+            $scope.showSearchLink=false;
+            $scope.showLinkInfo=false;            
+        };
+
         angular.element(document).ready(function(){
-            $scope.outfit = angular.copy($scope.outfitClear);
             $scope.productsView = [];
             $scope.searchView=1;
             $scope.list();

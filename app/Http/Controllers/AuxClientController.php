@@ -3,12 +3,13 @@
 namespace Dashboard\Http\Controllers;
 
 use Validator;
+use Carbon\Carbon;
 use Dashboard\User;
 use Dashboard\Http\Requests;
 use Illuminate\Http\Request;
 use Dashboard\Events\NotificationPusher;
 use Dashboard\Models\Experimental\Client;
-use Carbon\Carbon;
+use Dashboard\Models\Experimental\Movement;
 
 class AuxClientController extends Controller
 {
@@ -42,7 +43,9 @@ class AuxClientController extends Controller
         'phone'     =>  'required|string|max:25',
         'dni'       =>  'min:8,max:8',
         'address'   =>  'required|string',
-        'reference' =>  'required|string'
+        'reference' =>  'required|string',
+        'facebook_id' =>  'integer',
+        'facebook_name' =>  'string',
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -50,9 +53,10 @@ class AuxClientController extends Controller
             return response()->json(['message' => 'No se posee todos los atributos necesarios para crear un cliente'], 401);
         }
 
-        $client = Client::where('email', request("email"))
-        ->where("phone", request("phone"))
-        ->where("dni", request("dni"))->first();
+        $client = Client::where('phone', request("phone"))
+        ->orWhere("facebook_id", request("facebook_id"))
+        ->orWhere("email", request("email"))
+        ->orWhere("dni", request("dni"))->first();
 
         if ($client !== null) {
             return response()->json(['message' => 'El cliente ya se encuentra registrado'], 401);
@@ -72,6 +76,8 @@ class AuxClientController extends Controller
     public function show($text)
     {
         $clients = Client::where("name","like", "%".$text."%")
+        ->orWhere("facebook_name",$text)
+        ->orWhere("facebook_id",$text)
         ->orWhere("email", $text)
         ->orWhere("phone", $text)
         ->orWhere("dni", $text)->get();
@@ -110,6 +116,9 @@ class AuxClientController extends Controller
         'dni'       =>  'max:8',
         'address'   =>  'required|string',
         'reference' =>  'required|string',
+        'facebook_id' =>  'integer',
+        'facebook_name' =>  'string',
+
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -231,6 +240,21 @@ class AuxClientController extends Controller
         };       
         
         return response()->json(['movements'=>$client[0]->movements],200);
+    }
+
+    public function countMovement(){        
+        $movements = Movement::where('status','Vendido')
+                ->where('date_shipment','>=','2016-08-01')
+                ->where('date_shipment','<','2016-09-01')
+                ->orderby('date_shipment','asc')
+                ->get();
+
+        
+        foreach ($movements as $movement) {            
+            $data[$movement->date_shipment]= $data[$movement->date_shipment] + 1;
+        }        
+
+        return $data;
     }
 
 }

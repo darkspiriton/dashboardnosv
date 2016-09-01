@@ -334,7 +334,7 @@ Route::group(['prefix' => 'api'], function () {
     Route::get('auxclient/get/delete/','AuxClientController@FilterForSoftDelete');
     Route::post('auxclient/delete/restore/{id}','AuxClientController@restore');
     Route::get('auxclient/get/movement/{id}','AuxClientController@getMovement');
-    // Route::get('auxclient/get/movement/month/{id}','AuxClientController@getMovementMonth');
+    Route::get('auxclient/get/count','AuxClientController@countMovement');
 
     /**
      * Notification

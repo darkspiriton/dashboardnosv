@@ -10,7 +10,7 @@ class Client extends Model
     use SoftDeletes;
     
     protected $table="auxclients";
-    protected $fillable = ["name","email","phone","dni","address","reference"];
+    protected $fillable = ["name","email","phone","dni","address","reference","facebook_id","facebook_name"];
     public $timestamps = true;
 
     public function movements(){

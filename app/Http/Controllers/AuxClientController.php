@@ -109,7 +109,7 @@ class AuxClientController extends Controller
         'phone'     =>  'required|string|max:25',
         'dni'       =>  'max:8',
         'address'   =>  'required|string',
-        'reference' =>  'required|string'
+        'reference' =>  'required|string',
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -221,7 +221,7 @@ class AuxClientController extends Controller
                 $query->where('status',$status);
             },'movements.product','movements.product.size','movements.product.color'])
                 ->where('id',$id)->get();
-        }else if ($request->input('status') == 'Todo'){
+        } else if ($request->input('status') == 'Todo'){
             $client = Client::with('movements','movements.product','movements.product.size','movements.product.color')
                 ->where('id',$id)->get();
         }

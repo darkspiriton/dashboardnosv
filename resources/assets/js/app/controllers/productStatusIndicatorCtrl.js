@@ -96,7 +96,10 @@ angular.module('App')
                     }
                 ]
             };
-            charts.make("IndicatorChart", "pie", ChartData);
+            if (chart !== undefined) {
+                chart.destroy();
+            }
+            chart = charts.make("IndicatorChart", "pie", ChartData);
         }
 
         function proceessResponse(data){

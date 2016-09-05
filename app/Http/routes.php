@@ -160,6 +160,13 @@ Route::group(['prefix' => 'api'], function () {
     });
 
     /**
+     * PRODUCT INDICATOR
+     */
+
+    Route::get('auxproduct/get/statuses', 'auxProductFiltersController@getProductStatus');
+    Route::get('auxproduct/status/{id}/indicator', 'auxProductFiltersController@getProductStatusIndicator');
+
+    /**
      * MOVEMENTS
      */
     Route::resource('auxmovement', 'AuxMovementController',

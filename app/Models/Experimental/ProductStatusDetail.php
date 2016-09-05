@@ -17,4 +17,21 @@ class ProductStatusDetail extends Model
     {
     	return $this->hasMany(ProductDetailStatus::class, "status_id");
     }
+
+   	public function DetailStatusesCount()
+   	{
+   		return $this->hasOne(ProductDetailStatus::class, "status_id")->selectRaw("status_id, count(*) as count")->groupBy("status_id");
+   	}
+
+   	public function getDetailStatusesCountAttribute()
+   	{
+   		$detail = $this->relations["DetailStatusesCount"];
+   		if ($detail) {
+   			unset($this->attributes["product_status_id"]);
+   			unset($detail->status_id);
+   			return $detail->count;
+   		} else {
+   			return 0;
+   		}
+   	}
 }

@@ -50,20 +50,23 @@ class AuxClientController extends Controller
 
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return response()->json(['message' => 'No se posee todos los atributos necesarios para crear un cliente'], 401);
+            return response()->json(['message' => 'No se posee todos los atributos necesarios para crear un cliente'], 403);
         }
-
-        $client = Client::where('phone', request("phone"))
-        ->orWhere("facebook_id", request("facebook_id"))
-        ->orWhere("email", request("email"))
-        ->orWhere("dni", request("dni"))->first();
+        if( request("facebook_id")!=null && request("email")!=null && request("dni")!=null){
+            $client = Client::where('phone', request("phone"))
+                ->orWhere("facebook_id", request("facebook_id"))
+                ->orWhere("email", request("email"))
+                ->orWhere("dni", request("dni"))->first();
+        }else{
+            $client = Client::where('phone', request("phone"))->first();
+        }
 
         if ($client !== null) {
             return response()->json(['message' => 'El cliente ya se encuentra registrado'], 401);
         }
 
-        Client::create($request->all());
-        return response()->json(['message' => 'El cliente se creo correctamente'], 200);
+        $responseClient=Client::create($request->all());
+        return response()->json(['message' => 'El cliente se creo correctamente', "client" => $responseClient], 200);
     }
 
 
@@ -214,7 +217,7 @@ class AuxClientController extends Controller
             return response()->json(['message' => 'No posee todos los parametros para la busqueda'],404);
         }     
         $status = $request->input('status');
-
+        
         if ($request->has('year') && $request->has('month') && $request->input('status')!="Todo"){
             $dateIni=Carbon::create($request->input('year'), $request->input('month'), 1,0,0,0);
             $dateFin=$dateIni->copy()->addMonth();

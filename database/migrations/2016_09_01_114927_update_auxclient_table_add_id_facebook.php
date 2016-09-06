@@ -13,8 +13,8 @@ class UpdateAuxclientTableAddIdFacebook extends Migration
     public function up()
     {
         Schema::table('auxclients',function(Blueprint $table){
-            $table->integer('facebook_id');
-            $table->string('facebook_name');
+            $table->integer('facebook_id')->nullable();
+            $table->string('facebook_name')->nullable();
         });
     }
 

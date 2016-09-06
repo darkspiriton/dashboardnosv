@@ -376,7 +376,8 @@ angular.module('App')
 
         $scope.close = function(){
             $scope.showSearchLink=false;
-            $scope.showLinkInfo=false;            
+            $scope.showLinkInfo=false;  
+            $scope.test1=true;          
         };
 
         angular.element(document).ready(function(){

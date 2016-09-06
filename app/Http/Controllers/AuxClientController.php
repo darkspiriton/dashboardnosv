@@ -93,17 +93,6 @@ class AuxClientController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -192,7 +181,7 @@ class AuxClientController extends Controller
 
             // event(new NotificationPusher("Restauracion de producto", $body, 4, "productRestore"));
 
-            return response()->json(["message" => "El cliente se restauro con exito."]);
+            return response()->json(["message" => "El cliente se restauro con exito."],200);
         } else {
             return response()->json(["message" => "El cliente no se encuentra eliminado."]);
         }
@@ -245,19 +234,19 @@ class AuxClientController extends Controller
         return response()->json(['movements'=>$client[0]->movements],200);
     }
 
-    public function countMovement(){        
-        $movements = Movement::where('status','Vendido')
-                ->where('date_shipment','>=','2016-08-01')
-                ->where('date_shipment','<','2016-09-01')
-                ->orderby('date_shipment','asc')
-                ->get();
+    // public function countMovement(){        
+    //     $movements = Movement::where('status','Vendido')
+    //             ->where('date_shipment','>=','2016-08-01')
+    //             ->where('date_shipment','<','2016-09-01')
+    //             ->orderby('date_shipment','asc')
+    //             ->get();
 
         
-        foreach ($movements as $movement) {            
-            $data[$movement->date_shipment]= $data[$movement->date_shipment] + 1;
-        }        
+    //     foreach ($movements as $movement) {            
+    //         $data[$movement->date_shipment]= $data[$movement->date_shipment] + 1;
+    //     }        
 
-        return $data;
-    }
+    //     return $data;
+    // }
 
 }

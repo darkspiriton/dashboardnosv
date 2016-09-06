@@ -2,8 +2,6 @@
 
 use Dashboard\Models\Experimental\Client;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class AuxClientTest extends TestCase
 {
@@ -14,6 +12,10 @@ class AuxClientTest extends TestCase
         
     // }
 
+    /**
+     * [testClientConection description]
+     * @return [type] [description]
+     */
     public function testClientConection(){
             try{
                 DB::connection('mysql')->getDatabaseName();
@@ -50,6 +52,10 @@ class AuxClientTest extends TestCase
         $this->assertEquals(200, $response->status());
     }
 
+    /**
+     * Se prueba que el cliente test666 esta registrado correctamente
+     * @return [void] [Valida si el retorno es exitoso]
+     */
     public function testClientShow(){
         $client=$this->call('GET','/api/auxclient/test666');
         $name=json_decode($client->content(),true)[0]["name"];
@@ -67,20 +73,49 @@ class AuxClientTest extends TestCase
             ]);
     }
     
+    /**
+     * Este test se elimina el cliente test666 modo soft
+     * @return [void] [Valida si el retorno es exitoso]
+     */
     public function testClientDelete(){
 
-        $client=$this->call('GET','/api/auxclient/test666');
-        
+        $client=$this->call('GET','/api/auxclient/test666');        
         $id=json_decode($client->content(),true)[0]["id"];               
 
         $response = $this->call('DELETE','/api/auxclient/'.$id);
-        // DB::table('auxclients')->where('name','Test666')->delete();
+        
         $this->assertEquals(200,$response->status());
-    }    
+    }
 
     /**
-     * [testClientStoreFails description]
-     * @return [type] [description]
+     * Este test restaura el cliente test666 del modo soft
+     * @return [void] [Valida si el retorno es exitoso]
+     */
+    public function testClientRestore(){
+       $client=$this->call('GET','/api/auxclient/get/delete');       
+       $id=json_decode($client->content(),true)["clients"][0]["id"];
+
+       $response = $this->call('POST','/api/auxclient/delete/restore/'.$id);
+
+       
+       $this->assertEquals(200,$response->status());
+    }   
+
+    /**
+     * Este test retorna los movimientos relacionados de un cliente
+     * @return [void] [Valida si el retorno es exitoso]
+     */
+    public function testClientMovement(){
+        $client=$this->call('GET','/api/auxclient/test666');        
+        $id=json_decode($client->content(),true)[0]["id"];
+        $movement = $this->call('GET','/api/auxclient/get/movement/'.$id,["status"=>"1","year"=>2016,"month"=>8]);
+        DB::table('auxclients')->where('name','Test666')->delete();
+        $this->assertEquals(200,$movement->status());
+    }
+
+    /**
+     * Este test valida que los paramentros para guardar un cliente funciona
+     * @return [void] [Valida si el retorno es exitoso]
      */
     public function testClientStoreFails(){
         $client=$this->call('POST','/api/auxclient',[                

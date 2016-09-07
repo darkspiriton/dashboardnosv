@@ -538,6 +538,22 @@ angular.module('App')
                 });
         };
 
+        $scope.clear = function(dataSearch){
+            dataSearch.order=null;
+            dataSearch.type=null;
+            dataSearch.provider_id=null;
+            dataSearch.status_sale=null;
+            dataSearch.status=null;           
+            // dataSearch.product=null;
+            dataSearch.size=null;
+            // dataSearch.color=null;
+            // var result = document.getElementsByClassName("btn dropdown-toggle btn-default");  
+            // console.log(result);          
+            // result[0]["outerHTML"]='<button type="button" class="btn dropdown-toggle btn-default" data-toggle="dropdown" title="Ninguno" aria-expanded="false"><span class="filter-option pull-left">Ninguno</span>&nbsp;<span class="caret"></span></button>';
+             
+            toastr.success("Se limpiaron todos los filtros de busqueda");
+        };
+
         /**
          *    Helper para observar un producto en el kardex
          *

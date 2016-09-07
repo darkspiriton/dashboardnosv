@@ -418,6 +418,8 @@ angular.module('App')
 
 		$scope.selectClient = function(i) {
 		  	$scope.client = $scope.clients[i];
+		  	if($scope.client.dni == "No tiene")$scope.client.dni = null;
+		  	if($scope.client.email == "No tiene")$scope.client.email = null;
 		  	$scope.data.client_id = $scope.clients[i].id;
 		  	$scope.listView = false;
 		  };

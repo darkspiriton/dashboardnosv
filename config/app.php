@@ -170,6 +170,8 @@ return [
         /* Personal provider */
         Barryvdh\DomPDF\ServiceProvider::class,
         Vinkla\Pusher\PusherServiceProvider::class,
+        Collective\Bus\BusServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,
 
         /* Twilio */
         'Aloha\Twilio\Support\Laravel\ServiceProvider',
@@ -221,6 +223,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'PDF' => Barryvdh\DomPDF\Facade::class,
         'Twilio' => 'Aloha\Twilio\Support\Laravel\Facade',
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ],
 
 ];

@@ -56,7 +56,7 @@ angular.module('App')
                 {"sTitle": "P. Real" , "bSearchable": false},
                 {"sTitle": "Precio" , "bSearchable": false},
                 {"sTitle": "Status", "bSortable" : false, "bSearchable": true},
-                {"sTitle": "Accion", "bSortable" : false, "bSearchable": false, "sWidth" : "230px"}
+                {"sTitle": "Accion", "bSortable" : false, "bSearchable": false, "sWidth" : "90px"}
             ],
             buttons :
                 [

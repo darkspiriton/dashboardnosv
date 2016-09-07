@@ -130,6 +130,8 @@
 <script src="{{ asset('vendors/datatables/dataTables.bootstrap.min.js') }}" type="text/javascript"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.6/Chart.min.js"></script>
 
+<script src="{{ asset('vendors/bower_components/bootstrap-select/dist/js/bootstrap-select.js') }}"></script>
+
 <script src="{{ asset('js/functions.js') }}"></script>
 
 <!-- Others Libraries -->

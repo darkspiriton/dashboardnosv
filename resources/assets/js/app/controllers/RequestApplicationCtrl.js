@@ -31,7 +31,7 @@ angular.module('App')
                 {"sTitle": "Correo electronico", "bSortable" : true },
                 {"sTitle": "Telefono", "bSortable" : true },
                 {"sTitle": "Estado", "bSortable" : true },
-                {"sTitle": "Acción" , "bSortable" : false, "bSearchable": false , "sWidth": "190px"}
+                {"sTitle": "Acción" , "bSortable" : false, "bSearchable": false , "sWidth": "90px"}
             ],
             buttons :
                 [

@@ -5,11 +5,14 @@ namespace Dashboard\Http\Controllers;
 use Carbon\Carbon;
 use DB;
 use Dashboard\Events\NotificationPusher;
+use Dashboard\Events\ProductStatusWasChanged;
 use Dashboard\Events\ProductWasCreated;
 use Dashboard\Http\Requests;
 use Dashboard\Models\Experimental\Alarm;
 use Dashboard\Models\Experimental\Color;
 use Dashboard\Models\Experimental\Product;
+use Dashboard\Models\Experimental\ProductDetailStatus;
+use Dashboard\Models\Experimental\ProductStatusDetail;
 use Dashboard\Models\Experimental\Provider;
 use Dashboard\Models\Experimental\Size;
 use Dashboard\Models\Experimental\Type;
@@ -832,7 +835,7 @@ class AuxProductController extends Controller
             //             ->find($id);
 
             $movements = DB::table('auxproducts as p')
-                ->select('m.date_request as pedido', 'm.cod_order', 'm.date_shipment as entrega', 'm.status', 'm.situation', 'm.discount')
+                ->select('m.created_at','m.date_request as pedido', 'm.cod_order', 'm.date_shipment as entrega', 'm.status', 'm.situation', 'm.discount')
                 ->addSelect('p.cod as codigo', 'p.name as product', 'p.cost_provider', 'p.utility')
                 ->addSelect('c.name as color', 's.name as talla')
                 ->addSelect(DB::raw('p.cost_provider + p.utility  as price_real'))
@@ -858,85 +861,6 @@ class AuxProductController extends Controller
         }
     }
 
-    public function product_reserve($id)
-    {
-        $product = Product::find($id);
-
-        if ($product == null) {
-            return response()->json(["message" => "el producto no existe"], 404);
-        }
-
-        if ($product->status != 1 && $product->status != 3) {
-            return response()->json(["message" => "El producto no se puede reservar, por su estado"], 401);
-        }
-
-        if ($product->status == 1) {
-            $product->status = 3;
-            $product->save();
-
-            return response()->json(["message" => "Se reservo el producto exitosamente"]);
-        } elseif ($product->status == 3) {
-            $product->status = 1;
-            $product->save();
-
-            return response()->json(["message" => "Se retiro reserva"]);
-        } else {
-            return response()->json(["message" => "No se pudo cambiar el estado"], 401);
-        }
-    }
-
-    /**
-     *    Devuelve el estado del producto con respecto a si esta observado
-     *
-     *    @param  Int  id
-     *    @return  Boolean status
-     */
-    public function product_observe_status($id)
-    {
-        $product = Product::find($id);
-
-        if ($product == null) {
-            return response()->json(['message' => 'El producto no existe'], 404);
-        }
-        $stat=$product->status;
-        if ($stat == 1) {
-            return response()->json(['status' => false], 200);
-        } elseif ($stat == 4) {
-            return response()->json(['status' => true], 200);
-        } else {
-            return response()->json(['status' => null, 'message' => 'Solo se puede cambiar el estado a productos disponibles'], 200);
-        }
-    }
-
-    public function product_observe_update(Request $request, $id)
-    {
-        $rules =[
-            'situation'=>'string',
-        ];
-        $validator = \Validator::make($request->all(), $rules);
-        if ($validator->fails()) {
-            return response()->json(['message' => 'No posee todo los campos necesarios para actualizar producto']);
-        };
-
-        $product = Product::find($id);
-        if ($product == null) {
-            return response()->json(['message' => 'El producto no existe'], 404);
-        };
-
-        if ($product->status == 4) {
-            $product->status = 1;
-            $product->observe_detail = null;
-            $product->save();
-            return response()->json(['message'=>'Se quito el estado de observado']);
-        } elseif ($product->status == 1) {
-            $product->status = 4;
-            $product->observe_detail = $request->input('situation');
-            $product->save();
-            return response()->json(['message'=>'Se actualizo el estado a observado']);
-        }
-        return response()->json(['message'=>'No se pudo actualizar el estado del producto']);
-    }
-
     public function product_observe_detail($id)
     {
         $product = Product::find($id);
@@ -946,83 +870,129 @@ class AuxProductController extends Controller
         return response()->json(['observe_detail'=>$product->observe_detail], 200);
     }
 
-    public function product_transition_status($id){
-        $product = Product::find($id);
+    /**
+     *    Listado de motivos de cambio de estado,
+     *    por estado de producto
+     *
+     *    @param  int  $id
+     *    @return  Illuminate\Http\Response
+     */
+    public function reasonsList($id){
+        $reasons = ProductStatusDetail::where("product_status_id", $id)->get();
 
-        if ($product == null) {
-            return response()->json(['message' => 'El producto no existe'], 404);
-        }
-        $stat=$product->status;
-        if ($stat == 2) {
-            return response()->json(['status' => false], 200);
-        } elseif ($stat == 5) {
-            return response()->json(['status' => true], 200);
-        } else {
-            return response()->json(['status' => null, 'message' => 'Solo se puede cambiar el estado de transicion a productos vendidos'], 200);
-        }
+        return $reasons;
     }
 
-    public function product_transition_update(Request $request, $id)
+    /**
+     *    Detalle de ultimo estado del producto
+     *
+     *    @param  int  $id
+     *    @return  Illuminate\Http\Response
+     */
+    public function LastPruductStatusDetail($id)
     {
-        $rules =[
-            'situation'=>'string',
-        ];
-        $validator = \Validator::make($request->all(), $rules);
-        if ($validator->fails()) {
-            return response()->json(['message' => 'No posee todo los campos necesarios para actualizar producto']);
-        };
+        $productStatusDtl = ProductDetailStatus::with("Product_status_detail")
+                                                                ->where("product_id", $id)
+                                                                ->orderBy("created_at","desc")
+                                                                ->first();
+        if ($productStatusDtl == null) {
+            return response()->json(["message" => "No se pudo encontrar estado"]);
+        }
 
+        return $productStatusDtl->Product_status_detail;
+    }
+
+    /**
+     *    Cambio de estado de estado de un producto, guardar su registro
+     *    y volver el estado a disponible al resolver ultimo estado.
+     *
+     *    @param  Illuminate\Http\Request  $request
+     *    @param  int  $id
+     *    @return  Illuminate\Http\Response
+     */
+    public function productStatusChange(Request $request, $id)
+    {
         $product = Product::find($id);
+
         if ($product == null) {
-            return response()->json(['message' => 'El producto no existe'], 404);
-        };
+            return response()->json(["message" => "Parametros no validos"], 404);
+        }
 
-        if ($product->status == 5) {
+        $productStatusDtl = $this->ProductStatusDtl($request, $product);
 
-            $product->status = 1;
-            $product->save();
-            
+        if ($productStatusDtl == null) {
+            return response()->json(["message" => "Parametros no validos"], 404);
+        }
+
+        $status_id = $productStatusDtl->product_status_id;
+
+        if ($status_id == 5) { // Exención para cambio de estado en venta 
+            return $this->ProductTransition($product, $productStatusDtl);
+        } elseif ($product->status != 1 && $status_id != $product->status) {
+            return response()->json(["message" => "El producto no puede cambiar de estado ya que posee un estado distinto."], 401);
+        }
+
+        if ($product->status == 1) {
+            event(new ProductStatusWasChanged($product, $productStatusDtl));
+        } else {
+            event(new ProductStatusWasChanged($product));
+        }
+
+        return response()->json(["message" => request("response", "Cambio de estado existoso."), "product" => $product]);
+    }
+
+    /**
+     *    Resuelve el nuevo estado del producto o devuelve el ultimo.
+     *
+     *    @param  Illuminate\Http\Request  $request
+     *    @param  Dashboard\Models\Experimental\Product  $product
+     *    @return  Dashboard\Models\Experimental\ProductStatusDetail
+     */
+    private function ProductStatusDtl(Request $request, Product $product)
+    {
+        $productStatusDtl = null;
+
+        if($request->has("reason_id")){
+            $productStatusDtl = ProductStatusDetail::find(request("reason_id"));
+        } else {
+            $lastProductStatusDtl = ProductDetailStatus::with("Product_status_detail")
+                                                        ->where("product_id", $product->id)
+                                                        ->orderBy("created_at","desc")
+                                                        ->first();
+
+            if ($lastProductStatusDtl != null){
+                $productStatusDtl = $lastProductStatusDtl->Product_status_detail;
+            }
+        }
+
+        return $productStatusDtl;
+    }
+
+    /**
+     *    Cambiar estado o generar nuevo estado de producto,
+     *    en el caso de que sea una transición. y el producto este vendido.
+     *
+     *    @param  Dashboard\Models\Experimental\Product  $product
+     *    @param  Dashboard\Models\Experimental\ProductStatusDetail  $productStatusDtl
+     *    @return  Illuminate\Http\Response
+     */
+    private function ProductTransition(Product $product, ProductStatusDetail $productStatusDtl)
+    {
+        if ($product->status == 1) {
+            return response()->json(["message" => "Solo se puede cambiar a trancision un producto en venta"], 401);
+        } elseif ($product->status == 2) {
+            event(new ProductStatusWasChanged($product, $productStatusDtl));
+        } elseif ($product->status == 5) {
             $movement = $product->movements->first();
             $movement->situation='Transición';
             $movement->status="Retornado";
             $movement->save();
 
-            //Actualizar estado de movimiento de ventas            
-
-            return response()->json(['message'=>'Se quito el estado de transición'],200);
-        } elseif ($product->status == 2) {
-
-            $product->status = 5;
-            $product->save();
-
-            $movement = $product->movements->first();            
-            $movement->situation=$request->input('situation');
-            $movement->status="Transición";
-            $movement->save();                                
-
-            return response()->json(['message'=>'Se actualizo el estado a transición'],200);
-        }
-        return response()->json(['message'=>'No se pudo actualizar el estado del producto'],404);
-    }
-
-    public function product_inProvider_status($id)
-    {
-        $product = Product::find($id);
-
-        if ($product == null) {
-            return response()->json(['message' => 'El producto no existe'], 404);
-        }
-        $stat=$product->status;
-        if ($stat == 1) {
-            $product->status=6;
-            $product->save();            
-            return response()->json(['message' => 'El producto regreso al proveedor'], 200);
-        } elseif ($stat == 6) {
-            $product->status=1;
-            $product->save();
-        return response()->json(['message' => 'El producto esta disponible nuevamente'], 200);
+            event(new ProductStatusWasChanged($product));
         } else {
-            return response()->json(['message' => '', 'message' => 'Solo se puede cambiar el estado de este producto'], 401);
+            return response()->json(["message" => "El producto no puede cambiar de estado ya que posee un estado distinto."], 401);
         }
+        return response()->json(["message" => request("response", "Cambio de estado existoso."), "product" => $product]);
     }
+
 }

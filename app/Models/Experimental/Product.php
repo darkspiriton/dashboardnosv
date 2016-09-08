@@ -13,7 +13,7 @@ class Product extends Model
     use SoftDeletes;
 
     protected $table = "auxproducts";
-    protected $hidden = ['pivot', 'updated_at'];
+    protected $hidden = ['pivot', 'updated_at','deleted_at'];
     protected $casts = ["utility" => "float", "cost_provider" => "float"];
     protected $dates = ['deleted_at'];
 
@@ -67,5 +67,9 @@ class Product extends Model
 
     public function user(){
         return $this->belongsTo(User::class)->select("id","first_name");
+    }
+
+    public function detail_statuses(){
+        return $this->hasMany(ProductDetailStatus::class);
     }
 }

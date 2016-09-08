@@ -121,41 +121,41 @@
                         <div class="col-xs-12">
                             <div class="row">
                                 <div class="attr-group col-xs-12">
-                                    <table class="table table-bordered w-100 table-attr text-center table-mediun">
+                                    <table class="table table-bordered w-100 table-attr text-center table-mediun table-detail">
                                         <thead>
                                         <tr>
-                                            <th style="padding: 10 5;">F. Pedido</th>
-                                            <th style="padding: 10 5;">F. Entrega</th>
-                                            <th style="padding: 10 5;">N° P.</th>
-                                            <th style="padding: 10 5;">Vendedor(a)</th>
-                                            <th style="padding: 10 5;">Codigo</th>
-                                            <th style="padding: 10 5;">Producto</th>
-                                            <th style="padding: 10 5;">Color</th>
-                                            <th style="padding: 10 5;">Talla</th>
-                                            <th style="padding: 10 5;">Estado</th>
-                                            <th style="padding: 10 5;">Estado V.</th>
-                                            <th style="padding: 10 5;">P. Real</th>
-                                            <th style="padding: 10 5;">Precio</th>
-                                            <th style="padding: 10 5;">Desc.</th>
-                                            <th style="padding: 10 5;">P. Final</th>
+                                            <th>F. Pedido</th>
+                                            <th>F. Entrega</th>
+                                            <th>N° P.</th>
+                                            <th>Vendedor(a)</th>
+                                            <th>Codigo</th>
+                                            <th>Producto</th>
+                                            <th>Color</th>
+                                            <th>Talla</th>
+                                            <th>Estado</th>
+                                            <th>Estado V.</th>
+                                            <th>P. Real</th>
+                                            <th>Precio</th>
+                                            <th>Desc.</th>
+                                            <th>P. Final</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                             <tr ng-repeat="movement in productMovements">
-                                                <td style="display: table-cell;padding: 10 5;width:100px">{{ movement.pedido }}</td>
-                                                <td style="display: table-cell;padding: 10 5;">{{ movement.entrega }}</td>
-                                                <td style="display: table-cell;padding: 10 5;">{{ movement.cod_order }}</td>
-                                                <td style="display: table-cell;padding: 10 5;">{{ movement.seller }}</td>
-                                                <td style="display: table-cell;padding: 10 5;">{{ movement.codigo }}</td>
-                                                <td style="display: table-cell;padding: 10 5;">{{ movement.product }}</td>
-                                                <td style="display: table-cell;padding: 10 5;">{{ movement.color }}</td>
-                                                <td style="display: table-cell;padding: 10 5;">{{ movement.talla }}</td>
-                                                <td style="display: table-cell;padding: 10 5;" ng-bind-html="movementStatus(movement)"></td>
-                                                <td style="display: table-cell;padding: 10 5;" ng-bind-html="payStatus(movement.liquidation)"></td>
-                                                <td style="display: table-cell;padding: 10 5;">{{ movement.price_real }}</td>
-                                                <td style="display: table-cell;padding: 10 5;">{{ movement.price }}</td>
-                                                <td style="display: table-cell;padding: 10 5;">{{ movement.discount }}</td>
-                                                <td style="display: table-cell;padding: 10 5;">{{ movement.price_final }}</td>
+                                                <td>{{ movement.pedido }}</td>
+                                                <td>{{ movement.entrega }}</td>
+                                                <td>{{ movement.cod_order }}</td>
+                                                <td>{{ movement.seller }}</td>
+                                                <td>{{ movement.codigo }}</td>
+                                                <td>{{ movement.product }}</td>
+                                                <td>{{ movement.color }}</td>
+                                                <td>{{ movement.talla }}</td>
+                                                <td ng-bind-html="movementStatus(movement)"></td>
+                                                <td ng-bind-html="payStatus(movement.liquidation)"></td>
+                                                <td>{{ movement.price_real }}</td>
+                                                <td>{{ movement.price }}</td>
+                                                <td>{{ movement.discount }}</td>
+                                                <td>{{ movement.price_final }}</td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -176,102 +176,19 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="Modal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header bgm-teal">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                <h3 class="modal-title c-white">Motivo de observación</h3>
-            </div>
-            <div class="modal-body card-padding">
-                <form name="form" class="form-horizontal" autocomplete="off">
-                    <div class="form-group">
-                        <label class="col-xs-2 col-sm-4 control-label">Seleccione motivo de observación</label>
-                        <div class="col-xs-10 col-sm-6">
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="md md-list"></i></span>
-                                <div class="fg-line select">
-                                    <select class="form-control" ng-options="situation.name as situation.name for situation in situations" ng-model="productAux.situation" required>
-                                        <option value="" disabled="disabled" select="true">Seleccione</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-
-                <form class="form-horizontal">
-                    <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-10">
-                            <button ng-disabled="!form.$valid" ng-click="changeObserve()" type="button" class="btn btn-primary btn-sm waves-effect">Guardar</button>
-                            <a ng-click="cancel()" class="btn btn-danger btn-sm waves-effect">Cancelar</a>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="Transition2" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header bgm-teal">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                        aria-hidden="true">&times;</span></button>
-                <h3 class="modal-title c-white">Motivo de transición</h3>
-            </div>
-            <div class="modal-body card-padding">
-                <form name="formObserve" class="form-horizontal" autocomplete="off">
-                    <div class="form-group">
-                        <label class="col-xs-2 col-sm-4 control-label">Seleccione motivo de transición</label>
-                        <div class="col-xs-10 col-sm-6">
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="md md-list"></i></span>
-                                <div class="fg-line select">
-                                    <select class="form-control" ng-options="transition.name as transition.name for transition in transitions" ng-model="productAux.transition" required>
-                                        <option value="" disabled="disabled" select="true">Seleccione</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-
-                <form class="form-horizontal">
-                    <div class="form-group">
-                        <div class="col-sm-offset-2 col-sm-10">
-                            <button ng-disabled="!formObserve.$valid" ng-click="changeTransition()" type="button" class="btn btn-primary btn-sm waves-effect">Guardar</button>
-                            <a ng-click="cancel()" class="btn btn-danger btn-sm waves-effect">Cancelar</a>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal -->
 <div class="modal fade" id="ModalDetail" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header bgm-teal">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                         aria-hidden="true">&times;</span></button>
-                <h3 class="modal-title c-white">Motivo de observación</h3>
+                <h3 class="modal-title c-white">Descipcion de cambio de estado</h3>
             </div>
             <div class="modal-body card-padding">
                 <form name="form2" class="form-horizontal" autocomplete="off">
                     <div class="form-group">
-                        <label class="col-xs-2 col-sm-4 control-label">{{observe_detail}}</label>
+                        <label class="col-xs-2 col-sm-4 control-label">Descripcion: </label>
+                        <label class="col-xs-2 col-sm-4 control-label text-left-f">{{ statusDetail.description }}</label>
                     </div>
                 </form>
 
@@ -283,3 +200,40 @@
         </div>
     </div>
 </div>
+
+<!-- Modal -->
+<!-- <div class="modal fade" id="ReasonModal" tabindex="-1" role="dialog"> -->
+<div class="modal fade" id="Modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bgm-teal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title c-white">Motivo de cambio de estado</h3>
+            </div>
+            <div class="modal-body card-padding">
+                <form name="ReasonForm" class="form-horizontal" autocomplete="off">
+                    <div class="form-group">
+                        <label class="col-xs-2 col-sm-3 control-label">Seleccione motivo</label>
+                        <div class="col-xs-10 col-sm-6">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="md md-list"></i></span>
+                                <div class="fg-line select">
+                                    <select class="form-control" ng-options="$index as reason.description for ($index, reason) in reasons" ng-model="reason_i" required ng-disabled="stsCase">
+                                        <option value="" disabled="disabled" select="true">Seleccione</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary pull-left" ng-disabled="!ReasonForm.$valid || stsCase" ng-click="confirmChangeStatus(reason_i, product_i)">Guardar</button>
+                <button type="button" class="btn bgm-teal pull-left" ng-click="confirmRestoreStatus(reason_i, product_i)" ng-show="stsCase">Restaurar</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+

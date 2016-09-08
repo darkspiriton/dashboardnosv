@@ -104,7 +104,7 @@ Route::group(['prefix' => 'api'], function () {
         ['only'=>['index', 'store', 'update', 'show']]);
 
     Route::group(['prefix'=>'auxproduct/'], function () {
-        Route::get('/get/status/provider/{id}', 'AuxProductController@product_inProvider_status');
+        // Route::get('/get/status/provider/{id}', 'AuxProductController@product_inProvider_status');
 
         Route::post('/set/movement', 'AuxProductController@addressUpdate');
         Route::post('/set/color', 'AuxProductController@setColor');
@@ -130,15 +130,19 @@ Route::group(['prefix' => 'api'], function () {
         Route::get('/get/uniques/{name}/codes', 'AuxProductController@CodesLists');
         
         Route::get('get/movements/{id}', 'AuxProductController@movements_for_product');
-        Route::put('reserve/{id}', 'AuxProductController@product_reserve');
-        Route::get('observe/{id}', 'AuxProductController@product_observe_status');
-        Route::put('observe/update/{id}', 'AuxProductController@product_observe_update');
+        // Route::put('reserve/{id}', 'AuxProductController@product_reserve');
+        // Route::get('observe/{id}', 'AuxProductController@product_observe_status');
+        // Route::put('observe/update/{id}', 'AuxProductController@product_observe_update');
         Route::get('observe/detail/{id}', 'AuxProductController@product_observe_detail');
         Route::post('delete/restore/{id}', 'AuxProductController@restore');
 
         //Transition Product Movement
-        Route::get('transition/{id}', 'AuxProductController@product_transition_status');
-        Route::put('transition/update/{id}', 'AuxProductController@product_transition_update');
+        // Route::get('transition/{id}', 'AuxProductController@product_transition_status');
+        // Route::put('transition/update/{id}', 'AuxProductController@product_transition_update');
+
+        Route::get("get/reasons/{id}", "AuxProductController@reasonsList");
+        Route::post("{id}/status/change", "AuxProductController@productStatusChange");
+        Route::post("{id}/status/detail", "AuxProductController@LastPruductStatusDetail");
     });
 
     /**
@@ -154,6 +158,13 @@ Route::group(['prefix' => 'api'], function () {
         Route::get('get/search/stock', 'auxProductFiltersController@FilterStockForAllByVEN');
         Route::get('get/delete', 'auxProductFiltersController@FilterForSoftDelete');
     });
+
+    /**
+     * PRODUCT INDICATOR
+     */
+
+    Route::get('auxproduct/get/statuses', 'auxProductFiltersController@getProductStatus');
+    Route::get('auxproduct/status/{id}/indicator', 'auxProductFiltersController@getProductStatusIndicator');
 
     /**
      * MOVEMENTS
@@ -346,19 +357,29 @@ Route::group(['prefix' => 'api'], function () {
  *  @return Collection test
  */
 
-use Vinkla\Pusher\Facades\Pusher;
-use Dashboard\Events\NotificationPusher;
+// use Vinkla\Pusher\Facades\Pusher;
+// use Dashboard\Events\NotificationPusher;
+// use Dashboard\Models\Experimental\ProductStatus;
+use Dashboard\Events\ProductStatusWasChanged;
+use Dashboard\Models\Experimental\Product;
 
 Route::get('/test', function (\Illuminate\Http\Request $request) {
-    // event(new NotificationPusher("Producto Eliminado", "Juanito elimino product: Clarissa Color:5 Talla:L", 2, "productDelete"));
-    // return 'Done';
+    // return ProductStatus::with(["status_details" => function($query){
+    //     $query->with(["product_detail_statuses" => function($query){
+    //         return $query->with("product");
+    //     }]);
+    // }])->get();
 
-    // $data = Dashboard\Models\Experimental\Product::with("color")->get();
-    // \Excel::create('FirstExcel', function ($excel) use ($data) {
-    //     $excel->sheet('Sheetname', function ($sheet) use ($data) {
-    //         $sheet->fromArray($data, null, 'A1', true);
-    //     });
-    // })->download('xls');
+    // return Product::with(["detail_statuses" => function($query){
+    //     $query->with(["Product_status_detail" => function($query){
+    //         return $query->with("Product_status");
+    //     }]);
+    // }])->get();
+
+    // $product = Product::find(522);
+
+    // event(new ProductStatusWasChanged($product, 4));
+    // event(new ProductStatusWasChanged($product));
 
     return "=)";
 });

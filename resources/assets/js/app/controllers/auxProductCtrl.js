@@ -566,11 +566,76 @@ angular.module('App')
                 });
         };
 
+
+        $scope.clear = function(dataSearch){
+            dataSearch.order=null;
+            dataSearch.type=null;
+            dataSearch.provider_id=null;
+            dataSearch.status_sale=null;
+            dataSearch.status=null;           
+            // dataSearch.product=null;
+            dataSearch.size=null;
+            // dataSearch.color=null;
+            // var result = document.getElementsByClassName("btn dropdown-toggle btn-default");  
+            // console.log(result);          
+            // result[0]["outerHTML"]='<button type="button" class="btn dropdown-toggle btn-default" data-toggle="dropdown" title="Ninguno" aria-expanded="false"><span class="filter-option pull-left">Ninguno</span>&nbsp;<span class="caret"></span></button>';
+             
+            toastr.success("Se limpiaron todos los filtros de busqueda");
+        };
+
+        /**
+         *    Helper para observar un producto en el kardex
+         *
+         *    @param  Int  id
+         *    @return  Object:String    Confirmation
+         */
+         $scope.observe = function (i){
+            $scope.productId = $scope.tableData[i].id;
+            $scope.productAux.cod = $scope.tableData[i].cod;
+            $scope.productAux.name = $scope.tableData[i].name;
+            $scope.productAux.size = $scope.tableData[i].size;
+            $scope.productAux.color = $scope.tableData[i].color;
+            $scope.productAux.situation = null;
+            petition.get('api/auxproduct/observe/' +  $scope.productId)
+                .then(function(data){
+                    //Validar si el producto esta observado o no
+                    $scope.status=data.status;
+                    if($scope.status === false){
+                        util.modal('Modal');                        
+                        //Mostrar modal y poder elegir el motivo de la observacion
+                        //Luego mostrar detalle de modificacion
+                        //Luego mostrar detalle de confirmacion
+                        //changeObserve(productAux,id);
+                    }else if ($scope.status === true){
+                        //Mostrar detalle de modificacion
+                        //Luego mostrar detalle de confirmacion
+                        $scope.changeObserve();
+                    } else if ($scope.status === null){
+                        toastr.error('Huy Huy dice: ' + data.message);
+                    }
+                },function(error){
+                    $scope.searchList($scope.data);
+                    toastr.error('Huy Huy dice: ' + error.data.message);
+                });
+
+         };
+
+         $scope.inProvider = function (i){
+            $scope.productId = $scope.tableData[i].id;
+            $scope.productAux.cod = $scope.tableData[i].cod;
+            $scope.productAux.name = $scope.tableData[i].name;
+            $scope.productAux.size = $scope.tableData[i].size;
+            $scope.productAux.color = $scope.tableData[i].color; 
+            $scope.productAux.situation = $scope.tableData[i].status;          
+            $scope.inProviderChange();
+         };
+
         $scope.observe = function (i){
             msg = messages.observe;
             listReasons(4, i);
             util.modal();
         };
+
 
         $scope.inProvider = function (i) {
             msg = messages.inProvider;

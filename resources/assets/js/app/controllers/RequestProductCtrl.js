@@ -41,7 +41,7 @@ angular.module('App')
                 {"sTitle": "Producto", "bSortable" : true, "sWidth": "90px"},
                 {"sTitle": "Descripción", "bSortable" : true, "sWidth": "90px"},
                 {"sTitle": "Precio", "bSortable" : true, "sWidth": "90px"},
-                {"sTitle": "Estado", "bSortable" : true},
+                {"sTitle": "Estado", "bSortable" : true, "sWidth": "90px"},
                 {"sTitle": "Acción" , "bSortable" : false, "bSearchable": false , "sWidth": "90px"}
             ],
             buttons :

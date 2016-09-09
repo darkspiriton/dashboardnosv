@@ -939,7 +939,7 @@ class AuxProductController extends Controller
     {
         $product = Product::find($id);
 
-        if ($product == null) {
+        if ($product == null) { 
             return response()->json(["message" => "Parametros no validos"], 404);
         }
 

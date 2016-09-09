@@ -179,24 +179,28 @@ angular.module('App')
         };
 
         $scope.reserve = function(i){
+            $scope.listReasonId=3;
             msg = messages.reserve;
             listReasons(3, i);
             util.modal();
         };
 
         $scope.observe = function (i){
+            $scope.listReasonId=4;
            msg = messages.observe;
            listReasons(4, i);
            util.modal();
         };
 
         $scope.inProvider = function (i) {
+            $scope.listReasonId=6;
            msg = messages.inProvider;
            listReasons(6, i);
            util.modal();
         };
 
         $scope.transition = function (i){
+            $scope.listReasonId=5;
             msg = messages.transition;
             listReasons(5, i);
             util.modal();
@@ -313,6 +317,25 @@ angular.module('App')
                     toastr.error('Huy Huy dice: ' + error.data.message || "Error inesperado =(");
                 });
         }
+
+        $scope.openNewStatus= function(){
+            util.modalClose('Modal');
+            util.modal('ModalNewStatus');
+        };
+
+        $scope.saveNewStatus= function(detail){
+            petition.post('api/auxproduct/set/status/save',{'detail':detail,'status_id':$scope.listReasonId})
+                .then(function(response){
+                    util.modalClose('ModalNewStatus');                   
+                    msg = messages.reserve;
+                    listReasons($scope.listReasonId, $scope.product_i);
+                    toastr.success(response.message);
+                    util.modal('Modal');
+                    $scope.detail=null;
+                }, function (error){    
+                    toastr.error('Huy Huy dice: ' + error.data.message || "Error inesperado =(");
+                });
+        };
 
         $scope.confirmChangeStatus = function(reason_i, product_i){
             var data = {};

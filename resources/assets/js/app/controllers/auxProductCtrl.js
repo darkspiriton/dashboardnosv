@@ -716,6 +716,7 @@ angular.module('App')
                 });
         }
         $scope.openNewStatus= function(){
+            util.modalClose('Modal');
             util.modal('ModalNewStatus');
         };
 

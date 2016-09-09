@@ -25,9 +25,6 @@
         <li id="publicity">
             <a href="#" ui-sref="Publicidad Ventas"><i class="md md-local-see"></i>Gestionar publicidad</a>
         </li>
-        <li id="PrestaShop">
-            <a ui-sref="PrestaShop"><i class="md md-subtitles"></i>Pedidos Web</a>
-        </li>
         <li id="ProductStatusIndicator">
             <a ui-sref="IndicadorProductosEstados"><i class="md md-web"></i>Historial de estados de producto</a>
         </li> 

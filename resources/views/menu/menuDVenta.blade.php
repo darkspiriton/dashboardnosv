@@ -22,8 +22,5 @@
         <li id="RequestApplication">
             <a ui-sref="RequestApplication"><i class="md md-web"></i>Ventas Empresas Web</a>
         </li>
-        <li id="ProductStatusIndicator">
-            <a ui-sref="IndicadorProductosEstados"><i class="md md-web"></i>Indicador de estados de producto</a>
-        </li> 
     </ul>
 </li>

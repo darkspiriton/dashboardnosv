@@ -44,7 +44,7 @@ elixir(function(mix) {
 
     /*
      |
-     |  Compile for ADMNOS
+     |  Compile for Dirección de NosVenden
      |
      */
 
@@ -74,7 +74,7 @@ elixir(function(mix) {
     
     /*
      |
-     |  Compile for JVE
+     |  Compile for Coordinador VENTAS
      |
      */
 
@@ -89,11 +89,12 @@ elixir(function(mix) {
         "app/controllers/auxIndicator7Ctrl.js",
         "app/controllers/PrestaShopCtrl.js",
         "app/controllers/auxStockVENCtrl.js",
+        "app/controllers/productStatusIndicatorCtrl.js",
         ], "public/app/controllers/compile/coordinadorControllers.js");
 
     /*
      |
-     |  Compile for VEN
+     |  Compile for Equipo de VENTAS
      |
      */
 
@@ -159,7 +160,7 @@ elixir(function(mix) {
 
     /*
      |
-     |  Compile for ADM
+     |  Compile for Dirección de VENTAS
      |
      */
 

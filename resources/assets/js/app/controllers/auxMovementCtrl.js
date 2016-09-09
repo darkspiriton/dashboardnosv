@@ -329,11 +329,11 @@ angular.module('App')
             }
 
 			$scope.products[i].preciofinal = Math.round(($scope.products[i].price - $scope.products[i].discount)*100)/100;
-            if($scope.products[i].preciofinal<$scope.products[i].priceProvider){
+            if($scope.products[i].preciofinal<0){
                 $scope.products[i].price=$scope.products[i].backupPrice;
                 $scope.products[i].preciofinal=$scope.products[i].price;
                 $scope.products[i].discount=0;
-                toastr.error('El valor minimo del Precio de Venta deberia ser: '+'S/.'+$scope.products[i].priceProvider);                
+                toastr.error('El valor minimo del Precio de Final deberia ser: '+'S/.'+0);                
             }
 
 			$scope.dataProducts[i].discount = angular.copy($scope.products[i].discount);

@@ -2,25 +2,26 @@
 
 namespace Dashboard\Http\Controllers;
 
-use Carbon\Carbon;
 use DB;
-use Dashboard\Events\NotificationPusher;
-use Dashboard\Events\ProductStatusWasChanged;
-use Dashboard\Events\ProductWasCreated;
+use Exception;
+use Carbon\Carbon;
+use Dashboard\User;
 use Dashboard\Http\Requests;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Event;
+use Dashboard\Events\ProductWasCreated;
+use Dashboard\Models\Experimental\Size;
+use Dashboard\Models\Experimental\Type;
+use Dashboard\Events\NotificationPusher;
 use Dashboard\Models\Experimental\Alarm;
 use Dashboard\Models\Experimental\Color;
 use Dashboard\Models\Experimental\Product;
+use Dashboard\Models\Experimental\Provider;
+use Dashboard\Events\ProductStatusWasChanged;
+use Faker\Test\Provider\ProviderOverrideTest;
 use Dashboard\Models\Experimental\ProductDetailStatus;
 use Dashboard\Models\Experimental\ProductStatusDetail;
-use Dashboard\Models\Experimental\Provider;
-use Dashboard\Models\Experimental\Size;
-use Dashboard\Models\Experimental\Type;
-use Dashboard\User;
-use Exception;
-use Faker\Test\Provider\ProviderOverrideTest;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Event;
+
 
 class AuxProductController extends Controller
 {
@@ -900,6 +901,30 @@ class AuxProductController extends Controller
         }
 
         return $productStatusDtl->Product_status_detail;
+    }
+
+    public function setNewProductStatusDetail(Request $request){
+        // return $request->all();
+        $rules = [
+            'status_id' =>'required|integer',
+            'detail'=>'required|string'
+        ];
+
+        $validator = \Validator::make($request->all(),$rules);
+
+        if($validator->fails()){
+            echo "No valido";
+            return response()->json(['message' => 'No se poseen todos los parametros para agregar un detalle de estado'],404);
+        }
+
+        $productStatusDtl= new ProductStatusDetail();
+        $productStatusDtl->description=$request->input('detail');
+        $productStatusDtl->product_status_id=$request->input('status_id');
+        $productStatusDtl->save();
+        // dd($productStatusDtl);
+
+        return response()->json(['message' => 'Se agrego el nuevo detalle de estado correctamente'],200);
+
     }
 
     /**

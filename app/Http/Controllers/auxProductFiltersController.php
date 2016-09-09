@@ -192,6 +192,8 @@ class auxProductFiltersController extends Controller
             $data[] = (array)$product;
         }
 
+
+
         $excelSheet = Excel::create('kardex', function ($excel) use ($data) {
             $excel->sheet('Sheetname', function ($sheet) use ($data) {
                 $sheet->fromArray($data, null, 'A1', true);

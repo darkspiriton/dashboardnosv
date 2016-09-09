@@ -21,6 +21,7 @@ use Dashboard\Events\ProductStatusWasChanged;
 use Faker\Test\Provider\ProviderOverrideTest;
 use Dashboard\Models\Experimental\ProductDetailStatus;
 use Dashboard\Models\Experimental\ProductStatusDetail;
+use Excel;
 
 
 class AuxProductController extends Controller
@@ -490,6 +491,41 @@ class AuxProductController extends Controller
         }
 
         return response()->json(['stock' => $stock, 'resume' => $resume], 200);
+    }
+
+    public function FilterForStockDownload()
+    {
+        $products = Product::with('provider', 'types')
+                    ->select('created_at as Fecha_Creación', 'provider_id', 'id', 'name as Producto', DB::raw('count(name) as cantidad'), 'cost_provider as CostoProveedor', 'utility as Utilidad')
+                    ->where('status', '=', 1)
+                    ->orWhere('status', '=', 3)
+                    ->groupby('name')->get();
+        $data = array();
+
+
+        foreach ($products as $product) {
+            if ($product->types) {
+                $product->typesList = $product->types->implode("name", " | ");
+            }
+            $product->price_final = $product->CostoProveedor + $product->Utilidad;
+            $product->provider_id=$product->provider->name;
+
+
+            unset($product->provider);
+            unset($product->types);
+
+            $data[]=(array)$product->toArray();
+        }
+
+        // return $data;
+
+        $excelSheet = Excel::create('stock', function ($excel) use ($data) {
+            $excel->sheet('Sheetname', function ($sheet) use ($data) {
+                $sheet->fromArray($data, null, 'A1', true);
+            });
+        });
+
+        return $excelSheet->download('xls');
     }
 
     public function stockProdType($id)
@@ -973,7 +1009,7 @@ class AuxProductController extends Controller
      *    @param  Dashboard\Models\Experimental\Product  $product
      *    @return  Dashboard\Models\Experimental\ProductStatusDetail
      */
-    private function ProductStatusDtl(Request $request, Product $product)
+    private function productStatusDtl(Request $request, Product $product)
     {
         $productStatusDtl = null;
 

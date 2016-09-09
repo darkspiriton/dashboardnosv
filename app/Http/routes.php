@@ -144,6 +144,8 @@ Route::group(['prefix' => 'api'], function () {
         Route::post("{id}/status/change", "AuxProductController@productStatusChange");
         Route::post("{id}/status/detail", "AuxProductController@LastPruductStatusDetail");
         Route::post("set/status/save","AuxProductController@setNewProductStatusDetail");
+
+        Route::post("/filter/get/stock/download","AuxProductController@FilterForStockDownload");
     });
 
     /**

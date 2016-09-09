@@ -3,31 +3,7 @@ angular.module('App')
         $stateProvider
             .state('Indicator1', {
                 url: '/stock-general-de-productos',
-                template: '<div class="card" >'+
-                '    <div class="card-header bgm-blue">'+
-                '        <h2>Stock general de productos</h2>'+
-                '        <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="list()"'+
-                '                data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"'+
-                '                title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>'+
-                '    </div>'+
-                '    <div class="card-body card-padding table-responsive">'+
-                '       <div class="col-sm-12" ng-hide="updateList || !(tableData.length > 0)">'+
-                '           <i class="fa fa-refresh fa-spin fa-5x" style="display: table;margin: 0 auto;"></i>'+
-                '        </div><br>'+
-                '        <div class="col-sm-12" ng-hide="updateList">'+
-                '            <table id="table" class="table table-bordered table-striped w-100" style="text-align:center;"></table>'+
-                '        </div><br>'+
-                '    </div><br>'+
-                '</div>'+
-                '<div class="card">'+
-                '    <div class="card-header">'+
-                '        <h2>Vista Grafica</h2>'+
-                '    </div>'+
-                '    <div class="card-body card-padding">'+
-                '        <div id="pie-chart" class="flot-chart-pie"></div>'+
-                '        <div class="flc-pie hidden-xs"></div>'+
-                '    </div>'+
-                '</div>',
+                template: 'app/partials/auxIndicator1.html',
                 controller : 'auxIndicator1Ctrl'
             });
     }])
@@ -63,8 +39,27 @@ angular.module('App')
                 });
         };
 
+
+
+        $scope.download = function(dataSearch){
+            $scope.btnDownload = true;
+            if(dataSearch.status_sale === "")dataSearch.status_sale = null;
+            petition.post('api/auxproduct/filter/get/search/download', dataSearch, {responseType:'arraybuffer'})
+                .then(function(data){
+                    var date = new Date().getTime();
+                    var name = date + '-reporte-de-kardex.xls';
+                    var file = new Blob([data],{ type : 'application/vnd.ms-excel; charset=UTF-8'});
+                    saveAs(file, name);
+                    $scope.btnDownload = false;
+                }, function(error){
+                    toastr.error("El archivo es demasiado grande, no se pudo descargar");
+                    $scope.btnDownload = false;
+                });
+        };
+
         angular.element(document).ready(function(){
             // $scope.product = angular.copy($scope.productClear);
             // $scope.list();
+            $scope.btnDownload=false;
         });
     }]);

@@ -137,6 +137,24 @@ angular.module('App')
             $scope.data.size = null;
         }
 
+        $scope.download = function(){
+            $scope.btnDownload = true;
+            // if(dataSearch.status_sale === "")dataSearch.status_sale = null;
+            // petition.post('api/auxproduct/filter/get/stock/download',{responseType:'arraybuffer'})
+            // var dataSearch=null;
+            petition.post('api/auxproduct/filter/get/stock/download',null, {responseType:'arraybuffer'})
+                .then(function(data){
+                    var date = new Date().getTime();
+                    var name = date + '-reporte-de-stock.xls';
+                    var file = new Blob([data],{ type : 'application/vnd.ms-excel; charset=UTF-8'});
+                    saveAs(file, name);
+                    $scope.btnDownload = false;
+                }, function(error){
+                    toastr.error("El archivo es demasiado grande, no se pudo descargar");
+                    $scope.btnDownload = false;
+                });
+        };
+
         /*
          *  END
          */ 
@@ -144,7 +162,8 @@ angular.module('App')
         angular.element(document).ready(function(){
             $scope.product = angular.copy($scope.productClear);
             // $scope.list();
-
+            // 
+            $scope.btnDownload = false;
             $scope.typesList();
             $scope.providerList();
             $scope.productList();

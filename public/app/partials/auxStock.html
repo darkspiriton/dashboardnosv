@@ -88,6 +88,14 @@
                 data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
                 title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
     </div>
+    <div class="card-header bgm-lightblue">
+       <div ng-form="dates" class="row report-header">
+            <div class="col-xs-offset-0 col-xs-12 col-sm-offset-1 col-sm-3 p-0 m-t-20">
+                    <input type="button" class="btn btn-block bgm-green" value="Descargar Stock Productos" ng-disabled="btnDownload" ng-click="download()">
+            </div>
+       </div>
+    </div>
+
     <div class="card-body card-padding table-responsive">
 <!--     <div class="col-sm-12" ng-show="updateList">
         <i class="fa fa-refresh fa-spin fa-5x" style="display: table;margin: 0 auto;"></i>

@@ -16,6 +16,7 @@ class Product extends Model
     protected $hidden = ['pivot', 'updated_at','deleted_at'];
     protected $casts = ["utility" => "float", "cost_provider" => "float"];
     protected $dates = ['deleted_at'];
+    protected $appends = ["final_price"];
 
     public function size(){
         return $this->belongsTo(Size::class);
@@ -71,5 +72,9 @@ class Product extends Model
 
     public function detail_statuses(){
         return $this->hasMany(ProductDetailStatus::class);
+    }
+    
+    public function getFinalPriceAttribute(){
+        return $this->attributes["cost_provider"] +  $this->attributes["utility"];
     }
 }

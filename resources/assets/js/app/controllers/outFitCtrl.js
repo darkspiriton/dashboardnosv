@@ -2,7 +2,7 @@ angular.module('App')
     .config(["$stateProvider", function($stateProvider) {
         $stateProvider
             .state('out_fit', {
-                url: '/Gestion-de-outfit',
+                url: '/Gestion-de-promociones',
                 templateUrl: 'app/partials/outFit.html',
                 controller : 'out_fitCtrl'
             });
@@ -49,6 +49,34 @@ angular.module('App')
 
             data  	: 	['name','cod','price','type','status','actions'],
             configStatus: 'status'
+        };
+
+        var tableConfig2  =   {
+            columns :   [
+                {"sTitle": "Fecha", "bSortable" : true, 'sWidth': '90px'},
+                {"sTitle": "Codigo", "bSortable" : true, 'sWidth': '1px'},
+                {"sTitle": "Nombre", "bSortable" : true},
+                {"sTitle": "Proveedor", "bSortable" : true},
+                {"sTitle": "Talla", "bSortable" : true},
+                {"sTitle": "Color" , "bSearchable": true},
+                {"sTitle": "Precio" , "bSearchable": true},
+                {"sTitle": "Status" , "bSearchable": true},
+                {"sTitle": "Acción" , "bSearchable": true, "sWidth": '80px'}
+            ],
+            actions :       [
+                ['status',   {
+                    0 : { txt : 'salida' , cls : 'btn-danger', dis : false},
+                    1 : { txt : 'disponible' ,  cls : 'btn-success', dis : false},
+                    2 : { txt : 'vendido' ,  cls : 'bgm-teal', dis : false}
+                }
+                ],
+                ['actions', [
+                    ['eliminar', 'delete2' ,'bgm-red']
+                ]
+                ]
+            ],
+            data    :   [['product.created_at',10],'product.cod','product.name','product.provider.name','product.size.name','product.color.name','price','status','actions'],
+            configStatus : 'product.status'
         };
 
         var alertConfig = {
@@ -102,7 +130,7 @@ angular.module('App')
                 }
             }
 
-            if (count == 0){
+            if (count === 0){
                 toastr.success('se añadio');
                 $scope.outfit.products.push({name: $scope.products[ind].name});
                 $scope.productsView.push($scope.products[ind]);
@@ -208,12 +236,12 @@ angular.module('App')
                     }, function(error){
                         toastr.error('Huy Huy dice: ' + error.data.message);
                         $scope.formSubmit=false;
-                    })
+                    });
                 });
         };
         
         $scope.nameStatus = function (e) {
-            if(e == 0)
+            if(e === 0)
                 return 'Inactivo';
             else
                 return 'Activo';
@@ -232,7 +260,7 @@ angular.module('App')
         };
 
         var changeButton = function (ind, dom){
-            $scope.tableData[ind].status = ($scope.tableData[ind].status == 0)? 1 : 0;
+            $scope.tableData[ind].status = ($scope.tableData[ind].status === 0)? 1 : 0;
             if ( $scope.tableData[ind].status == 1){
                 $(dom).removeClass('btn-danger');
                 $(dom).addClass('btn-success');
@@ -244,10 +272,117 @@ angular.module('App')
             }
         };
 
+        /*******************************************************CONTROLADOR LIQUIDACIÓN*******************************************************/
+        $scope.list2 = function() {
+            $scope.updateList = true;
+            petition.get('api/liquidation')
+                .then(function(data){
+                    $scope.tableData2 = data.products;
+                    $('#table2').AJQtable('view', $scope, $compile,$scope.tableData2,tableConfig2);
+                    $scope.updateList = false;
+                }, function(error){
+                    console.log(error);
+                    toastr.error('Huy Huy dice: ' + error.data.message);
+                    $scope.updateList = false;
+                });
+        };
+
+        $scope.listProduct2 = function() {
+            $scope.products = [];
+            petition.get('api/auxproduct/get/uniques')
+                .then(function(data){
+                    $scope.products = data.products;
+                }, function(error){
+                    console.log(error);
+                    toastr.error('Huy Huy dice: ' + error.data.message);
+                });
+        };
+
+        $scope.ListCodes2 = function(name) {
+            if(name === undefined)return;
+            $scope.codes = [];
+            petition.get('api/auxproduct/get/uniques/'+ name +'/codes')
+                .then(function(data){
+                    $scope.codes = data.codes;
+                }, function(error){
+                    $scope.codes = [];
+                    console.log(error);
+                    toastr.error('Huy Huy dice: ' + error.data.message);
+                });
+        };
+
+        $scope.delete2 = function(i) {
+            alertConfig.title = '¿Desea retirar el producto del area de liquidacion?';
+            swal(alertConfig ,
+                function() {
+                    var id = $scope.tableData2[i].id;
+                    petition.delete('api/liquidation/' + id)
+                        .then(function(data){
+                            $scope.list();
+                            toastr.success(data.message);
+                        }, function(error){
+                            console.log(error);
+                            toastr.error('Huy Huy dice: ' + error.data.message);
+                        });
+                });
+        };
+
+        $scope.submit2 = function () {
+            alertConfig.title = '¿Todo es correcto?';
+            alertConfig.text=`<table class="table table-bordered w-100 table-attr text-center">
+                                        <thead>
+                                        <tr>
+                                            <th>Producto</th>
+                                            <th>Código</th>
+                                            <th>Precio</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>${$scope.product}</td>
+                                            <td>${( function(){
+                                                var code = "";
+                                                for(var i in $scope.codes){
+                                                    if($scope.codes[i].id==$scope.liquidation.id){
+                                                        code += $scope.codes[i].name+"<br>"    
+                                                    }                                                   
+                                                }
+                                                return code; })()}
+                                            </td>                                      
+                                            <td>${$scope.liquidation.price}</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>`;
+            swal(alertConfig ,
+                function() {
+                    $scope.formSubmit=true;
+                    petition.post('api/liquidation', $scope.liquidation ).then(function(data){
+                        toastr.success(data.message);
+                        $scope.formSubmit=false;
+                        $scope.list();
+                        util.modalClose();
+                    }, function(error){
+                        toastr.error('Huy Huy dice: ' + error.data.message);
+                        $scope.formSubmit=false;
+                    });
+                });
+        };
+
+        $scope.new2 = function(){
+            $scope.liquidation = {};
+            util.modal('Modal2');
+        };
+
         angular.element(document).ready(function(){
             $scope.outfit = angular.copy($scope.outfitClear);
             $scope.productsView = [];
+            $scope.searchView=1;
             $scope.list();
             $scope.listProduct();
+
+            /***********LIQUIDACIÓN**********/
+            $scope.list2();
+            $scope.listProduct2();
+            $scope.liquidation = {};
         });
     }]);

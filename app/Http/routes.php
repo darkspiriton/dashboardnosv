@@ -22,11 +22,11 @@
 |
 */
 
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Credentials: true');
-header('Access-Control-Allow-Headers: accept, content-type, x-xsrf-token, x-csrf-token, authorization');
-header("Access-Control-Allow-Methods: GET,POST,PUT,DELETE,OPTIONS");
-header("Content-Type: application/json");
+// header('Access-Control-Allow-Origin: *');
+// header('Access-Control-Allow-Credentials: true');
+// header('Access-Control-Allow-Headers: accept, content-type, x-xsrf-token, x-csrf-token, authorization');
+// header("Access-Control-Allow-Methods: GET,POST,PUT,DELETE,OPTIONS");
+// header("Content-Type: application/json");
 
 /**
  *  Nuevas rutas -- middleware se ubican en sus controladores
@@ -129,6 +129,7 @@ Route::group(['prefix' => 'api'], function () {
         Route::get('/get/uniques', 'AuxProductController@UniqueProduct');
         Route::get('/get/uniques/{name}/codes', 'AuxProductController@CodesLists');
         
+
         Route::get('get/movements/{id}', 'AuxProductController@movements_for_product');
         // Route::put('reserve/{id}', 'AuxProductController@product_reserve');
         // Route::get('observe/{id}', 'AuxProductController@product_observe_status');
@@ -344,7 +345,11 @@ Route::group(['prefix' => 'api'], function () {
     /**
      * Client
      */
-    Route::resource('auxclient', 'AuxClientController', ["only"=>["store", "show", "update"]]);
+    Route::resource('auxclient', 'AuxClientController', ["only"=>["index","store", "show", "update","destroy"]]);
+    Route::get('auxclient/get/delete/','AuxClientController@FilterForSoftDelete');
+    Route::post('auxclient/delete/restore/{id}','AuxClientController@restore');
+    Route::get('auxclient/get/movement/{id}','AuxClientController@getMovement');
+    // Route::get('auxclient/get/count','AuxClientController@countMovement');
 
     /**
      * Notification

@@ -11,7 +11,7 @@
             <a href="#" ui-sref="Movimientos2JVE"><i class="md md-swap-vert-circle"></i>Generar Retorno - Venta</a>
         </li>
         <li id="out_fit">
-            <a href="#" ui-sref="out_fit"><i class="md md-settings-input-component"></i>Gestionar Combinaciones</a>
+            <a href="#" ui-sref="out_fit"><i class="md md-settings-input-component"></i>Gestionar Promociones</a>
         </li>
         <li id="movimientos_outfit">
             <a href="#" ui-sref="Movimientos Out Fit"><i class="md md-remove-circle-outline"></i>Generar Salida de Combinaciones</a>
@@ -24,9 +24,16 @@
         </li>                       
         <li id="publicity">
             <a href="#" ui-sref="Publicidad Ventas"><i class="md md-local-see"></i>Gestionar publicidad</a>
+        </li>        
+        <li id="PrestaShop">
+            <a ui-sref="PrestaShop"><i class="md md-subtitles"></i>Pedidos Web</a>
         </li>
         <li id="ProductStatusIndicator">
             <a ui-sref="IndicadorProductosEstados"><i class="md md-web"></i>Historial de estados de producto</a>
         </li> 
+        <li id="auxClient">
+            <a ui-sref="auxClient"><i class="md md-web"></i>Historial de Clientes</a>
+        </li>
+
     </ul>
 </li>

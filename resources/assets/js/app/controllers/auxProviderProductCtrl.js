@@ -123,15 +123,15 @@ angular.module('App')
         $scope.perDate = function(){
             $scope.updateList = true;
             $scope.dateSave = angular.copy($scope.data3);
-            $scope.dateSave.dateaux1 = $filter('date')($scope.data3.dateaux1, 'yyyy-MM-dd')
-            $scope.dateSave.dateaux2 = $filter('date')($scope.data3.dateaux2, 'yyyy-MM-dd')
+            $scope.dateSave.dateaux1 = $filter('date')($scope.data3.dateaux1, 'yyyy-MM-dd');
+            $scope.dateSave.dateaux2 = $filter('date')($scope.data3.dateaux2, 'yyyy-MM-dd');
             petition.get('api/auxproduct/get/products/provider/date/'+3, { params : $scope.dateSave })
                 .then(function(data){
                     $scope.tableData = data.movements;
                     $scope.monto=0;
                     for(var i in $scope.tableData){
-                        if(parseFloat($scope.tableData[i].cost) != undefined){
-                            $scope.monto += parseFloat($scope.tableData[i].cost)
+                        if(parseFloat($scope.tableData[i].cost) !== undefined){
+                            $scope.monto += parseFloat($scope.tableData[i].cost);
                         }
                     }
                     $('#table').AJQtable2('view2', $scope, $compile);

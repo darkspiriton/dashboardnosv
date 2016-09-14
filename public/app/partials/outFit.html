@@ -1,25 +1,66 @@
 <div class="card" >
     <div class="card-header bgm-blue">
-        <h2>Gestionar Combinaciones</h2>
+        <h2>Gestionar Promociones</h2>
         <button ng-disabled="updateList" class="btn bgm-green btn-float waves-effect btnLista" ng-click="list()"
                 data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
                 title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
     </div>
 
     <div class="card-body card-padding table-responsive">
-        <div class="col-sm-12" ng-show="updateList">
-            <i class="fa fa-refresh fa-spin fa-5x" style="display: table;margin: 0 auto;"></i>
-        </div><br>
-        <div class="col-sm-12" ng-hide="updateList">
-            <table id="table" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
-        </div><br>
-        <div class="card-footer">
-            <a  class="btn bgm-green waves-effect" ng-click="new();">Crear nueva combinación</a>
+
+        <ul class="tab-nav" role="tablist" tabindex="1" style="overflow: hidden; outline: none;">
+            <li ng-class="{active : searchView == 1}"><a ng-click="searchView = 1" role="tab" data-toggle="tab" aria-expanded="true">Combinaciones</a></li>
+            <li ng-class="{active : searchView == 2}"><a ng-click="searchView = 2" role="tab" data-toggle="tab" aria-expanded="false">Saldo</a></li>
+            <li ng-class="{active : searchView == 3}"><a ng-click="searchView = 3" role="tab" data-toggle="tab" aria-expanded="false">Descuento</a></li>
+            <li ng-class="{active : searchView == 4}"><a ng-click="searchView = 4;" role="tab" data-toggle="tab" aria-expanded="false">Otros</a></li>
+        </ul>
+
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" ng-show="(searchView == 1)">
+                <div class="col-sm-12" ng-show="updateList">
+                    <i class="fa fa-refresh fa-spin fa-5x" style="display: table;margin: 0 auto;"></i>
+                </div><br>
+                <div class="col-sm-12" ng-hide="updateList">
+                    <table id="table" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
+                </div><br>
+                <div class="card-footer">
+                    <a  class="btn bgm-green waves-effect" ng-click="new();">Crear nueva combinación</a>
+                </div>
+            </div>
+            
+            <div role="tabpanel" class="tab-pane active" ng-show="(searchView == 2)">
+                <div class="col-sm-12" ng-show="updateList">
+                    <i class="fa fa-refresh fa-spin fa-5x" style="display: table;margin: 0 auto;"></i>
+                </div><br>
+                <div class="col-sm-12" ng-hide="updateList">
+                    <table id="table2" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
+                </div><br>
+                <div class="card-footer">
+                    <a  class="btn bgm-green waves-effect" ng-click="new2();">Crear nuevo saldo</a>
+                </div>
+            </div>
+
+            <div role="tabpanel" class="tab-pane active" ng-show="(searchView == 3)">
+                <div class="col-sm-12" ng-show="updateList">
+                    <i class="fa fa-refresh fa-spin fa-5x" style="display: table;margin: 0 auto;"></i>
+                </div><br>
+                <div class="col-sm-12" ng-hide="updateList">
+                    <table id="table3" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
+                </div><br>
+                <div class="card-footer">
+                    <a  class="btn bgm-green waves-effect" ng-click="new2();">Crear nuevo descuento</a>
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane" ng-show="(searchView == 4)">
+
+            </div>
         </div>
+
+        
     </div><br>
 </div>
 
-<div class="card" id="formulariohide">
+<div class="card" id="formulariohide" ng-show="(searchView == 1)">
     <div class="card-header bgm-blue">
         <h2>Combinaciones</h2>
     </div>
@@ -189,6 +230,67 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="Modal2" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header bgm-teal">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">&times;</span></button>
+                <h3 class="modal-title c-white">Nuevo producto en liquidacion</h3>
+            </div>
+            <div class="modal-body card-padding">
+                <form name="form" class="form-horizontal" autocomplete="off">
+                    <div class="form-group">
+                        <label class="col-xs-2 col-sm-2 control-label">Producto</label>
+                        <div class="col-xs-10 col-sm-4">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="md md-list"></i></span>
+                                <div class="fg-line select">
+                                    <select class="form-control" ng-change="ListCodes2(product)" ng-options="product.name as product.name for product in products" ng-model="product">
+                                        <option value="" disabled="disabled" select="true">Seleccione</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <label class="col-xs-2 col-sm-1 control-label">Codigo</label>
+                        <div class="col-xs-10 col-sm-5">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="md md-list"></i></span>
+                                <div class="fg-line select">
+                                    <select class="form-control" ng-options="code.id as code.name for code in codes" ng-model="liquidation.id" required>
+                                        <option value="" disabled="disabled" select="true">Seleccione</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-xs-2 col-sm-2 control-label">Precio</label>
+                        <div class="col-xs-10 col-sm-4">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="md md-local-parking"></i></span>
+                                <input ng-model="liquidation.price" type="number" class="form-control" required>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button ng-disabled="!form.$valid" ng-click="submit2()" type="button" class="btn btn-primary btn-sm waves-effect">Guardar</button>
+                            <a class="btn btn-danger" data-dismiss="modal">Cerrar</a>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

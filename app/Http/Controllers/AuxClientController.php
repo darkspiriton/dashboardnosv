@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Dashboard\Events\NotificationPusher;
 use Dashboard\Models\Experimental\Client;
 use Dashboard\Models\Experimental\Movement;
+use Excel;
 
 class AuxClientController extends Controller
 {
@@ -232,6 +233,24 @@ class AuxClientController extends Controller
         };       
         
         return response()->json(['movements'=>$client[0]->movements],200);
+    }
+
+    public function FilterForClientDowload()
+    {
+            $clients=Client::all('id as ID','name as Nombre','email as Correo','phone as Teléfono','dni as DNI','address as Dirección','reference as Referencia','created_at as Fecha_de_creación','updated_at as Fecha_de_actualización');
+            $data = array();
+
+            foreach ($clients as $client) {
+                $data[] = (array)$client->toArray();
+            }
+
+            $excelSheet = Excel::create('client',function($excel) use ($data){
+                $excel->sheet('Sheetname',function($sheet) use ($data){
+                    $sheet->fromArray($data,null,'A1',true);
+                });
+            });
+
+            return $excelSheet->download('xls');
     }
 
     // public function countMovement(){        

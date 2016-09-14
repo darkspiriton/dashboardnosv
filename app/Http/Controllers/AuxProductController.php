@@ -980,12 +980,16 @@ class AuxProductController extends Controller
         }
 
         $productStatusDtl = $this->ProductStatusDtl($request, $product);
-
+         
         if ($productStatusDtl == null) {
-            return response()->json(["message" => "Parametros no validos"], 404);
-        }
-
-        $status_id = $productStatusDtl->product_status_id;
+            if($product->status==4){
+                $status_id = $product->status;
+            }else{
+                return response()->json(["message" => "Parametros no validos"], 404);
+            }
+        } else {
+            $status_id = $productStatusDtl->product_status_id;
+        }        
 
         if ($status_id == 5) { // Exención para cambio de estado en venta 
             return $this->ProductTransition($product, $productStatusDtl);

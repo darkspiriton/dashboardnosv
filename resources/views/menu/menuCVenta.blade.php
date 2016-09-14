@@ -28,5 +28,8 @@
         <li id="PrestaShop">
             <a ui-sref="PrestaShop"><i class="md md-subtitles"></i>Pedidos Web</a>
         </li>
+        <li id="auxClient">
+            <a ui-sref="auxClient"><i class="md md-web"></i>Historial de Clientes</a>
+        </li>
     </ul>
 </li>

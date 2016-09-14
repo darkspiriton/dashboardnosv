@@ -88,8 +88,8 @@ elixir(function(mix) {
         "app/controllers/auxProductJVECtrl.js",
         "app/controllers/auxIndicator7Ctrl.js",
         "app/controllers/PrestaShopCtrl.js",
-        "app/controllers/auxStockVENCtrl.js",
-        
+        "app/controllers/auxStockVENCtrl.js",        
+        "app/controllers/auxClientCtrl.js"        
         ], "public/app/controllers/compile/coordinadorControllers.js");
 
     /*

@@ -169,9 +169,9 @@ class AuxProductController extends Controller
      */
     public function show($id)
     {
-        try {
+        // try {
             $product = Product::with('types', 'alarm')
-                            ->select(array('id', 'cod', 'provider_id', 'color_id', 'size_id', 'name', 'cost_provider as cost', 'utility as uti', 'cost_provider as cost', 'utility as uti', 'alarm_id'))
+                            ->select(array('id', 'cod', 'provider_id', 'color_id', 'size_id', 'name', 'cost_provider as cost', 'utility as uti', 'cost_provider', 'utility', 'alarm_id'))
                             ->find($id);
 
             if ($product !== null) {
@@ -179,9 +179,9 @@ class AuxProductController extends Controller
             }
 
             return \Response::json(['message' => 'No existe ese producto'], 404);
-        } catch (Exception $e) {
-            return \Response::json(['message' => 'Ocurrio un error'], 500);
-        }
+        // } catch (Exception $e) {
+        //     return \Response::json(['message' => 'Ocurrio un error'], 500);
+        // }
     }
 
     /**

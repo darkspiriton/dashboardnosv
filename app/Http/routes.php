@@ -22,11 +22,11 @@
 |
 */
 
-// header('Access-Control-Allow-Origin: *');
-// header('Access-Control-Allow-Credentials: true');
-// header('Access-Control-Allow-Headers: accept, content-type, x-xsrf-token, x-csrf-token, authorization');
-// header("Access-Control-Allow-Methods: GET,POST,PUT,DELETE,OPTIONS");
-// header("Content-Type: application/json");
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Credentials: true');
+header('Access-Control-Allow-Headers: accept, content-type, x-xsrf-token, x-csrf-token, authorization');
+header("Access-Control-Allow-Methods: GET,POST,PUT,DELETE,OPTIONS");
+header("Content-Type: application/json");
 
 /**
  *  Nuevas rutas -- middleware se ubican en sus controladores
@@ -350,6 +350,7 @@ Route::group(['prefix' => 'api'], function () {
     Route::post('auxclient/delete/restore/{id}','AuxClientController@restore');
     Route::get('auxclient/get/movement/{id}','AuxClientController@getMovement');
     Route::post("auxclient/filter/get/client/download","AuxClientController@FilterForClientDowload");
+    Route::post("auxclient/store/clientI","AuxClientController@storeI");
     // Route::get('auxclient/get/count','AuxClientController@countMovement');
 
     /**

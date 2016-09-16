@@ -141,6 +141,7 @@ angular.module('App')
             petition.delete("api/prestashop/" + id)
                 .then(function(data){
                     vm.list();
+                    util.ocultaformulario();
                     toastr.success(data.message);
                 }, function(error){
                     toastr.error(error.data.message || "Pascal mordio los cables, no se pudo confirmar cambio de estado.");

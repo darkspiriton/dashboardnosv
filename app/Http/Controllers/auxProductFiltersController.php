@@ -70,7 +70,7 @@ class auxProductFiltersController extends Controller
             $data = array();
             $data["sizes"] =  Size::select(array("id", "name"))->orderBy("name", "asc")->get();
             $data["colors"] =  Color::select(array("id", "name"))->orderBy("name", "asc")->get();
-            $data['products'] = Product::select("name","cost_provider","utility")->distinct()->orderBy("name", "asc")->get();
+            $data['products'] = Product::select("name","cost_provider","utility")->groupby("name")->orderBy("name", "asc")->get();
 
             return response()->json($data);
         } catch (\Exception $e) {

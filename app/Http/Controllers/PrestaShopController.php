@@ -42,7 +42,7 @@ class PrestaShopController extends Controller
         }
 
         if ($requestP->isEmpty()) {
-            return response()->json(['message' => 'No se encontro pedidos disponibles'], 404);
+            return response()->json(['message' => 'No se encontro pedidos disponibles'], 200);
         } else {            
             return response()->json(['pedidos' => $requestP], 200);
         }

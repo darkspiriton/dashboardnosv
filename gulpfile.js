@@ -103,6 +103,7 @@ elixir(function(mix) {
     mix.browserify([
         "app/controllers/auxStockVENCtrl.js",
         "app/controllers/PrestaShopCtrl.js",
+        "app/controllers/commentsCtrl.js",
         ], "public/app/controllers/compile/vendedorControllers.js");
 
     /*

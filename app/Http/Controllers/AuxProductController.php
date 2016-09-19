@@ -639,7 +639,7 @@ class AuxProductController extends Controller
 
     public function listProduct(Request $request)
     {
-        try {
+        // try {
             if ($request->has("name")) {
                 $colors = Product::select("color_id")->distinct()->where("name", $request->input("name"))->lists("color_id");
                 $sizes = Product::select("size_id")->distinct()->where("name", $request->input("name"))->lists("size_id");
@@ -650,12 +650,12 @@ class AuxProductController extends Controller
 
                 return response()->json($data);
             } else {
-                $products = Product::select("name")->distinct()->orderBy("name", "asc")->get();
+                $products = Product::select("name","cost_provider","utility")->distinct()->orderBy("name", "asc")->get();
                 return response()->json(["products" => $products]);
             }
-        } catch (\Exception $e) {
-            return \Response::json(["message" => "Se cruzaron algunos cables, llame a sistemas"], 500);
-        }
+        // } catch (\Exception $e) {
+        //     return \Response::json(["message" => "Se cruzaron algunos cables, llame a sistemas"], 500);
+        // }
     }
 
     public function UniqueProduct()

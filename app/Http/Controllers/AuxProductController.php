@@ -496,7 +496,7 @@ class AuxProductController extends Controller
     public function FilterForStockDownload()
     {
         $products = Product::with('provider', 'types')
-                    ->select('created_at as Fecha_Creación', 'provider_id', 'id', 'name as Producto', DB::raw('count(name) as cantidad'), 'cost_provider as CostoProveedor', 'utility as Utilidad')
+                    ->select('created_at as Fecha_Creación', 'provider_id', 'id', 'name as Producto', DB::raw('count(name) as cantidad'),'cost_provider','utility')
                     ->where('status', '=', 1)
                     ->orWhere('status', '=', 3)
                     ->groupby('name')->get();
@@ -507,7 +507,7 @@ class AuxProductController extends Controller
             if ($product->types) {
                 $product->typesList = $product->types->implode("name", " | ");
             }
-            $product->price_final = $product->CostoProveedor + $product->Utilidad;
+            $product->price_final = $product->cost_provider + $product->utility;
             $product->provider_id=$product->provider->name;
 
 

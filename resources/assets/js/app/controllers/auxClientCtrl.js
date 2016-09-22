@@ -499,7 +499,7 @@ angular.module('App')
             var date = new Date().getTime();
             var name = date + '-reporte-de-cliente.xls';
             var file = new Blob([data],{type : 'application/vnd.ms-excel; charset=UTF-8'});
-            saveAs(fil,name);
+            saveAs(file,name);
             vm.btnDownload = false;
         }
 

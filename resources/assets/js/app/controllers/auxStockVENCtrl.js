@@ -26,7 +26,7 @@ angular.module('App')
                                 <select ng-options="provider.id as provider.name for provider in providers" ng-model="data.provider_id">
                                    <option value="" selected="selected">Seleccione</option>
                                 </select>
-                            </div>
+                            </div>kk
 
                             <div class="col-xs-5 col-sm-1 m-t-20"">
                                 <h2 class="text-right">Venta: </h2>

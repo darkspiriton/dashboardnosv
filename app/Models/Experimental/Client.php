@@ -3,6 +3,7 @@
 namespace Dashboard\Models\Experimental;
 
 use Illuminate\Database\Eloquent\Model;
+use Dashboard\Models\Experimental\State;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Client extends Model
@@ -10,7 +11,7 @@ class Client extends Model
     use SoftDeletes;
     
     protected $table="auxclients";
-    protected $fillable = ["name","email","phone","dni","address","reference","facebook_id","facebook_name"];
+    protected $fillable = ["name","email","phone","dni","address","reference","facebook_id","facebook_name","status_id"];
     public $timestamps = true;
 
     public function movements(){
@@ -45,5 +46,19 @@ class Client extends Model
     public function getDniAttribute($value)
     {
         return is_null($value)?"No tiene":$value;
+    }
+
+    public function getAddressAttribute($value)
+    {
+        return is_null($value)?"No tiene":$value;
+    }
+
+    public function getReferenceAttribute($value)
+    {
+        return is_null($value)?"No tiene":$value;
+    }
+
+    public function state(){
+        return $this->belognsTo(State::class);
     }
 }

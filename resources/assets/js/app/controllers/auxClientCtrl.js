@@ -4,46 +4,58 @@ angular.module('App')
     .state('auxClient', {
         url: '/Gestion-de-clientes',
         templateUrl: 'app/partials/auxClient.html',
-        controller : 'auxClientCtrl'
+        controller : 'auxClientCtrl as vm'
     });
 }])
-.controller('auxClientCtrl', ["$scope", "$compile", "$state", "util", "petition", "toastr",
-    function($scope, $compile, $state, util, petition, toastr){
+.controller('auxClientCtrl', ["$scope", "$compile", "$state", "util", "petition", "toastr","apiclient",
+    function($scope, $compile, $state, util, petition, toastr, apiclient){
 
         util.liPage('auxClient');
 
         var actions = [           
-        ['Eliminar', 'deleteClient' ,'bgm-red'],
-        ['Editar', 'editClient' ,'bgm-blue'],
+            ['Eliminar', 'deleteClient' ,'bgm-red'],
+            ['Editar', 'vm.editClient' ,'bgm-blue'],
         ];
+
+        var s1 = {
+            1: ['Potencial','bgm-green',false],
+            2: ['Interesado','bgm-purple',false],
+        };
 
         $scope.tableConfig 	= 	{
             columns :	[
-            {"sTitle": "Creación", "bSortable" : true},
-            {"sTitle": "Nombre", "bSortable" : true},
-            {"sTitle": "Email", "bSortable" : true},
-            {"sTitle": "DNI", "bSortable" : true},
-            {"sTitle": "Teléfono", "bSortable" : false},
-            {"sTitle": "Dirección", "bSortable" : false},
-            {"sTitle": "Referencia", "bSortable" : false},                              
-            {"sTitle": "Acción" , "bSearchable": true}
+                {"sTitle": "Creación", "bSortable" : true},
+                {"sTitle": "Nombre", "bSortable" : true},
+                {"sTitle": "Email", "bSortable" : true},
+                {"sTitle": "DNI", "bSortable" : true},
+                {"sTitle": "Teléfono", "bSortable" : false},
+                {"sTitle": "Dirección", "bSortable" : false},
+                {"sTitle": "Referencia", "bSortable" : false},                              
+                {"sTitle": "Estado", "bSortable" : true},                              
+                {"sTitle": "Acción" , "bSearchable": true}
             ],
             buttons	:
             [
-            {
-                type: 'actions',
-                list:  [
-                { name: 'actions', render: actions}
-                ]
-            }
+                {
+                    type: 'status',
+                    list: [
+                        {name: 'status_id', column:'status_id', render: s1},
+                    ]
+                },
+                {
+                    type: 'actions',
+                    list:  [
+                    { name: 'actions', render: actions}
+                    ]
+                }
             ],
 
-            data  	: 	['created_at','name','email','dni','phone','address','reference','actions'],
+            data  	: 	['created_at','name','email','dni','phone','address','reference','status_id','actions'],
             configStatus: 'status'
         };
 
         var actions2 = [           
-        ['Recuperar', 'restoreClient' ,'bgm-red']
+            ['Recuperar', 'restoreClient' ,'bgm-red']
         ];
 
         var tableConfig2  =   {
@@ -95,31 +107,7 @@ angular.module('App')
             }
             ],
             data    :   ['date_shipment','product.cod','product.name','product.size.name','product.color.name','status','total_price'],
-        };      
-
-        $scope.months = [
-        {id:1, name:'Enero'},
-        {id:2, name:'Febrero'},
-        {id:3, name:'Marzo'},
-        {id:4, name:'Abril'},
-        {id:5, name:'Mayo'},
-        {id:6, name:'Junio'},
-        {id:7, name:'Julio'},
-        {id:8, name:'Agosto'},
-        {id:9, name:'Setiembre'},
-        {id:10, name:'Octubre'},
-        {id:11, name:'Noviembre'},
-        {id:12, name:'Diciembre'},
-        ];
-
-        $scope.years = [2016,2017];
-
-        $scope.status = [
-        {id:'salida', name:'Salida'},
-        {id:'Retornado', name:'Retorno'},
-        {id:'Vendido', name:'Vendido'},
-        {id:'Todo', name:'Todo'},
-        ];
+        };  
 
         var alertConfig = {
             title: "¿Esta seguro?",
@@ -135,76 +123,175 @@ angular.module('App')
             html:true
         };
 
-        $scope.list = function() {
-            $scope.updateList = true;
-            petition.get('api/auxclient')
-            .then(function(data){
-                $scope.tableData = data.clients;
-                $scope.listClients=$scope.tableData;
-                console.log($scope.listClients);
-                $('#table').AJQtable2('view2', $scope, $compile);
-                $scope.updateList = false;
-            }, function(error){
-                console.log(error);
-                toastr.error('Huy Huy dice: ' + error.data.message);
-                $scope.updateList = false;
-            });
-        };                
+        //Variables
+        var vm=this; 
+        vm.months = [
+            {id:1, name:'Enero'},
+            {id:2, name:'Febrero'},
+            {id:3, name:'Marzo'},
+            {id:4, name:'Abril'},
+            {id:5, name:'Mayo'},
+            {id:6, name:'Junio'},
+            {id:7, name:'Julio'},
+            {id:8, name:'Agosto'},
+            {id:9, name:'Setiembre'},
+            {id:10, name:'Octubre'},
+            {id:11, name:'Noviembre'},
+            {id:12, name:'Diciembre'},
+        ];
+        vm.years = [2016,2017];
+        vm.status = [
+            {id:'salida', name:'Salida'},
+            {id:'Retornado', name:'Retorno'},
+            {id:'Vendido', name:'Vendido'},
+            {id:'Todo', name:'Todo'},
+        ];
 
-        $scope.cancelEditClient = function () {
+        //Funciones
+        vm.cancelEditClient = cancelEditClient; 
+        vm.list3 = list3;
+        vm.editClient = editClient;
+        vm.changeStateClient = changeStateClient;
+        vm.showNewClientModal = showNewClientModal;
+        vm.saveClient = saveClient;
+        vm.download = download;
+
+        function list() {
+            vm.updateList = true;
+            apiclient.index().then(successIndex).catch(rejectIndex);            
+        }
+
+        function successIndex(response){
+            $scope.tableData = vm.listClients = response.clients;
+            $('#table').AJQtable2('view2', $scope, $compile);
+            vm.updateList = false;
+        }
+
+        function rejectIndex(response){
+            toastr.error('Huy Huy dice: ' + response.data.message);
+            vm.updateList = false;
+        }               
+
+        function cancelEditClient() {
             $scope.editImputClient=false;
-            $scope.client=[];
+            $scope.editImputClientI=false;
+            $scope.client={};
             util.ocultaformulario();
-        };
+        }
 
-        $scope.new = function(){
-            $scope.outfit = angular.copy($scope.outfitClear);
-            $scope.productsView = [];
-            util.muestraformulario();
+        function editClient(i){
+            $scope.client={};
+            if ($scope.tableData[i].status_id==1){
+                $scope.potencial=true;
+                $scope.editImputClient=true;
+                $scope.client.status_id=$scope.tableData[i].status_id;
+                $scope.client.id=$scope.tableData[i].id;
+                $scope.client.name=$scope.tableData[i].name;
+                $scope.client.phone=$scope.tableData[i].phone;                
+                
+                if ($scope.tableData[i].dni != "No tiene"){
+                    $scope.client.dni=$scope.tableData[i].dni;
+                } else {
+                    $scope.client.dni=null;
+                }
 
-        };
+                if ($scope.tableData[i].email != "No tiene"){
+                    $scope.client.email=$scope.tableData[i].email;
+                } else {
+                    $scope.client.email=null;
+                }    
 
-        $scope.client={};
-        $scope.editClient = function(i){
+                $scope.client.address=$scope.tableData[i].address;
+                $scope.client.reference=$scope.tableData[i].reference;   
+                $scope.close();                     
+                util.muestraformulario();
+            } else if($scope.tableData[i].status_id==2){
+                $scope.potencial=false;
+                $scope.editImputClientI=true;
+                $scope.client.status_id=$scope.tableData[i].status_id;
+                $scope.client.id=$scope.tableData[i].id;
+                $scope.client.name=$scope.tableData[i].name;
+                $scope.client.phone=$scope.tableData[i].phone;
+                $scope.client.status_id=$scope.tableData[i].status_id;
+                $scope.close();
+                util.muestraformulario();                
+            }            
+        }
+
+        function changeStateClient(client) {
+            $scope.potencial=true;
             $scope.editImputClient=true;
-            $scope.client.id=$scope.tableData[i].id;
-            $scope.client.name=$scope.tableData[i].name;
-            $scope.client.phone=$scope.tableData[i].phone;
-            
-            if ($scope.tableData[i].dni != "No tiene"){
-                $scope.client.dni=$scope.tableData[i].dni;
-            } else {
-                $scope.client.dni=null;
-            }
+            $scope.editImputClientI=false;
+            $scope.client.status_id=1;
+        }
 
-            if ($scope.tableData[i].email != "No tiene"){
-                $scope.client.email=$scope.tableData[i].email;
-            } else {
-                $scope.client.email=null;
-            }    
-
-            $scope.client.address=$scope.tableData[i].address;
-            $scope.client.reference=$scope.tableData[i].reference;   
-            $scope.close();                     
-            util.muestraformulario();
-            
-        };
-
-        $scope.showNewClientModal = function(){
+        function showNewClientModal(){
             $scope.newClient = {};
+            $scope.newClientI = {};
             util.modal("newClientModal");
+        }
+
+        function saveClient(status,client){
+            apiclient.saveClient(status,client).then(successSaveClient).catch(rejectSaveClient);
+        }
+
+        function successSaveClient(response){
+            toastr.success(response.message);
+            util.modalClose("newClientModal");
+            $scope.all(); 
+        }
+
+        function rejectSaveClient(response){
+            toastr.error("Huy Huy dice: " + response.data.message);
+        }
+
+        $scope.changeErrorPhone = function(phone){
+            if(phone === undefined ){
+                $scope.errorPhone=false;            
+            }else if(phone.length == 9 ){
+                $scope.errorPhone=true;
+            }else{
+                $scope.errorPhone=false;
+            }
         };
 
-        $scope.saveClient = function(client){
-            petition.post("api/auxclient", client)
-            .then(function(data){
-                toastr.success(data.message);
-                util.modalClose("newClientModal");
-                $scope.all();                    
-            }, function(error){
-                toastr.error("Huy Huy dice: " + error.data.message);
-            });
+       $scope.changeErrorName = function(name){              
+            if(name === undefined ){
+                $scope.errorName=false;
+            }else if(name.length >= 1){
+                $scope.errorName=true;
+            }else{
+                $scope.errorName=false;
+            }
         };
+
+        $scope.changeErrorAddress = function(address){              
+            if(address === undefined ){
+                $scope.errorAddress=false;
+            }else if(address.length >= 1){
+                $scope.errorAddress=true;
+            }else{
+                $scope.errorAddress=false;
+            }
+        };
+
+        $scope.changeErrorReference = function(reference){              
+            if(reference === undefined ){
+                $scope.errorReference=false;
+            }else if(reference.length >= 1){
+                $scope.errorReference=true;
+            }else{
+                $scope.errorReference=false;
+            }
+        };
+
+        function errorClear(){
+            $scope.errorName=false;
+            $scope.errorPhone=false;
+            $scope.errorAddress=false;
+            $scope.errorReference=false;
+        }
+
 
         $scope.updateClient = function(client){   
             petition.put("api/auxclient/"+client.id,client)
@@ -216,6 +303,19 @@ angular.module('App')
                 toastr.error("Huy Huy dice: " + error.data.message);
             });
         };
+        $scope.updateClientI = function(client){   
+            petition.put("api/auxclient/update/clientI/"+client.id,client)
+            .then(function(data){
+                toastr.success(data.message);
+                $scope.all();
+                util.ocultaformulario();
+            }, function(error){
+                toastr.error("Huy Huy dice: " + error.data.message);
+            });
+        };
+
+   
+
 
         $scope.deleteClient = function(i){            
             alertConfig.title = '¿Esta seguro de eliminar este cliente?';
@@ -257,16 +357,20 @@ angular.module('App')
 
         $scope.update = function(){
             if($scope.searchView == 1){
-                $scope.list();
+                list();
             }else if($scope.searchView == 2){
-                $scope.list2();
+                list2();
             }
         };
 
         $scope.all = function(){
-            $scope.list();
-            $scope.list2();
+            cancelEditClient();
+            errorClear();
+            list();
+            list2();
         };
+
+
 
         $scope.restoreClient = function(i){
             alertConfig.title = '¿Esta seguro desea restaurar este cliente?';
@@ -310,7 +414,7 @@ angular.module('App')
 
         /*******************************************************CONTROLADOR DELETE*******************************************************/
         
-        $scope.list2 = function() {
+        function list2() {
             $scope.updateList = true;
             petition.get('api/auxclient/get/delete/')
             .then(function(data){
@@ -328,11 +432,11 @@ angular.module('App')
                 toastr.error('Huy Huy dice: ' + error.data.message);
                 $scope.updateList = false;
             });
-        };
+        }
 
         /*******************************************************CONTROLADOR HISTORIAL*******************************************************/
 
-        $scope.list3=function(){
+        function list3(){
             $scope.updateList3 = true;
             petition.get('api/auxclient/get/movement/'+$scope.client_id , {params: {status: $scope.status_id, month: $scope.month, year: $scope.year }})
             .then(function(data){
@@ -349,7 +453,7 @@ angular.module('App')
                 toastr.error('Huy Huy dice: ' + error.data.message);
                 $scope.updateList3 = false;
             });
-        };
+        }
 
         $scope.filter=function(i){
             if(i==4){
@@ -375,33 +479,57 @@ angular.module('App')
         };
 
         $scope.close = function(){
+            errorClear();
             $scope.showSearchLink=false;
             $scope.showLinkInfo=false;  
             $scope.test1=true;          
         };
 
-        $scope.download =  function (){
-            $scope.btnDownload = true;
-            petition.post('api/auxclient/filter/get/client/download',null,{responseType:'arraybuffer'})
-            .then(function(data){
-                var date = new Date().getTime();
-                var name = date + '-reporte-de-cliente.xls';
-                var file = new Blob([data],{type : 'application/vnd.ms-excel; charset=UTF-8'});
-                saveAs(file,name);
-                $scope.btnDownload = false;                
-            },function(error){
-                toastr.error("El archivo es demasiado grande, no se pudo descargar");
-                $scope.btnDownload = false;
-            });
-        };
+        $scope.selectClient = function(i){
+            errorClear();
+            $scope.searchClient=i;
+        };        
+
+        function download(){
+            vm.btnDownload  = true;
+            apiclient.download().then(successDownload).catch(rejectDownload);
+        }
+
+        function successDownload(data){
+            var date = new Date().getTime();
+            var name = date + '-reporte-de-cliente.xls';
+            var file = new Blob([data],{type : 'application/vnd.ms-excel; charset=UTF-8'});
+            saveAs(fil,name);
+            vm.btnDownload = false;
+        }
+
+        function rejectDownload(error){
+            toastr.error("El archivo es demasiado grande, no se puedo descargar")
+            vm.btnDownload = false;
+        }
+
+        // $scope.download =  function (){
+        //     $scope.btnDownload = true;
+        //     petition.post('api/auxclient/filter/get/client/download',null,{responseType:'arraybuffer'})
+        //     .then(function(data){
+        //         var date = new Date().getTime();
+        //         var name = date + '-reporte-de-cliente.xls';
+        //         var file = new Blob([data],{type : 'application/vnd.ms-excel; charset=UTF-8'});
+        //         saveAs(file,name);
+        //         $scope.btnDownload = false;                
+        //     },function(error){
+        //         toastr.error("El archivo es demasiado grande, no se pudo descargar");
+        //         $scope.btnDownload = false;
+        //     });
+        // };
 
         angular.element(document).ready(function(){
             $scope.productsView = [];
             $scope.searchView=1;
-            $scope.list();
+            list();
             $scope.btnDownload = false;
-
+  
             /***********DELETE**********/            
-            $scope.list2();
+            list2();
         });
     }]);

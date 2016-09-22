@@ -36,7 +36,7 @@ angular.module('App')
                 ]
                 ]
             ],
-            data  	: 	[['product.created_at',10],'product.cod','product.name','product.provider.name','product.size.name','product.color.name','price','status','actions'],
+            data  	: 	[['product.created_at',10],'product.cod','product.name','product.provider.name','product.size.name','product.color.name','price','product.status','actions'],
             configStatus : 'product.status'
         };
 
@@ -58,6 +58,7 @@ angular.module('App')
             petition.get('api/liquidation')
                 .then(function(data){
                     $scope.tableData = data.products;
+                    console.log($scope.tableData);
                     $('#table').AJQtable('view', $scope, $compile);
                     $scope.updateList = false;
                 }, function(error){

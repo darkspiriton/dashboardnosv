@@ -1,7 +1,7 @@
 <div class="card" >
     <div class="card-header bgm-blue">
         <h2>Gestionar Clientes</h2>
-        <button ng-disabled="updateList || searchView == 3" class="btn bgm-green btn-float waves-effect btnLista" ng-click="update()"
+        <button ng-disabled="vm.updateList || searchView == 3" class="btn bgm-green btn-float waves-effect btnLista" ng-click="update()"
                 data-trigger="hover" data-toggle="popover" data-placement="top" data-content="Pulse para actualizar los registros"
                 title="" data-original-title="Actualizar"><i class="md md-sync"></i></button>
     </div>
@@ -26,31 +26,31 @@
 
                         <div  class="row report-date p-l-15 p-r-15">
                             <h2 class="col-xs-6 col-sm-2 text-right m-t-5">Cliente</h2>
-                            <select class="btn btn-default col-sm-2" ng-options="client.id as client.name for client in listClients" ng-model="client_id" required>
+                            <select class="btn btn-default col-sm-2" ng-options="client.id as client.name for client in vm.listClients" ng-model="client_id" required>
                                 <option value="" disabled="disabled" select="true">Seleccione</option>
                             </select>
                         </div>
 
                         <div ng-show="searchView2 == 4" class="row report-date p-l-15 p-r-15">
                             <h2 class="col-xs-5 col-sm-2 text-right m-t-5">Año</h2>
-                            <select class="col-xs-7 col-sm-2 btn btn-default m-t-5" ng-options="year as year for year in years" ng-model="year" required>
+                            <select class="col-xs-7 col-sm-2 btn btn-default m-t-5" ng-options="year as year for year in vm.years" ng-model="year" required>
                                 <option value="" disabled="disabled" selected="selected">Seleccione</option>
                             </select>
                             <h2 class="col-xs-5 col-sm-2 text-right m-t-5">Mensual</h2>
-                            <select class="col-xs-7 col-sm-2 btn btn-default m-t-5" ng-options="month.id as month.name for month in months" ng-model="month" required>
+                            <select class="col-xs-7 col-sm-2 btn btn-default m-t-5" ng-options="month.id as month.name for month in vm.months" ng-model="month" required>
                                 <option value="" disabled="disabled" select="true">Seleccione</option>
                             </select>
                         </div>
                         <div class="row report-date p-l-15 p-r-15">
                             <h2 class="col-xs-5 col-sm-2 text-right m-t-5">Estado</h2>
-                           <select class="col-xs-7 col-sm-2 btn btn-default m-t-5" ng-options="state.id as state.name for state in status" ng-model="status_id" required>
+                           <select class="col-xs-7 col-sm-2 btn btn-default m-t-5" ng-options="state.id as state.name for state in vm.status" ng-model="status_id" required>
                                 <option value="" disabled="disabled" selected="selected">Seleccione</option>
                             </select>
                         </div>
 
                         <div class="row m-t-15 p-15">
                             <div class="col-xs-12 col-sm-3 p-0 box-s">
-                                <input type="button" ng-disabled="!filterMensual.$valid" ng-click="list3()" class="btn btn-block bgm-indigo m-t-5" value="buscar">
+                                <input type="button" ng-disabled="!filterMensual.$valid" ng-click="vm.list3()" class="btn btn-block bgm-indigo m-t-5" value="buscar">
                             </div>
                         </div>
 
@@ -59,21 +59,21 @@
                     <div ng-form="filterHistorico" ng-show="searchView2 == 5" class="card-header bgm-blue p-t-0" style="margin-top: 18px;">
                         <div  class="row report-date p-l-15 p-r-15">
                             <h2 class="col-xs-6 col-sm-2 text-right m-t-5">Cliente</h2>
-                            <select class="btn btn-default col-sm-2" ng-options="client.id as client.name for client in listClients" ng-change="clientChange()" ng-model="client_id" required>
+                            <select class="btn btn-default col-sm-2" ng-options="client.id as client.name for client in vm.listClients" ng-change="clientChange()" ng-model="client_id" required>
                                 <option value="" disabled="disabled" select="true">Seleccione</option>
                             </select>
                         </div>
 
                         <div class="row report-date p-l-15 p-r-15">
                             <h2 class="col-xs-5 col-sm-2 text-right m-t-5">Estado</h2>
-                            <select class="col-xs-7 col-sm-2 btn btn-default m-t-5" ng-options="state.id as state.name for state in status" ng-change="statusChange()" ng-model="status_id" required>
+                            <select class="col-xs-7 col-sm-2 btn btn-default m-t-5" ng-options="state.id as state.name for state in vm.status" ng-change="statusChange()" ng-model="status_id" required>
                                 <option value="" disabled="disabled" selected="selected">Seleccione</option>
                             </select>
                         </div>
 
                         <div class="row m-t-15 p-15">
                             <div class="col-xs-12 col-sm-3 p-0 box-s">
-                                <input type="button" ng-disabled="!filterHistorico.$valid" ng-click="list3()" class="btn btn-block bgm-indigo m-t-5" value="buscar">
+                                <input type="button" ng-disabled="!filterHistorico.$valid" ng-click="vm.list3()" class="btn btn-block bgm-indigo m-t-5" value="buscar">
                             </div>
                         </div>
                     </div>
@@ -92,15 +92,15 @@
 
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane active" ng-show="(searchView == 1)">
-                <div class="col-sm-12" ng-show="updateList">
+                <div class="col-sm-12" ng-show="vm.updateList">
                     <i class="fa fa-refresh fa-spin fa-5x" style="display: table;margin: 0 auto;"></i>
                 </div><br>
-                <div class="col-sm-12" ng-hide="updateList">
+                <div class="col-sm-12" ng-hide="vm.updateList">
                     <table id="table" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
                 </div><br>
                 <div class="card-footer">
-                    <a  class="btn bgm-green waves-effect" ng-click="showNewClientModal();">Crear nuevo cliente</a>
-                    <a  class="btn bgm-blue waves-effect" ng-click="download();" ng-disabled="btnDownload">Descargar Clientes Excel</a>
+                    <a  class="btn bgm-green waves-effect" ng-click="vm.showNewClientModal();">Crear nuevo cliente</a>
+                    <a  class="btn bgm-blue waves-effect" ng-click="vm.download();" ng-disabled="btnDownload">Descargar Clientes Excel</a>
                 </div>
             </div>            
             <div role="tabpanel" class="tab-pane active" ng-show="(searchView == 2 && vacio == true)">
@@ -109,10 +109,10 @@
                 </div><br>               
             </div>
             <div role="tabpanel" class="tab-pane active" ng-show="(searchView == 2 && vacio == false)">
-                <div class="col-sm-12" ng-show="updateList">
+                <div class="col-sm-12" ng-show="vm.updateList">
                     <i class="fa fa-refresh fa-spin fa-5x" style="display: table;margin: 0 auto;"></i>
                 </div><br>
-                <div class="col-sm-12" ng-hide="updateList">
+                <div class="col-sm-12" ng-hide="vm.updateList">
                     <table id="table2" class="table table-bordered table-striped w-100" style="text-align:center;"></table>
                 </div><br>
             </div>
@@ -145,7 +145,7 @@
             <h2>Información de cliente</h2>
         </div>
 
-        <form name="formClient" id="form" class="form-horizontal" autocomplete="off">
+        <form name="formClientP" id="form" class="form-horizontal" autocomplete="off" ng-show="potencial">
             <div class="form-group">
                 <label class="col-xs-2 col-sm-2 control-label">Nombre: </label>
                 <div class="col-xs-10 col-sm-4">
@@ -157,7 +157,7 @@
                     </div>
                 </div>
 
-                <label class="col-xs-2 col-sm-2 control-label">Telefono: </label>
+                <label class="col-xs-2 col-sm-2 control-label">Teléfono: </label>
                 <div class="col-xs-10 col-sm-4">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="md md-person"></i></span>
@@ -190,32 +190,43 @@
                 </div>
             </div>
 
-            <!-- <div class="form-group">
-                <label class="col-xs-2 col-sm-2 control-label">Facebook Nombre: </label>
-                <div class="col-xs-9 col-sm-3">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="md md-person"></i></span>
-                        <div class="fg-line">
-                            <input ng-model="client.facebook_name" type="text" class="form-control" ng-disabled="editImputClient" >
-                        </div>
-                    </div>
-                </div>
-
-                <label class="col-xs-2 col-sm-2 control-label">Facebook ID: </label>
-                <div class="col-xs-9 col-sm-3">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="md md-person"></i></span>
-                        <div class="fg-line">
-                            <input ng-model="client.facebook_id" type="tel" class="form-control" minlength="9" ng-disabled="editImputClient" >
-                        </div>
-                    </div>
-                </div>
-
+            <div class="form-group"> 
+                <label class="col-xs-2 col-sm-2 control-label">Departamento: </label>
                 <div class="col-xs-2 col-sm-2">
-                    <a class="btn btn-block btn-primary" ng-click="updateLinkFacebook()">Actualizar Link</a>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-person"></i></span>
+                        <div class="fg-line col-xs-12 col-sm-12 m-t-20 p-0">
+                            <select class="form-control" ng-options="size.id as size.name for size in sizes" ng-model="data.size">
+                               <option value=""  selected="selected">Seleccione</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
 
-            </div> -->
+                <label class="col-xs-2 col-sm-2 control-label">Provincia: </label>
+                <div class="col-xs-2 col-sm-2">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-person"></i></span>
+                        <div class="fg-line col-xs-12 col-sm-12 m-t-20 p-0">
+                            <select class="form-control" ng-options="size.id as size.name for size in sizes" ng-model="data.size">
+                               <option value=""  selected="selected">Seleccione</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <label class="col-xs-2 col-sm-2 control-label">Distrito: </label>
+                <div class="col-xs-2 col-sm-2">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-person"></i></span>
+                        <div class="fg-line col-xs-12 col-sm-12 m-t-20 p-0">
+                            <select class="form-control" ng-options="size.id as size.name for size in sizes" ng-model="data.size">
+                               <option value=""  selected="selected">Seleccione</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <div class="form-group">
                 <label class="col-xs-2 col-sm-2 control-label">Dirección: </label>
@@ -242,11 +253,47 @@
             </div>
             <div class="form-group" ng-show="editImputClient">
                 <div class="col-xs-12 col-sm-offset-2 col-sm-2">
-                    <a class="btn btn-block btn-primary" ng-disabled="!formClient.$valid" ng-click="updateClient(client)">Guardar</a>
+                    <a class="btn btn-block btn-primary" ng-disabled="!formClientP.$valid" ng-click="updateClient(client)">Guardar</a>
                 </div>
 
                 <div class="col-xs-12 col-sm-2">
-                    <a class="btn btn-block bgm-red" ng-click="cancelEditClient()">Cancelar</a>
+                    <a class="btn btn-block bgm-red" ng-click="vm.cancelEditClient()">Cancelar</a>
+                </div>
+            </div>
+        </form>
+
+        <form name="formClientI" id="form" class="form-horizontal" autocomplete="off" ng-show="!potencial">
+            <div class="form-group">
+                <label class="col-xs-2 col-sm-2 control-label">Nombre: </label>
+                <div class="col-xs-10 col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-person"></i></span>
+                        <div class="fg-line">
+                            <input ng-model="client.name" type="text" class="form-control" ng-disabled="!editImputClientI" required>
+                        </div>
+                    </div>
+                </div>      
+            </div>
+            <div class="form-group">
+                <label class="col-xs-2 col-sm-2 control-label">Teléfono: </label>
+                <div class="col-xs-10 col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="md md-person"></i></span>
+                        <div class="fg-line">
+                            <input ng-model="client.phone" type="tel" class="form-control" minlength="9" ng-disabled="!editImputClientI" required>
+                        </div>
+                    </div>
+                </div>
+            </div>          
+            <div class="form-group" ng-show="editImputClientI">
+                <div class="col-xs-12 col-sm-offset-2 col-sm-2">
+                    <a class="btn btn-block btn-primary" ng-disabled="!formClientI.$valid" ng-click="updateClientI(client)">Guardar</a>
+                </div>
+                <div class="col-xs-12 col-sm-2">
+                    <a class="btn btn-block btn-success" ng-disabled="!formClientI.$valid" ng-click="vm.changeStateClient(client)">Cambiar Estado</a>
+                </div>
+                <div class="col-xs-12 col-sm-2">
+                    <a class="btn btn-block bgm-red" ng-click="vm.cancelEditClient()">Cancelar</a>
                 </div>
             </div>
         </form>
@@ -264,115 +311,180 @@
                 <h3 class="modal-title c-white">Crear nuevo cliente</h3>
             </div>
             <div class="modal-body card-padding">
-                <form name="clientValidate" class="form-horizontal" autocomplete="off">
-                    <div class="form-group m-b-0">
-                        <label class="col-xs-2 col-sm-4 control-label">Nombre: </label>
-                        <div class="col-xs-10 col-sm-5">
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="md md-list"></i></span>
-                                <div class="fg-line">
-                                    <input ng-model="newClient.name" type="text" class="form-control input-sm" required>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
-<!--                     <div class="form-group m-b-0">
-                        <label class="col-xs-2 col-sm-4 control-label"> Link perfil Facebook: </label>
-                        <div class="col-xs-8 col-sm-5">
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="md md-list"></i></span>
-                                <div class="fg-line">
-                                    <input ng-model="link" type="text" class="form-control input-sm" ng-change="linkChange()">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group m-b-0">
-                            <div class="col-xs-2 col-sm-3">
-                                <div class="input-group">
-                                    <a class="btn btn-primary m-t-5" ng-disabled="!showSearchLink" ng-click="linkSearch()">Buscar</a>
-                                </div>
-                            </div>
-                        </div>                        
-                    </div> -->
-    
-                    <div class="form-group m-b-0" ng-hide="!showLinkInfo">                       
-                        <label class="col-xs-2 col-xs-offset-2 col-sm-offset-2 col-sm-2 control-label"> Facebook_Nombre: </label>
-                        <div class="col-xs-3 col-sm-3">                              
-                                <label ng-model="newClient.facebook_name" type="text" class="control-label" > Cesar Moreno </label>
-                        </div>
-                        <label class="col-xs-2 col-sm-2 control-label"> Facebook_ID: </label>
-                        <div class="col-xs-3 col-sm-3">    
-                                <label ng-model="newClient.facebook_id" type="text" class="control-label" > 123456789 </label>
-                        </div>
-                    </div>
+                <!-- Linea Inicial  -->
+                <ul class="tab-nav" role="tablist" tabindex="1" style="overflow: hidden; outline: none;">
+                    <li ng-class="{active : searchClient == 1}"><a ng-click="selectClient(1)" role="tab" data-toggle="tab" aria-expanded="true">Cliente Potencial</a></li>
+                    <li ng-class="{active : searchClient == 2}"><a ng-click="selectClient(2)" role="tab" data-toggle="tab" aria-expanded="false">Cliente Interesado</a></li>
+                </ul>
 
-                    <div class="form-group m-b-0">
-                        <label class="col-xs-2 col-sm-4 control-label"> Correo: </label>
-                        <div class="col-xs-10 col-sm-5">
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="md md-list"></i></span>
-                                <div class="fg-line">
-                                    <input ng-model="newClient.email" type="text" class="form-control input-sm">
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" ng-show="(searchClient == 1)">
+                        <form name="clientPValidate" class="form-horizontal" autocomplete="off">
+                            <div class="form-group m-b-0">
+                                <label class="col-xs-2 col-sm-4 control-label">Nombre: </label>
+                                <div class="col-xs-10 col-sm-5">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="md md-list"></i></span>
+                                        <div class="fg-line has-feedback" ng-class="errorName ? 'has-success' : 'has-error'">                                            
+                                            <input ng-model="newClient.name" type="text" class="form-control input-sm" ng-change="changeErrorName(newClient.name)" required>
+                                            <div ng-show="errorName">
+                                                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                                                <span id="inputSuccess2Status" class="sr-only">(success)</span>
+                                            </div>                                            
+                                            <div ng-show="!errorName">
+                                                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                                                <span id="inputError2Status" class="sr-only">(error)</span>
+                                            </div>                                            
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <div class="form-group m-b-0">
-                        <label class="col-xs-2 col-sm-4 control-label"> Telefono: </label>
-                        <div class="col-xs-10 col-sm-4">
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="md md-list"></i></span>
-                                <div class="fg-line">
-                                    <input ng-model="newClient.phone" type="tel" class="form-control input-sm" minlength="9" required>
+                            <div class="form-group m-b-0">
+                                <label class="col-xs-2 col-sm-4 control-label"> Correo: </label>
+                                <div class="col-xs-10 col-sm-5">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="md md-list"></i></span>
+                                        <div class="fg-line">
+                                            <input ng-model="newClient.email" type="text" class="form-control input-sm">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <div class="form-group m-b-0">
-                        <label class="col-xs-2 col-sm-4 control-label"> DNI: </label>
-                        <div class="col-xs-10 col-sm-4">
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="md md-list"></i></span>
-                                <div class="fg-line">
-                                    <input ng-model="newClient.dni" type="text" class="form-control input-sm">
+                            <div class="form-group m-b-0">
+                                <label class="col-xs-2 col-sm-4 control-label"> Teléfono: </label>
+                                   <div class="col-xs-10 col-sm-4">
+                                       <div class="input-group">
+                                           <span class="input-group-addon"><i class="md md-list"></i></span>
+                                           <div class="fg-line has-feedback" ng-class="errorPhone ? 'has-success' : 'has-error'">                                            
+                                               <input ng-model="newClient.phone" type="tel" class="form-control input-sm" ng-change="changeErrorPhone(newClient.phone)" required>
+                                               <div ng-show="errorPhone">
+                                                   <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                                                   <span id="inputSuccess2Status" class="sr-only">(success)</span>
+                                               </div>                                            
+                                               <div ng-show="!errorPhone">
+                                                   <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                                                   <span id="inputError2Status" class="sr-only">(error)</span>
+                                               </div>                                            
+                                           </div>
+                                       </div>
+                                   </div>
+                            </div>
+
+                            <div class="form-group m-b-0">
+                                <label class="col-xs-2 col-sm-4 control-label"> DNI: </label>
+                                <div class="col-xs-10 col-sm-4">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="md md-list"></i></span>
+                                        <div class="fg-line">
+                                            <input ng-model="newClient.dni" type="text" class="form-control input-sm">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <div class="form-group m-b-0">
-                        <label class="col-xs-2 col-sm-4 control-label"> Dirección: </label>
-                        <div class="col-xs-10 col-sm-7">
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="md md-list"></i></span>
-                                <div class="fg-line">
-                                    <input ng-model="newClient.address" type="text" class="form-control input-sm" required>
+                            <div class="form-group m-b-0">
+                                <label class="col-xs-2 col-sm-4 control-label"> Dirección: </label>
+                                <div class="col-xs-10 col-sm-7">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="md md-list"></i></span>
+                                        <div class="fg-line has-feedback" ng-class="errorAddress ? 'has-success' : 'has-error'">                                            
+                                            <input ng-model="newClient.address" type="tel" class="form-control input-sm" ng-change="changeErrorAddress(newClient.address)" required>
+                                            <div ng-show="errorAddress">
+                                                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                                                <span id="inputSuccess2Status" class="sr-only">(success)</span>
+                                            </div>                                            
+                                            <div ng-show="!errorAddress">
+                                                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                                                <span id="inputError2Status" class="sr-only">(error)</span>
+                                            </div>                                            
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <div class="form-group m-b-0">
-                        <label class="col-xs-2 col-sm-4 control-label"> Referencia: </label>
-                        <div class="col-xs-10 col-sm-7">
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="md md-list"></i></span>
-                                <div class="fg-line">
-                                    <input ng-model="newClient.reference" type="text" class="form-control input-sm" required>
+                            <div class="form-group m-b-0">
+                                <label class="col-xs-2 col-sm-4 control-label"> Referencia: </label>
+                                <div class="col-xs-10 col-sm-7">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="md md-list"></i></span>
+                                        <div class="fg-line has-feedback" ng-class="errorReference ? 'has-success' : 'has-error'">                                            
+                                            <input ng-model="newClient.reference" type="tel" class="form-control input-sm" ng-change="changeErrorReference(newClient.reference)" required>
+                                            <div ng-show="errorReference">
+                                                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                                                <span id="inputSuccess2Status" class="sr-only">(success)</span>
+                                            </div>                                            
+                                            <div ng-show="!errorReference">
+                                                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                                                <span id="inputError2Status" class="sr-only">(error)</span>
+                                            </div>                                            
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
 
-                    <div class="form-group m-b-0">
-                        <div class="col-xs-offset-2 col-xs-9 col-sm-offset-4 col-sm-7">
-                            <a class="btn btn-primary m-t-5" ng-disabled="!clientValidate.$valid" ng-click="saveClient(newClient)">Guardar</a>
-                        </div>
-                    </div>
-                </form>
+                            <div class="form-group m-b-0">
+                                <div class="col-xs-offset-2 col-xs-9 col-sm-offset-4 col-sm-7">
+                                    <a class="btn btn-primary m-t-5" ng-disabled="!errorPhone || !errorName || !errorAddress || !errorReference" ng-click="vm.saveClient(1,newClient)">Guardar</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>            
+                    <div role="tabpanel" class="tab-pane active" ng-show="(searchClient == 2)">
+                        <form name="clientIValidate" class="form-horizontal" autocomplete="off">
+                            <div class="form-group m-b-0">
+                                <label class="col-xs-2 col-sm-4 control-label">Nombre: </label>
+                                <div class="col-xs-10 col-sm-5">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="md md-list"></i></span>
+                                        <div class="fg-line has-feedback" ng-class="errorName ? 'has-success' : 'has-error'">                                            
+                                            <input ng-model="newClientI.name" type="text" class="form-control input-sm" ng-change="changeErrorName(newClientI.name)" required>
+                                            <div ng-show="errorName">
+                                                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                                                <span id="inputSuccess2Status" class="sr-only">(success)</span>
+                                            </div>                                            
+                                            <div ng-show="!errorName">
+                                                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                                                <span id="inputError2Status" class="sr-only">(error)</span>
+                                            </div>                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group m-b-0">
+                                <label class="col-xs-2 col-sm-4 control-label"> Teléfono: </label>
+                                <div class="col-xs-10 col-sm-4">
+                                    <div class="input-group">
+                                        <span class="input-group-addon"><i class="md md-list"></i></span>
+                                        <div class="fg-line has-feedback" ng-class="errorPhone ? 'has-success' : 'has-error'">                                            
+                                            <input ng-model="newClientI.phone" type="tel" class="form-control input-sm" ng-change="changeErrorPhone(newClientI.phone)" required>
+                                            <div ng-show="errorPhone">
+                                                <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                                                <span id="inputSuccess2Status" class="sr-only">(success)</span>
+                                            </div>                                            
+                                            <div ng-show="!errorPhone">
+                                                <span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                                                <span id="inputError2Status" class="sr-only">(error)</span>
+                                            </div>                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                           
+                            <div class="form-group m-b-0">
+                                <div class="col-xs-offset-2 col-xs-9 col-sm-offset-4 col-sm-7">
+                                    <a class="btn btn-primary m-t-5" ng-disabled="!errorPhone || !errorName" ng-click="vm.saveClient(2,newClientI)">Guardar</a>
+                                </div>
+                            </div>
+                        </form>
+
+                    </div>                               
+                </div>
+                <!-- Linea Referencial -->
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal" ng-click="close()"> Cerrar </button>

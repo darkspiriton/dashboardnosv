@@ -8,6 +8,7 @@
             <ul> 
                 @include('menu.menuCVenta');
                 @include('menu.menuEVenta');
+                @include('menu.menuLVenta');
             </ul>
         </li>
     </ul>

@@ -435,6 +435,7 @@ angular.module('App')
 		};
 
 		$scope.saveClient = function(client){
+            client.status_id=1;
 			petition.post("api/auxclient", client)
 				.then(function(data){
 					toastr.success(data.message);
@@ -457,6 +458,19 @@ angular.module('App')
 		};
 
 		$scope.editClient = function(client){
+
+            // client.status_id=1;
+            var oldClient = clientOriginal;
+            // console.log([client,oldClient]);
+            // console.log(client.address == oldClient.address);
+            // console.log(client.reference == oldClient.reference);
+            // console.log(client.dni == oldClient.dni);
+            // console.log(client.email == oldClient.email);
+            if(client.address !== oldClient.address || client.reference !== oldClient.reference ||
+               client.dni !== oldClient.dni || client.email !== oldClient.email){
+                client.status_id=1;
+            }
+
 			petition.put("api/auxclient/" + client.id, client)
 				.then(function(data){
 					toastr.success(data.message);
@@ -469,8 +483,6 @@ angular.module('App')
 		/**
 		 * END
 		 */
-
-
 		angular.element(document).ready(function(){
 			resetProduct();
 			$scope.list();

@@ -47,6 +47,7 @@ class AuxClientController extends Controller
         'reference' =>  'required|string',
         'facebook_id' =>  'integer',
         'facebook_name' =>  'string',
+        'status_id'    => 'required|integer'
         ];
 
         $validator = Validator::make($request->all(), $rules);
@@ -68,6 +69,30 @@ class AuxClientController extends Controller
 
         $responseClient=Client::create($request->all());
         return response()->json(['message' => 'El cliente se creo correctamente', "client" => $responseClient], 200);
+    }
+
+    public function storeI(Request $request)
+    {
+        $rules = [
+            'name'  => 'required|string|max:255',
+            'phone'=> 'required|string|max:25',
+            'status_id' => 'required|integer',
+        ];
+
+        $validator = Validator::make($request->all(),$rules);
+        if($validator->fails()){
+            return response()->json(['message' => 'No se posee todos los atributos necesario pra crear un cliente'],403);
+        }
+        
+        $client = Client::where('phone', request("phone"))->first();
+
+        if ($client !== null) {
+            return response()->json(['message' => 'El cliente ya se encuentra registrado'], 401);
+        }
+
+        $responseClient=Client::create($request->all());
+        return response()->json(['message' => 'El cliente se creo correctamente', "client" => $responseClient], 200);
+
     }
 
 
@@ -111,6 +136,7 @@ class AuxClientController extends Controller
         'reference' =>  'required|string',
         'facebook_id' =>  'integer',
         'facebook_name' =>  'string',
+        'status_id' => 'required|integer'
 
         ];
 
@@ -127,6 +153,28 @@ class AuxClientController extends Controller
 
         $client->update($request->all());
         return response()->json(['message' => 'Se actualizo el cliente correctamente'], 200);
+    }
+
+    public function updateI(Request $request,$id)
+    {
+        $rules=[
+            'name' => 'required|string|max:255',
+            'phone' => 'required|string|max:25',
+            'status_id' => 'required|integer'
+        ];
+
+        $validator = Validator::make($request->all(),$rules);
+        if($validator->fails()){
+            return response()->json(['message' => 'No se posee todos los atributos necesarios para crear un cliente'],401);
+        }
+        $client = Client::find($id);
+
+        if($client == null) {
+            return response()->json(['message' => 'No se encontro el cliente'],401);
+        }
+
+        $client->update($request->all());
+        return response()->json(['message'=>'Se actualizo el cliente correctamente'],200);
     }
 
     /**
@@ -237,10 +285,15 @@ class AuxClientController extends Controller
 
     public function FilterForClientDowload()
     {
-            $clients=Client::all('id as ID','name as Nombre','email as Correo','phone as Teléfono','dni as DNI','address as Dirección','reference as Referencia','created_at as Fecha_de_creación','updated_at as Fecha_de_actualización');
+            $clients=Client::all('id as ID','name as Nombre','email as Correo','phone as Teléfono','dni as DNI','address as Dirección','reference as Referencia','status_id as Estado','created_at as Fecha_de_creación','updated_at as Fecha_de_actualización');
             $data = array();
 
             foreach ($clients as $client) {
+                if($client->Estado==1){
+                    $client->Estado="Potencial";
+                }else{
+                    $client->Estado="Interesado";
+                }
                 $data[] = (array)$client->toArray();
             }
 

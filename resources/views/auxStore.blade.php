@@ -6,7 +6,7 @@
         <li class="sub-menu">            
             <a href="#"><i class="md md-redeem">Logística</i></a>
             <ul>
-                @include('menuLVenta');
+                @include('menu.menuLVenta');
             </ul>
         </li>        
     </ul>

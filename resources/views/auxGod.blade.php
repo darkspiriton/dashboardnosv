@@ -16,6 +16,7 @@
                 @include('menu.menuDVenta');
                 @include('menu.menuCVenta');
                 @include('menu.menuEVenta');
+                @include('menu.menuLVenta');
             </ul>
         </li>
         <li class="sub-menu">

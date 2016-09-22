@@ -226,6 +226,7 @@ angular.module('App')
             petition.get('api/auxproviders')
                 .then(function(data){
                     $scope.providers = data.providers;
+                    $scope.providersFilter = angular.copy(data.providers);
                     $scope.providers.push(newProvider);
                 }, function(error){
                     toastr.error('Huy Huy dice: ' + error.data.message);

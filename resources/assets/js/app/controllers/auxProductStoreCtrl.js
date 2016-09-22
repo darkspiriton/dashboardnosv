@@ -4,10 +4,10 @@ angular.module('App')
             .state('ProductosStore', {
                 url: '/Adminitracion-de-productos-Almacen',
                 templateUrl: 'app/partials/auxProductStore.html',
-                controller : 'productsCtrl'
+                controller : 'productsCtrlStore'
             });
     }])
-    .controller('productsCtrl', ["$scope", "$compile", "$state", "$log", "util", "petition", "toastr",
+    .controller('productsCtrlStore', ["$scope", "$compile", "$state", "$log", "util", "petition", "toastr",
         function($scope, $compile, $state, $log, util, petition, toastr){
 
         /*

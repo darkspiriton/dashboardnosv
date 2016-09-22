@@ -4,7 +4,7 @@
     <ul class="main-menu">
         <li class="active"><a href="#/"><i class="md md-home"></i> Inicio</a></li>
         <li class="sub-menu">            
-            <a href="#"><i class="md md-redeem">Logística</i></a>
+            <a href="#"><i class="md md-redeem"></i>VentaCorp</a>
             <ul>
                 @include('menu.menuLVenta');
             </ul>

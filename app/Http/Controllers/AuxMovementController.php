@@ -705,13 +705,13 @@ class AuxMovementController extends Controller
 
         $prd = Product::find($request->input('id'));
 
-        $product =  Product::select('id', 'cod')
+        $product =  Product::select('id', 'cod','cost_provider','utility')
         ->where('name', '=', $prd->name)
         ->where('color_id', '=', $prd->color_id)
         ->where('size_id', '=', $prd->size_id)
         ->where('status', '=', 1)
         ->orderBy('cod', 'asc')
-        ->get();
+        ->get();    
 
         return response()->json(['codes' => $product], 200);
     }

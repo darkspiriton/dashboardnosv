@@ -7,8 +7,8 @@ angular.module('App')
                 controller : 'productsCtrlStore'
             });
     }])
-    .controller('productsCtrlStore', ["$scope", "$compile", "$state", "$log", "util", "petition", "toastr",
-        function($scope, $compile, $state, $log, util, petition, toastr){
+    .controller('productsCtrlStore', ["$scope", "$compile", "$state", "$log", "util", "petition", "toastr", "$injector"
+        function($scope, $compile, $state, $log, util, petition, toastr,$injector){
 
         /*
          |

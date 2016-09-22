@@ -661,7 +661,7 @@ class AuxProductController extends Controller
     public function UniqueProduct()
     {
         try {
-            $products = Product::select(array('name'/*,'price'*/))->groupBy('name')->get();
+            $products = Product::select(array('name','cost_provider','utility'))->groupBy('name')->get();
 
             return response()->json(['products' => $products], 200);
         } catch (Exception $e) {

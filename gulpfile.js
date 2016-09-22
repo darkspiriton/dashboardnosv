@@ -70,7 +70,9 @@ elixir(function(mix) {
         "app/controllers/PartnerPanelCtrl.js",
         "app/controllers/PaymentCtrl.js",
         "app/controllers/PaymentListCtrl.js",
-        "app/controllers/productStatusIndicatorCtrl.js",     
+        "app/controllers/productStatusIndicatorCtrl.js",
+        "app/controllers/auxStockVENCtrl.js",
+        "app/controllers/PrestaShopCtrl.js",
         ], "public/app/controllers/compile/admNosControllers.js");
     
     /*
@@ -160,7 +162,8 @@ elixir(function(mix) {
         "app/controllers/auxStockVENCtrl.js",
         "app/controllers/auxProductHelpCtrl.js",
         "app/controllers/productStatusIndicatorCtrl.js",
-        "app/controllers/auxClientCtrl.js"
+        "app/controllers/auxClientCtrl.js",
+        "app/services/auxClientService.js"
         ], "public/app/controllers/compile/godControllers.js");    
 
     /*

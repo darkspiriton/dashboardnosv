@@ -174,6 +174,7 @@ elixir(function(mix) {
     mix.browserify([
         "app/controllers/auxStockCtrl.js",
         "app/controllers/auxStockVENCtrl.js",
+        "app/controllers/auxMovement2_JVECtrl.js",
         "app/controllers/outFitCtrl.js",
         "app/controllers/auxMovementOutFitCtrl.js",
         "app/controllers/auxMovementOutFit2Ctrl.js",

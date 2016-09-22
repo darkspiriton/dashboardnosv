@@ -251,6 +251,17 @@ angular.module('App')
                 });
         };
 
+        $scope.listColors = function() {
+            petition.get('api/colors')
+                .then(function(data){
+                    $scope.colors = data.colors;
+                    $scope.colorsFilter = angular.copy(data.colors);
+                    $scope.colors.push(newColor);
+                }, function(error){
+                    toastr.error('Huy Huy dice: ' + error.data.message);
+                });
+        };
+
         $scope.listTypes = function() {
             petition.get('api/auxproduct/get/type')
                 .then(function(data){

@@ -13,6 +13,7 @@ angular.module('App')
             });
             return promise;
         };
+        
 
         this.saveClient = function (status,client) {
             var defered = $q.defer();

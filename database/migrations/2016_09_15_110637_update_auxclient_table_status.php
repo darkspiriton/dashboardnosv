@@ -19,8 +19,8 @@ class UpdateAuxclientTableStatus extends Migration
 
         Schema::table('auxclients',function(Blueprint $table){
             $table->integer('status_id')->unsigned()->nullable();
-            $table->string('address')->nullable();
-            $table->string('reference')->nullable();
+            $table->string('address')->nullable()->change();
+            $table->string('reference')->nullable()->change();
             $table->foreign('status_id')->references('id')->on('auxclients');
         });
     }

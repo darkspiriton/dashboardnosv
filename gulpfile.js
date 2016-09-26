@@ -93,6 +93,7 @@ elixir(function(mix) {
         "app/controllers/auxStockVENCtrl.js",
         "app/controllers/productStatusIndicatorCtrl.js",
         "app/controllers/auxClientCtrl.js",
+        "app/services/auxClientService.js",
         "app/controllers/auxProductStoreCtrl.js",        
         ], "public/app/controllers/compile/coordinadorControllers.js");
 
@@ -192,6 +193,7 @@ elixir(function(mix) {
         "app/controllers/auxProductCtrl.js",
         "app/controllers/productStatusIndicatorCtrl.js",
         "app/controllers/auxClientCtrl.js",
+        "app/services/auxClientService.js",
         "app/controllers/auxProductStoreCtrl.js",
         ], "public/app/controllers/compile/admControllers.js");
 
